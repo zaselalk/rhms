@@ -1,6 +1,6 @@
 # Village - Hospital Management System
 
-<b>Overview<b>
+Overview
 
 The Village-Hospital Management System is a digital platform designed to streamline healthcare services by connecting hospitals with villages through Grama Niladhari divisions. This system enables efficient patient tracking, medical record management, and village population monitoring to ensure better healthcare accessibility and organized resource distribution.
 
