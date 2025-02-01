@@ -19,6 +19,43 @@ Database: MySQL (sequelize)
 Authentication:passport.js
 Hosting & Deployment: Azure
 
+Timeline
+
+1st week:
+Requirement gathering
+Identifying main functionalities
+Defining technologies
+UI planning
+
+2nd week:
+Research about map APIs
+Start designing UI
+Creating wireframes
+Creating project proposal
+
+3rd week:
+RDBMS → ER → SRS
+Finalizing UI
+Starting development
+
+4th week:
+Developing prototype (start)
+
+5th week:
+Working prototype
+
+6th week - 9th week:
+Implementing project
+
+10th week:
+Complete project ✅
+
+11th - 12th week:
+Testing & maintenance
+
+13th week:
+Completed project (final)
+
 Contributors
 
 Asela Priyadarshana
