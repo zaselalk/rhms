@@ -13,11 +13,11 @@ Data Analytics & Reports: Provides insights into health trends and resource need
 
 Technologies Used
 
-Backend: Node.js 
-Frontend: React.js 
-Database: MySQL
-Authentication:
-Hosting & Deployment: 
+Backend: Node.js (Express.js)
+Frontend:  React (typescript) + mantine UI
+Database: MySQL (sequelize)
+Authentication:passport.js
+Hosting & Deployment: Azure
 
 Contributors
 
