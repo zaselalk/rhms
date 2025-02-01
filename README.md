@@ -22,39 +22,39 @@ Hosting & Deployment: Azure
 Timeline
 
 1st week:
-Requirement gathering
-Identifying main functionalities
-Defining technologies
-UI planning
+Requirement gathering.
+Identifying main functionalities.
+Defining technologies.
+UI planning.
 
 2nd week:
-Research about map APIs
-Start designing UI
-Creating wireframes
-Creating project proposal
+Research about map APIs.
+Start designing UI.
+Creating wireframes.
+Creating project proposal.
 
 3rd week:
-RDBMS → ER → SRS
-Finalizing UI
-Starting development
+RDBMS → ER → SRS.
+Finalizing UI.
+Starting development.
 
 4th week:
-Developing prototype (start)
+Developing prototype (start).
 
 5th week:
-Working prototype
+Working prototype.
 
 6th week - 9th week:
-Implementing project
+Implementing project.
 
 10th week:
-Complete project ✅
+Complete project ✅.
 
 11th - 12th week:
-Testing & maintenance
+Testing & maintenance.
 
 13th week:
-Completed project (final)
+Completed project (final).
 
 Contributors
 
