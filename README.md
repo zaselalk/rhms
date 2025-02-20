@@ -1,67 +1,50 @@
-# Village - Hospital Management System
+# React + TypeScript + Vite
 
-Overview
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-The Village-Hospital Management System is a digital platform designed to streamline healthcare services by connecting hospitals with villages through Grama Niladhari divisions. This system enables efficient patient tracking, medical record management, and village population monitoring to ensure better healthcare accessibility and organized resource distribution.
+Currently, two official plugins are available:
 
-Features
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-Patient Registration & Tracking: Record patient details and track their medical history.
-Hospital Connectivity: Connects hospitals with villages for seamless healthcare service management.
-Grama Niladhari-Based Management: Organizes village populations into Grama Niladhari divisions for structured data handling.
-Data Analytics & Reports: Provides insights into health trends and resource needs in villages.
+## Expanding the ESLint configuration
 
-Technologies Used
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-Backend: Node.js (Express.js)
-Frontend:  React (typescript) + mantine UI
-Database: MySQL (sequelize)
-Authentication:passport.js
-Hosting & Deployment: Azure
+- Configure the top-level `parserOptions` property like this:
 
-Timeline
+```js
+export default tseslint.config({
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
+```
 
-1st week:
-Requirement gathering,
-Identifying main functionalities,
-Defining technologies,
-UI planning
+- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
+- Optionally add `...tseslint.configs.stylisticTypeChecked`
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
 
-2nd week:
-Research about map APIs,
-Start designing UI,
-Creating wireframes,
-Creating project proposal
+```js
+// eslint.config.js
+import react from 'eslint-plugin-react'
 
-3rd week:
-RDBMS → ER → SRS,
-Finalizing UI,
-Starting development
-
-4th week:
-Developing prototype (start).
-
-5th week:
-Working prototype.
-
-6th week - 9th week:
-Implementing project.
-
-10th week:
-Complete project ✅.
-
-11th - 12th week:
-Testing & maintenance.
-
-13th week:
-Completed project (final).
-
-Contributors
-
-Asela Priyadarshana
-Ravindu Harshana
-Ashfa Nisthar
-Dilukshi Nimasha
-
-
-
+export default tseslint.config({
+  // Set the react version
+  settings: { react: { version: '18.3' } },
+  plugins: {
+    // Add the react plugin
+    react,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended rules
+    ...react.configs.recommended.rules,
+    ...react.configs['jsx-runtime'].rules,
+  },
+})
+```
