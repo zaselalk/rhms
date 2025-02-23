@@ -8,7 +8,9 @@
     "start": "node dist/server.js",
     "test": "jest",
     "migrate": "sequelize db:migrate",
-    "migrate:undo": "sequelize db:migrate:undo"
+    "migrate:all": "sequelize db:migrate:all",
+    "migrate:undo": "sequelize db:migrate:undo",
+    "migrate:undo:all": "sequelize db:migrate:undo:all"
   },
   "keywords": [],
   "author": "",
