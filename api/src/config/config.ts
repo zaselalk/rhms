@@ -1,7 +1,9 @@
 import { SequelizeOptions } from "sequelize-typescript";
-import * as dotenv from "dotenv";
+import dotenv from "dotenv";
 
 dotenv.config();
+
+console.log(process.env.DATABASE_PASSWORD);
 
 const config: { [key: string]: SequelizeOptions } = {
   development: {
