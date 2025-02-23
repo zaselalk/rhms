@@ -1,6 +1,6 @@
 "use strict";
 
-import { DataTypes, QueryInterface, QueryOptionsWithForce } from "sequelize";
+import { DataTypes, QueryInterface } from "sequelize";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
