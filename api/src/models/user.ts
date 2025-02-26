@@ -1,6 +1,7 @@
 "use strict";
 
 import { DataTypes, Model, Sequelize } from "sequelize";
+import bcrypt from "bcrypt";
 
 interface UserAttributes {
   name: string;
@@ -12,6 +13,10 @@ export class User extends Model<UserAttributes> implements UserAttributes {
   public name!: string;
   public email!: string;
   public password!: string;
+
+  public async validatePassword(password: string): Promise<boolean> {
+    return await bcrypt.compare(password, this.password);
+  }
 }
 
 export default (sequelize: Sequelize) => {
@@ -53,6 +58,12 @@ export default (sequelize: Sequelize) => {
       sequelize,
       modelName: "User",
       tableName: "users",
+      hooks: {
+        beforeCreate: async (user: User) => {
+          const salt = await bcrypt.genSalt(10);
+          user.password = await bcrypt.hash(user.password, salt);
+        },
+      },
     }
   );
 
