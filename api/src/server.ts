@@ -2,6 +2,8 @@ import express, { Application } from "express";
 import dotenv from "dotenv";
 import passport from "./config/passport";
 import session from "express-session";
+import AuthRouter from "./routes/auth.routes";
+
 dotenv.config();
 
 // env variables
@@ -12,11 +14,13 @@ const app: Application = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'secret',
-  resave: false,
-  saveUninitialized: false
-}));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "secret",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -24,6 +28,8 @@ app.use(passport.session());
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
+
+app.use("/auth", AuthRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
