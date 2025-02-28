@@ -24,6 +24,7 @@ const Registration: FC<RegistrationProps> = () => {
         initialValue: "",
     })
 
+
     return (
         <>
             <div>Registration</div>

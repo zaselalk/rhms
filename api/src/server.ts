@@ -1,11 +1,25 @@
 import express, { Application } from "express";
 import dotenv from "dotenv";
+import passport from "./config/passport";
+import session from "express-session";
 dotenv.config();
 
 // env variables
 const PORT: number =
   parseInt(process.env.APPLICATION_PORT as string, 10) || 3001;
 const app: Application = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'secret',
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
