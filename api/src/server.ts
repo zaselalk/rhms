@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import passport from "./config/passport";
 import session from "express-session";
 import AuthRouter from "./routes/auth.routes";
+import sequelize from "./models";
 
 dotenv.config();
 
@@ -31,7 +32,8 @@ app.get("/", (req, res) => {
 
 app.use("/auth", AuthRouter);
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
+  sequelize.sync({ force: true });
   console.log(`Server is running on http://localhost:${PORT}`);
 });
 
