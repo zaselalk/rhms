@@ -1,5 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from ".";
+import bcrypt from "bcrypt";
 
 /* Define the User model properties
   Extra properties like id, createdAt, and updatedAt are added by default
@@ -40,8 +41,20 @@ User.init(
       allowNull: true,
     },
   },
+
   {
     sequelize: sequelize,
+    hooks: {
+      /**
+       * Before the user is created, hash the password using bcrypt
+       * @param user
+       */
+      beforeCreate: async (user: User) => {
+        if (user.password) {
+          user.password = await bcrypt.hash(user.password, 10);
+        }
+      },
+    },
     modelName: "User",
     tableName: "users",
   }
