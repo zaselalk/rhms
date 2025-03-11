@@ -37,6 +37,6 @@ module.exports = {
   },
 
   async down(queryInterface: QueryInterface) {
-    await queryInterface.dropTable("hosehold");
+    await queryInterface.dropTable("households");
   },
 };
