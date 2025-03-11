@@ -38,8 +38,8 @@ export default (sequelize: Sequelize) => {
     },
     {
       sequelize,
-      modelName: "household",
-      tableName: "household",
+      modelName: "Household",
+      tableName: "households",
     }
   );
 
