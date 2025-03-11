@@ -26,4 +26,4 @@ dist-ssr
 #api
 /api/node_modules
 /api/dist
-/api/.env
+/api/src/.env
