@@ -1,15 +1,19 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router";
-import Registration from './pages/Registration';
+
 
 function App() {
 
 
   return (
     <BrowserRouter>
-      <Link to="/registration">Registration</Link>
       <Routes>
-        <Route path="/" element={<div>Home</div>} />
+        <Route path="/" element={<div>Home
+          <Link to="/registration">Registration</Link>
+          <Link to="/profile">Profile</Link>
+
+        </div>} />
         <Route path="/registration" element={<Registration />} />
+        <Route path="/Profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   )
