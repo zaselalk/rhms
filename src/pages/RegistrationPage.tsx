@@ -3,7 +3,7 @@ import { FC } from "react";
 
 type RegistrationProps = {};
 
-const Registration: FC<RegistrationProps> = () => {
+const RegistrationPage: FC<RegistrationProps> = () => {
 
     return (
         <>
@@ -15,4 +15,4 @@ const Registration: FC<RegistrationProps> = () => {
     );
 };
 
-export default Registration;
+export default RegistrationPage;
