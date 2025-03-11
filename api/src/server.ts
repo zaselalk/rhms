@@ -2,6 +2,9 @@ import express, { Application } from "express";
 import dotenv from "dotenv";
 import passport from "./config/passport";
 import session from "express-session";
+import AuthRouter from "./routes/auth.routes";
+import sequelize from "./models";
+
 dotenv.config();
 
 // env variables
@@ -12,20 +15,25 @@ const app: Application = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'secret',
-  resave: false,
-  saveUninitialized: false
-}));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "secret",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+// app.get("/", (req, res) => {
+//   res.send("Hello World!");
+// });
 
-app.listen(PORT, () => {
+app.use("/auth", AuthRouter);
+
+app.listen(PORT, async () => {
+  sequelize.sync({ force: true });
   console.log(`Server is running on http://localhost:${PORT}`);
 });
 
