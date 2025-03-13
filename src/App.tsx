@@ -13,6 +13,7 @@ import ResidentProfilePage from "./pages/ResidentProfilePage";
 import CreateResidentPage from "./pages/CreateResidentPage";
 import ResidentLoginPage from "./pages/ResidentLoginPage";
 import EditResidentProfilePage from "./pages/EditResidentProfilePage";
+import ForgottenPasswordPage from "./pages/ForgottenPasswordPage";
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
         <Route path="/houses" element={<HouseholdPage />} />
         <Route path="/resident-profile" element={<ResidentProfilePage />} />
         <Route path="/resident-profile-edit" element={<EditResidentProfilePage />} />
+        <Route path="/resident-forgotten-password" element={<ForgottenPasswordPage />} />
         <Route path="/resident-login" element={<ResidentLoginPage />} />
         <Route path="/create-resident" element={<CreateResidentPage />} />
 

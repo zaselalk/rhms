@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
 const ResidentLoginPage: FC = () => {
     const [username, setUsername] = useState('');
@@ -63,7 +63,8 @@ const ResidentLoginPage: FC = () => {
                     </div>
 
                     <div className="text-center">
-                        <a href="#" className="text-sm text-[#008FFB] hover:text-[#00C1A7]">Forgot password?</a>
+                        {/* <a href="#" ></a> */}
+                        <Link to="/resident-forgotten-password" className="text-sm text-[#008FFB] hover:text-[#00C1A7]">Forgot password?</Link>
                     </div>
                 </div>
             </div>
