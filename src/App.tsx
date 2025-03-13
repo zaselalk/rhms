@@ -14,6 +14,9 @@ import CreateResidentPage from "./pages/CreateResidentPage";
 import ResidentLoginPage from "./pages/ResidentLoginPage";
 import EditResidentProfilePage from "./pages/EditResidentProfilePage";
 import ForgottenPasswordPage from "./pages/ForgottenPasswordPage";
+import HouseholdLoginPage from "./pages/HouseholdLoginPage";
+import HouseholdManagePage from "./pages/HouseholdManagePage";
+import AdminDashboardPage from "./pages/AdminDashboardPage";
 
 
 function App() {
@@ -22,11 +25,13 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<div>Home
-          <Link to="/registration">Registration</Link>
-          <Link to="/profile">Profile</Link>
+        <Route path="/" element={<div>
+          <Link to="/household-login" className="bg-gray-300">HouseHold</Link> <br />
+          <Link to="/resident-login">Resident Login</Link><br />
+          <Link to="/login">Staff</Link><br />
 
         </div>} />
+        <Route path="/dashboard" element={<AdminDashboardPage />} />
         <Route path="/registration" element={<RegistrationPage />} />
         <Route path="/Profile" element={<ProfilePage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -42,6 +47,11 @@ function App() {
         <Route path="/resident-forgotten-password" element={<ForgottenPasswordPage />} />
         <Route path="/resident-login" element={<ResidentLoginPage />} />
         <Route path="/create-resident" element={<CreateResidentPage />} />
+
+        {/* household */}
+        <Route path="/household-login" element={<HouseholdLoginPage />} />
+        <Route path="/household-manage" element={<HouseholdManagePage />} />
+
 
       </Routes>
     </BrowserRouter>

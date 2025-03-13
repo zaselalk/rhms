@@ -1,6 +1,14 @@
 import React, { FC } from 'react';
+import { useNavigate } from 'react-router';
 
 const LoginPage: FC = () => {
+  const navigate = useNavigate();
+
+  const handleLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    // Handle login logic here
+    navigate('/dashboard');
+  }
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Left Image Section */}
@@ -43,8 +51,9 @@ const LoginPage: FC = () => {
 
             {/* Login Button */}
             <button
-              type="submit"
+
               className="w-full py-2 bg-[#008FFB] text-white font-semibold rounded-lg shadow-md hover:bg-[#006fbb] focus:ring-2 focus:ring-[#00C1A7] focus:ring-offset-2"
+              onClick={handleLogin}
             >
               Login
             </button>
