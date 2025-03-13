@@ -1,4 +1,10 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router";
+import RegistrationPage from "./pages/RegistrationPage";
+import ProfilePage from "./pages/ProfilePage";
+import LoginPage from "./pages/LoginPage";
+import DivisionPage from "./pages/DivisionPage";
+import SingleDivisionPage from "./pages/SingleDivisionPage";
+import DiseasesPage from "./pages/DiseasesPage";
 
 
 function App() {
@@ -12,8 +18,13 @@ function App() {
           <Link to="/profile">Profile</Link>
 
         </div>} />
-        <Route path="/registration" element={<Registration />} />
-        <Route path="/Profile" element={<Profile />} />
+        <Route path="/registration" element={<RegistrationPage />} />
+        <Route path="/Profile" element={<ProfilePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/division" element={<DivisionPage />} />
+        <Route path="/single-division" element={<SingleDivisionPage />} />
+        <Route path="/diseases" element={<DiseasesPage />} />
+
       </Routes>
     </BrowserRouter>
   )
