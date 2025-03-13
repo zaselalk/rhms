@@ -33,109 +33,143 @@ const AdminDashboard: React.FC = () => {
         ],
     };
 
-    return (
-        <div className="min-h-screen bg-gray-100 flex">
-            {/* Sidebar */}
-            <div className="w-1/4 bg-white shadow-lg p-6">
-                <h2 className="text-xl font-semibold text-[#008FFB]">Hospital Management</h2>
-                <div className="mt-8">
-                    <ul className="space-y-4">
-                        <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Dashboard</a></li>
-                        <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Diseases</a></li>
-                        <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Households</a></li>
-                        <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Residents</a></li>
-                        <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Clinic</a></li>
-                        <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Division</a></li>
-                        <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Users</a></li>
-                    </ul>
-                </div>
-                <div className="mt-8 flex items-center">
-                    <div className="text-sm text-gray-700">Ravindu</div>
-                    <div className="text-xs text-gray-500 ml-2">Admin</div>
-                </div>
-                <div className="mt-2">
-                    <button className="w-full py-2 text-white bg-[#008FFB] rounded-md hover:bg-[#006fbb]">Logout</button>
-                </div>
+
+    //Markers
+    const markers = [
+
+        { position: [6.489720802, 80.084187593], popup: "DEYAGALA1" },
+        { position: [6.490332500, 80.083685417], popup: "DEYAGALA2" },
+        { position: [6.490475333, 80.083943417], popup: "DEYAGALA3" },
+        { position: [6.490525152, 80.083716364], popup: "DEYAGALA4" },
+        { position: [6.490402667, 80.084311667], popup: "DEYAGALA5" },
+        { position: [6.490197500, 80.084572500], popup: "DEYAGALA6" },
+        { position: [6.490591786, 80.084634245], popup: "DEYAGALA7" },
+        { position: [6.490843000, 80.083716000], popup: "DEYAGALA8" },
+        { position: [6.490886078, 80.083787108], popup: "DEYAGALA9" },
+        { position: [6.490988333, 80.083746667], popup: "DEYAGALA10" },
+        { position: [6.491178409, 80.083586288], popup: "DEYAGALA11" },
+        { position: [6.491275000, 80.083555000], popup: "DEYAGALA12" },
+        { position: [6.491520000, 80.083192000], popup: "DEYAGALA13" },
+        { position: [6.491578333, 80.083619792], popup: "DEYAGALA14" },
+        { position: [6.491763333, 80.083505000], popup: "DEYAGALA15" },
+        { position: [6.491810000, 80.083600833], popup: "DEYAGALA16" },
+        { position: [6.491963889, 80.083514444], popup: "DEYAGALA17" },
+        { position: [6.492000000, 80.083713333], popup: "DEYAGALA18" },
+        { position: [6.492091667, 80.083858333], popup: "DEYAGALA19" },
+        { position: [6.492096667, 80.084067500], popup: "DEYAGALA20" },
+    ];
+        
+
+
+
+
+return (
+    <div className="min-h-screen bg-gray-100 flex">
+        {/* Sidebar */}
+        <div className="w-1/4 bg-white shadow-lg p-6">
+            <h2 className="text-xl font-semibold text-[#008FFB]">Hospital Management</h2>
+            <div className="mt-8">
+                <ul className="space-y-4">
+                    <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Dashboard</a></li>
+                    <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Diseases</a></li>
+                    <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Households</a></li>
+                    <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Residents</a></li>
+                    <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Clinic</a></li>
+                    <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Division</a></li>
+                    <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Users</a></li>
+                </ul>
             </div>
-
-            {/* Main Content */}
-            <div className="flex-1 p-6">
-                <h2 className="text-2xl font-semibold text-[#008FFB] mb-6">Katugahahena Divisional Hospital</h2>
-                <div>
-
-                    {/* Map Section */}
-                    <div className="bg-white p-6 rounded-lg shadow-md mb-6 w-full ">
-                        <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Hospital Location</h3>
-                        <MapContainer center={[6.4893, 80.0847]} zoom={100} style={{ height: '400px', width: '100%' }}>
-                            <LayersControl position="topright">
-                                <BaseLayer checked name="Satellite View">
-                                    <TileLayer
-
-                                        url="https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
-                                        attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
-                                    />
-                                </BaseLayer>
-                                <BaseLayer name="Street View">
-                                    <TileLayer
-                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                    />
-                                </BaseLayer>
-                            </LayersControl>
-
-                            <Marker position={[6.4893, 80.0847]}>
-                                <Popup>
-                                    Katugahahena Divisional Hospital
-                                </Popup>
-                            </Marker>
-
-
-
-                        </MapContainer>
-                    </div>
-
-
-
-
-
-
-                    {/* Stats Section */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                        {/* Residents Pie Chart */}
-                        <div className="bg-white p-6 rounded-lg shadow-md">
-                            <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Residents</h3>
-                            <Pie data={residentsData} />
-                        </div>
-
-                        {/* Non-Communicable Diseases Pie Chart */}
-                        <div className="bg-white p-6 rounded-lg shadow-md">
-                            <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Non Communicable Diseases</h3>
-                            <Pie data={nonCommunicableDiseasesData} />
-                        </div>
-
-
-                    </div>
-                    {/* Other Stats */}
-                    <div className="grid grid-cols-2 gap-6">
-                        <div className="bg-white p-6 rounded-lg shadow-md">
-                            <h3 className="text-xl font-semibold text-[#008FFB]">100 Houses</h3>
-                        </div>
-                        <div className="bg-white p-6 rounded-lg shadow-md">
-                            <h3 className="text-xl font-semibold text-[#008FFB]">236 Members</h3>
-                        </div>
-                        <div className="bg-white p-6 rounded-lg shadow-md">
-                            <h3 className="text-xl font-semibold text-[#008FFB]">12 Divisions</h3>
-                        </div>
-                        <div className="bg-white p-6 rounded-lg shadow-md">
-                            <h3 className="text-xl font-semibold text-[#008FFB]">5 Diseases</h3>
-                        </div>
-                    </div>
-                </div>
-
-
+            <div className="mt-8 flex items-center">
+                <div className="text-sm text-gray-700">Ravindu</div>
+                <div className="text-xs text-gray-500 ml-2">Admin</div>
+            </div>
+            <div className="mt-2">
+                <button className="w-full py-2 text-white bg-[#008FFB] rounded-md hover:bg-[#006fbb]">Logout</button>
             </div>
         </div>
-    );
+
+        {/* Main Content */}
+        <div className="flex-1 p-6">
+            <h2 className="text-2xl font-semibold text-[#008FFB] mb-6">Katugahahena Divisional Hospital</h2>
+            <div>
+
+                {/* Map Section */}
+                <div className="bg-white p-6 rounded-lg shadow-md mb-6 w-full ">
+                    <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Hospital Location</h3>
+                    <MapContainer center={[6.4893, 80.0847]} zoom={100} style={{ height: '400px', width: '100%' }}>
+                        <LayersControl position="topright">
+                            <BaseLayer checked name="Satellite View">
+                                <TileLayer
+
+                                    url="https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
+                                    // attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
+                                />
+                            </BaseLayer>
+                            <BaseLayer name="Street View">
+                                <TileLayer
+                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    // attribution='&copy; <a href="https://www.openstreetmap.org/copyright"></a>'
+                                />
+                            </BaseLayer>
+                        </LayersControl>
+
+                        {markers.map((marker, index) => (
+                            <Marker position={marker.position}>
+                                <Popup>{marker.popup}</Popup>
+                            </Marker>
+                        ))}
+
+
+
+                       
+
+
+
+                    </MapContainer>
+                </div>
+
+
+
+
+
+
+                {/* Stats Section */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                    {/* Residents Pie Chart */}
+                    <div className="bg-white p-6 rounded-lg shadow-md">
+                        <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Residents</h3>
+                        <Pie data={residentsData} />
+                    </div>
+
+                    {/* Non-Communicable Diseases Pie Chart */}
+                    <div className="bg-white p-6 rounded-lg shadow-md">
+                        <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Non Communicable Diseases</h3>
+                        <Pie data={nonCommunicableDiseasesData} />
+                    </div>
+
+
+                </div>
+                {/* Other Stats */}
+                <div className="grid grid-cols-2 gap-6">
+                    <div className="bg-white p-6 rounded-lg shadow-md">
+                        <h3 className="text-xl font-semibold text-[#008FFB]">100 Houses</h3>
+                    </div>
+                    <div className="bg-white p-6 rounded-lg shadow-md">
+                        <h3 className="text-xl font-semibold text-[#008FFB]">236 Members</h3>
+                    </div>
+                    <div className="bg-white p-6 rounded-lg shadow-md">
+                        <h3 className="text-xl font-semibold text-[#008FFB]">12 Divisions</h3>
+                    </div>
+                    <div className="bg-white p-6 rounded-lg shadow-md">
+                        <h3 className="text-xl font-semibold text-[#008FFB]">5 Diseases</h3>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+);
 };
 
 export default AdminDashboard;
