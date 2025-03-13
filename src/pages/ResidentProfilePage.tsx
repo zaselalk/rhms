@@ -2,49 +2,35 @@ import React, { FC } from 'react';
 
 const ResidentProfilePage: FC = () => {
     return (
-        <div className="flex min-h-screen bg-gray-100">
-            {/* Sidebar */}
-            <div className="w-1/4 bg-white shadow-lg">
-                <div className="p-6">
-                    <h2 className="text-xl font-semibold text-[#008FFB]">Hospital Management</h2>
-                    <nav className="mt-8">
-                        <ul>
-                            <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Dashboard</a></li>
-                            <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Diseases</a></li>
-                            <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Households</a></li>
-                            <li><a href="#" className="block py-2 text-sm text-[#008FFB]">Residents</a></li>
-                            <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Clinic</a></li>
-                            <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Division</a></li>
-                            <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Users</a></li>
-                        </ul>
-                    </nav>
-                    <div className="mt-8 flex items-center">
-                        <div className="text-sm text-gray-700">Ravindu</div>
-                        <div className="text-xs text-gray-500 ml-2">Admin</div>
-                    </div>
-                    <div className="mt-2">
-                        <button className="w-full py-2 text-white bg-[#008FFB] rounded-md hover:bg-[#006fbb]">Logout</button>
-                    </div>
+        <div className="min-h-screen bg-gray-100">
+            {/* Navbar */}
+            <div className="bg-[#008FFB] p-4 flex justify-between items-center">
+                <h2 className="text-2xl font-semibold text-white">Hospital Management</h2>
+                <div className="flex items-center">
+                    <span className="text-sm text-white mr-4">Ravindu (Admin)</span>
+                    <button className="text-white border border-white rounded-md px-4 py-2 hover:bg-[#006fbb]">
+                        Logout
+                    </button>
                 </div>
             </div>
 
             {/* Main Content */}
-            <div className="flex-1 p-6">
-                <div className="flex justify-between items-center mb-6">
+            <div className="p-6">
+                <div className="flex justify-between items-center mb-6 flex-col sm:flex-row">
                     <h2 className="text-2xl font-semibold text-[#008FFB]">Resident Profile</h2>
-                    <button className="text-[#008FFB] border border-[#008FFB] rounded-md px-4 py-2 hover:bg-[#00C1A7]">
+                    <button className="mt-4 sm:mt-0 text-[#008FFB] border border-[#008FFB] rounded-md px-4 py-2 hover:bg-[#00C1A7]">
                         Edit Profile
                     </button>
                 </div>
 
                 {/* Profile Overview */}
-                <div className="bg-white p-6 rounded-lg shadow-md flex">
-                    <div className="flex-shrink-0">
+                <div className="bg-white p-6 rounded-lg shadow-md flex flex-col sm:flex-row">
+                    <div className="flex-shrink-0 sm:w-1/3 flex justify-center sm:justify-start mb-4 sm:mb-0">
                         <img src="https://via.placeholder.com/150" alt="Profile" className="rounded-full w-32 h-32" />
                     </div>
-                    <div className="ml-6 flex-grow">
+                    <div className="ml-0 sm:ml-6 flex-grow">
                         <h3 className="text-xl font-semibold text-gray-800">Mr. Ravindu Harshana</h3>
-                        <div className="grid grid-cols-2 gap-4 text-sm text-gray-600 mt-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-600 mt-4">
                             <div>
                                 <p><strong>Age:</strong> 29</p>
                                 <p><strong>Blood Group:</strong> O+</p>
