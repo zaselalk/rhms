@@ -38,14 +38,21 @@ function App() {
         <Route path="/admin" >
           <Route path="dashboard" element={<AdminDashboardPage />} />
           <Route path="login" element={<LoginPage />} />
+
+          {/* /admin/diseases  */}
+          <Route path="diseases" >
+            <Route path="" element={<DiseasesPage />} />
+            <Route path="single" element={<SingleDiseasePage />} />
+          </Route>
+
+          {/* /admin/users routs */}
           <Route path="users">
             <Route path="" element={<UsersPage />} />
-            <Route path="add-users" element={<AddUserPage />} />
+            <Route path="add" element={<AddUserPage />} />
           </Route>
+
           <Route path="houses" element={<HouseholdPage />} />
           <Route path="resident-create" element={<CreateResidentPage />} />
-          <Route path="diseases" element={<DiseasesPage />} />
-          <Route path="single-diseases" element={<SingleDiseasePage />} />
           <Route path="division" element={<DivisionPage />} />
           <Route path="single-division" element={<SingleDivisionPage />} />
         </Route>

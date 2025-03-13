@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { Link } from 'react-router';
 
 const DiseasesPage: FC = () => {
     return (
@@ -50,63 +51,63 @@ const DiseasesPage: FC = () => {
                                 <td className="px-4 py-2 text-sm text-gray-700">Diabetics</td>
                                 <td className="px-4 py-2 text-sm text-gray-700">261</td>
                                 <td className="px-4 py-2 text-sm text-gray-700">
-                                    <button className="text-[#008FFB] hover:text-[#00C1A7]">View</button>
+                                    <Link to={"single"} className="text-[#008FFB] hover:text-[#00C1A7]">View</Link>
                                 </td>
                             </tr>
                             <tr>
                                 <td className="px-4 py-2 text-sm text-gray-700">Sugar</td>
                                 <td className="px-4 py-2 text-sm text-gray-700">261</td>
                                 <td className="px-4 py-2 text-sm text-gray-700">
-                                    <button className="text-[#008FFB] hover:text-[#00C1A7]">View</button>
+                                    <Link to={"single"} className="text-[#008FFB] hover:text-[#00C1A7]">View</Link>
                                 </td>
                             </tr>
                             <tr>
                                 <td className="px-4 py-2 text-sm text-gray-700">Low Pressure</td>
                                 <td className="px-4 py-2 text-sm text-gray-700">261</td>
                                 <td className="px-4 py-2 text-sm text-gray-700">
-                                    <button className="text-[#008FFB] hover:text-[#00C1A7]">View</button>
+                                    <Link to={"single"} className="text-[#008FFB] hover:text-[#00C1A7]">View</Link>
                                 </td>
                             </tr>
                             <tr>
                                 <td className="px-4 py-2 text-sm text-gray-700">High Pressure</td>
                                 <td className="px-4 py-2 text-sm text-gray-700">261</td>
                                 <td className="px-4 py-2 text-sm text-gray-700">
-                                    <button className="text-[#008FFB] hover:text-[#00C1A7]">View</button>
+                                    <Link to={"single"} className="text-[#008FFB] hover:text-[#00C1A7]">View</Link>
                                 </td>
                             </tr>
                             <tr>
                                 <td className="px-4 py-2 text-sm text-gray-700">Depression</td>
                                 <td className="px-4 py-2 text-sm text-gray-700">261</td>
                                 <td className="px-4 py-2 text-sm text-gray-700">
-                                    <button className="text-[#008FFB] hover:text-[#00C1A7]">View</button>
+                                    <Link to={"single"} className="text-[#008FFB] hover:text-[#00C1A7]">View</Link>
                                 </td>
                             </tr>
                             <tr>
                                 <td className="px-4 py-2 text-sm text-gray-700">Osteoporosis</td>
                                 <td className="px-4 py-2 text-sm text-gray-700">261</td>
                                 <td className="px-4 py-2 text-sm text-gray-700">
-                                    <button className="text-[#008FFB] hover:text-[#00C1A7]">View</button>
+                                    <Link to={"single"} className="text-[#008FFB] hover:text-[#00C1A7]">View</Link>
                                 </td>
                             </tr>
                             <tr>
                                 <td className="px-4 py-2 text-sm text-gray-700">Acne</td>
                                 <td className="px-4 py-2 text-sm text-gray-700">261</td>
                                 <td className="px-4 py-2 text-sm text-gray-700">
-                                    <button className="text-[#008FFB] hover:text-[#00C1A7]">View</button>
+                                    <Link to={"single"} className="text-[#008FFB] hover:text-[#00C1A7]">View</Link>
                                 </td>
                             </tr>
                             <tr>
                                 <td className="px-4 py-2 text-sm text-gray-700">Asthma</td>
                                 <td className="px-4 py-2 text-sm text-gray-700">261</td>
                                 <td className="px-4 py-2 text-sm text-gray-700">
-                                    <button className="text-[#008FFB] hover:text-[#00C1A7]">View</button>
+                                    <Link to={"single"} className="text-[#008FFB] hover:text-[#00C1A7]">View</Link>
                                 </td>
                             </tr>
                             <tr>
                                 <td className="px-4 py-2 text-sm text-gray-700">Arrhythmia</td>
                                 <td className="px-4 py-2 text-sm text-gray-700">261</td>
                                 <td className="px-4 py-2 text-sm text-gray-700">
-                                    <button className="text-[#008FFB] hover:text-[#00C1A7]">View</button>
+                                    <Link to={"single"} className="text-[#008FFB] hover:text-[#00C1A7]">View</Link>
                                 </td>
                             </tr>
                         </tbody>
