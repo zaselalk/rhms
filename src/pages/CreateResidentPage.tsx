@@ -4,7 +4,7 @@ const CreateResidentPage: FC = () => {
     return (
         <div className="flex min-h-screen bg-gray-100">
             {/* Sidebar */}
-            <div className="w-1/4 bg-white shadow-lg">
+            <div className="w-full sm:w-1/4 bg-white shadow-lg">
                 <div className="p-6">
                     <h2 className="text-xl font-semibold text-[#008FFB]">Hospital Management</h2>
                     <nav className="mt-8">
@@ -51,7 +51,7 @@ const CreateResidentPage: FC = () => {
                     </div>
 
                     {/* Form Fields */}
-                    <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-700">First Name</label>
                             <input
@@ -148,9 +148,7 @@ const CreateResidentPage: FC = () => {
 
                     {/* Submit Button */}
                     <div className="flex justify-end">
-                        <button
-                            className="px-6 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
-                        >
+                        <button className="px-6 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]">
                             Create
                         </button>
                     </div>
