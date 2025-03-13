@@ -10,32 +10,40 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER
+        
       },
       firstName: {
         type: DataTypes.STRING
       },
       lastName: {
+        allowNull: false,
         type: DataTypes.STRING
       },
       email: {
         type: DataTypes.STRING
       },
       password: {
+        allowNull: false,
         type: DataTypes.STRING
       },
       age: {
+        allowNull: false,
         type: DataTypes.INTEGER
       },
       bloodGroup: {
+        allowNull: false,
         type: DataTypes.STRING
       },
       sex: {
+        allowNull: false,
         type: DataTypes.STRING
       },
       clinicNumber: {
+        
         type: DataTypes.STRING
       },
       bloodPressure: {
+        
         type: DataTypes.STRING
       },
       glucose: {
