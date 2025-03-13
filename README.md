@@ -1,7 +1,7 @@
 # Village - Hospital Management System
 
 ## Developer Document
-![Developer Doc](/doc/Developer.md)
+Devloper Doc : [Developer Doc](/doc/Developer.md)
 
 Overview
 
