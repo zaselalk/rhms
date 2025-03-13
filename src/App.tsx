@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router";
 import RegistrationPage from "./pages/RegistrationPage";
-import ProfilePage from "./pages/ProfilePage";
 import LoginPage from "./pages/LoginPage";
 import DivisionPage from "./pages/DivisionPage";
 import SingleDivisionPage from "./pages/SingleDivisionPage";
@@ -17,6 +16,7 @@ import ForgottenPasswordPage from "./pages/ForgottenPasswordPage";
 import HouseholdLoginPage from "./pages/HouseholdLoginPage";
 import HouseholdManagePage from "./pages/HouseholdManagePage";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
+import ResidentLandingPage from "./pages/ResidentLandingPage";
 
 
 function App() {
@@ -24,6 +24,7 @@ function App() {
 
   return (
     <BrowserRouter>
+
       <Routes>
         <Route path="/" element={<div>
           <Link to="/household-login" className="bg-gray-300">HouseHold</Link> <br />
@@ -31,27 +32,39 @@ function App() {
           <Link to="/login">Staff</Link><br />
 
         </div>} />
-        <Route path="/dashboard" element={<AdminDashboardPage />} />
-        <Route path="/registration" element={<RegistrationPage />} />
-        <Route path="/Profile" element={<ProfilePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/division" element={<DivisionPage />} />
-        <Route path="/single-division" element={<SingleDivisionPage />} />
-        <Route path="/diseases" element={<DiseasesPage />} />
-        <Route path="/single-diseases" element={<SingleDiseasePage />} />
-        <Route path="/users" element={<UsersPage />} />
-        <Route path="/add-users" element={<AddUserPage />} />
-        <Route path="/houses" element={<HouseholdPage />} />
-        <Route path="/resident-profile" element={<ResidentProfilePage />} />
-        <Route path="/resident-profile-edit" element={<EditResidentProfilePage />} />
-        <Route path="/resident-forgotten-password" element={<ForgottenPasswordPage />} />
-        <Route path="/resident-login" element={<ResidentLoginPage />} />
-        <Route path="/create-resident" element={<CreateResidentPage />} />
 
-        {/* household */}
-        <Route path="/household-login" element={<HouseholdLoginPage />} />
-        <Route path="/household-manage" element={<HouseholdManagePage />} />
 
+        {/* Admin Users */}
+        <Route path="/admin" >
+          <Route path="dashboard" element={<AdminDashboardPage />} />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="users">
+            <Route path="" element={<UsersPage />} />
+            <Route path="add-users" element={<AddUserPage />} />
+          </Route>
+          <Route path="houses" element={<HouseholdPage />} />
+          <Route path="resident-create" element={<CreateResidentPage />} />
+          <Route path="diseases" element={<DiseasesPage />} />
+          <Route path="single-diseases" element={<SingleDiseasePage />} />
+          <Route path="division" element={<DivisionPage />} />
+          <Route path="single-division" element={<SingleDivisionPage />} />
+        </Route>
+
+        {/* household paths*/}
+        <Route path="/household">
+          <Route path="login" element={<HouseholdLoginPage />} />
+          <Route path="manage" element={<HouseholdManagePage />} />
+        </Route>
+
+        {/* Resident Paths*/}
+        <Route path="/resident" >
+          <Route path="" element={<ResidentLandingPage />} />
+          <Route path="registration" element={<RegistrationPage />} />
+          <Route path="profile" element={<ResidentProfilePage />} />
+          <Route path="profile-edit" element={<EditResidentProfilePage />} />
+          <Route path="forgotten-password" element={<ForgottenPasswordPage />} />
+          <Route path="login" element={<ResidentLoginPage />} />
+        </Route>
 
       </Routes>
     </BrowserRouter>
