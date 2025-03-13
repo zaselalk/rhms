@@ -17,11 +17,10 @@ import HouseholdLoginPage from "./pages/HouseholdLoginPage";
 import HouseholdManagePage from "./pages/HouseholdManagePage";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import ResidentLandingPage from "./pages/ResidentLandingPage";
+import CreateHouseholdPage from "./pages/CreateHouseholdPage";
 
 
 function App() {
-
-
   return (
     <BrowserRouter>
 
@@ -51,7 +50,11 @@ function App() {
             <Route path="add" element={<AddUserPage />} />
           </Route>
 
-          <Route path="houses" element={<HouseholdPage />} />
+          <Route path="households" >
+            <Route path="" element={<HouseholdPage />} />
+            <Route path="new" element={<CreateHouseholdPage />} />
+          </Route>
+
           <Route path="resident-create" element={<CreateResidentPage />} />
           <Route path="division" element={<DivisionPage />} />
           <Route path="single-division" element={<SingleDivisionPage />} />
