@@ -5,6 +5,7 @@ import LoginPage from "./pages/LoginPage";
 import DivisionPage from "./pages/DivisionPage";
 import SingleDivisionPage from "./pages/SingleDivisionPage";
 import DiseasesPage from "./pages/DiseasesPage";
+import SingleDiseasePage from "./pages/SingleDiseasePage";
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Route path="/division" element={<DivisionPage />} />
         <Route path="/single-division" element={<SingleDivisionPage />} />
         <Route path="/diseases" element={<DiseasesPage />} />
+        <Route path="/single-diseases" element={<SingleDiseasePage />} />
 
       </Routes>
     </BrowserRouter>
