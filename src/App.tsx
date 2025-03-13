@@ -10,6 +10,7 @@ import UsersPage from "./pages/UsersPage";
 import AddUserPage from "./pages/AddUserPage";
 import HouseholdPage from "./pages/HouseholdPage";
 import ResidentProfilePage from "./pages/ResidentProfilePage";
+import CreateResidentPage from "./pages/CreateResidentPage";
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
         <Route path="/add-users" element={<AddUserPage />} />
         <Route path="/houses" element={<HouseholdPage />} />
         <Route path="/resident-profile" element={<ResidentProfilePage />} />
+        <Route path="/create-resident" element={<CreateResidentPage />} />
 
       </Routes>
     </BrowserRouter>
