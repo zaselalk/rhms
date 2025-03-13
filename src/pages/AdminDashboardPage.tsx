@@ -1,11 +1,13 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js';
-import { MapContainer, TileLayer,Popup,Marker} from 'react-leaflet'
+import { MapContainer, TileLayer, Popup, Marker, LayersControl } from 'react-leaflet'
+
 
 
 import 'leaflet/dist/leaflet.css';
 
+const { BaseLayer } = LayersControl;
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 
@@ -59,21 +61,60 @@ const AdminDashboard: React.FC = () => {
             {/* Main Content */}
             <div className="flex-1 p-6">
                 <h2 className="text-2xl font-semibold text-[#008FFB] mb-6">Katugahahena Divisional Hospital</h2>
+                <div>
 
-                {/* Stats Section */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                    {/* Residents Pie Chart */}
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Residents</h3>
-                        <Pie data={residentsData} />
+                    {/* Map Section */}
+                    <div className="bg-white p-6 rounded-lg shadow-md mb-6 w-full ">
+                        <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Hospital Location</h3>
+                        <MapContainer center={[6.4893, 80.0847]} zoom={100} style={{ height: '400px', width: '100%' }}>
+                            <LayersControl position="topright">
+                                <BaseLayer checked name="Satellite View">
+                                    <TileLayer
+
+                                        url="https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
+                                        attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
+                                    />
+                                </BaseLayer>
+                                <BaseLayer name="Street View">
+                                    <TileLayer
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                    />
+                                </BaseLayer>
+                            </LayersControl>
+
+                            <Marker position={[6.4893, 80.0847]}>
+                                <Popup>
+                                    Katugahahena Divisional Hospital
+                                </Popup>
+                            </Marker>
+
+
+
+                        </MapContainer>
                     </div>
 
-                    {/* Non-Communicable Diseases Pie Chart */}
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Non Communicable Diseases</h3>
-                        <Pie data={nonCommunicableDiseasesData} />
-                    </div>
 
+
+
+
+
+                    {/* Stats Section */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                        {/* Residents Pie Chart */}
+                        <div className="bg-white p-6 rounded-lg shadow-md">
+                            <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Residents</h3>
+                            <Pie data={residentsData} />
+                        </div>
+
+                        {/* Non-Communicable Diseases Pie Chart */}
+                        <div className="bg-white p-6 rounded-lg shadow-md">
+                            <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Non Communicable Diseases</h3>
+                            <Pie data={nonCommunicableDiseasesData} />
+                        </div>
+
+
+                    </div>
                     {/* Other Stats */}
                     <div className="grid grid-cols-2 gap-6">
                         <div className="bg-white p-6 rounded-lg shadow-md">
@@ -91,31 +132,7 @@ const AdminDashboard: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Map Section */}
-                <div className="bg-white p-6 rounded-lg shadow-md mb-6 w-full h-100 ">
-                    <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Hospital Location</h3>
-                    {/* Replace with an actual map component */}
-                    <img src="https://via.placeholder.com/500x300" alt="Hospital Location" className="w-full h-auto rounded-md" />
 
-
-                    <MapContainer center={[6.4893, 80.0847]} zoom={30} style={{ height: '400px', width: '100%' }}>
-
-                        <TileLayer
-                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        />
-
-                        <Marker position={[6.4893, 80.0847]}>
-                            <Popup>
-                                A pretty CSS3 popup. <br /> Easily customizable.
-                            </Popup>
-                        </Marker>
-                       
-
-
-
-                    </MapContainer>
-                </div>
             </div>
         </div>
     );
