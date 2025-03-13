@@ -3,7 +3,7 @@
 ## Developer Document
 Devloper Doc : [Developer Doc](/doc/Developer.md) 
 <br>
-UI Designs : [UI Designs](/doc/UIDesigns.md)
+UI Designs : [UI Designs](/docs/UIDesigns.md) 
 
 Overview
 
