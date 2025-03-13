@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js';
-import { MapContainer, TileLayer} from 'react-leaflet'
+import { MapContainer, TileLayer,Popup,Marker} from 'react-leaflet'
 
 
 import 'leaflet/dist/leaflet.css';
@@ -98,12 +98,18 @@ const AdminDashboard: React.FC = () => {
                     <img src="https://via.placeholder.com/500x300" alt="Hospital Location" className="w-full h-auto rounded-md" />
 
 
-                    <MapContainer center={[7.8731, 80.7718]} zoom={13} style={{ height: '400px', width: '100%' }}>
+                    <MapContainer center={[6.4893, 80.0847]} zoom={30} style={{ height: '400px', width: '100%' }}>
 
                         <TileLayer
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
+
+                        <Marker position={[6.4893, 80.0847]}>
+                            <Popup>
+                                A pretty CSS3 popup. <br /> Easily customizable.
+                            </Popup>
+                        </Marker>
                        
 
 
