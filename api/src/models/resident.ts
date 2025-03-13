@@ -52,27 +52,14 @@ export default (sequelize: Sequelize) => {
       },
       password: {
         type: DataTypes.STRING,
-        validate: {
-          notEmpty: {
-            msg: "Password cannot be empty",
-          },
-        },
       },
       birthday: {
         type: DataTypes.DATE,
-        validate: {
-          notEmpty: {
-            msg: "Age cannot be empty",
-          },
-        },
+
       },
       bloodGroup: {
         type: DataTypes.STRING,
-        validate: {
-          notEmpty: {
-            msg: "Blood Group cannot be empty",
-          },
-        },
+
       },
       sex: {
         type: DataTypes.STRING,
@@ -88,11 +75,7 @@ export default (sequelize: Sequelize) => {
       },
       bloodPressure: {
         type: DataTypes.STRING,
-        validate: {
-          notEmpty: {
-            msg: "Blood Pressure cannot be empty",
-          },
-        },
+
       },
       glucose: {
         type: DataTypes.STRING,

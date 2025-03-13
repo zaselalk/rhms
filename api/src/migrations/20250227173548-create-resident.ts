@@ -23,15 +23,15 @@ module.exports = {
         type: DataTypes.STRING
       },
       password: {
-        allowNull: false,
+
         type: DataTypes.STRING
       },
       birthday: {
-        allowNull: false,
+
         type: DataTypes.INTEGER
       },
       bloodGroup: {
-        allowNull: false,
+
         type: DataTypes.STRING
       },
       sex: {
@@ -59,7 +59,7 @@ module.exports = {
         type: DataTypes.DATE
       },
       updatedAt: {
-
+        allowNull: false,
         type: DataTypes.DATE
       }
     });
