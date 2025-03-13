@@ -2,6 +2,7 @@
 
 ## Developer Document
 Devloper Doc : [Developer Doc](/doc/Developer.md)
+UI Designs : [Developer Doc](/doc/UIDesigns.md)
 
 Overview
 
