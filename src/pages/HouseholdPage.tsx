@@ -1,6 +1,11 @@
 import React, { FC } from 'react';
+import { useNavigate } from 'react-router';
 
 const HouseholdPage: FC = () => {
+    const navigate = useNavigate();
+    const handleHouseholdCreate = () => {
+        navigate('/admin/households/new');
+    }
     return (
         <div className="flex min-h-screen bg-gray-100">
             {/* Sidebar */}
@@ -32,7 +37,8 @@ const HouseholdPage: FC = () => {
             <div className="flex-1 p-6">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-semibold text-[#008FFB]">Household Details</h2>
-                    <div className="px-4 py-2 bg-[#008FFB] text-white rounded-lg">8 Houses</div>
+                    {/* <div className="px-4 py-2 bg-[#008FFB] text-white rounded-lg">8 Houses</div> */}
+                    <button className="px-4 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]" onClick={handleHouseholdCreate}>+ Add Household</button>
                 </div>
 
                 {/* Household Stats */}
