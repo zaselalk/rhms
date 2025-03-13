@@ -7,6 +7,10 @@ const ResidentProfilePage: FC = () => {
         // Handle logout logic here
         navigate('/resident-login');
     }
+    const handleEditProfile = () => {
+        // Handle edit profile logic here
+        navigate('/resident-profile-edit');
+    }
     return (
         <div className="min-h-screen bg-gray-100">
             {/* Navbar */}
@@ -24,7 +28,7 @@ const ResidentProfilePage: FC = () => {
             <div className="p-6">
                 <div className="flex justify-between items-center mb-6 flex-col sm:flex-row">
                     <h2 className="text-2xl font-semibold text-[#008FFB]">Resident Profile</h2>
-                    <button className="mt-4 sm:mt-0 text-[#008FFB] border border-[#008FFB] rounded-md px-4 py-2 hover:bg-[#00C1A7]">
+                    <button className="mt-4 sm:mt-0 text-[#008FFB] border border-[#008FFB] rounded-md px-4 py-2 hover:bg-[#00C1A7]" onClick={handleEditProfile}>
                         Edit Profile
                     </button>
                 </div>
