@@ -9,6 +9,7 @@ import SingleDiseasePage from "./pages/SingleDiseasePage";
 import UsersPage from "./pages/UsersPage";
 import AddUserPage from "./pages/AddUserPage";
 import HouseholdPage from "./pages/HouseholdPage";
+import ResidentProfilePage from "./pages/ResidentProfilePage";
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
         <Route path="/users" element={<UsersPage />} />
         <Route path="/add-users" element={<AddUserPage />} />
         <Route path="/houses" element={<HouseholdPage />} />
+        <Route path="/resident-profile" element={<ResidentProfilePage />} />
 
       </Routes>
     </BrowserRouter>
