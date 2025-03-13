@@ -1,6 +1,11 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js';
+import { MapContainer, TileLayer} from 'react-leaflet'
+
+
+import 'leaflet/dist/leaflet.css';
+
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 
@@ -87,10 +92,23 @@ const AdminDashboard: React.FC = () => {
                 </div>
 
                 {/* Map Section */}
-                <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+                <div className="bg-white p-6 rounded-lg shadow-md mb-6 w-full h-100 ">
                     <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Hospital Location</h3>
                     {/* Replace with an actual map component */}
                     <img src="https://via.placeholder.com/500x300" alt="Hospital Location" className="w-full h-auto rounded-md" />
+
+
+                    <MapContainer center={[7.8731, 80.7718]} zoom={13} style={{ height: '400px', width: '100%' }}>
+
+                        <TileLayer
+                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        />
+                       
+
+
+
+                    </MapContainer>
                 </div>
             </div>
         </div>
