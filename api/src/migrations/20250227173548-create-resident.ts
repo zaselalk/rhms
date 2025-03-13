@@ -1,6 +1,6 @@
 'use strict';
 import { QueryInterface, DataTypes } from "sequelize";
-  
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(QueryInterface: QueryInterface) {
@@ -10,13 +10,13 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER
-        
+
       },
       firstName: {
+        allowNull: false,
         type: DataTypes.STRING
       },
       lastName: {
-        allowNull: false,
         type: DataTypes.STRING
       },
       email: {
@@ -26,7 +26,7 @@ module.exports = {
         allowNull: false,
         type: DataTypes.STRING
       },
-      age: {
+      birthday: {
         allowNull: false,
         type: DataTypes.INTEGER
       },
@@ -39,11 +39,10 @@ module.exports = {
         type: DataTypes.STRING
       },
       clinicNumber: {
-        
         type: DataTypes.STRING
       },
       bloodPressure: {
-        
+
         type: DataTypes.STRING
       },
       glucose: {
@@ -60,7 +59,7 @@ module.exports = {
         type: DataTypes.DATE
       },
       updatedAt: {
-        allowNull: false,
+
         type: DataTypes.DATE
       }
     });
