@@ -6,7 +6,7 @@ interface ResidentAttributes {
   lastName: string,
   email: string,
   password: string,
-  age: string,
+  birthday: Date,
   bloodGroup: string,
   sex: string,
   clinicNumber: string,
@@ -21,7 +21,7 @@ export class Resident extends Model<ResidentAttributes> implements ResidentAttri
   public lastName!: string;
   public email!: string;
   public password!: string;
-  public age!: string;
+  public birthday!: Date;
   public bloodGroup!: string;
   public sex!: string;
   public clinicNumber!: string;
@@ -45,22 +45,10 @@ export default (sequelize: Sequelize) => {
       },
       lastName: {
         type: DataTypes.STRING,
-        validate: {
-          notEmpty: {
-            msg: "Last Name cannot be empty",
-          },
-        },
       },
       email: {
         type: DataTypes.STRING,
-        validate: {
-          notEmpty: {
-            msg: "Email cannot be empty",
-          },
-          isEmail: {
-            msg: "Email format is invalid",
-          },
-        },
+
       },
       password: {
         type: DataTypes.STRING,
@@ -68,14 +56,10 @@ export default (sequelize: Sequelize) => {
           notEmpty: {
             msg: "Password cannot be empty",
           },
-          len: {
-            args: [6, 20],
-            msg: "Password must be between 6 and 20 characters",
-          },
         },
       },
-      age: {
-        type: DataTypes.STRING,
+      birthday: {
+        type: DataTypes.DATE,
         validate: {
           notEmpty: {
             msg: "Age cannot be empty",
@@ -100,11 +84,7 @@ export default (sequelize: Sequelize) => {
       },
       clinicNumber: {
         type: DataTypes.STRING,
-        validate: {
-          notEmpty: {
-            msg: "Clinic Number cannot be empty",
-          },
-        },
+
       },
       bloodPressure: {
         type: DataTypes.STRING,
@@ -116,27 +96,15 @@ export default (sequelize: Sequelize) => {
       },
       glucose: {
         type: DataTypes.STRING,
-        validate: {
-          notEmpty: {
-            msg: "Glucose cannot be empty",
-          },
-        },
+
       },
       heartRate: {
         type: DataTypes.STRING,
-        validate: {
-          notEmpty: {
-            msg: "Heart Rate cannot be empty",
-          },
-        },
+
       },
       cholesterol: {
         type: DataTypes.STRING,
-        validate: {
-          notEmpty: {
-            msg: "Cholesterol cannot be empty",
-          },
-        },
+
       },
     },
     {
