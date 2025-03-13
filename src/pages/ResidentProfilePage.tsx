@@ -1,6 +1,12 @@
 import React, { FC } from 'react';
+import { useNavigate } from 'react-router';
 
 const ResidentProfilePage: FC = () => {
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        // Handle logout logic here
+        navigate('/resident-login');
+    }
     return (
         <div className="min-h-screen bg-gray-100">
             {/* Navbar */}
@@ -8,7 +14,7 @@ const ResidentProfilePage: FC = () => {
                 <h2 className="text-2xl font-semibold text-white">Hospital Management</h2>
                 <div className="flex items-center">
                     <span className="text-sm text-white mr-4">Ravindu (Admin)</span>
-                    <button className="text-white border border-white rounded-md px-4 py-2 hover:bg-[#006fbb]">
+                    <button className="text-white border border-white rounded-md px-4 py-2 hover:bg-[#006fbb]" onClick={handleLogout}>
                         Logout
                     </button>
                 </div>
