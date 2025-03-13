@@ -1,7 +1,8 @@
 # Village - Hospital Management System
 
 ## Developer Document
-Devloper Doc : [Developer Doc](/doc/Developer.md)
+Devloper Doc : [Developer Doc](/doc/Developer.md) 
+<br>
 UI Designs : [Developer Doc](/doc/UIDesigns.md)
 
 Overview
