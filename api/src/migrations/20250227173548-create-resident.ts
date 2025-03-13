@@ -1,61 +1,63 @@
 'use strict';
+import { QueryInterface, DataTypes } from "sequelize";
+  
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Residents', {
+  async up(QueryInterface: QueryInterface) {
+    await QueryInterface.createTable('Residents', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: DataTypes.INTEGER
       },
       firstName: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING
       },
       lastName: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING
       },
       email: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING
       },
       password: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING
       },
       age: {
-        type: Sequelize.INTEGER
+        type: DataTypes.INTEGER
       },
       bloodGroup: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING
       },
       sex: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING
       },
       clinicNumber: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING
       },
       bloodPressure: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING
       },
       glucose: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING
       },
       heartRate: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING
       },
       cholesterol: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: DataTypes.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: DataTypes.DATE
       }
     });
   },
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface: QueryInterface) {
     await queryInterface.dropTable('Residents');
   }
 };
