@@ -6,6 +6,8 @@ import DivisionPage from "./pages/DivisionPage";
 import SingleDivisionPage from "./pages/SingleDivisionPage";
 import DiseasesPage from "./pages/DiseasesPage";
 import SingleDiseasePage from "./pages/SingleDiseasePage";
+import UsersPage from "./pages/UsersPage";
+import AddUserPage from "./pages/AddUserPage";
 
 
 function App() {
@@ -26,6 +28,8 @@ function App() {
         <Route path="/single-division" element={<SingleDivisionPage />} />
         <Route path="/diseases" element={<DiseasesPage />} />
         <Route path="/single-diseases" element={<SingleDiseasePage />} />
+        <Route path="/users" element={<UsersPage />} />
+        <Route path="/add-users" element={<AddUserPage />} />
 
       </Routes>
     </BrowserRouter>
