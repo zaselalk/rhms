@@ -1,6 +1,12 @@
 import passport, { DoneCallback } from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { User } from "../models/user";
+import passportLocalStrategy from "./passport/passportLocalStrategy";
+import {
+  ExtractJwt,
+  Strategy as JwtStrategy,
+  StrategyOptionsWithoutRequest,
+} from "passport-jwt";
 
 passport.use(
   new LocalStrategy(
@@ -8,26 +14,30 @@ passport.use(
       usernameField: "email",
       passwordField: "password",
     },
-    async (email: string, password: string, done: any) => {
-      try {
-        const user: User | null = await User.findOne({ where: { email } });
-
-        if (!user) {
-          return done(null, false, { message: "Incorrect email." });
-        }
-
-        const isValid = true; //await user.validatePassword(password);
-
-        if (!isValid) {
-          return done(null, false, { message: "Incorrect password." });
-        }
-
-        return done(null, user);
-      } catch (err) {
-        return done(err);
-      }
-    }
+    passportLocalStrategy
   )
+);
+
+//jwt opt
+const jwtops: StrategyOptionsWithoutRequest = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.JWT_SECRET as string,
+};
+
+// jwt strategy
+passport.use(
+  "jwt",
+  new JwtStrategy(jwtops, async (jwt_payload, done: DoneCallback) => {
+    try {
+      const user: User | null = await User.findByPk(jwt_payload.id);
+      if (!user) {
+        return done(null, false);
+      }
+      return done(null, user);
+    } catch (err) {
+      return done(err);
+    }
+  })
 );
 
 passport.serializeUser((user, done) => {
