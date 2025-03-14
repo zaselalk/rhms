@@ -3,7 +3,6 @@ import passport from "../config/passport";
 import User from "../models/user";
 import UserController from "../controllers/UserController";
 import catchAsync from "../util/catchAsync";
-import { AuthenticateCallback } from "passport";
 
 const AuthRouter: Router = Router();
 const userController = new UserController();
