@@ -26,10 +26,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// app.get("/", (req, res) => {
-//   res.send("Hello World!");
-// });
-
 app.use("/auth", AuthRouter);
 
 app.listen(PORT, async () => {
