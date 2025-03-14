@@ -3,8 +3,6 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-console.log(process.env.DATABASE_PASSWORD);
-
 const config: { [key: string]: SequelizeOptions } = {
   development: {
     username: process.env.DATABASE_USER,
