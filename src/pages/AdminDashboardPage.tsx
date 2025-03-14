@@ -1,11 +1,10 @@
 import React from 'react';
-import { Pie } from 'react-chartjs-2';
+import { Doughnut, Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js';
 import { MapContainer, TileLayer, Popup, Marker, LayersControl } from 'react-leaflet'
-
-
-
 import 'leaflet/dist/leaflet.css';
+import NavBar from '../components/SideBar';
+import TopBar from '../components/TopBar';
 
 const { BaseLayer } = LayersControl;
 
@@ -17,8 +16,8 @@ const AdminDashboard: React.FC = () => {
         labels: ['Yes', 'No'],
         datasets: [
             {
-                data: [1243, 500], // Example data (1,243 Yes, 500 No)
-                backgroundColor: ['#00C1A7', '#FF0000'], // Green for Yes, Red for No
+                data: [12, 50, 43, 65], // Example data (1,243 Yes, 500 No)
+                backgroundColor: ['#00C1A7', '#FF0000', '#A87C34', '#ACF542'], // Green for Yes, Red for No
             },
         ],
     };
@@ -58,118 +57,91 @@ const AdminDashboard: React.FC = () => {
         { position: [6.492091667, 80.083858333], popup: "DEYAGALA19" },
         { position: [6.492096667, 80.084067500], popup: "DEYAGALA20" },
     ];
-        
 
 
 
 
-return (
-    <div className="min-h-screen bg-gray-100 flex">
-        {/* Sidebar */}
-        <div className="w-1/4 bg-white shadow-lg p-6">
-            <h2 className="text-xl font-semibold text-[#008FFB]">Hospital Management</h2>
-            <div className="mt-8">
-                <ul className="space-y-4">
-                    <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Dashboard</a></li>
-                    <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Diseases</a></li>
-                    <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Households</a></li>
-                    <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Residents</a></li>
-                    <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Clinic</a></li>
-                    <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Division</a></li>
-                    <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Users</a></li>
-                </ul>
-            </div>
-            <div className="mt-8 flex items-center">
-                <div className="text-sm text-gray-700">Ravindu</div>
-                <div className="text-xs text-gray-500 ml-2">Admin</div>
-            </div>
-            <div className="mt-2">
-                <button className="w-full py-2 text-white bg-[#008FFB] rounded-md hover:bg-[#006fbb]">Logout</button>
-            </div>
-        </div>
 
-        {/* Main Content */}
-        <div className="flex-1 p-6">
-            <h2 className="text-2xl font-semibold text-[#008FFB] mb-6">Katugahahena Divisional Hospital</h2>
-            <div>
+    return (
 
-                {/* Map Section */}
-                <div className="bg-white p-6 rounded-lg shadow-md mb-6 w-full ">
-                    <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Hospital Location</h3>
-                    <MapContainer center={[6.4893, 80.0847]} zoom={100} style={{ height: '400px', width: '100%' }}>
-                        <LayersControl position="topright">
-                            <BaseLayer checked name="Satellite View">
-                                <TileLayer
 
-                                    url="https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
+        <div className="min-h-screen bg-gray-100">
+
+
+            {/* Main Content */}
+            <div className="">
+                {/* <NavBar></NavBar> */}
+                {/* <TopBar></TopBar> */}
+                <div className="grid grid-cols-2 w-full gap-5">
+
+                    {/* // Map Section */}
+                    <div className="bg-white p-5 rounded-lg shadow-md h-1.5/2">
+
+                        <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Resident Location</h3>
+                        <MapContainer center={[6.4893, 80.0847]} zoom={100} style={{ height: '90%', width: '100%' }}>
+                            <LayersControl position="topright">
+                                <BaseLayer checked name="Satellite View">
+                                    <TileLayer
+
+                                        url="https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
                                     // attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
-                                />
-                            </BaseLayer>
-                            <BaseLayer name="Street View">
-                                <TileLayer
-                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    />
+                                </BaseLayer>
+                                <BaseLayer name="Street View">
+                                    <TileLayer
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                                     // attribution='&copy; <a href="https://www.openstreetmap.org/copyright"></a>'
-                                />
-                            </BaseLayer>
-                        </LayersControl>
+                                    />
+                                </BaseLayer>
+                            </LayersControl>
 
-                        {markers.map((marker, index) => (
-                            <Marker position={marker.position}>
-                                <Popup>{marker.popup}</Popup>
-                            </Marker>
-                        ))}
-
-
-
-                       
-
-
-
-                    </MapContainer>
-                </div>
-
-
-
-
-
-
-                {/* Stats Section */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                    {/* Residents Pie Chart */}
-                    <div className="bg-white p-6 rounded-lg shadow-md">
+                            {markers.map((marker, index) => (
+                                <Marker position={marker.position}>
+                                    <Popup>{marker.popup}</Popup>
+                                </Marker>
+                            ))}
+                        </MapContainer>
+                    </div>
+                    {/* Non-Communicable Diseases Pie Chart */}
+                    <div className="bg-white p-6 rounded-lg shadow-md w-1/2">
                         <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Residents</h3>
                         <Pie data={residentsData} />
                     </div>
 
+
+
+
+                    {/* Other Stats */}
+                    <div className="grid grid-cols-2 gap-6 ">
+                        <div className="bg-white p-6 rounded-lg shadow-md text-center align-middle flex-col flex items-center justify-center">
+                            <h1 className="text-4xl font-semibold text-[#008FFB]">179 </h1>
+                            <h2 className='text-2xl'>Houses</h2>
+                        </div>
+                        <div className="bg-white p-6 rounded-lg shadow-md text-center align-middle flex-col flex items-center justify-center">
+                            <h1 className="text-4xl font-semibold text-[#008FFB]">1245 </h1>
+                            <h2 className='text-2xl'>Members</h2>
+                        </div>
+                        <div className="bg-white p-6 rounded-lg shadow-md text-center align-middle flex-col flex items-center justify-center">
+                            <h1 className="text-4xl font-semibold text-[#008FFB]">13 </h1>
+                            <h2 className='text-2xl'>Division</h2>
+                        </div>
+                        <div className="bg-white p-6 rounded-lg shadow-md text-center align-middle flex-col flex items-center justify-center">
+                            <h1 className="text-4xl font-semibold text-[#008FFB]">8 </h1>
+                            <h2 className='text-2xl'>Diseaes</h2>
+                        </div>
+                        
+                    </div>
+
                     {/* Non-Communicable Diseases Pie Chart */}
-                    <div className="bg-white p-6 rounded-lg shadow-md">
+                    <div className="bg-white p-6 rounded-lg shadow-md w-1/2 h-auto">
                         <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Non Communicable Diseases</h3>
                         <Pie data={nonCommunicableDiseasesData} />
                     </div>
 
-
-                </div>
-                {/* Other Stats */}
-                <div className="grid grid-cols-2 gap-6">
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h3 className="text-xl font-semibold text-[#008FFB]">100 Houses</h3>
-                    </div>
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h3 className="text-xl font-semibold text-[#008FFB]">236 Members</h3>
-                    </div>
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h3 className="text-xl font-semibold text-[#008FFB]">12 Divisions</h3>
-                    </div>
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h3 className="text-xl font-semibold text-[#008FFB]">5 Diseases</h3>
-                    </div>
                 </div>
             </div>
-
-
         </div>
-    </div>
-);
+    );
 };
 
 export default AdminDashboard;
