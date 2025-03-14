@@ -13,13 +13,14 @@ passport.use(
         const user: User | null = await User.findOne({ where: { email } });
 
         if (!user) {
-          return done(null, false, { message: "Incorrect email." });
+          // log error
+          return done(null, false, { message: "Incorrect email or password!" });
         }
 
-        const isValid = true; //await user.validatePassword(password);
+        const isValid = await user.validatePassword(password);
 
         if (!isValid) {
-          return done(null, false, { message: "Incorrect password." });
+          return done(null, false, { message: "Incorrect email or password!" });
         }
 
         return done(null, user);

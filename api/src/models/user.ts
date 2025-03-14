@@ -20,6 +20,12 @@ export class User extends Model<UserAttributes> implements UserAttributes {
   public name!: string;
   public email!: string;
   public password?: string;
+
+  // validate password
+  public async validatePassword(password: string): Promise<boolean> {
+    if (!this.password) return false;
+    return await bcrypt.compare(password, this.password);
+  }
 }
 
 /**
