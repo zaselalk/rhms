@@ -4,6 +4,7 @@ import passport from "./config/passport";
 import session from "express-session";
 import AuthRouter from "./routes/auth.routes";
 import sequelize from "./models";
+import DisaseRouter from "./routes/disease.routes";
 
 dotenv.config();
 
@@ -26,14 +27,11 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// app.get("/", (req, res) => {
-//   res.send("Hello World!");
-// });
-
 app.use("/auth", AuthRouter);
+app.use("/disease", DisaseRouter);
 
 app.listen(PORT, async () => {
-  sequelize.sync({ force: true });
+  sequelize.sync();
   console.log(`Server is running on http://localhost:${PORT}`);
 });
 
