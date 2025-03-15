@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Link } from "react-router-dom"; // Ensure proper routing
+import { Link } from "react-router"; // Ensure proper routing
 
 
 
@@ -12,13 +12,13 @@ const AdminSidebar: FC = () => {
             <div className="mt-8">
                 <ul className="space-y-4">
                     {[
-                        { path: "/dashboard", label: "Dashboard" },
-                        { path: "/diseases", label: "Diseases" },
-                        { path: "/households", label: "Households" },
-                        { path: "/residents", label: "Residents" },
-                        { path: "/clinic", label: "Clinic" },
-                        { path: "/division", label: "Division" },
-                        { path: "/users", label: "Users" }
+                        { path: "/admin/dashboard", label: "Dashboard" },
+                        { path: "/admin/diseases", label: "Diseases" },
+                        { path: "/admin/households", label: "Households" },
+                        { path: "/admin/residents", label: "Residents" },
+                        { path: "/admin/clinic", label: "Clinic" },
+                        { path: "/admin/division", label: "Division" },
+                        { path: "/admin/users", label: "Users" }
                     ].map((item) => (
                         <li key={item.path}>
                             <Link

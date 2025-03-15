@@ -1,7 +1,6 @@
-import React from 'react';
 import React, { FC } from 'react';
-import { useNavigate } from 'react-router';
-import AdminSidebar from "../../Components/Layouts/Admin/AdminSidebar";
+import { useNavigate } from 'react-router-dom';
+import AdminSlidebar from '../components/layouts/admin/AdminSlidebar';
 
 const HouseholdPage: FC = () => {
     const navigate = useNavigate();
@@ -11,7 +10,7 @@ const HouseholdPage: FC = () => {
     return (
          <div className="min-h-screen bg-gray-100 flex">
                 {/* Reusable Sidebar */}
-                <AdminSidebar />
+                <AdminSlidebar />
 
             {/* Main Content */}
             <div className="flex-1 p-6">
