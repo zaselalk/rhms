@@ -1,6 +1,5 @@
 import { FC, useState } from "react";
-import { Link } from "react-router-dom"; 
-import AdminSidebar from "../../Components/Layouts/Admin/AdminSidebar"; // Adjust the path as necessary
+import AdminSidebar from "../components/layouts/admin/AdminSlidebar";
 
 
 const CreateHouseholdPage: FC = () => {
@@ -22,8 +21,8 @@ const CreateHouseholdPage: FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-100 flex">
-        {/* Reusable Sidebar */}
-        <AdminSidebar />
+            {/* Reusable Sidebar */}
+            <AdminSidebar />
 
             {/* Main Content */}
             <div className="flex-1 p-6">
