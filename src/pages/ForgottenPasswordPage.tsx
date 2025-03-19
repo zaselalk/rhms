@@ -1,5 +1,6 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { Link } from 'react-router';
+import AdminSlidebar from '../components/layouts/admin/AdminSlidebar';
 
 const ForgottenPasswordPage: FC = () => {
     const [email, setEmail] = useState('');
@@ -16,6 +17,9 @@ const ForgottenPasswordPage: FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col">
+             {/* Reusable Sidebar */}
+             <AdminSlidebar />
+
             {/* Navbar */}
             <div className="bg-[#008FFB] p-4 flex justify-between items-center">
                 <h2 className="text-2xl font-semibold text-white">Hospital Management</h2>

@@ -1,13 +1,13 @@
-import React from 'react';
-import React, { FC } from 'react';
+
+import { FC } from 'react';
 import { Link } from 'react-router';
-import AdminSidebar from "../../Components/Layouts/Admin/AdminSidebar";
+import AdminSlidebar from '../components/layouts/admin/AdminSlidebar';
 
 const DiseasesPage: FC = () => {
     return (
          <div className="min-h-screen bg-gray-100 flex">
                 {/* Reusable Sidebar */}
-                <AdminSidebar />
+                <AdminSlidebar />
 
             {/* Main Content */}
             <div className="flex-1 p-6">

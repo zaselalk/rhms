@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router';
+import AdminSlidebar from '../components/layouts/admin/AdminSlidebar';
 
 const LoginPage: FC = () => {
   const navigate = useNavigate();
@@ -11,6 +12,9 @@ const LoginPage: FC = () => {
   }
   return (
     <div className="flex min-h-screen bg-gray-100">
+       {/* Reusable Sidebar */}
+       <AdminSlidebar />
+
       {/* Left Image Section */}
       <div className="hidden lg:block w-1/2 bg-cover bg-center" style={{ backgroundImage: "url('path/to/your/image.jpg')" }}></div>
 

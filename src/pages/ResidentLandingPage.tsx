@@ -1,11 +1,16 @@
 import { FC } from "react";
 import { Link } from "react-router"; // Ensure you're using react-router-dom for navigation
+import AdminSlidebar from "../components/layouts/admin/AdminSlidebar"; // Import the AdminSidebar component
 
 const ResidentLandingPage: FC = () => {
     return (
+        
         <div className="min-h-screen bg-gray-100 flex justify-center items-center">
             <div className="bg-white p-8 rounded-lg shadow-lg w-full sm:w-1/2 md:w-1/3">
                 <h2 className="text-2xl font-semibold text-[#008FFB] mb-6 text-center">Resident Dashboard</h2>
+
+                 {/* Reusable Sidebar */}
+                 <AdminSlidebar />
 
                 {/* Links to Other Pages */}
                 <div className="space-y-4">
