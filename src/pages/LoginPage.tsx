@@ -4,10 +4,18 @@ import { useNavigate } from 'react-router';
 const LoginPage: FC = () => {
   const navigate = useNavigate();
 
+  //ref to store username and password
+  const usernameRef = React.useRef<HTMLInputElement>(null);
+  const passwordRef = React.useRef<HTMLInputElement>(null);
+
   const handleLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
+    const username = usernameRef.current?.value;
+    const password = passwordRef.current?.value;
+    console.log(username, password)
     // Handle login logic here
-    navigate('/dashboard');
+    // navigate('/dashboard');
   }
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -27,6 +35,7 @@ const LoginPage: FC = () => {
                 type="text"
                 id="username"
                 name="username"
+                ref={usernameRef}
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                 placeholder="Enter your username"
               />
@@ -39,6 +48,7 @@ const LoginPage: FC = () => {
                 type="password"
                 id="password"
                 name="password"
+                ref={passwordRef}
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                 placeholder="Enter your password"
               />
