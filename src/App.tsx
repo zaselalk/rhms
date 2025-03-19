@@ -26,9 +26,9 @@ function App() {
 
       <Routes>
         <Route path="/" element={<div>
-          <Link to="/household-login" className="bg-gray-300">HouseHold</Link> <br />
-          <Link to="/resident-login">Resident Login</Link><br />
-          <Link to="/login">Staff</Link><br />
+          {/* <Link to="/household-login" className="bg-gray-300">HouseHold</Link> <br /> */}
+          <Link to="/admin/login">Admin Login</Link><br />
+          {/* <Link to="/login">Staff</Link><br /> */}
 
         </div>} />
 
