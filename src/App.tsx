@@ -55,7 +55,14 @@ function App() {
             <Route path="new" element={<CreateHouseholdPage />} />
           </Route>
 
-          <Route path="resident-create" element={<CreateResidentPage />} />
+          {/* /admin/residents routes */}
+          <Route path="residents">
+            <Route path="" element={<ResidentLandingPage />} />
+            <Route path="registration" element={<RegistrationPage />} />
+            <Route path="profile" element={<ResidentProfilePage />} />
+          </Route>
+
+
           <Route path="division" element={<DivisionPage />} />
           <Route path="single-division" element={<SingleDivisionPage />} />
         </Route>

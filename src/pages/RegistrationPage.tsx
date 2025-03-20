@@ -17,16 +17,31 @@ const RegistrationPage: FC<RegistrationProps> = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 flex justify-center items-center">
-            <div className="bg-white p-8 rounded-lg shadow-lg w-full sm:w-1/2 md:w-1/3">
+        <div className="min-h-screen bg-gray-100 flex ">
+            {/* Reusable Sidebar */}
+            <AdminSlidebar />
+
+            {/* Registration Form Container */}
+            <div className="bg-white p-8 rounded-lg shadow-lg w-full ">
                 <h2 className="text-2xl font-semibold text-[#008FFB] mb-6 text-center">Resident Registration</h2>
-                 {/* Reusable Sidebar */}
-                 <AdminSlidebar />
 
                 {/* Registration Form */}
-                <div className="space-y-4">
-                    {/* First Name */}
+                <div className="space-y-4 grid grid-cols-2 gap-4">
+                    {/* Profile Image */}
+                    <div className="img">
+                        <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
+                            Profile Picture
+                        </label>
+                        <div className="div bg-gray-500 w-25 h-25 rounded-full flex items-center justify-center">
+
+                            <input type="file" id="profileimg" name="profileimg" accept="image/*" className="" />
+
+                        </div>
+
+
+                    </div>
                     <div>
+
                         <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
                             First Name
                         </label>
@@ -38,8 +53,10 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                             placeholder="Enter first name"
                         />
-                    </div>
 
+
+
+                    </div>
                     {/* Last Name */}
                     <div>
                         <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
@@ -83,7 +100,6 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                             placeholder="Enter contact number"
                         />
                     </div>
-
                     {/* Address */}
                     <div>
                         <label htmlFor="address" className="block text-sm font-medium text-gray-700">
@@ -98,8 +114,68 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                         />
                     </div>
 
+
+                    <div>
+                        <label htmlFor="Gender" className="block text-sm font-medium text-gray-700">Gender</label>
+
+                        <div className="flex items-center space-x-4">
+                            <label htmlFor="">Male</label>
+                            <input type="radio" name="Gender" />
+                            <label htmlFor="">Female</label>
+                            <input type="radio" name="Gender"
+                                id="Gender"
+                            />
+                        </div>
+
+                    </div>
+
+                    <div>
+                        <label>Select Grama Division</label>
+
+                        <select name="GramaDivision" id="GramaDivision" className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
+                            <option value="1">Grama Division 1</option>
+                            <option value="2">Grama Division 2</option>
+                            <option value="3">Grama Division 3</option>
+                            <option value="4">Grama Division 4</option>
+                            <option value="5">Grama Division 5</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Marital State</label>
+
+                        <select name="MaritalState" id="MaritalState" className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
+                            <option value="Married">Married</option>
+                            <option value="Unmarried">Unmarried</option>
+                            <option value="Divorced">Divorced</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Education level</label>
+
+                        <select name="Educationlevel" id="Educationlevel" className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
+                            <option value="Married">Odinary Level</option>
+                            <option value="Unmarried">Advance Level</option>
+                            <option value="Divorced">Graduate</option>
+                        </select>
+                    </div>
+
+
+
+
+
+                </div>
+                <div className="space-y-4">
+
+
+
+
+
+
+
+
+
                     {/* Submit Button */}
-                    <div className="flex justify-center">
+                    <div className="flex justify-center mt-10 ">
                         <button
                             onClick={handleRegister}
                             className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
