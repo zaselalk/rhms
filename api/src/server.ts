@@ -29,6 +29,7 @@ app.use(passport.session());
 
 app.use("/auth", AuthRouter);
 app.use("/disease", DisaseRouter);
+app.use("/resident", DisaseRouter);
 
 app.listen(PORT, async () => {
   sequelize.sync();
