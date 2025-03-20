@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
 import AdminSlidebar from "../components/layouts/admin/AdminSlidebar";
+import DetailTable from "../components/Common/DetailTable";
 
 
 type RegistrationProps = {};
@@ -10,10 +11,13 @@ const RegistrationPage: FC<RegistrationProps> = () => {
     const [dob, setDob] = useState("");
     const [contact, setContact] = useState("");
     const [address, setAddress] = useState("");
+    const [Gender, setGender] = useState("");
+
+
 
     const handleRegister = () => {
         // Handle the registration logic here (e.g., save to database, send request to API)
-        console.log("Registered:", { firstName, lastName, dob, contact, address });
+        console.log("Registered:", { firstName, lastName, dob, contact, address, Gender });
     };
 
     return (
@@ -25,23 +29,14 @@ const RegistrationPage: FC<RegistrationProps> = () => {
             <div className="bg-white p-8 rounded-lg shadow-lg w-full ">
                 <h2 className="text-2xl font-semibold text-[#008FFB] mb-6 text-center">Resident Registration</h2>
 
+                <div className="mt-5 mb-8 ">
+                    <h2 className="text-2xl">Personal Details</h2>
+                    <hr className="bg-gray-100 mb-2" />
+                </div>
+
                 {/* Registration Form */}
                 <div className="space-y-4 grid grid-cols-2 gap-4">
-                    {/* Profile Image */}
-                    <div className="img">
-                        <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                            Profile Picture
-                        </label>
-                        <div className="div bg-gray-500 w-25 h-25 rounded-full flex items-center justify-center">
-
-                            <input type="file" id="profileimg" name="profileimg" accept="image/*" className="" />
-
-                        </div>
-
-
-                    </div>
                     <div>
-
                         <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
                             First Name
                         </label>
@@ -53,9 +48,6 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                             placeholder="Enter first name"
                         />
-
-
-
                     </div>
                     {/* Last Name */}
                     <div>
@@ -118,14 +110,13 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                     <div>
                         <label htmlFor="Gender" className="block text-sm font-medium text-gray-700">Gender</label>
 
-                        <div className="flex items-center space-x-4">
-                            <label htmlFor="">Male</label>
-                            <input type="radio" name="Gender" />
-                            <label htmlFor="">Female</label>
-                            <input type="radio" name="Gender"
-                                id="Gender"
-                            />
-                        </div>
+                        <select name="Gender" id="Gender" className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                            onChange={(e) => setGender(e.target.value)}
+                        >
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+
+                        </select>
 
                     </div>
 
@@ -158,32 +149,29 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                             <option value="Divorced">Graduate</option>
                         </select>
                     </div>
-
-
-
-
-
                 </div>
-                <div className="space-y-4">
 
-
-
-
-
-
-
-
-
-                    {/* Submit Button */}
-                    <div className="flex justify-center mt-10 ">
-                        <button
-                            onClick={handleRegister}
-                            className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
-                        >
-                            Register
-                        </button>
-                    </div>
+                <div className="mt-5 mb-8">
+                    <h2 className="text-2xl">Health Details</h2>
+                    <hr className="bg-gray-100 mb-2" />
                 </div>
+
+                <div className="grid gap-15">
+                    <DetailTable TableName={"Current Desiease"} Colunms="Name" />
+                    <DetailTable TableName={"Surgery"} Colunms="Name" />
+                </div>
+
+
+                {/* Submit Button */}
+                <div className="flex justify-center mt-10 ">
+                    <button
+                        onClick={handleRegister}
+                        className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
+                    >
+                        Register
+                    </button>
+                </div>
+
             </div>
         </div>
     );
