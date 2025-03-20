@@ -1,5 +1,6 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { useNavigate } from 'react-router';
+import AdminSlidebar from '../components/layouts/admin/AdminSlidebar';
 
 const HouseholdManagePage: FC = () => {
     // Sample data for residents in a household
@@ -44,6 +45,9 @@ const HouseholdManagePage: FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-100">
+             {/* Reusable Sidebar */}
+             <AdminSlidebar />
+
             {/* Navbar */}
             <div className="bg-[#008FFB] p-4 flex justify-between items-center">
                 <h2 className="text-2xl font-semibold text-white">Hospital Management</h2>

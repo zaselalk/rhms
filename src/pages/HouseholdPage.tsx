@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { FC } from 'react';
+import { useNavigate } from 'react-router';
 import AdminSlidebar from '../components/layouts/admin/AdminSlidebar';
 
 const HouseholdPage: FC = () => {

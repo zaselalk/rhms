@@ -2,6 +2,8 @@ import React from 'react';
 import { Doughnut, Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js';
 import { MapContainer, TileLayer, Popup, Marker, LayersControl } from 'react-leaflet'
+import { MapContainer, TileLayer, Popup, Marker, LayersControl } from 'react-leaflet';
+import AdminSlidebar from '../components/layouts/admin/AdminSlidebar';
 import 'leaflet/dist/leaflet.css';
 import NavBar from '../components/SideBar';
 import TopBar from '../components/TopBar';
@@ -58,9 +60,15 @@ const AdminDashboard: React.FC = () => {
         { position: [6.492096667, 80.084067500], popup: "DEYAGALA20" },
     ];
 
-
-
-
+return (
+    <div className="min-h-screen bg-gray-100 flex">
+        {/* Reusable Sidebar */}
+        <AdminSlidebar />
+                        {markers.map((marker, index) => (
+                            <Marker position={marker.position as [number, number]}>
+                                <Popup>{marker.popup}</Popup>
+                            </Marker>
+                        ))}
 
     return (
 

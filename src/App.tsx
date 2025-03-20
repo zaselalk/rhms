@@ -18,6 +18,11 @@ import HouseholdManagePage from "./pages/HouseholdManagePage";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import ResidentLandingPage from "./pages/ResidentLandingPage";
 import CreateHouseholdPage from "./pages/CreateHouseholdPage";
+import LandingPage from "./pages/LandingPage";
+import ClinicOverviewPage from "./pages/ClinicOverviewPage";
+import ClinicDetailPage from "./pages/ClinicDetailPage";
+
+
 
 
 function App() {
@@ -25,12 +30,8 @@ function App() {
     <BrowserRouter>
 
       <Routes>
-        <Route path="/" element={<div>
-          <Link to="/household-login" className="bg-gray-300">HouseHold</Link> <br />
-          <Link to="/resident-login">Resident Login</Link><br />
-          <Link to="/login">Staff</Link><br />
-
-        </div>} />
+        <Route path="/" element={<LandingPage />} />
+        
 
 
         {/* Admin Users */}
@@ -58,6 +59,15 @@ function App() {
           <Route path="resident-create" element={<CreateResidentPage />} />
           <Route path="division" element={<DivisionPage />} />
           <Route path="single-division" element={<SingleDivisionPage />} />
+
+
+          {/* Clinic Paths*/}
+        <Route path="clinic">
+         <Route path="" element={<ClinicOverviewPage />} />
+          <Route path="diabetic" element={<ClinicDetailPage />} />
+        </Route>
+  
+        
         </Route>
 
         {/* household paths*/}
@@ -75,6 +85,7 @@ function App() {
           <Route path="forgotten-password" element={<ForgottenPasswordPage />} />
           <Route path="login" element={<ResidentLoginPage />} />
         </Route>
+
 
       </Routes>
     </BrowserRouter>

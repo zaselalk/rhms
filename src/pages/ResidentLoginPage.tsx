@@ -1,5 +1,6 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
+import AdminSlidebar from '../components/layouts/admin/AdminSlidebar';
 
 const ResidentLoginPage: FC = () => {
     const [username, setUsername] = useState('');
@@ -16,12 +17,7 @@ const ResidentLoginPage: FC = () => {
 
     return (
         <div className="flex min-h-screen bg-gray-100">
-            {/* Sidebar */}
-            <div className="w-full sm:w-1/4 bg-white shadow-lg flex items-center justify-center">
-                <div className="p-6">
-                    <h2 className="text-2xl font-semibold text-[#008FFB] text-center">Hospital Management</h2>
-                </div>
-            </div>
+            
 
             {/* Main Content */}
             <div className="flex-1 flex items-center justify-center bg-gray-100">

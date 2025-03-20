@@ -1,16 +1,16 @@
-import React from 'react';
-import React, { FC } from 'react';
-import AdminSidebar from "../../Components/Layouts/Admin/AdminSidebar";
+
+import { FC } from 'react';
+import AdminSlidebar from '../components/layouts/admin/AdminSlidebar';
 
 const DivisionPage: FC = () => {
     return (
-        
+        <>
             <div className="min-h-screen bg-gray-100 flex">
                 {/* Reusable Sidebar */}
-                <AdminSidebar />
+                <AdminSlidebar />
             </div>
 
-            {/* Main Content */}
+
             <div className="flex-1 p-6">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-semibold text-[#008FFB]">Division Details</h2>
@@ -93,8 +93,13 @@ const DivisionPage: FC = () => {
                     </div>
                 </div>
             </div>
-        </div>
+
+
+
+        </>
     );
+
+
 };
 
 export default DivisionPage;

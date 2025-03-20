@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
-import AdminSidebar from "../../Components/Layouts/Admin/AdminSidebar";
+import { FC } from 'react';
+import AdminSlidebar from '../components/layouts/admin/AdminSlidebar';
 
 
 
@@ -7,7 +7,7 @@ const CreateResidentPage: FC = () => {
     return (
         <div className="min-h-screen bg-gray-100 flex">
                 {/* Reusable Sidebar */}
-                <AdminSidebar />
+                <AdminSlidebar />
 
             {/* Main Content */}
             <div className="flex-1 p-6">
