@@ -4,7 +4,6 @@ interface ClinicAttributes {
   id: string;
   name: string;
   category: string;
-  division: string;
   patient_count: number;
 }
 
@@ -12,8 +11,7 @@ export class Clinic extends Model<ClinicAttributes> implements ClinicAttributes 
   public id!: string;
   public name!: string;
   public category!: string;
-  public division!: string;
-  public patient_count: number = 0;
+  public patient_count!: number; 
 }
 
 export default (sequelize: Sequelize) => {
@@ -39,15 +37,6 @@ export default (sequelize: Sequelize) => {
         validate: {
           notEmpty: {
             msg: "Category cannot be empty",
-          },
-        },
-      },
-      division: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            msg: "Division cannot be empty",
           },
         },
       },
