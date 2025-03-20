@@ -19,6 +19,10 @@ import AdminDashboardPage from "./pages/AdminDashboardPage";
 import ResidentLandingPage from "./pages/ResidentLandingPage";
 import CreateHouseholdPage from "./pages/CreateHouseholdPage";
 import LandingPage from "./pages/LandingPage";
+import ClinicOverviewPage from "./pages/ClinicOverviewPage";
+import ClinicDetailPage from "./pages/ClinicDetailPage";
+
+
 
 
 function App() {
@@ -55,6 +59,15 @@ function App() {
           <Route path="resident-create" element={<CreateResidentPage />} />
           <Route path="division" element={<DivisionPage />} />
           <Route path="single-division" element={<SingleDivisionPage />} />
+
+
+          {/* Clinic Paths*/}
+        <Route path="clinic">
+         <Route path="" element={<ClinicOverviewPage />} />
+          <Route path="diabetic" element={<ClinicDetailPage />} />
+        </Route>
+  
+        
         </Route>
 
         {/* household paths*/}
@@ -72,6 +85,7 @@ function App() {
           <Route path="forgotten-password" element={<ForgottenPasswordPage />} />
           <Route path="login" element={<ResidentLoginPage />} />
         </Route>
+
 
       </Routes>
     </BrowserRouter>
