@@ -18,8 +18,10 @@ import HouseholdManagePage from "./pages/HouseholdManagePage";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import ResidentLandingPage from "./pages/ResidentLandingPage";
 import CreateHouseholdPage from "./pages/CreateHouseholdPage";
+import LandingPage from "./pages/LandingPage";
 import ClinicOverviewPage from "./pages/ClinicOverviewPage";
 import ClinicDetailPage from "./pages/ClinicDetailPage";
+
 
 
 
@@ -28,12 +30,8 @@ function App() {
     <BrowserRouter>
 
       <Routes>
-        <Route path="/" element={<div>
-          {/* <Link to="/household-login" className="bg-gray-300">HouseHold</Link> <br /> */}
-          <Link to="/admin/login">Admin Login</Link><br />
-          {/* <Link to="/login">Staff</Link><br /> */}
-
-        </div>} />
+        <Route path="/" element={<LandingPage />} />
+        
 
 
         {/* Admin Users */}

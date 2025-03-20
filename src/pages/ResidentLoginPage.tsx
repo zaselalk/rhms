@@ -17,8 +17,7 @@ const ResidentLoginPage: FC = () => {
 
     return (
         <div className="flex min-h-screen bg-gray-100">
-             {/* Reusable Sidebar */}
-             <AdminSlidebar />
+            
 
             {/* Main Content */}
             <div className="flex-1 flex items-center justify-center bg-gray-100">

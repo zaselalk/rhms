@@ -15,8 +15,6 @@ const HouseholdLoginPage: FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col">
-             {/* Reusable Sidebar */}
-             <AdminSlidebar />
 
             {/* Navbar */}
             <div className="bg-[#008FFB] p-4 flex justify-between items-center">
