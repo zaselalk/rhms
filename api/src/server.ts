@@ -5,6 +5,7 @@ import session from "express-session";
 import AuthRouter from "./routes/auth.routes";
 import sequelize from "./models";
 import DisaseRouter from "./routes/disease.routes";
+import cors from "cors";
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ const PORT: number =
 const app: Application = express();
 
 app.use(express.json());
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(

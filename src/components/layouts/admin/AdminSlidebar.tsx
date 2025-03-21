@@ -32,9 +32,10 @@ const AdminSidebar: FC = () => {
                 <div className="text-xs text-gray-500 ml-2">Admin</div>
             </div>
             <div className="mt-2">
-                <button className="w-full py-2 text-white bg-[#008FFB] rounded-md hover:bg-[#006fbb]">
+
+                <Link to="/admin/login" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7] rounded-md px-3">
                     Logout
-                </button>
+                </Link>
             </div>
         </div>
     );
