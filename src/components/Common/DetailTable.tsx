@@ -34,7 +34,7 @@ const DetailTable: React.FC<DetailTableProps> = ({ TableName, Colunms, }) => {
         </thead>
         <tbody>
           {users.map((user, index) => (
-            <tr key={index} className="border-b">
+            <tr key={index} className="border-b-gray-200">
               <td className="p-3">{user.name}</td>
               <td className="p-3">{user.title}</td>
               <td className="p-3">{user.email}</td>

@@ -13,6 +13,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
     const [address, setAddress] = useState("");
     const [Gender, setGender] = useState("");
     const [JobDetail, setjob] = useState("");
+    const [weight, setWeight] = useState("");
 
     const handleRegister = () => {
         // Handle the registration logic here (e.g., save to database, send request to API)
@@ -91,6 +92,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                             placeholder="Enter contact number"
                         />
                     </div>
+
                     {/* Address */}
                     <div>
                         <label htmlFor="address" className="block text-sm font-medium text-gray-700">
@@ -105,7 +107,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                         />
                     </div>
 
-
+                    {/* Gender */}
                     <div>
                         <label htmlFor="Gender" className="block text-sm font-medium text-gray-700">Gender</label>
 
@@ -119,8 +121,41 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                     </div>
 
+                    {/* Weight */}
                     <div>
-                        <label>Select Grama Division</label>
+                        <label htmlFor="Weight" className="block text-sm font-medium text-gray-700">
+                            Weight
+                        </label>
+                        <input
+                            type="text"
+                            id="Weight"
+                            value={weight}
+                            onChange={(e) => setContact(e.target.value)}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                            placeholder="Enter Weight"
+                        />
+                    </div>
+
+                    {/* Heidght */}
+                    <div>
+                        <label htmlFor="Height" className="block text-sm font-medium text-gray-700">
+                            Height
+                        </label>
+                        <input
+                            type="text"
+                            id="Height"
+                            value={contact}
+                            onChange={(e) => setContact(e.target.value)}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                            placeholder="Enter Height"
+                        />
+                    </div>
+
+
+
+
+                    <div>
+                        <label>Gramaniladari Division</label>
 
                         <select name="GramaDivision" id="GramaDivision" className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
                             <option value="1">Grama Division 1</option>
@@ -136,52 +171,134 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                         <select name="MaritalState" id="MaritalState" className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
                             <option value="Married">Married</option>
                             <option value="Unmarried">Unmarried</option>
+                            <option value="Unmarried">Widowed</option>
                             <option value="Divorced">Divorced</option>
                         </select>
                     </div>
                     <div>
+                        <label>Religion</label>
+                        <select name="Religion" id="Religion" className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
+                            <option value="Buddhist">Buddhist</option>
+                            <option value="Christian">Christian</option>
+                            <option value="Hindu">Hindu</option>
+                            <option value="Muslim">Muslim</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div>
                         <label>Education level</label>
-
                         <select name="Educationlevel" id="Educationlevel" className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
+                            <option value="Married">No Formal Education</option>
+                            <option value="Married">Grade 1-5 </option>
+                            <option value="Married">Grade 6-10 </option>
                             <option value="Married">Odinary Level</option>
                             <option value="Unmarried">Advance Level</option>
-                            <option value="Divorced">Graduate</option>
+                            <option value="Unmarried">Diploma</option>
+                            <option value="Divorced">Digree</option>
+                            <option value="Divorced">Post Graduate</option>
+
                         </select>
                     </div>
                     <div>
                         <label>Job Details</label>
+                        <select name="jobDetails" id="jobDetails" className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
+                            <option value="No Formal Education">Worker</option>
+                            <option value="Semi_artisan">Semi-artisan</option>
+                            <option value="Artisan">Artisan</option>
+                            <option value="Excecutive">Excecutive</option>t
+                            <option value="Unemployment">Unemployment</option>
+                            <option value="Student">Student</option>
+                        </select>
+                    </div>
 
-                        <input type="text"
-                            id="jobDetails"
-                            placeholder="Enter Job Details"
-                            value={JobDetail}
-                            onChange={(e) => setjob(e.target.value)}
+                    <div className="col-span-2">
+                        <label>Addicteds</label>
+                        <div className="gap-4 mt-3 ml-3 flex">
+                            <div className="flex gap-2 justify-content-center">
 
-                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none" />
+                                <label htmlFor="Smoke">Smoke</label>
+                                <input type="checkbox" name="Smoke" id="Smoke" />
+                            </div>
+                            <div className="flex gap-2 justify-content-center">
+                                <label>Betel Chewing</label>
+                                <input type="checkbox" name="" id="" />
+                            </div>
+                            <div className="flex gap-2 justify-content-center">
+                                <label>Alocohol</label>
+                                <input type="checkbox" name="" id="" />
+                            </div>
+                            <div className="flex gap-2 justify-content-center">
+                                <label>Other Substance Use</label>
+                                <input type="checkbox" name="" id="" />
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div className="mt-5 mb-8">
+
+                <div className="mt-10 mb-5">
                     <h2 className="text-2xl">Health Details</h2>
                     <hr className="bg-gray-100 mb-2" />
                 </div>
+                <div className="mb-10" >
+                    <label className="mb-50">Allergies</label>
+                    <div className="gap-4 mt-3 ml-3 flex">
+                        <div className="flex gap-2 justify-content-center">
+
+                            <label htmlFor="Smoke">Food Alergies</label>
+                            <input type="checkbox" name="Alergy" id="Smoke" />
+                        </div>
+                        <div className="flex gap-2 justify-content-center">
+                            <label>Drug Alergies</label>
+                            <input type="checkbox" name="Alergy" id="" />
+                        </div>
+                        <div className="flex gap-2 justify-content-center">
+
+                            <label htmlFor="Smoke">Medicine Alergies</label>
+                            <input type="checkbox" name="Alergy" id="Smoke" />
+                        </div>
+                        <div className="flex gap-2 justify-content-center">
+                            <label>Other Alergies</label>
+                            <input type="checkbox" name="Alergy" id="" />
+                        </div>
+
+                    </div>
+                </div>
+
+                <div className="mt-5 mb-8" >
+                    <label className="mb-50">Attendent Clinic</label>
+                    <div className="gap-4 mt-3 ml-3 flex">
+                        <div className="flex gap-2 justify-content-center">
+
+                            <label htmlFor="Smoke">Medical Clinic</label>
+                            <input type="checkbox" name="Smoke" id="Smoke" />
+                        </div>
+                        <div className="flex gap-2 justify-content-center">
+                            <label>HCL</label>
+                            <input type="checkbox" name="" id="" />
+                        </div>
+                        <div className="flex gap-2 justify-content-center">
+                            <label>Dental Clinic</label>
+                            <input type="checkbox" name="" id="" />
+                        </div>
+                        <div className="flex gap-2 justify-content-center">
+                            <label>Specialist Clinic</label>
+                            <input type="checkbox" name="" id="" />
+                        </div>
+                    </div>
+
+                </div>
+
 
                 <div className="grid gap-15">
-                    <DetailTable TableName={"Current Desiease"} Colunms={[{ title: "Name" }, { title: "Medicine" }, { title: "Time Period" }, { title: "Venue" }]} />
+                    <DetailTable TableName={"Chronical Diseaes"} Colunms={[{ title: "Name" }, { title: "Medicine" }, { title: "Time Period" }, { title: "Venue" }]} />
                     <DetailTable TableName={"Surgery"} Colunms={[{ title: "Surgery Name" }, { title: "Reason" }, { title: "Time" }, { title: "Venue" }]} />
 
                 </div>
-              
 
-                <div className="mt-5 mb-5" >
-                        <label className="mb-50">Clinic level</label>
 
-                        <select name="Educationlevel" id="Educationlevel" className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
-                            <option value="Married">Odinary Level</option>
-                            <option value="Unmarried">Advance Level</option>
-                            <option value="Divorced">Graduate</option>
-                        </select>
-                    </div>
+
+
 
 
                 {/* Submit Button */}
