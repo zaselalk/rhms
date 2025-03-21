@@ -12,8 +12,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
     const [contact, setContact] = useState("");
     const [address, setAddress] = useState("");
     const [Gender, setGender] = useState("");
-
-
+    const [JobDetail, setjob] = useState("");
 
     const handleRegister = () => {
         // Handle the registration logic here (e.g., save to database, send request to API)
@@ -149,6 +148,17 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                             <option value="Divorced">Graduate</option>
                         </select>
                     </div>
+                    <div>
+                        <label>Job Details</label>
+
+                        <input type="text"
+                            id="jobDetails"
+                            placeholder="Enter Job Details"
+                            value={JobDetail}
+                            onChange={(e) => setjob(e.target.value)}
+
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none" />
+                    </div>
                 </div>
 
                 <div className="mt-5 mb-8">
@@ -157,9 +167,21 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                 </div>
 
                 <div className="grid gap-15">
-                    <DetailTable TableName={"Current Desiease"} Colunms="Name" />
-                    <DetailTable TableName={"Surgery"} Colunms="Name" />
+                    <DetailTable TableName={"Current Desiease"} Colunms={[{ title: "Name" }, { title: "Medicine" }, { title: "Time Period" }, { title: "Venue" }]} />
+                    <DetailTable TableName={"Surgery"} Colunms={[{ title: "Surgery Name" }, { title: "Reason" }, { title: "Time" }, { title: "Venue" }]} />
+
                 </div>
+              
+
+                <div className="mt-5 mb-5" >
+                        <label className="mb-50">Clinic level</label>
+
+                        <select name="Educationlevel" id="Educationlevel" className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
+                            <option value="Married">Odinary Level</option>
+                            <option value="Unmarried">Advance Level</option>
+                            <option value="Divorced">Graduate</option>
+                        </select>
+                    </div>
 
 
                 {/* Submit Button */}
