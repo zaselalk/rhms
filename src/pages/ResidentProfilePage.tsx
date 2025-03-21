@@ -15,23 +15,27 @@ const ResidentProfilePage: FC = () => {
     return (
         <div className="min-h-screen bg-gray-100">
              {/* Reusable Sidebar */}
-             <AdminSlidebar />
-
+             {/* <AdminSlidebar /> */}
+             
+                
             {/* Navbar */}
-            <div className="bg-[#008FFB] p-4 flex justify-between items-center">
-                <h2 className="text-2xl font-semibold text-white">Hospital Management</h2>
+             <div className="bg-[#008FFB] p-4 flex justify-between items-center">  
+                <h2 className="text-2xl font-semibold text-white">Resident Profile</h2>
                 <div className="flex items-center">
                     <span className="text-sm text-white mr-4">Ravindu (Admin)</span>
                     <button className="text-white border border-white rounded-md px-4 py-2 hover:bg-[#006fbb]" onClick={handleLogout}>
                         Logout
                     </button>
                 </div>
-            </div>
+                
+            </div> 
+           
+          
 
             {/* Main Content */}
             <div className="p-6">
-                <div className="flex justify-between items-center mb-6 flex-col sm:flex-row">
-                    <h2 className="text-2xl font-semibold text-[#008FFB]">Resident Profile</h2>
+                {/* <div className="flex justify-between items-center mb-6 flex-col sm:flex-row">
+                    <h2 className="text-2xl font-semibold text-[#008FFB]">Resident Profile</h2> */}
                     <button className="mt-4 sm:mt-0 text-[#008FFB] border border-[#008FFB] rounded-md px-4 py-2 hover:bg-[#00C1A7]" onClick={handleEditProfile}>
                         Edit Profile
                     </button>
@@ -122,7 +126,10 @@ const ResidentProfilePage: FC = () => {
                     </table>
                 </div>
             </div>
-        </div>
+        
+        
+        
+
     );
 };
 

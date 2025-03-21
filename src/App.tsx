@@ -35,14 +35,16 @@ function App() {
         <Route path="/" element={<LandingPage />} />
 
 
-        {/*Resident profiles*/}
-        <Route path="/resident" element={<Resident />} />
-        <Route path="/resident/profile/:id" element={<ResidentProfilePage />} />
+    
 
         {/* Admin Users */}
         <Route path="/admin" >
           <Route path="dashboard" element={<AdminDashboardPage />} />
           <Route path="login" element={<LoginPage />} />
+
+        {/*Resident profiles*/}
+        <Route path="residents" element={<Resident />} />
+        <Route path="residents/profile/:id" element={<ResidentProfilePage />} />
 
           {/* /admin/diseases  */}
           <Route path="diseases" >

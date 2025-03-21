@@ -1,5 +1,6 @@
 
 import { Link } from "react-router";
+import AdminSidebar from "../components/layouts/admin/AdminSlidebar";
 
 
 
@@ -12,8 +13,20 @@ const residents = [
 
 const ResidentListPage = () => {
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Resident Details</h2>
+
+    <div className="flex">
+    {/* Sidebar */}
+    <AdminSidebar/>
+
+    {/* Main Content */}
+    <div className="p-6 w-full bg-gray-100 min-h-screen">
+      {/* Header Section */}
+      {/* <div className="flex justify-between items-center mb-6 bg-white p-4 shadow rounded-lg">
+        <div className="flex items-center space-x-3"> */}
+          
+          <div>
+            <h2 className="text-lg font-bold">Resident Details</h2>
+          </div>
 
       <div className="bg-white shadow-lg rounded-lg p-4">
         <table className="w-full border-collapse">
@@ -39,7 +52,7 @@ const ResidentListPage = () => {
                   {/* <Link to={`/resident/profile/${resident.id}`}>
                     <Button className="bg-blue-500 text-white px-4 py-2 rounded">VIEW</Button>
                   </Link> */}
-                 <Link to={`/resident/profile/${resident.id}`}className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-purple-700 transition">
+                 <Link to={`profile/${resident.id}`}className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-purple-700 transition">
                     View
                   </Link>
                 </td>
@@ -49,6 +62,9 @@ const ResidentListPage = () => {
         </table>
       </div>
     </div>
+    </div>
+    // </div>
+    // </div>
   );
 };
 
