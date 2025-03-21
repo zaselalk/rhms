@@ -14,11 +14,37 @@ const RegistrationPage: FC<RegistrationProps> = () => {
     const [Gender, setGender] = useState("");
     const [JobDetail, setjob] = useState("");
     const [weight, setWeight] = useState("");
+    const [height, setHeight] = useState("");
+    const [GramaDivision, setGramaDivision] = useState("");
+    const [maritalState, setMaritalstate] = useState("");
+    const [religion, setReligion] = useState("");
+    const [education, setEducation] = useState("");
+   
+    const [selected, setAddictedd] = useState<string[]>([]);
+
+
+
+    const options = [
+        "Smoke",
+        "Betel Chewing",
+        "Alocohol",
+        "Other Substance Use",
+    ];
+
+    const handleAddicted = (event) => {
+        const { value, checked } = event.target;
+        setAddictedd((prev) =>
+            checked ? [...prev, value] : prev.filter((item) => item !== value)
+        );
+    };
+
 
     const handleRegister = () => {
         // Handle the registration logic here (e.g., save to database, send request to API)
         console.log("Registered:", { firstName, lastName, dob, contact, address, Gender });
     };
+
+
 
     return (
         <div className="min-h-screen bg-gray-100 flex ">
@@ -130,7 +156,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                             type="text"
                             id="Weight"
                             value={weight}
-                            onChange={(e) => setContact(e.target.value)}
+                            onChange={(e) => setWeight(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                             placeholder="Enter Weight"
                         />
@@ -145,39 +171,44 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                             type="text"
                             id="Height"
                             value={contact}
-                            onChange={(e) => setContact(e.target.value)}
+                            onChange={(e) => setHeight(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                             placeholder="Enter Height"
                         />
                     </div>
 
-
-
-
+                    {/* Gramaniladari division */}
                     <div>
                         <label>Gramaniladari Division</label>
+                        <select name="GramaDivision" id="GramaDivision"
+                            onChange={(e) => setGramaDivision(e.target.value)}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
+                            <option value="1">Kotagedara</option>
+                            <option value="2">Kolahakada</option>
+                            <option value="3">Pahalawela</option>
 
-                        <select name="GramaDivision" id="GramaDivision" className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
-                            <option value="1">Grama Division 1</option>
-                            <option value="2">Grama Division 2</option>
-                            <option value="3">Grama Division 3</option>
-                            <option value="4">Grama Division 4</option>
-                            <option value="5">Grama Division 5</option>
                         </select>
                     </div>
+                    {/* Marital State */}
                     <div>
                         <label>Marital State</label>
 
-                        <select name="MaritalState" id="MaritalState" className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
+                        <select name="MaritalState" id="MaritalState"
+                            onChange={(e) => setMaritalstate(e.target.value)}
+
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
                             <option value="Married">Married</option>
                             <option value="Unmarried">Unmarried</option>
                             <option value="Unmarried">Widowed</option>
                             <option value="Divorced">Divorced</option>
                         </select>
                     </div>
+                    {/* Religion */}
                     <div>
                         <label>Religion</label>
-                        <select name="Religion" id="Religion" className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
+                        <select name="Religion" id="Religion"
+                            onChange={(e) => setReligion(e.target.value)}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
                             <option value="Buddhist">Buddhist</option>
                             <option value="Christian">Christian</option>
                             <option value="Hindu">Hindu</option>
@@ -185,23 +216,30 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                             <option value="Other">Other</option>
                         </select>
                     </div>
+
+                    {/* Education Level */}
                     <div>
                         <label>Education level</label>
-                        <select name="Educationlevel" id="Educationlevel" className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
-                            <option value="Married">No Formal Education</option>
-                            <option value="Married">Grade 1-5 </option>
-                            <option value="Married">Grade 6-10 </option>
-                            <option value="Married">Odinary Level</option>
-                            <option value="Unmarried">Advance Level</option>
-                            <option value="Unmarried">Diploma</option>
-                            <option value="Divorced">Digree</option>
-                            <option value="Divorced">Post Graduate</option>
+                        <select name="Educationlevel" id="Educationlevel"
+                            onChange={(e) => setEducation(e.target.value)}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
+                            <option value="No Formal Education">No Formal Education</option>
+                            <option value="Grade 1-5 ">Grade 1-5</option>
+                            <option value="Grade 6-10">Grade 6-10</option>
+                            <option value="Odinary Level">Odinary Level</option>
+                            <option value="Advance Level">Advance Level</option>
+                            <option value="Diploma">Diploma</option>
+                            <option value="Digree">Digree</option>
+                            <option value="Post Graduate">Post Graduate</option>
 
                         </select>
                     </div>
+                    {/* Job Details */}
                     <div>
                         <label>Job Details</label>
-                        <select name="jobDetails" id="jobDetails" className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
+                        <select name="jobDetails" id="jobDetails"
+                            onChange={(e) => setjob(e.target.value)}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
                             <option value="No Formal Education">Worker</option>
                             <option value="Semi_artisan">Semi-artisan</option>
                             <option value="Artisan">Artisan</option>
@@ -211,26 +249,23 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                         </select>
                     </div>
 
+
+                    {/* Addicteds */}
                     <div className="col-span-2">
                         <label>Addicteds</label>
                         <div className="gap-4 mt-3 ml-3 flex">
-                            <div className="flex gap-2 justify-content-center">
-
-                                <label htmlFor="Smoke">Smoke</label>
-                                <input type="checkbox" name="Smoke" id="Smoke" />
-                            </div>
-                            <div className="flex gap-2 justify-content-center">
-                                <label>Betel Chewing</label>
-                                <input type="checkbox" name="" id="" />
-                            </div>
-                            <div className="flex gap-2 justify-content-center">
-                                <label>Alocohol</label>
-                                <input type="checkbox" name="" id="" />
-                            </div>
-                            <div className="flex gap-2 justify-content-center">
-                                <label>Other Substance Use</label>
-                                <input type="checkbox" name="" id="" />
-                            </div>
+                            {options.map((option) => (
+                                <label key={option}>
+                                    <input
+                                        type="checkbox"
+                                        value={option}
+                                        checked={selected.includes(option)}
+                                        onChange={handleAddicted}
+                                    />
+                                    {option}
+                                </label>
+                            ))}
+                            
                         </div>
                     </div>
                 </div>
