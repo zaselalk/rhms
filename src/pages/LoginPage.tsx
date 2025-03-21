@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router';
 
+
 const LoginPage: FC = () => {
   const navigate = useNavigate();
 
@@ -15,10 +16,12 @@ const LoginPage: FC = () => {
     const password = passwordRef.current?.value;
     console.log(username, password)
     // Handle login logic here
-    // navigate('/dashboard');
+    navigate('/admin/dashboard');
   }
   return (
     <div className="flex min-h-screen bg-gray-100">
+
+
       {/* Left Image Section */}
       <div className="hidden lg:block w-1/2 bg-cover bg-center" style={{ backgroundImage: "url('path/to/your/image.jpg')" }}></div>
 

@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
-import { Link } from "react-router"; // Ensure you're using react-router-dom for navigation
+import AdminSidebar from "../components/layouts/admin/AdminSlidebar";
+
 
 const CreateHouseholdPage: FC = () => {
     // State to handle form inputs
@@ -20,70 +21,8 @@ const CreateHouseholdPage: FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-100 flex">
-            {/* Sidebar */}
-            <div className="w-1/4 bg-white shadow-lg p-6">
-                <h2 className="text-xl font-semibold text-[#008FFB]">Hospital Management</h2>
-                <div className="mt-8">
-                    <ul className="space-y-4">
-                        <li>
-                            <Link
-                                to="/dashboard"
-                                className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">
-                                Dashboard
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                to="/diseases"
-                                className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">
-                                Diseases
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                to="/households"
-                                className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">
-                                Households
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                to="/residents"
-                                className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">
-                                Residents
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                to="/clinic"
-                                className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">
-                                Clinic
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                to="/division"
-                                className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">
-                                Division
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                to="/users"
-                                className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">
-                                Users
-                            </Link>
-                        </li>
-                    </ul>
-                </div>
-                <div className="mt-8 flex items-center">
-                    <div className="text-sm text-gray-700">Ravindu</div>
-                    <div className="text-xs text-gray-500 ml-2">Admin</div>
-                </div>
-                <div className="mt-2">
-                    <button className="w-full py-2 text-white bg-[#008FFB] rounded-md hover:bg-[#006fbb]">Logout</button>
-                </div>
-            </div>
+            {/* Reusable Sidebar */}
+            <AdminSidebar />
 
             {/* Main Content */}
             <div className="flex-1 p-6">

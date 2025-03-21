@@ -1,7 +1,9 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js';
-import { MapContainer, TileLayer, Popup, Marker, LayersControl } from 'react-leaflet'
+import { MapContainer, TileLayer, Popup, Marker, LayersControl } from 'react-leaflet';
+import AdminSlidebar from '../components/layouts/admin/AdminSlidebar';
+
 
 
 
@@ -65,28 +67,8 @@ const AdminDashboard: React.FC = () => {
 
 return (
     <div className="min-h-screen bg-gray-100 flex">
-        {/* Sidebar */}
-        <div className="w-1/4 bg-white shadow-lg p-6">
-            <h2 className="text-xl font-semibold text-[#008FFB]">Hospital Management</h2>
-            <div className="mt-8">
-                <ul className="space-y-4">
-                    <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Dashboard</a></li>
-                    <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Diseases</a></li>
-                    <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Households</a></li>
-                    <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Residents</a></li>
-                    <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Clinic</a></li>
-                    <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Division</a></li>
-                    <li><a href="#" className="block py-2 text-sm text-gray-700 hover:bg-[#00C1A7]">Users</a></li>
-                </ul>
-            </div>
-            <div className="mt-8 flex items-center">
-                <div className="text-sm text-gray-700">Ravindu</div>
-                <div className="text-xs text-gray-500 ml-2">Admin</div>
-            </div>
-            <div className="mt-2">
-                <button className="w-full py-2 text-white bg-[#008FFB] rounded-md hover:bg-[#006fbb]">Logout</button>
-            </div>
-        </div>
+        {/* Reusable Sidebar */}
+        <AdminSlidebar />
 
         {/* Main Content */}
         <div className="flex-1 p-6">
@@ -114,7 +96,7 @@ return (
                         </LayersControl>
 
                         {markers.map((marker, index) => (
-                            <Marker position={marker.position}>
+                            <Marker position={marker.position as [number, number]}>
                                 <Popup>{marker.popup}</Popup>
                             </Marker>
                         ))}
