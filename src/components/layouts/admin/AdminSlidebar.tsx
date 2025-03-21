@@ -1,13 +1,9 @@
 import { FC } from "react";
 import { Link } from "react-router"; // Ensure proper routing
 
-
-
-
-
 const AdminSidebar: FC = () => {
     return (
-        <div className="w-1/4 bg-white shadow-lg p-6">
+        <div className="w-1/6 bg-white shadow-lg p-6">
             <h2 className="text-xl font-semibold text-[#008FFB]">Hospital Management</h2>
             <div className="mt-8">
                 <ul className="space-y-4">
