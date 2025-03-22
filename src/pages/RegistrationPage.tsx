@@ -36,6 +36,13 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
     ];
 
+    const ChronicDesease = [
+        { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
+        { name: "Courtney Henry", title: "Designer", email: "courtney.henry@example.com", role: "Admin" },
+        { name: "Tom Cook", title: "Director of Product", email: "tom.cook@example.com", role: "Member" },
+      
+      ];
+
 
 
     const handleAddicted = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -248,6 +255,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                         </select>
                     </div>
+
                     {/* Job Details */}
                     <div>
                         <label>Job Details</label>
@@ -262,7 +270,6 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                             <option value="Student">Student</option>
                         </select>
                     </div>
-
 
                     {/* Addicteds */}
                     <div className="col-span-2">
@@ -321,8 +328,9 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
 
                 
-                
 
+
+                {/* Clinic Details */}
                 <div className="mt-5 mb-8" >
                     <label className="mb-50">Attendent Clinic</label>
                     <div className="gap-4 mt-3 ml-3 flex">
@@ -349,8 +357,8 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
 
                 <div className="grid gap-15">
-                    <DetailTable TableName={"Chronical Diseaes"} Colunms={[{ title: "Name" }, { title: "Medicine" }, { title: "Time Period" }, { title: "Venue" }]} />
-                    <DetailTable TableName={"Surgery"} Colunms={[{ title: "Surgery Name" }, { title: "Reason" }, { title: "Time" }, { title: "Venue" }]} />
+                    <DetailTable TableName={"Chronical Diseaes"} Colunms={[{ title: "Name" }, { title: "Medicine" }, { title: "Time Period" }, { title: "Venue" }] }  Data={ChronicDesease} />
+                    {/* <DetailTable TableName={"Surgery"} Colunms={[{ title: "Surgery Name" }, { title: "Reason" }, { title: "Time" }, { title: "Venue" }]} /> */}
 
                 </div>
 

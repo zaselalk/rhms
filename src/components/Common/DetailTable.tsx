@@ -1,18 +1,12 @@
 import React from "react";
 
-const users = [
-  { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
-  { name: "Courtney Henry", title: "Designer", email: "courtney.henry@example.com", role: "Admin" },
-  { name: "Tom Cook", title: "Director of Product", email: "tom.cook@example.com", role: "Member" },
-
-];
-
 interface DetailTableProps {
   TableName: string;
-  Colunms: string | { title: string;}[];
+  Colunms: Array<{ title: string }>;
+  Data: Array<{ name: string; title: string; email: string }>;
 }
 
-const DetailTable: React.FC<DetailTableProps> = ({ TableName, Colunms, }) => {
+const DetailTable: React.FC<DetailTableProps> = ({ TableName, Colunms, Data }) => {
   return (
     <div className="p-6rounded-lg">
       <div className="flex justify-between mb-4">
@@ -33,14 +27,20 @@ const DetailTable: React.FC<DetailTableProps> = ({ TableName, Colunms, }) => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user, index) => (
-            <tr key={index} className="border-b-gray-200">
-              <td className="p-3">{user.name}</td>
-              <td className="p-3">{user.title}</td>
-              <td className="p-3">{user.email}</td>
-              <td className="p-3 text-blue-600 cursor-pointer">Edit</td>
+          {Array.isArray(Data) ? (
+            Data.map((user, index) => (
+              <tr key={index} className="border-b-gray-200">
+                <td className="p-3">{user.name}</td>
+                <td className="p-3">{user.title}</td>
+                <td className="p-x3">{user.email}</td>
+                <td className="p-3 text-blue-600 cursor-pointer">Edit</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td className="p-3" colSpan={4}>Invalid data format</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     </div>
