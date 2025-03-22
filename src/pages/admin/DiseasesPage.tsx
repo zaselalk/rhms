@@ -1,7 +1,7 @@
 
 import { FC } from 'react';
 import { Link } from 'react-router';
-import AdminSlidebar from '../components/layouts/admin/AdminSlidebar';
+import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
 
 const DiseasesPage: FC = () => {
     return (

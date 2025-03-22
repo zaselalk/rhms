@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import AdminSlidebar from '../components/layouts/admin/AdminSlidebar';
+import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
 
 const SingleDivisionPage: FC = () => {
     return (

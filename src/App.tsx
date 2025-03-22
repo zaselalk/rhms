@@ -1,26 +1,28 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router";
 import RegistrationPage from "./pages/RegistrationPage";
 import LoginPage from "./pages/LoginPage";
-import DivisionPage from "./pages/DivisionPage";
-import SingleDivisionPage from "./pages/SingleDivisionPage";
-import DiseasesPage from "./pages/DiseasesPage";
-import SingleDiseasePage from "./pages/SingleDiseasePage";
+import DivisionPage from "./pages/admin/DivisionPage";
+import SingleDivisionPage from "./pages/admin/SingleDivisionPage";
+import DiseasesPage from "./pages/admin/DiseasesPage";
+import SingleDiseasePage from "./pages/admin/SingleDiseasePage";
 import UsersPage from "./pages/UsersPage";
-import AddUserPage from "./pages/AddUserPage";
-import HouseholdPage from "./pages/HouseholdPage";
-import ResidentProfilePage from "./pages/ResidentProfilePage";
-import CreateResidentPage from "./pages/CreateResidentPage";
-import ResidentLoginPage from "./pages/ResidentLoginPage";
-import EditResidentProfilePage from "./pages/EditResidentProfilePage";
+import AddUserPage from "./pages/admin/AddUserPage";
+import HouseholdPage from "./pages/admin/HouseholdPage";
+import ResidentProfilePage from "./pages/admin/ResidentProfilePage";
+import CreateResidentPage from "./pages/admin/CreateResidentPage";
+import ResidentLoginPage from "./pages/resident/ResidentLoginPage";
+import EditResidentProfilePage from "./pages/resident/EditResidentProfilePage";
 import ForgottenPasswordPage from "./pages/ForgottenPasswordPage";
-import HouseholdLoginPage from "./pages/HouseholdLoginPage";
-import HouseholdManagePage from "./pages/HouseholdManagePage";
-import AdminDashboardPage from "./pages/AdminDashboardPage";
-import ResidentLandingPage from "./pages/ResidentLandingPage";
-import CreateHouseholdPage from "./pages/CreateHouseholdPage";
+import HouseholdLoginPage from "./pages/household/HouseholdLoginPage";
+import HouseholdManagePage from "./pages/admin/HouseholdManagePage";
+import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
+import ResidentLandingPage from "./pages/resident/ResidentLandingPage";
+import CreateHouseholdPage from "./pages/admin/CreateHouseholdPage";
 import LandingPage from "./pages/LandingPage";
-import ClinicOverviewPage from "./pages/ClinicOverviewPage";
-import ClinicDetailPage from "./pages/ClinicDetailPage";
+import ClinicOverviewPage from "./pages/admin/ClinicOverviewPage";
+import ClinicDetailPage from "./pages/admin/ClinicDetailPage";
+import Resident from "./pages/admin/Resident";
+
 
 
 
@@ -31,27 +33,34 @@ function App() {
 
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        
 
+
+    
 
         {/* Admin Users */}
-        <Route path="/admin" >
+        <Route path="/admin" element={<AdminDashboardPage />} >
           <Route path="dashboard" element={<AdminDashboardPage />} />
           <Route path="login" element={<LoginPage />} />
 
+        {/* /admin/resident */}
+        <Route path="residents" element={<Resident />} >
+          <Route path="" element={<Resident />} />
+          <Route path="profile/:id" element={<ResidentProfilePage />} />
+        </Route>
+
           {/* /admin/diseases  */}
-          <Route path="diseases" >
+          <Route path="diseases" element={<DiseasesPage />} >
             <Route path="" element={<DiseasesPage />} />
             <Route path="single" element={<SingleDiseasePage />} />
           </Route>
 
           {/* /admin/users routs */}
-          <Route path="users">
+          <Route path="users" element={<UsersPage />} >
             <Route path="" element={<UsersPage />} />
             <Route path="add" element={<AddUserPage />} />
           </Route>
 
-          <Route path="households" >
+          <Route path="households" element={<HouseholdPage />} >
             <Route path="" element={<HouseholdPage />} />
             <Route path="new" element={<CreateHouseholdPage />} />
           </Route>
@@ -62,7 +71,7 @@ function App() {
 
 
           {/* Clinic Paths*/}
-        <Route path="clinic">
+        <Route path="clinic" element={<ClinicOverviewPage />} >
          <Route path="" element={<ClinicOverviewPage />} />
           <Route path="diabetic" element={<ClinicDetailPage />} />
         </Route>
