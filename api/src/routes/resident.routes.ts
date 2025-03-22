@@ -7,4 +7,9 @@ const ResidentRouter: Router = Router();
 const residentController = new ResidentController();
 
 ResidentRouter.get("/ping", protectRoute, catchAsync(residentController.ping));
+ResidentRouter.post(
+  "/create",
+  protectRoute,
+  catchAsync(residentController.create)
+);
 export default ResidentRouter;
