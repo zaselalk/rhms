@@ -1,4 +1,5 @@
-
+{/*This is the Resident List Page. This page will display the list of residents in the system to the admin.
+  this will navigate to the ResidentProfilePage.tsx to view single resident details.*/}
 import { Link } from "react-router";
 import AdminSidebar from "../components/layouts/admin/AdminSlidebar";
 
