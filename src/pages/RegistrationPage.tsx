@@ -19,29 +19,43 @@ const RegistrationPage: FC<RegistrationProps> = () => {
     const [maritalState, setMaritalstate] = useState("");
     const [religion, setReligion] = useState("");
     const [education, setEducation] = useState("");
-   
-    const [selected, setAddictedd] = useState<string[]>([]);
+    const [addicteds, setAddictedd] = useState<string[]>([]);
+    const [allergy, setAllergy] = useState<string[]>([]);
 
 
-
-    const options = [
+    const addictedlist = [
         "Smoke",
         "Betel Chewing",
         "Alocohol",
         "Other Substance Use",
     ];
+    const alergydlist = [
+        "Food Allergy",
+        "Drug Allergy",
+        "Other Allergy",
 
-    const handleAddicted = (event) => {
+    ];
+
+
+
+    const handleAddicted = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value, checked } = event.target;
         setAddictedd((prev) =>
             checked ? [...prev, value] : prev.filter((item) => item !== value)
         );
     };
 
+    const handleAllergy = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { value, checked } = event.target;
+        setAllergy((prev) =>
+            checked ? [...prev, value] : prev.filter((item) => item !== value)
+        );
+    }
+
 
     const handleRegister = () => {
         // Handle the registration logic here (e.g., save to database, send request to API)
-        console.log("Registered:", { firstName, lastName, dob, contact, address, Gender });
+        console.log("Registered:", { firstName, lastName, dob, contact, address, Gender, addicteds, weight, height, GramaDivision, maritalState, religion, education, JobDetail, allergy, });
     };
 
 
@@ -170,7 +184,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                         <input
                             type="text"
                             id="Height"
-                            value={contact}
+                            value={height}
                             onChange={(e) => setHeight(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                             placeholder="Enter Height"
@@ -254,51 +268,60 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                     <div className="col-span-2">
                         <label>Addicteds</label>
                         <div className="gap-4 mt-3 ml-3 flex">
-                            {options.map((option) => (
-                                <label key={option}>
+                            {addictedlist.map((option) => (
+                                <label key={option} className="flex items-center gap-2">
+                                    {option}
                                     <input
                                         type="checkbox"
                                         value={option}
-                                        checked={selected.includes(option)}
+                                        checked={addicteds.includes(option)}
                                         onChange={handleAddicted}
                                     />
-                                    {option}
                                 </label>
                             ))}
-                            
+
                         </div>
                     </div>
+
+
+
+
+
+
                 </div>
 
 
+                {/* Health Details */}
                 <div className="mt-10 mb-5">
                     <h2 className="text-2xl">Health Details</h2>
                     <hr className="bg-gray-100 mb-2" />
                 </div>
-                <div className="mb-10" >
-                    <label className="mb-50">Allergies</label>
+
+
+
+
+                {/* Alergies */}
+                <div className="col-span-2">
+                    <label>Allergies</label>
                     <div className="gap-4 mt-3 ml-3 flex">
-                        <div className="flex gap-2 justify-content-center">
-
-                            <label htmlFor="Smoke">Food Alergies</label>
-                            <input type="checkbox" name="Alergy" id="Smoke" />
-                        </div>
-                        <div className="flex gap-2 justify-content-center">
-                            <label>Drug Alergies</label>
-                            <input type="checkbox" name="Alergy" id="" />
-                        </div>
-                        <div className="flex gap-2 justify-content-center">
-
-                            <label htmlFor="Smoke">Medicine Alergies</label>
-                            <input type="checkbox" name="Alergy" id="Smoke" />
-                        </div>
-                        <div className="flex gap-2 justify-content-center">
-                            <label>Other Alergies</label>
-                            <input type="checkbox" name="Alergy" id="" />
-                        </div>
+                        {alergydlist.map((option) => (
+                            <label key={option} className="flex items-center gap-2">
+                                {option}
+                                <input
+                                    type="checkbox"
+                                    value={option}
+                                    // check={alergydlist.includes(option)}
+                                    onChange={handleAllergy}
+                                />
+                            </label>
+                        ))}
 
                     </div>
                 </div>
+
+
+                
+                
 
                 <div className="mt-5 mb-8" >
                     <label className="mb-50">Attendent Clinic</label>
