@@ -35,18 +35,18 @@ function App() {
         <Route path="/" element={<LandingPage />} />
 
 
-    
+
 
         {/* Admin Users */}
-        <Route path="/admin" element={<AdminDashboardPage />} >
+        <Route path="/admin" >
           <Route path="dashboard" element={<AdminDashboardPage />} />
           <Route path="login" element={<LoginPage />} />
 
-        {/* /admin/resident */}
-        <Route path="residents" element={<Resident />} >
-          <Route path="" element={<Resident />} />
-          <Route path="profile/:id" element={<ResidentProfilePage />} />
-        </Route>
+          {/* /admin/resident */}
+          <Route path="residents" element={<Resident />} >
+            <Route path="" element={<Resident />} />
+            <Route path="profile/:id" element={<ResidentProfilePage />} />
+          </Route>
 
           {/* /admin/diseases  */}
           <Route path="diseases" element={<DiseasesPage />} >
@@ -71,12 +71,12 @@ function App() {
 
 
           {/* Clinic Paths*/}
-        <Route path="clinic" element={<ClinicOverviewPage />} >
-         <Route path="" element={<ClinicOverviewPage />} />
-          <Route path="diabetic" element={<ClinicDetailPage />} />
-        </Route>
-  
-        
+          <Route path="clinic" element={<ClinicOverviewPage />} >
+            <Route path="" element={<ClinicOverviewPage />} />
+            <Route path="diabetic" element={<ClinicDetailPage />} />
+          </Route>
+
+
         </Route>
 
         {/* household paths*/}
