@@ -23,19 +23,12 @@ import ClinicOverviewPage from "./pages/admin/ClinicOverviewPage";
 import ClinicDetailPage from "./pages/admin/ClinicDetailPage";
 import Resident from "./pages/admin/Resident";
 
-
-
-
-
 function App() {
   return (
     <BrowserRouter>
 
       <Routes>
         <Route path="/" element={<LandingPage />} />
-
-
-
 
         {/* Admin Users */}
         <Route path="/admin" >
