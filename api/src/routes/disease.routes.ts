@@ -7,6 +7,5 @@ const DisaseRouter: Router = Router();
 const disaseController = new DisaseController();
 
 DisaseRouter.get("/ping", protectRoute, catchAsync(disaseController.ping));
-DisaseRouter.post("/create", protectRoute, catchAsync(disaseController.create));
 
 export default DisaseRouter;
