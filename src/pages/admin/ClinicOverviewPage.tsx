@@ -2,7 +2,7 @@ import React from "react";
 import { FaClinicMedical, FaTrash } from "react-icons/fa";
 import { FiPlusCircle } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import AdminSidebar from "../components/layouts/admin/AdminSlidebar";
+import AdminSidebar from "../../components/layouts/admin/AdminSlidebar";
 
 const ClinicOverview: React.FC = () => {
   // Sample data for clinic categories
