@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import AdminSlidebar from '../components/layouts/admin/AdminSlidebar';
+import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
 
 const AddUserPage: FC = () => {
     const [firstName, setFirstName] = useState('');

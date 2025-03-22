@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Link } from "react-router"; // Ensure you're using react-router-dom for navigation
-import AdminSlidebar from "../components/layouts/admin/AdminSlidebar"; // Import the AdminSidebar component
+import AdminSlidebar from "../../components/layouts/admin/AdminSlidebar"; // Import the AdminSidebar component
 
 const ResidentLandingPage: FC = () => {
     return (

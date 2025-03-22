@@ -1,6 +1,6 @@
 import React from "react";
 import { FaClinicMedical, FaEdit, FaTrash } from "react-icons/fa";
-import AdminSidebar from "../components/layouts/admin/AdminSlidebar";
+import AdminSidebar from "../../components/layouts/admin/AdminSlidebar";
 
 
 const ClinicDetail: React.FC = () => {

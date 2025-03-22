@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router';
-import AdminSlidebar from '../components/layouts/admin/AdminSlidebar';
+import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
 
 const HouseholdManagePage: FC = () => {
     // Sample data for residents in a household

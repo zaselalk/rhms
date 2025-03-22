@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import AdminSidebar from "../components/layouts/admin/AdminSlidebar";
+import AdminSidebar from "../../components/layouts/admin/AdminSlidebar";
 
 
 const CreateHouseholdPage: FC = () => {
