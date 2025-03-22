@@ -20,8 +20,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
         <div className="min-h-screen bg-gray-100 flex justify-center items-center">
             <div className="bg-white p-8 rounded-lg shadow-lg w-full sm:w-1/2 md:w-1/3">
                 <h2 className="text-2xl font-semibold text-[#008FFB] mb-6 text-center">Resident Registration</h2>
-                 {/* Reusable Sidebar */}
-                 <AdminSlidebar />
+                
 
                 {/* Registration Form */}
                 <div className="space-y-4">
