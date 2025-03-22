@@ -21,6 +21,8 @@ import CreateHouseholdPage from "./pages/CreateHouseholdPage";
 import LandingPage from "./pages/LandingPage";
 import ClinicOverviewPage from "./pages/ClinicOverviewPage";
 import ClinicDetailPage from "./pages/ClinicDetailPage";
+import Resident from "./pages/Resident";
+
 
 
 
@@ -31,13 +33,20 @@ function App() {
 
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        
 
+
+    
 
         {/* Admin Users */}
         <Route path="/admin" >
           <Route path="dashboard" element={<AdminDashboardPage />} />
           <Route path="login" element={<LoginPage />} />
+
+        {/* /admin/resident */}
+        <Route path="residents">
+          <Route path="" element={<Resident />} />
+          <Route path="profile/:id" element={<ResidentProfilePage />} />
+        </Route>
 
           {/* /admin/diseases  */}
           <Route path="diseases" >
