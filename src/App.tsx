@@ -42,9 +42,11 @@ function App() {
           <Route path="dashboard" element={<AdminDashboardPage />} />
           <Route path="login" element={<LoginPage />} />
 
-        {/*Resident profiles*/}
-        <Route path="residents" element={<Resident />} />
-        <Route path="residents/profile/:id" element={<ResidentProfilePage />} />
+        {/* /admin/resident */}
+        <Route path="residents">
+          <Route path="" element={<Resident />} />
+          <Route path="profile/:id" element={<ResidentProfilePage />} />
+        </Route>
 
           {/* /admin/diseases  */}
           <Route path="diseases" >
