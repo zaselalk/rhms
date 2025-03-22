@@ -36,24 +36,24 @@ function App() {
           <Route path="login" element={<LoginPage />} />
 
           {/* /admin/resident */}
-          <Route path="residents" element={<Resident />} >
+          <Route path="residents" >
             <Route path="" element={<Resident />} />
             <Route path="profile/:id" element={<ResidentProfilePage />} />
           </Route>
 
           {/* /admin/diseases  */}
-          <Route path="diseases" element={<DiseasesPage />} >
+          <Route path="diseases" >
             <Route path="" element={<DiseasesPage />} />
             <Route path="single" element={<SingleDiseasePage />} />
           </Route>
 
           {/* /admin/users routs */}
-          <Route path="users" element={<UsersPage />} >
+          <Route path="users"  >
             <Route path="" element={<UsersPage />} />
             <Route path="add" element={<AddUserPage />} />
           </Route>
 
-          <Route path="households" element={<HouseholdPage />} >
+          <Route path="households" >
             <Route path="" element={<HouseholdPage />} />
             <Route path="new" element={<CreateHouseholdPage />} />
           </Route>
