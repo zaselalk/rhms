@@ -40,8 +40,8 @@ const RegistrationPage: FC<RegistrationProps> = () => {
         { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
         { name: "Courtney Henry", title: "Designer", email: "courtney.henry@example.com", role: "Admin" },
         { name: "Tom Cook", title: "Director of Product", email: "tom.cook@example.com", role: "Member" },
-      
-      ];
+
+    ];
 
 
 
@@ -327,7 +327,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                 </div>
 
 
-                
+
 
 
                 {/* Clinic Details */}
@@ -357,7 +357,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
 
                 <div className="grid gap-15">
-                    <DetailTable TableName={"Chronical Diseaes"} Colunms={[{ title: "Name" }, { title: "Medicine" }, { title: "Time Period" }, { title: "Venue" }] }  Data={ChronicDesease} />
+                    <DetailTable TableName={"Chronical Diseaes"} Colunms={[{ title: "Name" }, { title: "Medicine" }, { title: "Time Period" }, { title: "Venue" }]} Data={ChronicDesease} />
                     {/* <DetailTable TableName={"Surgery"} Colunms={[{ title: "Surgery Name" }, { title: "Reason" }, { title: "Time" }, { title: "Venue" }]} /> */}
 
                 </div>

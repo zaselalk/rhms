@@ -1,42 +1,45 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router";
 import RegistrationPage from "./pages/RegistrationPage";
 import LoginPage from "./pages/LoginPage";
-import DivisionPage from "./pages/DivisionPage";
-import SingleDivisionPage from "./pages/SingleDivisionPage";
-import DiseasesPage from "./pages/DiseasesPage";
-import SingleDiseasePage from "./pages/SingleDiseasePage";
+import DivisionPage from "./pages/admin/DivisionPage";
+import SingleDivisionPage from "./pages/admin/SingleDivisionPage";
+import DiseasesPage from "./pages/admin/DiseasesPage";
+import SingleDiseasePage from "./pages/admin/SingleDiseasePage";
 import UsersPage from "./pages/UsersPage";
-import AddUserPage from "./pages/AddUserPage";
-import HouseholdPage from "./pages/HouseholdPage";
-import ResidentProfilePage from "./pages/ResidentProfilePage";
-import CreateResidentPage from "./pages/CreateResidentPage";
-import ResidentLoginPage from "./pages/ResidentLoginPage";
-import EditResidentProfilePage from "./pages/EditResidentProfilePage";
+import AddUserPage from "./pages/admin/AddUserPage";
+import HouseholdPage from "./pages/admin/HouseholdPage";
+import ResidentProfilePage from "./pages/admin/ResidentProfilePage";
+import CreateResidentPage from "./pages/admin/CreateResidentPage";
+import ResidentLoginPage from "./pages/resident/ResidentLoginPage";
+import EditResidentProfilePage from "./pages/resident/EditResidentProfilePage";
 import ForgottenPasswordPage from "./pages/ForgottenPasswordPage";
-import HouseholdLoginPage from "./pages/HouseholdLoginPage";
-import HouseholdManagePage from "./pages/HouseholdManagePage";
-import AdminDashboardPage from "./pages/AdminDashboardPage";
-import ResidentLandingPage from "./pages/ResidentLandingPage";
-import CreateHouseholdPage from "./pages/CreateHouseholdPage";
-
+import HouseholdLoginPage from "./pages/household/HouseholdLoginPage";
+import HouseholdManagePage from "./pages/admin/HouseholdManagePage";
+import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
+import ResidentLandingPage from "./pages/resident/ResidentLandingPage";
+import CreateHouseholdPage from "./pages/admin/CreateHouseholdPage";
+import LandingPage from "./pages/LandingPage";
+import ClinicOverviewPage from "./pages/admin/ClinicOverviewPage";
+import ClinicDetailPage from "./pages/admin/ClinicDetailPage";
+import Resident from "./pages/admin/Resident";
 
 function App() {
   return (
     <BrowserRouter>
 
       <Routes>
-        <Route path="/" element={<div>
-          {/* <Link to="/household-login" className="bg-gray-300">HouseHold</Link> <br /> */}
-          <Link to="/admin/login">Admin Login</Link><br />
-          {/* <Link to="/login">Staff</Link><br /> */}
-
-        </div>} />
-
+        <Route path="/" element={<LandingPage />} />
 
         {/* Admin Users */}
         <Route path="/admin" >
           <Route path="dashboard" element={<AdminDashboardPage />} />
           <Route path="login" element={<LoginPage />} />
+
+          {/* /admin/resident */}
+          <Route path="residents" >
+            <Route path="" element={<Resident />} />
+            <Route path="profile/:id" element={<ResidentProfilePage />} />
+          </Route>
 
           {/* /admin/diseases  */}
           <Route path="diseases" >
@@ -45,7 +48,7 @@ function App() {
           </Route>
 
           {/* /admin/users routs */}
-          <Route path="users">
+          <Route path="users"  >
             <Route path="" element={<UsersPage />} />
             <Route path="add" element={<AddUserPage />} />
           </Route>
@@ -65,6 +68,15 @@ function App() {
 
           <Route path="division" element={<DivisionPage />} />
           <Route path="single-division" element={<SingleDivisionPage />} />
+
+
+          {/* Clinic Paths*/}
+          <Route path="clinic" element={<ClinicOverviewPage />} >
+            <Route path="" element={<ClinicOverviewPage />} />
+            <Route path="diabetic" element={<ClinicDetailPage />} />
+          </Route>
+
+
         </Route>
 
         {/* household paths*/}
@@ -82,6 +94,7 @@ function App() {
           <Route path="forgotten-password" element={<ForgottenPasswordPage />} />
           <Route path="login" element={<ResidentLoginPage />} />
         </Route>
+
 
       </Routes>
     </BrowserRouter>

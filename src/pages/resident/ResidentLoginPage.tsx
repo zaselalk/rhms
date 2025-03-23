@@ -1,34 +1,30 @@
 import { FC, useState } from 'react';
-import { useNavigate } from 'react-router';
-import AdminSlidebar from '../components/layouts/admin/AdminSlidebar';
+import { Link, useNavigate } from 'react-router';
 
-const HouseholdLoginPage: FC = () => {
+
+const ResidentLoginPage: FC = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
     const handleLogin = () => {
         // Handle login logic here
-        navigate('/household-manage');
+        // redirect to  /resident-profile
+        navigate('/resident-profile');
+
+        console.log('Logged in with:', { username, password });
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 flex flex-col">
-             {/* Reusable Sidebar */}
-             <AdminSlidebar />
-
-            {/* Navbar */}
-            <div className="bg-[#008FFB] p-4 flex justify-between items-center">
-                <h2 className="text-2xl font-semibold text-white">Hospital Management</h2>
-            </div>
+        <div className="flex min-h-screen bg-gray-100">
+            
 
             {/* Main Content */}
-            <div className="flex-1 p-6 flex items-center justify-center">
+            <div className="flex-1 flex items-center justify-center bg-gray-100">
                 <div className="bg-white p-8 rounded-lg shadow-md w-full sm:w-1/2 md:w-1/3">
-                    <h2 className="text-2xl font-semibold text-[#008FFB] text-center mb-6">Household Login</h2>
+                    <h2 className="text-2xl font-semibold text-[#008FFB] mb-6 text-center">Resident Login</h2>
 
-                    {/* Form */}
+                    {/* Login Form */}
                     <div className="mb-4">
                         <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
                         <input
@@ -53,15 +49,7 @@ const HouseholdLoginPage: FC = () => {
                         />
                     </div>
 
-                    {/* Error / Success Message */}
-                    {message && (
-                        <div className="text-sm text-gray-700 mt-4">
-                            {message}
-                        </div>
-                    )}
-
-                    {/* Login Button */}
-                    <div className="mt-6">
+                    <div className="mb-6">
                         <button
                             onClick={handleLogin}
                             className="w-full px-6 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
@@ -70,9 +58,9 @@ const HouseholdLoginPage: FC = () => {
                         </button>
                     </div>
 
-                    {/* Back to Login */}
-                    <div className="text-center mt-4">
-                        <a href="/forgot-password" className="text-sm text-[#008FFB] hover:text-[#00C1A7]">Forgot password?</a>
+                    <div className="text-center">
+                        {/* <a href="#" ></a> */}
+                        <Link to="/resident/forgotten-password" className="text-sm text-[#008FFB] hover:text-[#00C1A7]">Forgot password?</Link>
                     </div>
                 </div>
             </div>
@@ -80,4 +68,4 @@ const HouseholdLoginPage: FC = () => {
     );
 };
 
-export default HouseholdLoginPage;
+export default ResidentLoginPage;
