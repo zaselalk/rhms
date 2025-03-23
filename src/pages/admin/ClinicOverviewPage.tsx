@@ -1,7 +1,7 @@
 import React from "react";
 import { FaClinicMedical, FaTrash } from "react-icons/fa";
 import { FiPlusCircle } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import AdminSidebar from "../../components/layouts/admin/AdminSlidebar";
 
 const ClinicOverview: React.FC = () => {
@@ -47,9 +47,8 @@ const ClinicOverview: React.FC = () => {
                 <p className="text-2xl font-bold">{clinic.count}</p>
                 <p className="text-gray-500 text-sm">Last month</p>
                 <p
-                  className={`text-sm font-semibold ${
-                    clinic.increase ? "text-green-500" : "text-red-500"
-                  }`}
+                  className={`text-sm font-semibold ${clinic.increase ? "text-green-500" : "text-red-500"
+                    }`}
                 >
                   {clinic.change} {clinic.increase ? "▲" : "▼"}
                 </p>

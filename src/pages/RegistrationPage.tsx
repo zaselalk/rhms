@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
 import AdminSlidebar from "../components/layouts/admin/AdminSlidebar";
+import DetailTable from "../components/Common/DetailTable";
 
 
 type RegistrationProps = {};
@@ -10,21 +11,78 @@ const RegistrationPage: FC<RegistrationProps> = () => {
     const [dob, setDob] = useState("");
     const [contact, setContact] = useState("");
     const [address, setAddress] = useState("");
+    const [Gender, setGender] = useState("");
+    const [JobDetail, setjob] = useState("");
+    const [weight, setWeight] = useState("");
+    const [height, setHeight] = useState("");
+    const [GramaDivision, setGramaDivision] = useState("");
+    const [maritalState, setMaritalstate] = useState("");
+    const [religion, setReligion] = useState("");
+    const [education, setEducation] = useState("");
+    const [addicteds, setAddictedd] = useState<string[]>([]);
+    const [allergy, setAllergy] = useState<string[]>([]);
+
+
+    const addictedlist = [
+        "Smoke",
+        "Betel Chewing",
+        "Alocohol",
+        "Other Substance Use",
+    ];
+    const alergydlist = [
+        "Food Allergy",
+        "Drug Allergy",
+        "Other Allergy",
+
+    ];
+
+    const ChronicDesease = [
+        { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
+        { name: "Courtney Henry", title: "Designer", email: "courtney.henry@example.com", role: "Admin" },
+        { name: "Tom Cook", title: "Director of Product", email: "tom.cook@example.com", role: "Member" },
+
+    ];
+
+
+
+    const handleAddicted = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { value, checked } = event.target;
+        setAddictedd((prev) =>
+            checked ? [...prev, value] : prev.filter((item) => item !== value)
+        );
+    };
+
+    const handleAllergy = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { value, checked } = event.target;
+        setAllergy((prev) =>
+            checked ? [...prev, value] : prev.filter((item) => item !== value)
+        );
+    }
+
 
     const handleRegister = () => {
         // Handle the registration logic here (e.g., save to database, send request to API)
-        console.log("Registered:", { firstName, lastName, dob, contact, address });
+        console.log("Registered:", { firstName, lastName, dob, contact, address, Gender, addicteds, weight, height, GramaDivision, maritalState, religion, education, JobDetail, allergy, });
     };
 
+
+
     return (
-        <div className="min-h-screen bg-gray-100 flex justify-center items-center">
-            <div className="bg-white p-8 rounded-lg shadow-lg w-full sm:w-1/2 md:w-1/3">
+        <div className="min-h-screen bg-gray-100 flex ">
+            {/* Reusable Sidebar */}
+            <AdminSlidebar />
+
+            {/* Registration Form Container */}
+            <div className="bg-white p-8 rounded-lg shadow-lg w-full ">
                 <h2 className="text-2xl font-semibold text-[#008FFB] mb-6 text-center">Resident Registration</h2>
-                
+
+                <div className="mt-5 mb-8 ">
+                    <h2 className="text-2xl">Personal Details</h2>
+                    <hr className="bg-gray-100 mb-2" />
+                </div>
 
                 {/* Registration Form */}
-                <div className="space-y-4">
-                    {/* First Name */}
+                <div className="space-y-4 grid grid-cols-2 gap-4">
                     <div>
                         <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
                             First Name
@@ -38,7 +96,6 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                             placeholder="Enter first name"
                         />
                     </div>
-
                     {/* Last Name */}
                     <div>
                         <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
@@ -97,16 +154,229 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                         />
                     </div>
 
-                    {/* Submit Button */}
-                    <div className="flex justify-center">
-                        <button
-                            onClick={handleRegister}
-                            className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
+                    {/* Gender */}
+                    <div>
+                        <label htmlFor="Gender" className="block text-sm font-medium text-gray-700">Gender</label>
+
+                        <select name="Gender" id="Gender" className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                            onChange={(e) => setGender(e.target.value)}
                         >
-                            Register
-                        </button>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+
+                        </select>
+
+                    </div>
+
+                    {/* Weight */}
+                    <div>
+                        <label htmlFor="Weight" className="block text-sm font-medium text-gray-700">
+                            Weight
+                        </label>
+                        <input
+                            type="text"
+                            id="Weight"
+                            value={weight}
+                            onChange={(e) => setWeight(e.target.value)}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                            placeholder="Enter Weight"
+                        />
+                    </div>
+
+                    {/* Heidght */}
+                    <div>
+                        <label htmlFor="Height" className="block text-sm font-medium text-gray-700">
+                            Height
+                        </label>
+                        <input
+                            type="text"
+                            id="Height"
+                            value={height}
+                            onChange={(e) => setHeight(e.target.value)}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                            placeholder="Enter Height"
+                        />
+                    </div>
+
+                    {/* Gramaniladari division */}
+                    <div>
+                        <label>Gramaniladari Division</label>
+                        <select name="GramaDivision" id="GramaDivision"
+                            onChange={(e) => setGramaDivision(e.target.value)}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
+                            <option value="1">Kotagedara</option>
+                            <option value="2">Kolahakada</option>
+                            <option value="3">Pahalawela</option>
+
+                        </select>
+                    </div>
+                    {/* Marital State */}
+                    <div>
+                        <label>Marital State</label>
+
+                        <select name="MaritalState" id="MaritalState"
+                            onChange={(e) => setMaritalstate(e.target.value)}
+
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
+                            <option value="Married">Married</option>
+                            <option value="Unmarried">Unmarried</option>
+                            <option value="Unmarried">Widowed</option>
+                            <option value="Divorced">Divorced</option>
+                        </select>
+                    </div>
+                    {/* Religion */}
+                    <div>
+                        <label>Religion</label>
+                        <select name="Religion" id="Religion"
+                            onChange={(e) => setReligion(e.target.value)}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
+                            <option value="Buddhist">Buddhist</option>
+                            <option value="Christian">Christian</option>
+                            <option value="Hindu">Hindu</option>
+                            <option value="Muslim">Muslim</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    {/* Education Level */}
+                    <div>
+                        <label>Education level</label>
+                        <select name="Educationlevel" id="Educationlevel"
+                            onChange={(e) => setEducation(e.target.value)}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
+                            <option value="No Formal Education">No Formal Education</option>
+                            <option value="Grade 1-5 ">Grade 1-5</option>
+                            <option value="Grade 6-10">Grade 6-10</option>
+                            <option value="Odinary Level">Odinary Level</option>
+                            <option value="Advance Level">Advance Level</option>
+                            <option value="Diploma">Diploma</option>
+                            <option value="Digree">Digree</option>
+                            <option value="Post Graduate">Post Graduate</option>
+
+                        </select>
+                    </div>
+
+                    {/* Job Details */}
+                    <div>
+                        <label>Job Details</label>
+                        <select name="jobDetails" id="jobDetails"
+                            onChange={(e) => setjob(e.target.value)}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
+                            <option value="No Formal Education">Worker</option>
+                            <option value="Semi_artisan">Semi-artisan</option>
+                            <option value="Artisan">Artisan</option>
+                            <option value="Excecutive">Excecutive</option>t
+                            <option value="Unemployment">Unemployment</option>
+                            <option value="Student">Student</option>
+                        </select>
+                    </div>
+
+                    {/* Addicteds */}
+                    <div className="col-span-2">
+                        <label>Addicteds</label>
+                        <div className="gap-4 mt-3 ml-3 flex">
+                            {addictedlist.map((option) => (
+                                <label key={option} className="flex items-center gap-2">
+                                    {option}
+                                    <input
+                                        type="checkbox"
+                                        value={option}
+                                        checked={addicteds.includes(option)}
+                                        onChange={handleAddicted}
+                                    />
+                                </label>
+                            ))}
+
+                        </div>
+                    </div>
+
+
+
+
+
+
+                </div>
+
+
+                {/* Health Details */}
+                <div className="mt-10 mb-5">
+                    <h2 className="text-2xl">Health Details</h2>
+                    <hr className="bg-gray-100 mb-2" />
+                </div>
+
+
+
+
+                {/* Alergies */}
+                <div className="col-span-2">
+                    <label>Allergies</label>
+                    <div className="gap-4 mt-3 ml-3 flex">
+                        {alergydlist.map((option) => (
+                            <label key={option} className="flex items-center gap-2">
+                                {option}
+                                <input
+                                    type="checkbox"
+                                    value={option}
+                                    // check={alergydlist.includes(option)}
+                                    onChange={handleAllergy}
+                                />
+                            </label>
+                        ))}
+
                     </div>
                 </div>
+
+
+
+
+
+                {/* Clinic Details */}
+                <div className="mt-5 mb-8" >
+                    <label className="mb-50">Attendent Clinic</label>
+                    <div className="gap-4 mt-3 ml-3 flex">
+                        <div className="flex gap-2 justify-content-center">
+
+                            <label htmlFor="Smoke">Medical Clinic</label>
+                            <input type="checkbox" name="Smoke" id="Smoke" />
+                        </div>
+                        <div className="flex gap-2 justify-content-center">
+                            <label>HCL</label>
+                            <input type="checkbox" name="" id="" />
+                        </div>
+                        <div className="flex gap-2 justify-content-center">
+                            <label>Dental Clinic</label>
+                            <input type="checkbox" name="" id="" />
+                        </div>
+                        <div className="flex gap-2 justify-content-center">
+                            <label>Specialist Clinic</label>
+                            <input type="checkbox" name="" id="" />
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div className="grid gap-15">
+                    <DetailTable TableName={"Chronical Diseaes"} Colunms={[{ title: "Name" }, { title: "Medicine" }, { title: "Time Period" }, { title: "Venue" }]} Data={ChronicDesease} />
+                    {/* <DetailTable TableName={"Surgery"} Colunms={[{ title: "Surgery Name" }, { title: "Reason" }, { title: "Time" }, { title: "Venue" }]} /> */}
+
+                </div>
+
+
+
+
+
+
+                {/* Submit Button */}
+                <div className="flex justify-center mt-10 ">
+                    <button
+                        onClick={handleRegister}
+                        className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
+                    >
+                        Register
+                    </button>
+                </div>
+
             </div>
         </div>
     );
