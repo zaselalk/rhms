@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router";
-import RegistrationPage from "./pages/RegistrationPage";
+import RegistrationPage from "./pages/admin/ResidentRegistrationPage";
 import LoginPage from "./pages/LoginPage";
 import DivisionPage from "./pages/admin/DivisionPage";
 import SingleDivisionPage from "./pages/admin/SingleDivisionPage";
@@ -59,10 +59,16 @@ function App() {
           </Route>
 
           {/* /admin/residents routes */}
-          <Route path="residents">
+          {/* <Route path="residents">
             <Route path="" element={<ResidentLandingPage />} />
             <Route path="registration" element={<RegistrationPage />} />
             <Route path="profile" element={<ResidentProfilePage />} />
+          </Route> */}
+
+          <Route path="residents" >
+            <Route path="" element={<Resident />} />
+            <Route path="create" element={<RegistrationPage />} />
+            <Route path="profile/:id" element={<ResidentProfilePage />} />
           </Route>
 
 
