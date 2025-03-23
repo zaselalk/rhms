@@ -2,7 +2,7 @@
 
 This guide explains how to use the newly introduced `ReactPortal` and `Modal` components to create modular, reusable modals in your React application.
 
-### Step 1: Understanding the Components
+### Step 1: Understanding the Components (Not Necessary)
 
 - **ReactPortal**: A helper component that renders children into a specified DOM node outside the main DOM hierarchy.
 - **Modal**: A reusable layout component for displaying modal overlays using `ReactPortal`, providing features such as closing modals via Escape key or a dedicated close button.
