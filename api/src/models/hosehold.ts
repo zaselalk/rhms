@@ -1,23 +1,44 @@
-import { DataTypes, Model, Sequelize } from "sequelize";
+"use strict";
+import { DataTypes, IntegerDataType, Model, Sequelize } from "sequelize";
 
 interface HouseholdAttributes {
+  houseid: string;
+  password: string;
   name: string;
-  id :string;
-  family_member:number;
- 
+  familyMember: number;
+
 }
 
-export class household extends Model<HouseholdAttributes> implements HouseholdAttributes {
-  
-  public id!: string;
+export class Household
+  extends Model<HouseholdAttributes>
+  implements HouseholdAttributes
+{
+  public houseid!: string;
+  public password!: string;
   public name!: string;
-  public family_member: number = 1;
+  public familyMember!: number;
  
 }
 
 export default (sequelize: Sequelize) => {
-  household.init(
+  Household.init(
     {
+      houseid: {
+        type: DataTypes.STRING,
+        validate: {
+          notEmpty: {
+            msg: "House Id cannot be empty",
+          },
+        },
+      },
+      password: {
+        type: DataTypes.STRING,
+        validate: {
+          notEmpty: {
+            msg: "Password cannot be empty",
+          },
+        },
+      },
       name: {
         type: DataTypes.STRING,
         validate: {
@@ -26,22 +47,17 @@ export default (sequelize: Sequelize) => {
           },
         },
       },
-        id: {
-            type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4,
-            primaryKey: true,
-        },
-        family_member: {
-            type: DataTypes.INTEGER,
-            defaultValue: 1,
-        },
+      familyMember:{
+        type: DataTypes.INTEGER,
+      }
+      
     },
     {
       sequelize,
       modelName: "Household",
-      tableName: "households",
+      tableName: "household",
     }
   );
 
-  return household;
+  return Household;
 };
