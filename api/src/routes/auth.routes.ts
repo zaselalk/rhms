@@ -1,7 +1,6 @@
-import { NextFunction, Request, Response, Router } from "express";
-import passport from "../config/passport";
+import { Request, Response, Router } from "express";
 import User from "../models/user";
-import UserController from "../controllers/UserController";
+import { UserController } from "../controllers/UserController";
 import catchAsync from "../util/catchAsync";
 import bcrypt from "bcrypt";
 
