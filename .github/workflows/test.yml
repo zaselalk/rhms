@@ -19,11 +19,10 @@ jobs:
         with:
           node-version: 22
 
-      - name: 📂 Change directory
-        run: cd api
-
       - name: 🚀 Install dependencies
         run: npm install
+        working-directory: api
 
       - name: 🧪 Run tests
         run: npm run test
+        working-directory: api
