@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import AdminSlidebar from "../components/layouts/admin/AdminSlidebar";
-import DetailTable from "../components/Common/DetailTable";
+
 
 
 type RegistrationProps = {};
@@ -200,7 +200,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                     {/* Gramaniladari division */}
                     <div>
-                        <label>Gramaniladari Division</label>
+                        <label className="block text-sm font-medium text-gray-700">Gramaniladari Division</label>
                         <select name="GramaDivision" id="GramaDivision"
                             onChange={(e) => setGramaDivision(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
@@ -212,7 +212,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                     </div>
                     {/* Marital State */}
                     <div>
-                        <label>Marital State</label>
+                        <label className="block text-sm font-medium text-gray-700">Marital State</label>
 
                         <select name="MaritalState" id="MaritalState"
                             onChange={(e) => setMaritalstate(e.target.value)}
@@ -226,7 +226,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                     </div>
                     {/* Religion */}
                     <div>
-                        <label>Religion</label>
+                        <label className="block text-sm font-medium text-gray-700">Religion</label>
                         <select name="Religion" id="Religion"
                             onChange={(e) => setReligion(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
@@ -240,7 +240,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                     {/* Education Level */}
                     <div>
-                        <label>Education level</label>
+                        <label className="block text-sm font-medium text-gray-700">Education level</label>
                         <select name="Educationlevel" id="Educationlevel"
                             onChange={(e) => setEducation(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
@@ -258,7 +258,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                     {/* Job Details */}
                     <div>
-                        <label>Job Details</label>
+                        <label className="block text-sm font-medium text-gray-700">Job Details</label>
                         <select name="jobDetails" id="jobDetails"
                             onChange={(e) => setjob(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
@@ -273,7 +273,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                     {/* Addicteds */}
                     <div className="col-span-2">
-                        <label>Addicteds</label>
+                        <label className="block text-sm font-medium text-gray-700">Addicteds</label>
                         <div className="gap-4 mt-3 ml-3 flex">
                             {addictedlist.map((option) => (
                                 <label key={option} className="flex items-center gap-2">
@@ -309,7 +309,27 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                 {/* Alergies */}
                 <div className="col-span-2">
-                    <label>Allergies</label>
+                    <label className="block text-sm font-medium text-gray-700" >Allergies</label>
+                    <div className="gap-4 mt-3 ml-3 flex">
+                        {alergydlist.map((option) => (
+                            <label key={option} className="flex items-center gap-2">
+                                {option}
+                                <input
+                                    type="checkbox"
+                                    value={option}
+                                    // check={alergydlist.includes(option)}
+                                    onChange={handleAllergy}
+                                />
+                            </label>
+                        ))}
+
+                    </div>
+                </div>
+
+
+                {/* Chronic Desease */}
+                <div className="mt-5 mb-8">
+                    <label className="block text-sm font-medium text-gray-700">Chronic Desase</label>
                     <div className="gap-4 mt-3 ml-3 flex">
                         {alergydlist.map((option) => (
                             <label key={option} className="flex items-center gap-2">
@@ -329,10 +349,9 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
 
 
-
                 {/* Clinic Details */}
                 <div className="mt-5 mb-8" >
-                    <label className="mb-50">Attendent Clinic</label>
+                    <label className="block text-sm font-medium text-gray-700">Attendent Clinic</label>
                     <div className="gap-4 mt-3 ml-3 flex">
                         <div className="flex gap-2 justify-content-center">
 
@@ -356,11 +375,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                 </div>
 
 
-                <div className="grid gap-15">
-                    <DetailTable TableName={"Chronical Diseaes"} Colunms={[{ title: "Name" }, { title: "Medicine" }, { title: "Time Period" }, { title: "Venue" }]} Data={ChronicDesease} />
-                    {/* <DetailTable TableName={"Surgery"} Colunms={[{ title: "Surgery Name" }, { title: "Reason" }, { title: "Time" }, { title: "Venue" }]} /> */}
-
-                </div>
+                
 
 
 
