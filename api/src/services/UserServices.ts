@@ -34,21 +34,8 @@ export class UserServices {
     const user = await this.userRepository.findByEmail(email);
     if (!user) throw new ValidationException("Invalid username or password");
 
-    const plainTextPassword = "1234";
-    const hashedPassword = await bcrypt.hash(plainTextPassword, 10);
-    console.log("Generated hash for '1234':", hashedPassword);
-
-    const isPasswordValid = await bcrypt.compare(
-      "1234",
-      "$2b$10$bSu326e7wHpPcaWPgTMuoejZlXBJHC.rP2H5o3PZRwvvfkXxkxF02"
-    );
+    const isPasswordValid = await bcrypt.compare(password, user.password);
     console.log("Password validation result:", isPasswordValid);
-
-    // const passwordHash = await bcrypt.hash(password, 10);
-    // const isPasswordValid = await bcrypt.compare(
-    //   "1234",
-    //   "$2b$10$S0HmmFBlfcirfoSbyabpSedXxWf9AX5XyXv4b7/YIy4GIYMROkVHG"
-    // );
 
     //why - https://security.stackexchange.com/questions/17816/username-and-or-password-invalid-why-do-websites-show-this-kind-of-message-i
     if (!isPasswordValid)
