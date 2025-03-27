@@ -21,6 +21,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
     const [education, setEducation] = useState("");
     const [addicteds, setAddictedd] = useState<string[]>([]);
     const [allergy, setAllergy] = useState<string[]>([]);
+    const [chronicDesease, setChronicDesease] = useState<string[]>([]);
 
 
     const addictedlist = [
@@ -35,13 +36,24 @@ const RegistrationPage: FC<RegistrationProps> = () => {
         "Other Allergy",
 
     ];
-
-    const ChronicDesease = [
-        { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
-        { name: "Courtney Henry", title: "Designer", email: "courtney.henry@example.com", role: "Admin" },
-        { name: "Tom Cook", title: "Director of Product", email: "tom.cook@example.com", role: "Member" },
+    const chronicDeseaselist = [
+        "Cancer",
+        "Arthritis",
+        "Asthma",
+        "High Blood Pressure",
+        "Low Blood Pressure",
+        "Heart Disease",
+        "Stroke",
+        "Kidney Disease",
+        "Liver Disease",
+        "Thyroid Disease",
+        "Epilepsy",
+        "Mental Illness",
+        "HIV/AIDS",
 
     ];
+
+
 
 
 
@@ -58,11 +70,17 @@ const RegistrationPage: FC<RegistrationProps> = () => {
             checked ? [...prev, value] : prev.filter((item) => item !== value)
         );
     }
+    const HandleChronicDesease = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { value, checked } = event.target;
+        setChronicDesease((prev) =>
+            checked ? [...prev, value] : prev.filter((item) => item !== value)
+        );
+    }
 
 
     const handleRegister = () => {
         // Handle the registration logic here (e.g., save to database, send request to API)
-        console.log("Registered:", { firstName, lastName, dob, contact, address, Gender, addicteds, weight, height, GramaDivision, maritalState, religion, education, JobDetail, allergy, });
+        console.log("Registered:", { firstName, lastName, dob, contact, address, Gender, addicteds, weight, height, GramaDivision, maritalState, religion, education, JobDetail, allergy, chronicDesease });
     };
 
 
@@ -84,7 +102,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                 {/* Registration Form */}
                 <div className="space-y-4 grid grid-cols-2 gap-4">
                     <div>
-                        <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="firstName" className="block text-xl font-medium text-gray-700">
                             First Name
                         </label>
                         <input
@@ -98,7 +116,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                     </div>
                     {/* Last Name */}
                     <div>
-                        <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="lastName" className="block text-xl font-medium text-gray-700">
                             Last Name
                         </label>
                         <input
@@ -113,7 +131,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                     {/* Date of Birth */}
                     <div>
-                        <label htmlFor="dob" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="dob" className="block text-xl font-medium text-gray-700">
                             Date of Birth
                         </label>
                         <input
@@ -127,7 +145,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                     {/* Contact */}
                     <div>
-                        <label htmlFor="contact" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="contact" className="block text-xl font-medium text-gray-700">
                             Contact Number
                         </label>
                         <input
@@ -142,7 +160,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                     {/* Address */}
                     <div>
-                        <label htmlFor="address" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="address" className="block text-xl font-medium text-gray-700">
                             Address
                         </label>
                         <textarea
@@ -156,7 +174,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                     {/* Gender */}
                     <div>
-                        <label htmlFor="Gender" className="block text-sm font-medium text-gray-700">Gender</label>
+                        <label htmlFor="Gender" className="block text-xl font-medium text-gray-700">Gender</label>
 
                         <select name="Gender" id="Gender" className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                             onChange={(e) => setGender(e.target.value)}
@@ -170,7 +188,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                     {/* Weight */}
                     <div>
-                        <label htmlFor="Weight" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="Weight" className="block text-xl font-medium text-gray-700">
                             Weight
                         </label>
                         <input
@@ -185,7 +203,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                     {/* Heidght */}
                     <div>
-                        <label htmlFor="Height" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="Height" className="block text-xl font-medium text-gray-700">
                             Height
                         </label>
                         <input
@@ -200,7 +218,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                     {/* Gramaniladari division */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Gramaniladari Division</label>
+                        <label className="block text-xl font-medium text-gray-700">Gramaniladari Division</label>
                         <select name="GramaDivision" id="GramaDivision"
                             onChange={(e) => setGramaDivision(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
@@ -212,7 +230,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                     </div>
                     {/* Marital State */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Marital State</label>
+                        <label className="block text-xl font-medium text-gray-700">Marital State</label>
 
                         <select name="MaritalState" id="MaritalState"
                             onChange={(e) => setMaritalstate(e.target.value)}
@@ -226,7 +244,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                     </div>
                     {/* Religion */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Religion</label>
+                        <label className="block text-xl font-medium text-gray-700">Religion</label>
                         <select name="Religion" id="Religion"
                             onChange={(e) => setReligion(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
@@ -240,7 +258,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                     {/* Education Level */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Education level</label>
+                        <label className="block text-xl font-medium text-gray-700">Education level</label>
                         <select name="Educationlevel" id="Educationlevel"
                             onChange={(e) => setEducation(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
@@ -258,7 +276,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                     {/* Job Details */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Job Details</label>
+                        <label className="block text-xl font-medium text-gray-700">Job Details</label>
                         <select name="jobDetails" id="jobDetails"
                             onChange={(e) => setjob(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
@@ -273,7 +291,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                     {/* Addicteds */}
                     <div className="col-span-2">
-                        <label className="block text-sm font-medium text-gray-700">Addicteds</label>
+                        <label className="block text-xl font-medium text-gray-700">Addicteds</label>
                         <div className="gap-4 mt-3 ml-3 flex">
                             {addictedlist.map((option) => (
                                 <label key={option} className="flex items-center gap-2">
@@ -309,7 +327,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                 {/* Alergies */}
                 <div className="col-span-2">
-                    <label className="block text-sm font-medium text-gray-700" >Allergies</label>
+                    <label className="block text-xl font-medium text-gray-700" >Allergies</label>
                     <div className="gap-4 mt-3 ml-3 flex">
                         {alergydlist.map((option) => (
                             <label key={option} className="flex items-center gap-2">
@@ -328,21 +346,20 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
 
                 {/* Chronic Desease */}
-                <div className="mt-5 mb-8">
-                    <label className="block text-sm font-medium text-gray-700">Chronic Desase</label>
-                    <div className="gap-4 mt-3 ml-3 flex">
-                        {alergydlist.map((option) => (
+                <div className="mt-5 mb-8 ">
+                    <label className="block text-xl font-medium text-gray-700">Chronic Desease</label>
+                    <div className="gap-4 mt-3 ml-3 grid items-center grid-cols-3">
+                        {chronicDeseaselist.map((option) => (
                             <label key={option} className="flex items-center gap-2">
                                 {option}
                                 <input
                                     type="checkbox"
                                     value={option}
-                                    // check={alergydlist.includes(option)}
-                                    onChange={handleAllergy}
+                                    checked={chronicDesease.includes(option)}
+                                    onChange={HandleChronicDesease}
                                 />
                             </label>
                         ))}
-
                     </div>
                 </div>
 
@@ -351,7 +368,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                 {/* Clinic Details */}
                 <div className="mt-5 mb-8" >
-                    <label className="block text-sm font-medium text-gray-700">Attendent Clinic</label>
+                    <label className="block text-xl font-medium text-gray-700">Attendent Clinic</label>
                     <div className="gap-4 mt-3 ml-3 flex">
                         <div className="flex gap-2 justify-content-center">
 
@@ -375,7 +392,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                 </div>
 
 
-                
+
 
 
 
