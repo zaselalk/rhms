@@ -20,8 +20,9 @@ const RegistrationPage: FC<RegistrationProps> = () => {
     const [religion, setReligion] = useState("");
     const [education, setEducation] = useState("");
     const [addicteds, setAddictedd] = useState<string[]>([]);
-    const [allergy, setAllergy] = useState<string[]>([]);
-    const [chronicDesease, setChronicDesease] = useState<string[]>([]);
+    const [allergys, setAllergy] = useState<string[]>([]);
+    const [chronicDeseases, setChronicDesease] = useState<string[]>([]);
+    const [clinics, setClinic] = useState<string[]>([]);
 
 
     const addictedlist = [
@@ -50,12 +51,24 @@ const RegistrationPage: FC<RegistrationProps> = () => {
         "Epilepsy",
         "Mental Illness",
         "HIV/AIDS",
+        "Other",
 
     ];
 
-
-
-
+    const Cliniclist = [
+        "Medical Clinic",
+        "HCL",
+        "Dental Clinic",
+        "Specialist Clinic",
+        "Eye Clinc",
+        "ENT Clinic",
+        "Skin Clinic",
+        "Diabetic Clinic",
+        "Child Clinic",
+        "Womens Clinic",
+        "Other Clinic",
+        
+    ];
 
     const handleAddicted = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value, checked } = event.target;
@@ -80,7 +93,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
     const handleRegister = () => {
         // Handle the registration logic here (e.g., save to database, send request to API)
-        console.log("Registered:", { firstName, lastName, dob, contact, address, Gender, addicteds, weight, height, GramaDivision, maritalState, religion, education, JobDetail, allergy, chronicDesease });
+        console.log("Registered:", { firstName, lastName, dob, contact, address, Gender, addicteds, weight, height, GramaDivision, maritalState, religion, education, JobDetail, allergys, chronicDeseases, clinics });
     };
 
 
@@ -295,13 +308,13 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                         <div className="gap-4 mt-3 ml-3 flex">
                             {addictedlist.map((option) => (
                                 <label key={option} className="flex items-center gap-2">
-                                    {option}
                                     <input
                                         type="checkbox"
                                         value={option}
                                         checked={addicteds.includes(option)}
                                         onChange={handleAddicted}
                                     />
+                                    {option}
                                 </label>
                             ))}
 
@@ -331,13 +344,13 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                     <div className="gap-4 mt-3 ml-3 flex">
                         {alergydlist.map((option) => (
                             <label key={option} className="flex items-center gap-2">
-                                {option}
                                 <input
                                     type="checkbox"
                                     value={option}
                                     // check={alergydlist.includes(option)}
                                     onChange={handleAllergy}
                                 />
+                                {option}
                             </label>
                         ))}
 
@@ -348,54 +361,38 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                 {/* Chronic Desease */}
                 <div className="mt-5 mb-8 ">
                     <label className="block text-xl font-medium text-gray-700">Chronic Desease</label>
-                    <div className="gap-4 mt-3 ml-3 grid items-center grid-cols-3">
+                    <div className="gap-4 mt-3 ml-3 grid items-center grid-cols-4">
                         {chronicDeseaselist.map((option) => (
                             <label key={option} className="flex items-center gap-2">
-                                {option}
                                 <input
                                     type="checkbox"
                                     value={option}
-                                    checked={chronicDesease.includes(option)}
+                                    checked={chronicDeseases.includes(option)}
                                     onChange={HandleChronicDesease}
                                 />
+                                {option}
                             </label>
                         ))}
                     </div>
                 </div>
 
-
-
-
                 {/* Clinic Details */}
-                <div className="mt-5 mb-8" >
-                    <label className="block text-xl font-medium text-gray-700">Attendent Clinic</label>
-                    <div className="gap-4 mt-3 ml-3 flex">
-                        <div className="flex gap-2 justify-content-center">
-
-                            <label htmlFor="Smoke">Medical Clinic</label>
-                            <input type="checkbox" name="Smoke" id="Smoke" />
-                        </div>
-                        <div className="flex gap-2 justify-content-center">
-                            <label>HCL</label>
-                            <input type="checkbox" name="" id="" />
-                        </div>
-                        <div className="flex gap-2 justify-content-center">
-                            <label>Dental Clinic</label>
-                            <input type="checkbox" name="" id="" />
-                        </div>
-                        <div className="flex gap-2 justify-content-center">
-                            <label>Specialist Clinic</label>
-                            <input type="checkbox" name="" id="" />
-                        </div>
+                <div className="mt-5 mb-8 ">
+                    <label className="block text-xl font-medium text-gray-700">Attenden Clinic</label>
+                    <div className="gap-4 mt-3 ml-3 grid items-center grid-cols-4">
+                        {Cliniclist.map((option) => (
+                            <label key={option} className="flex items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    value={option}
+                                    checked={chronicDeseases.includes(option)}
+                                    onChange={HandleChronicDesease}
+                                />
+                                {option}
+                            </label>
+                        ))}
                     </div>
-
                 </div>
-
-
-
-
-
-
 
 
 
