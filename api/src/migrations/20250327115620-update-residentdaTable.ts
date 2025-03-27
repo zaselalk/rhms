@@ -22,10 +22,11 @@ module.exports = {
       type: sequelize.ARRAY(sequelize.STRING),
       defaultValue: [],
     });
-
-
+    await queryInterface.removeColumn('residents', 'cholesterol',);
+    
+    
   },
-
+  
   async down(queryInterface: QueryInterface, Sequelize: typeof sequelize) {
     await queryInterface.addColumn('residents', 'glucose', {
       type: Sequelize.STRING,
@@ -42,6 +43,9 @@ module.exports = {
       type: sequelize.STRING,
     });
     await queryInterface.addColumn('residents', 'currentDiseases', {
+      type: sequelize.STRING,
+    });
+    await queryInterface.addColumn('residents', 'cholesterol',{
       type: sequelize.STRING,
     });
   }

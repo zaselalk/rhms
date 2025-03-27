@@ -13,7 +13,6 @@ interface ResidentAttributes {
   gender: string;
   bloodPressure: string;
   heartRate: string;
-  cholesterol: string;
   address: string;
   contactNumber: string;
   divisionId: number;
@@ -28,8 +27,7 @@ interface ResidentAttributes {
 
 export class Resident
   extends Model<ResidentAttributes>
-  implements ResidentAttributes
-{
+  implements ResidentAttributes {
   public firstName!: string;
   public lastName!: string;
   public email!: string;
@@ -39,7 +37,6 @@ export class Resident
   public gender!: string;
   public bloodPressure!: string;
   public heartRate!: string;
-  public cholesterol!: string;
   public nic!: string;
   public address!: string;
   public contactNumber!: string;
@@ -94,9 +91,7 @@ export default (sequelize: Sequelize) => {
       heartRate: {
         type: DataTypes.STRING,
       },
-      cholesterol: {
-        type: DataTypes.STRING,
-      },
+
       nic: {
         type: DataTypes.STRING,
       },
