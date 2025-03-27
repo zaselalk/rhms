@@ -31,8 +31,6 @@ export class UserServices {
     const user = await this.userRepository.findByEmail(email);
     const passwordHash = await bcrypt.hash(password, 10);
     if (!user) throw new ValidationException("Invalid username or password");
-    console.log(user.password, password);
-
     const isPasswordValid = await bcrypt.compare(password, passwordHash);
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string);
 
