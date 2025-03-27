@@ -123,7 +123,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
         }
 
         if (weight != "") {
-            if (weight.match(/^[0-9]+(\.[0-9]+)?$/)&& parseFloat(weight)>0) {
+            if (weight.match(/^[0-9]+(\.[0-9]+)?$/) && parseFloat(weight) > 0) {
                 setWeight(weight);
             }
             else {
@@ -132,7 +132,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
         }
 
         if (height != "") {
-            if (height.match(/^[0-9]+(\.[0-9]+)?$/) && parseFloat(height)>0) {
+            if (height.match(/^[0-9]+(\.[0-9]+)?$/) && parseFloat(height) > 0) {
                 setHeight(height);
             }
             else {
