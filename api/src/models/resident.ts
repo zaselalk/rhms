@@ -1,4 +1,5 @@
 "use strict";
+import { A } from "react-router/dist/development/route-data-H2S3hwhf";
 import { DataTypes, Model, Sequelize } from "sequelize";
 
 interface ResidentAttributes {
@@ -9,20 +10,18 @@ interface ResidentAttributes {
   password: string;
   birthday: Date;
   bloodGroup: string;
-  sex: string;
-  clinicNumber: string;
+  gender: string;
   bloodPressure: string;
-  glucose: string;
   heartRate: string;
   cholesterol: string;
   address: string;
   contactNumber: string;
-  divtionId: number;
-  civilStatus: string;
-  education_status: string;
-  addictedNotes: string;
-  alergyNotes: string;
-  currentDiseases: string;
+  divisionId: number;
+  maritalState: string;
+  educationLevel: string;
+  addicted: string;
+  alergies: Array<string>;
+  chronicalDesease: Array<string>;
   height: string;
   weight: string;
 }
@@ -37,21 +36,19 @@ export class Resident
   public password!: string;
   public birthday!: Date;
   public bloodGroup!: string;
-  public sex!: string;
-  public clinicNumber!: string;
+  public gender!: string;
   public bloodPressure!: string;
-  public glucose!: string;
   public heartRate!: string;
   public cholesterol!: string;
   public nic!: string;
   public address!: string;
   public contactNumber!: string;
-  public divtionId!: number;
-  public civilStatus!: string;
-  public education_status!: string;
-  public addictedNotes!: string;
-  public alergyNotes!: string;
-  public currentDiseases!: string;
+  public divisionId!: number;
+  public maritalState!: string;
+  public educationLevel!: string;
+  public addicted!: string;
+  public alergies!: Array<string>;
+  public chronicalDesease!: Array<string>;
   public height!: string;
   public weight!: string;
 }
@@ -82,7 +79,7 @@ export default (sequelize: Sequelize) => {
       bloodGroup: {
         type: DataTypes.STRING,
       },
-      sex: {
+      gender: {
         type: DataTypes.STRING,
         validate: {
           notEmpty: {
@@ -90,15 +87,10 @@ export default (sequelize: Sequelize) => {
           },
         },
       },
-      clinicNumber: {
-        type: DataTypes.STRING,
-      },
       bloodPressure: {
         type: DataTypes.STRING,
       },
-      glucose: {
-        type: DataTypes.STRING,
-      },
+
       heartRate: {
         type: DataTypes.STRING,
       },
@@ -114,23 +106,25 @@ export default (sequelize: Sequelize) => {
       contactNumber: {
         type: DataTypes.STRING,
       },
-      divtionId: {
+      divisionId: {
         type: DataTypes.INTEGER,
       },
-      civilStatus: {
+      maritalState: {
         type: DataTypes.STRING,
       },
-      education_status: {
+      educationLevel: {
         type: DataTypes.STRING,
       },
-      addictedNotes: {
+      addicted: {
         type: DataTypes.STRING,
       },
-      alergyNotes: {
-        type: DataTypes.STRING,
+      alergies: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
       },
-      currentDiseases: {
-        type: DataTypes.STRING,
+      chronicalDesease: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
       },
       height: {
         type: DataTypes.STRING,
