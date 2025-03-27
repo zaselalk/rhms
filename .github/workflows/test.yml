@@ -21,6 +21,8 @@ jobs:
 
       - name: 🚀 Install dependencies
         run: npm install
+        working-directory: api
 
       - name: 🧪 Run tests
-        run: npm test
+        run: npm run test
+        working-directory: api
