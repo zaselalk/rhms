@@ -25,6 +25,9 @@ const RegistrationPage: FC<RegistrationProps> = () => {
     const [clinics, setClinic] = useState<string[]>([]);
 
 
+
+
+
     const addictedlist = [
         "Smoke",
         "Betel Chewing",
@@ -67,8 +70,17 @@ const RegistrationPage: FC<RegistrationProps> = () => {
         "Child Clinic",
         "Womens Clinic",
         "Other Clinic",
-        
+
     ];
+
+    const GramaniladariDivision = [
+        "Kotagedara",
+        "Kolahakada",
+        "Pahalawela",
+
+    ];
+
+
 
     const handleAddicted = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value, checked } = event.target;
@@ -89,12 +101,52 @@ const RegistrationPage: FC<RegistrationProps> = () => {
             checked ? [...prev, value] : prev.filter((item) => item !== value)
         );
     }
+    const HandleClinics = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { value, checked } = event.target;
+        setClinic((prev) =>
+            checked ? [...prev, value] : prev.filter((item) => item !== value)
+        );
+    }
 
 
     const handleRegister = () => {
+
+        // Validate the form data
+        if (contact.length != 10) {
+
+            if (contact.match(/^[0-9]{10}$/)) {
+                setContact(contact);
+            }
+            else {
+                alert("Please enter only number in contact");
+            }
+        }
+
+        if (weight != "") {
+            if (weight.match(/^[0-9]+(\.[0-9]+)?$/)&& parseFloat(weight)>0) {
+                setWeight(weight);
+            }
+            else {
+                alert("Please enter weight Correctly");
+            }
+        }
+
+        if (height != "") {
+            if (height.match(/^[0-9]+(\.[0-9]+)?$/) && parseFloat(height)>0) {
+                setHeight(height);
+            }
+            else {
+                alert("Please enter height Correctly");
+            }
+        }
+
         // Handle the registration logic here (e.g., save to database, send request to API)
         console.log("Registered:", { firstName, lastName, dob, contact, address, Gender, addicteds, weight, height, GramaDivision, maritalState, religion, education, JobDetail, allergys, chronicDeseases, clinics });
     };
+
+
+
+
 
 
 
@@ -167,7 +219,8 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                             value={contact}
                             onChange={(e) => setContact(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                            placeholder="Enter contact number"
+
+                            placeholder="07X XXX XXXX"
                         />
                     </div>
 
@@ -205,12 +258,12 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                             Weight
                         </label>
                         <input
-                            type="text"
+                            type="number"
                             id="Weight"
                             value={weight}
                             onChange={(e) => setWeight(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                            placeholder="Enter Weight"
+                            placeholder="Enter Weight KG"
                         />
                     </div>
 
@@ -220,12 +273,12 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                             Height
                         </label>
                         <input
-                            type="text"
+                            type="number"
                             id="Height"
                             value={height}
                             onChange={(e) => setHeight(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                            placeholder="Enter Height"
+                            placeholder="Enter Height CM"
                         />
                     </div>
 
@@ -235,9 +288,9 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                         <select name="GramaDivision" id="GramaDivision"
                             onChange={(e) => setGramaDivision(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
-                            <option value="1">Kotagedara</option>
-                            <option value="2">Kolahakada</option>
-                            <option value="3">Pahalawela</option>
+                            {GramaniladariDivision.map((option) => (
+                                <option value={option} >{option}</option>
+                            ))}
 
                         </select>
                     </div>
@@ -367,7 +420,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                                 <input
                                     type="checkbox"
                                     value={option}
-                                    checked={chronicDeseases.includes(option)}
+                                    // checked={chronicDeseases.includes(option)}
                                     onChange={HandleChronicDesease}
                                 />
                                 {option}
@@ -385,8 +438,8 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                                 <input
                                     type="checkbox"
                                     value={option}
-                                    checked={chronicDeseases.includes(option)}
-                                    onChange={HandleChronicDesease}
+                                    // checked={clinics.includes(option)}
+                                    onChange={HandleClinics}
                                 />
                                 {option}
                             </label>
