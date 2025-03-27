@@ -34,7 +34,7 @@ app.use("/disease", DisaseRouter);
 app.use("/resident", DisaseRouter);
 
 app.listen(PORT, async () => {
-  sequelize.sync({ force: true });
+  sequelize.sync();
   console.log(`Server is running on http://localhost:${PORT}`);
 });
 
