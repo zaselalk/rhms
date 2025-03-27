@@ -1,11 +1,11 @@
 import { FC, useState } from "react";
-import AdminSlidebar from "../components/layouts/admin/AdminSlidebar";
-import DetailTable from "../components/Common/DetailTable";
+import AdminSlidebar from "../../components/layouts/admin/AdminSlidebar";
+import DetailTable from "../../components/Common/DetailTable";
 
 
-type RegistrationProps = {};
+type ResidentRegistrationProps = {};
 
-const RegistrationPage: FC<RegistrationProps> = () => {
+const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [dob, setDob] = useState("");
@@ -382,4 +382,4 @@ const RegistrationPage: FC<RegistrationProps> = () => {
     );
 };
 
-export default RegistrationPage;
+export default ResidentRegistrationPage;
