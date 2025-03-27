@@ -12,7 +12,6 @@ export class UserController {
 
   register = async (req: Request, res: Response): Promise<Response | void> => {
     const { name, email, password } = req.body;
-    // console.log(this.userService);
     const user = await this.userService.registerUser(name, email, password);
     return res.json(user);
   };
