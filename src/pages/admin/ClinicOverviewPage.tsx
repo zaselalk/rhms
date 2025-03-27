@@ -1,16 +1,27 @@
-import React from "react";
+// import necessary dependencies
+import React, { useState } from "react";
 import { FaClinicMedical, FaTrash } from "react-icons/fa";
 import { FiPlusCircle } from "react-icons/fi";
 import { Link } from "react-router";
 import AdminSidebar from "../../components/layouts/admin/AdminSlidebar";
+import Modal from '../../components/layouts/overlays/Modal';
 
 const ClinicOverview: React.FC = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [clinicTitle, setClinicTitle] = useState("");
+
   // Sample data for clinic categories
   const clinicCategories = [
     { name: "Diabetic", count: 236, change: "10%", increase: true },
     { name: "Hypo lipid", count: 34, change: "10%", increase: false },
     { name: "Asthma", count: 45, change: "10%", increase: false },
   ];
+
+  const handleCreateClinic = () => {
+    console.log("New clinic created:", clinicTitle);
+    setShowModal(false);
+    setClinicTitle(""); // Reset the input field
+  };
 
   return (
     <div className="flex">
@@ -28,7 +39,10 @@ const ClinicOverview: React.FC = () => {
               <p className="text-gray-500 text-sm">Total Clinics: 23</p>
             </div>
           </div>
-          <button className="bg-blue-500 text-white px-4 py-2 flex items-center rounded-lg shadow hover:bg-blue-600 transition">
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-blue-500 text-white px-4 py-2 flex items-center rounded-lg shadow hover:bg-blue-600 transition"
+          >
             <FiPlusCircle className="mr-2" /> New Clinic
           </button>
         </div>
@@ -39,7 +53,7 @@ const ClinicOverview: React.FC = () => {
           {clinicCategories.map((clinic, index) => (
             <Link
               key={index}
-              to={`/admin/clinic/diabetic`}
+              to={`/admin/clinic/${clinic.name.toLowerCase()}`}
               className="bg-white p-4 shadow-md rounded-lg flex justify-between items-center cursor-pointer hover:shadow-lg transition"
             >
               <div>
@@ -47,8 +61,7 @@ const ClinicOverview: React.FC = () => {
                 <p className="text-2xl font-bold">{clinic.count}</p>
                 <p className="text-gray-500 text-sm">Last month</p>
                 <p
-                  className={`text-sm font-semibold ${clinic.increase ? "text-green-500" : "text-red-500"
-                    }`}
+                  className={`text-sm font-semibold ${clinic.increase ? "text-green-500" : "text-red-500"}`}
                 >
                   {clinic.change} {clinic.increase ? "▲" : "▼"}
                 </p>
@@ -57,6 +70,30 @@ const ClinicOverview: React.FC = () => {
             </Link>
           ))}
         </div>
+
+        {/* Modal for Creating New Clinic */}
+        {showModal && (
+          <Modal onClose={() => setShowModal(false)}>
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h2 className="text-lg font-bold mb-4">Add Clinic</h2>
+              <input
+                type="text"
+                placeholder="Title"
+                value={clinicTitle}
+                onChange={(e) => setClinicTitle(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-lg mb-4"
+              />
+              <div className="flex justify-end">
+                <button
+                  onClick={handleCreateClinic}
+                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
+                >
+                  Create
+                </button>
+              </div>
+            </div>
+          </Modal>
+        )}
       </div>
     </div>
   );
