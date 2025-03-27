@@ -23,20 +23,25 @@ export class UserServices {
     const excitingUser = await this.userRepository.findByEmail(email);
     if (excitingUser) throw new UserNotFoundException("Email already in use");
 
+    // console.log(password);
+
     const hashedPassword = await bcrypt.hash(password, 10);
+    console.log("Generated hash for '1234':", hashedPassword);
     return this.userRepository.createUser(name, email, hashedPassword);
   }
 
   async loginUser(email: string, password: string): Promise<LoginUser> {
     const user = await this.userRepository.findByEmail(email);
-    const passwordHash = await bcrypt.hash(password, 10);
     if (!user) throw new ValidationException("Invalid username or password");
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string);
+    console.log("Password validation result:", isPasswordValid);
 
     //why - https://security.stackexchange.com/questions/17816/username-and-or-password-invalid-why-do-websites-show-this-kind-of-message-i
-    if (!isPasswordValid) throw new Error("Invalid username or password");
+    if (!isPasswordValid)
+      throw new ValidationException("Invalid username or password");
 
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string);
     return {
       id: user.id,
       name: user.name,
