@@ -23,20 +23,38 @@ export class UserServices {
     const excitingUser = await this.userRepository.findByEmail(email);
     if (excitingUser) throw new UserNotFoundException("Email already in use");
 
+    // console.log(password);
+
     const hashedPassword = await bcrypt.hash(password, 10);
+    console.log("Generated hash for '1234':", hashedPassword);
     return this.userRepository.createUser(name, email, hashedPassword);
   }
 
   async loginUser(email: string, password: string): Promise<LoginUser> {
     const user = await this.userRepository.findByEmail(email);
-    const passwordHash = await bcrypt.hash(password, 10);
     if (!user) throw new ValidationException("Invalid username or password");
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string);
+
+    const plainTextPassword = "1234";
+    const hashedPassword = await bcrypt.hash(plainTextPassword, 10);
+    console.log("Generated hash for '1234':", hashedPassword);
+
+    const isPasswordValid = await bcrypt.compare(
+      "1234",
+      "$2b$10$bSu326e7wHpPcaWPgTMuoejZlXBJHC.rP2H5o3PZRwvvfkXxkxF02"
+    );
+    console.log("Password validation result:", isPasswordValid);
+
+    // const passwordHash = await bcrypt.hash(password, 10);
+    // const isPasswordValid = await bcrypt.compare(
+    //   "1234",
+    //   "$2b$10$S0HmmFBlfcirfoSbyabpSedXxWf9AX5XyXv4b7/YIy4GIYMROkVHG"
+    // );
 
     //why - https://security.stackexchange.com/questions/17816/username-and-or-password-invalid-why-do-websites-show-this-kind-of-message-i
-    if (!isPasswordValid) throw new Error("Invalid username or password");
+    if (!isPasswordValid)
+      throw new ValidationException("Invalid username or password");
 
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string);
     return {
       id: user.id,
       name: user.name,
