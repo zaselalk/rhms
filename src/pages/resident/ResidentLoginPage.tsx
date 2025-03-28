@@ -10,14 +10,14 @@ const ResidentLoginPage: FC = () => {
     const handleLogin = () => {
         // Handle login logic here
         // redirect to  /resident-profile
-        navigate('/resident-profile');
+        navigate('/resident');
 
         console.log('Logged in with:', { username, password });
     };
 
     return (
         <div className="flex min-h-screen bg-gray-100">
-            
+
 
             {/* Main Content */}
             <div className="flex-1 flex items-center justify-center bg-gray-100">
