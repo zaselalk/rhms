@@ -10,7 +10,7 @@ const HouseholdLoginPage: FC = () => {
 
     const handleLogin = () => {
         // Handle login logic here
-        navigate('/household-manage');
+        navigate('/household');
     };
 
     return (

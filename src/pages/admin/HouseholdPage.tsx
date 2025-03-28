@@ -8,9 +8,9 @@ const HouseholdPage: FC = () => {
         navigate('/admin/households/new');
     }
     return (
-         <div className="min-h-screen bg-gray-100 flex">
-                {/* Reusable Sidebar */}
-                <AdminSlidebar />
+        <div className="min-h-screen bg-gray-100 flex">
+            {/* Reusable Sidebar */}
+            <AdminSlidebar />
 
             {/* Main Content */}
             <div className="flex-1 p-6">
@@ -39,7 +39,7 @@ const HouseholdPage: FC = () => {
                             <tr>
                                 <th className="text-left px-4 py-2 text-sm text-gray-600">ID</th>
                                 <th className="text-left px-4 py-2 text-sm text-gray-600">Name</th>
-                                <th className="text-left px-4 py-2 text-sm text-gray-600">Permissions</th>
+                                {/* <th className="text-left px-4 py-2 text-sm text-gray-600">Permissions</th> */}
                                 <th className="text-left px-4 py-2 text-sm text-gray-600">Actions</th>
                             </tr>
                         </thead>
@@ -47,7 +47,7 @@ const HouseholdPage: FC = () => {
                             <tr>
                                 <td className="px-4 py-2 text-sm text-gray-700">#STF001</td>
                                 <td className="px-4 py-2 text-sm text-gray-700">Dr. Ravindu Harshana</td>
-                                <td className="px-4 py-2 text-sm text-gray-700">Dashboard, Diseases, HouseHold</td>
+                                {/* <td className="px-4 py-2 text-sm text-gray-700">Dashboard, Diseases, HouseHold</td> */}
                                 <td className="px-4 py-2 text-sm text-gray-700">
                                     <button className="text-[#008FFB] hover:text-[#00C1A7]">
                                         <i className="fas fa-edit"></i>
@@ -60,7 +60,7 @@ const HouseholdPage: FC = () => {
                             <tr>
                                 <td className="px-4 py-2 text-sm text-gray-700">#STF001</td>
                                 <td className="px-4 py-2 text-sm text-gray-700">Dr. Ravindu Harshana</td>
-                                <td className="px-4 py-2 text-sm text-gray-700">Dashboard</td>
+                                {/* <td className="px-4 py-2 text-sm text-gray-700">Dashboard</td> */}
                                 <td className="px-4 py-2 text-sm text-gray-700">
                                     <button className="text-[#008FFB] hover:text-[#00C1A7]">
                                         <i className="fas fa-edit"></i>

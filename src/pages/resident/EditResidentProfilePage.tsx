@@ -16,16 +16,15 @@ const EditResidentProfilePage: FC = () => {
     const handleSave = () => {
         // Logic to save the updated profile data
         console.log('Profile Updated:', { firstName, lastName, birthday, contact, address });
-        navigate('/resident-profile');
+        navigate('/resident');
     };
 
     return (
         <div className="min-h-screen bg-gray-100">
-             {/* Reusable Sidebar */}
-             <AdminSlidebar />
+            {/* Reusable Sidebar */}
 
             {/* Navbar */}
-            <div className="bg-[#008FFB] p-4 flex justify-between items-center">
+            {/* <div className="bg-[#008FFB] p-4 flex justify-between items-center">
                 <h2 className="text-2xl font-semibold text-white">Hospital Management</h2>
                 <div className="flex items-center">
                     <span className="text-sm text-white mr-4">Ravindu (Admin)</span>
@@ -33,7 +32,7 @@ const EditResidentProfilePage: FC = () => {
                         Logout
                     </button>
                 </div>
-            </div>
+            </div> */}
 
             {/* Main Content */}
             <div className="p-6">
