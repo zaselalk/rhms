@@ -3,22 +3,22 @@ import { UserServices } from "../services/UserServices";
 import { UserRepository } from "../repositories/UserRepository";
 
 export class UserController {
-  private userSerivce: UserServices;
+  private userService: UserServices;
 
   constructor() {
     const userRepositoy = new UserRepository();
-    this.userSerivce = new UserServices(userRepositoy);
+    this.userService = new UserServices(userRepositoy);
   }
 
-  async register(req: Request, res: Response): Promise<Response | void> {
+  register = async (req: Request, res: Response): Promise<Response | void> => {
     const { name, email, password } = req.body;
-    const user = await this.userSerivce.registerUser(name, email, password);
+    const user = await this.userService.registerUser(name, email, password);
     return res.json(user);
-  }
+  };
 
-  async login(req: Request, res: Response): Promise<Response | void> {
+  login = async (req: Request, res: Response): Promise<Response | void> => {
     const { email, password } = req.body;
-    const user = await this.userSerivce.loginUser(email, password);
+    const user = await this.userService.loginUser(email, password);
     return res.status(200).json({ message: "Login successful", user });
-  }
+  };
 }
