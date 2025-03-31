@@ -24,7 +24,7 @@ NODE_ENV=development
 Migration files are important to track the changes happen inside the database, By using predefined commands now you can easily do migration related tasks with just simple commands.
 
 - Run migration : `npm run migrate`
-- Create new migartion file: `npm run migrate:create {name}`
+- Create new migration file: `npm run migrate:create {name}`
 - Undo the last migration: `npm run migrate:undo`
 - Undo all migrations: `npm run migrate:undo:all`
 - Run all seeds : `npm run seed`
