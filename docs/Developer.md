@@ -30,4 +30,4 @@ Migration files are important to track the changes happen inside the database, B
 - Run all seeds : `npm run seed`
 - Create new seed file: `npm run seed:create`
 - Undo last seed : `npm run seed:undo`
-- Undo all seeds :`npm run seed:undo:all`
+- Undo all seeds : `npm run seed:undo:all`
