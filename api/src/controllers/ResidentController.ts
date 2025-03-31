@@ -1,67 +1,66 @@
 import { Request, Response } from "express";
 import { Resident } from "../models/resident";
+import { ResidentService } from "../services/ResidentService";
+import { ResidentRepository } from "../repositories/ResidentRepository";
 
 class ResidentController {
-  async ping(req: Request, res: Response): Promise<Response> {
-    return new Promise((resolve) => {
-      return res.json({ message: "pong" });
-    });
+  private residentService: ResidentService;
+
+  constructor() {
+    const residentRepository = new ResidentRepository();
+    this.residentService = new ResidentService(residentRepository);
   }
-  async create(req: Request, res: Response): Promise<Response> {
-    const {
-      firstName,
+
+  residentRegister = async (req: Request, res: Response): Promise<Response | void> => {
+    const { firstName,
       lastName,
+      nic,
       email,
       password,
       birthday,
       bloodGroup,
-      sex,
-      clinicNumber,
+      gender,
       bloodPressure,
-      glucose,
       heartRate,
-      cholesterol,
-      nic,
       address,
       contactNumber,
-      divtionId,
-      civilStatus,
-      education_status,
-      addictedNotes,
-      alergyNotes,
-      currentDiseases,
+      divisionId,
+      maritalState,
+      educationLevel,
+      addicted,
+      alergies,
+      chronicalDesease,
       height,
       weight,
     } = req.body;
 
-    const resident = await Resident.create({
+    const resident = await this.residentService.registerResident(
       firstName,
       lastName,
+      nic,
       email,
       password,
       birthday,
       bloodGroup,
-      sex,
-      clinicNumber,
+      gender,
       bloodPressure,
-      glucose,
       heartRate,
-      cholesterol,
-      nic,
       address,
       contactNumber,
-      divtionId,
-      civilStatus,
-      education_status,
-      addictedNotes,
-      alergyNotes,
-      currentDiseases,
+      divisionId,
+      maritalState,
+      educationLevel,
+      addicted,
+      alergies,
+      chronicalDesease,
       height,
-      weight,
-    });
+      weight
+    );
 
     return res.json(resident);
   }
+
+
 }
 
 export default ResidentController;
