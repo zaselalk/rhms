@@ -58,17 +58,6 @@ User.init(
 
   {
     sequelize: sequelize,
-    hooks: {
-      /**
-       * Before the user is created, hash the password using bcrypt
-       * @param user
-       */
-      beforeCreate: async (user: User) => {
-        if (user.password) {
-          user.password = await bcrypt.hash(user.password, 10);
-        }
-      },
-    },
     modelName: "User",
     tableName: "users",
   }
