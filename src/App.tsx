@@ -22,6 +22,7 @@ import LandingPage from "./pages/LandingPage";
 import ClinicOverviewPage from "./pages/admin/ClinicOverviewPage";
 import ClinicDetailPage from "./pages/admin/ClinicDetailPage";
 import Resident from "./pages/admin/Resident";
+import ResidentDashboard from "./pages/resident/ResidentDashboard";
 
 function App() {
   return (
@@ -88,15 +89,15 @@ function App() {
         {/* household paths*/}
         <Route path="/household">
           <Route path="login" element={<HouseholdLoginPage />} />
-          <Route path="manage" element={<HouseholdManagePage />} />
+          <Route path="" element={<HouseholdManagePage />} />
         </Route>
 
         {/* Resident Paths*/}
         <Route path="/resident" >
-          <Route path="" element={<ResidentLandingPage />} />
+          <Route path="" element={<ResidentDashboard />} />
+          {/* <Route path="" element={<ResidentLandingPage />} /> */}
           <Route path="registration" element={<RegistrationPage />} />
-          <Route path="profile" element={<ResidentProfilePage />} />
-          <Route path="profile-edit" element={<EditResidentProfilePage />} />
+          <Route path="edit" element={<EditResidentProfilePage />} />
           <Route path="forgotten-password" element={<ForgottenPasswordPage />} />
           <Route path="login" element={<ResidentLoginPage />} />
         </Route>
