@@ -11,8 +11,13 @@ class ResidentController {
     this.residentService = new ResidentService(residentRepository);
   }
 
+  residentPing = async (req: Request, res: Response): Promise<Response | void> => {
+    return res.json({ message: "Resident ping" });
+  }
+
   residentRegister = async (req: Request, res: Response): Promise<Response | void> => {
-    const { firstName,
+    const { 
+      firstName,
       lastName,
       nic,
       email,
