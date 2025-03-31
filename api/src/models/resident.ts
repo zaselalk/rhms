@@ -18,7 +18,7 @@ interface ResidentAttributes {
   divisionId: number;
   maritalState: string;
   educationLevel: string;
-  addicted: string;
+  addicted: Array<string>;
   alergies: Array<string>;
   chronicalDesease: Array<string>;
   height: string;
@@ -43,7 +43,7 @@ export class Resident
   public divisionId!: number;
   public maritalState!: string;
   public educationLevel!: string;
-  public addicted!: string;
+  public addicted!: Array<string>;
   public alergies!: Array<string>;
   public chronicalDesease!: Array<string>;
   public height!: string;
@@ -111,7 +111,8 @@ export default (sequelize: Sequelize) => {
         type: DataTypes.STRING,
       },
       addicted: {
-        type: DataTypes.STRING,
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
       },
       alergies: {
         type: DataTypes.ARRAY(DataTypes.STRING),

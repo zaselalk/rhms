@@ -13,20 +13,24 @@ module.exports = {
     await queryInterface.renameColumn('residents', 'education_status', 'educationLevel');
     await queryInterface.renameColumn('residents', 'addictedNotes', 'addicted');
     await queryInterface.removeColumn('residents', 'alergyNote');
+    await queryInterface.removeColumn('residents', 'addicted');
+    await queryInterface.addColumn('residents', 'addicted', {
+      type: sequelize.ARRAY(sequelize.STRING),
+      defaultValue: [],
+    });
+    await queryInterface.removeColumn('residents', 'alergies')
     await queryInterface.addColumn('residents', 'alergies', {
       type: sequelize.ARRAY(sequelize.STRING),
       defaultValue: [],
     });
-
+    await queryInterface.removeColumn('residents', 'chronicalDesease')
     await queryInterface.addColumn('residents', 'chronicalDesease', {
       type: sequelize.ARRAY(sequelize.STRING),
       defaultValue: [],
     });
     await queryInterface.removeColumn('residents', 'cholesterol',);
-    
-    
   },
-  
+
   async down(queryInterface: QueryInterface, Sequelize: typeof sequelize) {
     await queryInterface.addColumn('residents', 'glucose', {
       type: Sequelize.STRING,
@@ -38,14 +42,17 @@ module.exports = {
     await queryInterface.renameColumn('residents', 'divisionId', 'divtionId');
     await queryInterface.renameColumn('residents', 'maritalState', 'civilStatus');
     await queryInterface.renameColumn('residents', 'educationLevel', 'education_status');
-    await queryInterface.renameColumn('residents', 'addicted', 'addictedNotes');
+    await queryInterface.removeColumn('residents', 'addicted');
+    await queryInterface.addColumn('residents', 'addictedNotes', {
+      type: sequelize.STRING,
+    });
     await queryInterface.addColumn('residents', 'alergyNotes', {
       type: sequelize.STRING,
     });
     await queryInterface.addColumn('residents', 'currentDiseases', {
       type: sequelize.STRING,
     });
-    await queryInterface.addColumn('residents', 'cholesterol',{
+    await queryInterface.addColumn('residents', 'cholesterol', {
       type: sequelize.STRING,
     });
   }
