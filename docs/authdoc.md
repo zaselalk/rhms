@@ -16,7 +16,7 @@ Permission String | Description
 `user:view` | Able to view all users including indivitual users
 `user:edit` | Able to edit user information including password
 `user:delete`| Able to delete users
-`user:add` | Able to add new staff user to the system. <br> **Note: Only When the user adding he able to assign any role for any other user.**
+`user:create` | Able to add new staff user to the system. <br> **Note: Only When the user adding he able to assign any role for any other user.**
 ---
 
 #### Role
