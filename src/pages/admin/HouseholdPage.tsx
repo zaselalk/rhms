@@ -16,7 +16,6 @@ const HouseholdPage: FC = () => {
             <div className="flex-1 p-6">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-semibold text-[#008FFB]">Household Details</h2>
-                    {/* <div className="px-4 py-2 bg-[#008FFB] text-white rounded-lg">8 Houses</div> */}
                     <button className="px-4 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]" onClick={handleHouseholdCreate}>+ Add Household</button>
                 </div>
 
@@ -45,8 +44,7 @@ const HouseholdPage: FC = () => {
                         <tbody>
                             <tr>
                                 <td className="px-4 py-2 text-sm text-gray-700">#STF001</td>
-                                <td className="px-4 py-2 text-sm text-gray-700">Dr. Ravindu Harshana</td>
-                                
+                                <td className="px-4 py-2 text-sm text-gray-700">Dr. Ravindu Harshana</td>                             
                                 <td className="px-4 py-2 text-sm text-gray-700">
                                     <button className="text-[#008FFB] hover:text-[#00C1A7]">
                                         <i className="fas fa-edit"></i>
