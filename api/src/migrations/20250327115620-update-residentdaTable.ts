@@ -5,55 +5,64 @@ import sequelize, { QueryInterface } from "sequelize";
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface: QueryInterface, Sequelize: typeof sequelize) {
-    await queryInterface.removeColumn('residents', 'glucose');
-    await queryInterface.renameColumn('residents', 'sex', 'gender');
-    await queryInterface.removeColumn('residents', 'clinicNumber');
-    await queryInterface.renameColumn('residents', 'divtionId', 'divisionId');
-    await queryInterface.renameColumn('residents', 'civilStatus', 'maritalState');
-    await queryInterface.renameColumn('residents', 'education_status', 'educationLevel');
-    await queryInterface.renameColumn('residents', 'addictedNotes', 'addicted');
-    await queryInterface.removeColumn('residents', 'alergyNote');
-    await queryInterface.removeColumn('residents', 'addicted');
+    // await queryInterface.renameColumn('residents', 'sex', 'gender');
+    // await queryInterface.removeColumn('residents', 'clinicNumber');
+    await queryInterface.removeColumn('residents', 'cholesterol');
+
+    // await queryInterface.addColumn('residents', 'nic', {
+    //   type: sequelize.STRING,
+    // });
+    await queryInterface.addColumn('residents', 'address', {
+      type: sequelize.STRING,
+    });
+    await queryInterface.addColumn('residents', 'contactNumber', {
+      type: sequelize.STRING,
+    });
+    await queryInterface.addColumn('residents', 'divisionId', {
+      type: sequelize.INTEGER,
+    });
+    await queryInterface.addColumn('residents', 'maritalState', {
+      type: sequelize.STRING,
+    });
+    await queryInterface.addColumn('residents', 'educationLevel', {
+      type: sequelize.STRING,
+    });
     await queryInterface.addColumn('residents', 'addicted', {
-      type: sequelize.ARRAY(sequelize.STRING),
-      defaultValue: [],
+      type: sequelize.JSON,
     });
-    await queryInterface.removeColumn('residents', 'alergies')
     await queryInterface.addColumn('residents', 'alergies', {
-      type: sequelize.ARRAY(sequelize.STRING),
-      defaultValue: [],
+      type: sequelize.JSON,
     });
-    await queryInterface.removeColumn('residents', 'chronicalDesease')
     await queryInterface.addColumn('residents', 'chronicalDesease', {
-      type: sequelize.ARRAY(sequelize.STRING),
-      defaultValue: [],
+      type: sequelize.JSON,
     });
-    await queryInterface.removeColumn('residents', 'cholesterol',);
+    await queryInterface.addColumn('residents', 'height', {
+      type: sequelize.STRING,
+    });
+    await queryInterface.addColumn('residents', 'weight', {
+      type: sequelize.STRING,
+    });
+
   },
 
   async down(queryInterface: QueryInterface, Sequelize: typeof sequelize) {
-    await queryInterface.addColumn('residents', 'glucose', {
-      type: Sequelize.STRING,
-    });
-    await queryInterface.renameColumn('residents', 'gender', 'sex');
-    await queryInterface.addColumn('residents', 'clinicNumber', {
-      type: sequelize.STRING,
-    });
-    await queryInterface.renameColumn('residents', 'divisionId', 'divtionId');
-    await queryInterface.renameColumn('residents', 'maritalState', 'civilStatus');
-    await queryInterface.renameColumn('residents', 'educationLevel', 'education_status');
+    // await queryInterface.renameColumn('residents', 'gender', 'sex');
+    // await queryInterface.addColumn('residents', 'clinicNumber', {
+    //   type: sequelize.STRING,
+    // });
+    // await queryInterface.removeColumn('residents', 'cholesterol');
+    // await queryInterface.removeColumn('residents', 'nic');
+    await queryInterface.removeColumn('residents', 'address');
+    await queryInterface.removeColumn('residents', 'contactNumber');
+    await queryInterface.removeColumn('residents', 'divisionId');
+    await queryInterface.removeColumn('residents', 'maritalState');
+    await queryInterface.removeColumn('residents', 'educationLevel');
     await queryInterface.removeColumn('residents', 'addicted');
-    await queryInterface.addColumn('residents', 'addictedNotes', {
-      type: sequelize.STRING,
-    });
-    await queryInterface.addColumn('residents', 'alergyNotes', {
-      type: sequelize.STRING,
-    });
-    await queryInterface.addColumn('residents', 'currentDiseases', {
-      type: sequelize.STRING,
-    });
-    await queryInterface.addColumn('residents', 'cholesterol', {
-      type: sequelize.STRING,
-    });
+    await queryInterface.removeColumn('residents', 'alergies');
+    await queryInterface.removeColumn('residents', 'chronicalDesease');
+    await queryInterface.removeColumn('residents', 'height');
+    await queryInterface.removeColumn('residents', 'weight');
+
+
   }
 };
