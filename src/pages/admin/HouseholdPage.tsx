@@ -1,16 +1,26 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useNavigate } from 'react-router';
 import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
+import CreateHouseholdModal from '../../components/household/CreateHouseholdModal';
 
 const HouseholdPage: FC = () => {
-    const navigate = useNavigate();
+    const [isOpen, setIsOpen] = useState(true);
+
     const handleHouseholdCreate = () => {
-        navigate('/admin/households/new');
+        setIsOpen(true);
     }
+
+    const handleClose = () => {
+        setIsOpen(false);
+    }
+
+
     return (
         <div className="min-h-screen bg-gray-100 flex">
             {/* Reusable Sidebar */}
             <AdminSlidebar />
+
+            <CreateHouseholdModal isOpen={isOpen} handleClose={handleClose} />
 
             {/* Main Content */}
             <div className="flex-1 p-6">
