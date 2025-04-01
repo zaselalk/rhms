@@ -160,7 +160,7 @@ module.exports = {
         },
 
         /**
-         * Division related fields
+         * Division related permission
          */
 
         {
