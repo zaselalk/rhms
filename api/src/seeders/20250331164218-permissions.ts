@@ -112,7 +112,7 @@ module.exports = {
           updatedAt: new Date(),
         },
         /**
-         * HouseHold related permission
+         * Household related permission
          */
         {
           permission: "household:view",
