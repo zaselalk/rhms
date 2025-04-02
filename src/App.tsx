@@ -5,7 +5,7 @@ import DivisionPage from "./pages/admin/DivisionPage";
 import SingleDivisionPage from "./pages/admin/SingleDivisionPage";
 import DiseasesPage from "./pages/admin/DiseasesPage";
 import SingleDiseasePage from "./pages/admin/SingleDiseasePage";
-import UsersPage from "./pages/UsersPage";
+import UsersPage from "./pages/admin/UsersPage";
 import AddUserPage from "./pages/admin/AddUserPage";
 import HouseholdPage from "./pages/admin/HouseholdPage";
 import ResidentProfilePage from "./pages/admin/ResidentProfilePage";
