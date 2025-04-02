@@ -431,7 +431,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
 
                 {/* Clinic Details */}
                 <div className="mt-5 mb-8 ">
-                    <label className="block text-xl font-medium text-gray-700">Attenden Clinic</label>
+                    <label className="block text-xl font-medium text-gray-700">Attendant Clinic</label>
                     <div className="gap-4 mt-3 ml-3 grid items-center grid-cols-4">
                         {Cliniclist.map((option) => (
                             <label key={option} className="flex items-center gap-2">
