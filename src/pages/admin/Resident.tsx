@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import AdminSidebar from "../../components/layouts/admin/AdminSlidebar";
 import { useState } from "react";
 import { AdminNavbar } from "../../components/layouts/admin/AdminNavbar";
+import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 
 
 
@@ -28,13 +29,13 @@ const ResidentListPage = () => {
   console.log(residents);
   return (
 
-    <div className=" min-h-screen bg-gray-100 flex">
+    <DashboardContainer>
       {/* Sidebar */}
-      <AdminSidebar />
+      
 
       {/* Main Content */}
       <div className="w-full bg-gray-100 ">
-        <AdminNavbar />
+        
         {/* Header Section */}
         {/* <div className="flex justify-between items-center mb-6 bg-white p-4 shadow rounded-lg">
         <div className="flex items-center space-x-3"> */}
@@ -99,7 +100,7 @@ const ResidentListPage = () => {
           </table>
         </div>
       </div>
-    </div>
+    </DashboardContainer>
     // </div>
     // </div>
   );

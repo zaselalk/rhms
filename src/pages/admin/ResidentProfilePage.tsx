@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { useNavigate } from 'react-router';
 import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
 import { AdminNavbar } from '../../components/layouts/admin/AdminNavbar';
+import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
 
 const ResidentProfilePage: FC = () => {
     const navigate = useNavigate();
@@ -11,12 +12,12 @@ const ResidentProfilePage: FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 flex">
+        <DashboardContainer>
             {/* Sidebar */}
-            <AdminSlidebar />
+
             {/* Main Content */}
             <div className="flex flex-col w-full">
-                <AdminNavbar />
+
                 {/* Navbar */}
 
 
@@ -103,7 +104,7 @@ const ResidentProfilePage: FC = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </DashboardContainer>
     );
 };
 
