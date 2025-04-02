@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { FaClinicMedical, FaEdit, FaTrash, FaClipboardList, FaPlus } from "react-icons/fa";
-import AdminSidebar from "../../components/layouts/admin/AdminSlidebar";
+
 import { useNavigate } from "react-router-dom"; // Import useNavigate for routing
-import { Link } from "react-router";
+import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
+
 
 interface Patient {
   id: string;
@@ -68,8 +69,8 @@ const ClinicDetail: React.FC = () => {
   };
 
   return (
-    <div className="flex">
-      <AdminSidebar />
+   <DashboardContainer>
+      
       <div className="p-6 w-full bg-gray-100 min-h-screen">
         <div className="flex justify-between items-center mb-6 bg-white p-4 shadow rounded-lg">
           <div className="flex items-center space-x-3">
@@ -142,7 +143,7 @@ const ClinicDetail: React.FC = () => {
 
         {/* Add Event Form Section */}
         <div className="bg-white p-6 shadow-md rounded-lg mt-6">
-          <h3 className="text-xl font-semibold mb-4">Add Event</h3>
+          <h3 className="text-xl font-semibold mb-4">Add Session</h3>
           <div className="mb-4">
             <input
               type="text"
@@ -162,13 +163,14 @@ const ClinicDetail: React.FC = () => {
             onClick={addClinicEvent}
             className="bg-blue-500 text-white px-4 py-2 flex items-center rounded-lg shadow hover:bg-blue-600 transition"
           >
-            <FaPlus className="mr-2" /> Add Event
+            <FaPlus className="mr-2" /> Add Session
           </button>
         </div>
+        
 
         {/* Clinic Events Table */}
         <div className="bg-white p-6 shadow-md rounded-lg mt-6">
-          <h3 className="text-xl font-semibold mb-4">Clinic Events</h3>
+          <h3 className="text-xl font-semibold mb-4">Clinic Session</h3>
           <table className="w-full border-collapse">
             <thead>
               <tr className="border-b">
@@ -193,7 +195,7 @@ const ClinicDetail: React.FC = () => {
                       className="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition"
                       onClick={() => removeClinicEvent(event.id)}
                     >
-                      <FaTrash className="mr-2" /> Remove Event
+                      <FaTrash className="mr-2" /> Remove Session
                     </button>
                   </td>
                 </tr>
@@ -202,7 +204,7 @@ const ClinicDetail: React.FC = () => {
           </table>
         </div>
       </div>
-    </div>
+    </DashboardContainer>
   );
 };
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { FaClinicMedical, FaTrash } from "react-icons/fa";
 import { FiPlusCircle } from "react-icons/fi";
-import { Link } from "react-router";
+import { Link } from "react-router-dom"; // Update import for react-router
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 
 const ClinicOverview: React.FC = () => {
@@ -12,49 +12,50 @@ const ClinicOverview: React.FC = () => {
     { name: "Asthma", count: 45, change: "10%", increase: false },
   ];
 
+  // Count the number of clinic categories (clinics)
+  const totalClinics = clinicCategories.length;
+
   return (
     <DashboardContainer>
-
-        {/* Header Section */}
-        <div className="flex justify-between items-center mb-6 bg-white p-4 shadow rounded-lg">
-          <div className="flex items-center space-x-3">
-            <FaClinicMedical className="text-blue-600 text-3xl" />
-            <div>
-              <h2 className="text-lg font-bold">Clinic Overview</h2>
-              <p className="text-gray-500 text-sm">Total Clinics: 23</p>
-            </div>
+      {/* Header Section */}
+      <div className="flex justify-between items-center mb-6 bg-white p-4 shadow rounded-lg">
+        <div className="flex items-center space-x-3">
+          <FaClinicMedical className="text-blue-600 text-3xl" />
+          <div>
+            <h2 className="text-lg font-bold">Clinic Overview</h2>
+            <p className="text-gray-500 text-sm">Total Clinics: {totalClinics}</p> {/* Display total clinic count */}
           </div>
-          <button className="bg-blue-500 text-white px-4 py-2 flex items-center rounded-lg shadow hover:bg-blue-600 transition">
-            <FiPlusCircle className="mr-2" /> New Clinic
-          </button>
         </div>
+        <button className="bg-blue-500 text-white px-4 py-2 flex items-center rounded-lg shadow hover:bg-blue-600 transition">
+          <FiPlusCircle className="mr-2" /> New Clinic
+        </button>
+      </div>
 
-        {/* Clinic Categories Section */}
-        <h3 className="text-xl font-semibold mb-4">Clinic Categories</h3>
-        <div className="grid grid-cols-3 gap-4">
-          {clinicCategories.map((clinic, index) => (
-            <Link
-              key={index}
-              to={`/admin/clinic/diabetic`}
-              className="bg-white p-4 shadow-md rounded-lg flex justify-between items-center cursor-pointer hover:shadow-lg transition"
-            >
-              <div>
-                <h4 className="text-lg font-semibold">{clinic.name}</h4>
-                <p className="text-2xl font-bold">{clinic.count}</p>
-                <p className="text-gray-500 text-sm">Last month</p>
-                <p
-                  className={`text-sm font-semibold ${clinic.increase ? "text-green-500" : "text-red-500"
-                    }`}
-                >
-                  {clinic.change} {clinic.increase ? "▲" : "▼"}
-                </p>
-              </div>
-              <FaTrash className="text-gray-500 cursor-pointer hover:text-red-600 transition" />
-            </Link>
-          ))}
-        </div>
-     
-      </DashboardContainer>
+      {/* Clinic Categories Section */}
+      <h3 className="text-xl font-semibold mb-4">Clinic Categories</h3>
+      <div className="grid grid-cols-3 gap-4">
+        {clinicCategories.map((clinic, index) => (
+          <Link
+            key={index}
+            to={`/admin/clinic/diabetic`}
+            className="bg-white p-4 shadow-md rounded-lg flex justify-between items-center cursor-pointer hover:shadow-lg transition"
+          >
+            <div>
+              <h4 className="text-lg font-semibold">{clinic.name}</h4>
+              <p className="text-2xl font-bold">{clinic.count}</p>
+              <p className="text-gray-500 text-sm">Last month</p>
+              <p
+                className={`text-sm font-semibold ${clinic.increase ? "text-green-500" : "text-red-500"
+                  }`}
+              >
+                {clinic.change} {clinic.increase ? "▲" : "▼"}
+              </p>
+            </div>
+            <FaTrash className="text-gray-500 cursor-pointer hover:text-red-600 transition" />
+          </Link>
+        ))}
+      </div>
+    </DashboardContainer>
   );
 };
 
