@@ -6,10 +6,11 @@ import catchAsync from "../util/catchAsync";
 const ResidentRouter: Router = Router();
 const residentController = new ResidentController();
 
-ResidentRouter.get("/ping", protectRoute, catchAsync(residentController.ping));
+ResidentRouter.get("/ping",protectRoute, catchAsync(residentController.residentPing));
 ResidentRouter.post(
-  "/create",
-  protectRoute,
-  catchAsync(residentController.create)
+  "/createResident",
+
+  // protectRoute,
+  catchAsync(residentController.residentRegister)
 );
 export default ResidentRouter;

@@ -1,11 +1,11 @@
 import { FC, useState } from "react";
-import AdminSlidebar from "../components/layouts/admin/AdminSlidebar";
-import DetailTable from "../components/Common/DetailTable";
+import AdminSlidebar from "../../components/layouts/admin/AdminSlidebar";
+import DetailTable from "../../components/Common/DetailTable";
 
 
-type RegistrationProps = {};
+type ResidentRegistrationProps = {};
 
-const RegistrationPage: FC<RegistrationProps> = () => {
+const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [dob, setDob] = useState("");
@@ -20,7 +20,12 @@ const RegistrationPage: FC<RegistrationProps> = () => {
     const [religion, setReligion] = useState("");
     const [education, setEducation] = useState("");
     const [addicteds, setAddictedd] = useState<string[]>([]);
-    const [allergy, setAllergy] = useState<string[]>([]);
+    const [allergys, setAllergy] = useState<string[]>([]);
+    const [chronicDeseases, setChronicDesease] = useState<string[]>([]);
+    const [clinics, setClinic] = useState<string[]>([]);
+
+
+
 
 
     const addictedlist = [
@@ -35,11 +40,43 @@ const RegistrationPage: FC<RegistrationProps> = () => {
         "Other Allergy",
 
     ];
+    const chronicDeseaselist = [
+        "Cancer",
+        "Arthritis",
+        "Asthma",
+        "High Blood Pressure",
+        "Low Blood Pressure",
+        "Heart Disease",
+        "Stroke",
+        "Kidney Disease",
+        "Liver Disease",
+        "Thyroid Disease",
+        "Epilepsy",
+        "Mental Illness",
+        "HIV/AIDS",
+        "Other",
 
-    const ChronicDesease = [
-        { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
-        { name: "Courtney Henry", title: "Designer", email: "courtney.henry@example.com", role: "Admin" },
-        { name: "Tom Cook", title: "Director of Product", email: "tom.cook@example.com", role: "Member" },
+    ];
+
+    const Cliniclist = [
+        "Medical Clinic",
+        "HCL",
+        "Dental Clinic",
+        "Specialist Clinic",
+        "Eye Clinc",
+        "ENT Clinic",
+        "Skin Clinic",
+        "Diabetic Clinic",
+        "Child Clinic",
+        "Womens Clinic",
+        "Other Clinic",
+
+    ];
+
+    const GramaniladariDivision = [
+        "Kotagedara",
+        "Kolahakada",
+        "Pahalawela",
 
     ];
 
@@ -58,12 +95,58 @@ const RegistrationPage: FC<RegistrationProps> = () => {
             checked ? [...prev, value] : prev.filter((item) => item !== value)
         );
     }
+    const HandleChronicDesease = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { value, checked } = event.target;
+        setChronicDesease((prev) =>
+            checked ? [...prev, value] : prev.filter((item) => item !== value)
+        );
+    }
+    const HandleClinics = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { value, checked } = event.target;
+        setClinic((prev) =>
+            checked ? [...prev, value] : prev.filter((item) => item !== value)
+        );
+    }
 
 
     const handleRegister = () => {
+
+        // Validate the form data
+        if (contact.length != 10) {
+
+            if (contact.match(/^[0-9]{10}$/)) {
+                setContact(contact);
+            }
+            else {
+                alert("Please enter only number in contact");
+            }
+        }
+
+        if (weight != "") {
+            if (weight.match(/^[0-9]+(\.[0-9]+)?$/) && parseFloat(weight) > 0) {
+                setWeight(weight);
+            }
+            else {
+                alert("Please enter weight Correctly");
+            }
+        }
+
+        if (height != "") {
+            if (height.match(/^[0-9]+(\.[0-9]+)?$/) && parseFloat(height) > 0) {
+                setHeight(height);
+            }
+            else {
+                alert("Please enter height Correctly");
+            }
+        }
+
         // Handle the registration logic here (e.g., save to database, send request to API)
-        console.log("Registered:", { firstName, lastName, dob, contact, address, Gender, addicteds, weight, height, GramaDivision, maritalState, religion, education, JobDetail, allergy, });
+        console.log("Registered:", { firstName, lastName, dob, contact, address, Gender, addicteds, weight, height, GramaDivision, maritalState, religion, education, JobDetail, allergys, chronicDeseases, clinics });
     };
+
+
+
+
 
 
 
@@ -84,7 +167,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                 {/* Registration Form */}
                 <div className="space-y-4 grid grid-cols-2 gap-4">
                     <div>
-                        <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="firstName" className="block text-xl font-medium text-gray-700">
                             First Name
                         </label>
                         <input
@@ -98,7 +181,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                     </div>
                     {/* Last Name */}
                     <div>
-                        <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="lastName" className="block text-xl font-medium text-gray-700">
                             Last Name
                         </label>
                         <input
@@ -113,7 +196,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                     {/* Date of Birth */}
                     <div>
-                        <label htmlFor="dob" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="dob" className="block text-xl font-medium text-gray-700">
                             Date of Birth
                         </label>
                         <input
@@ -127,7 +210,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                     {/* Contact */}
                     <div>
-                        <label htmlFor="contact" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="contact" className="block text-xl font-medium text-gray-700">
                             Contact Number
                         </label>
                         <input
@@ -136,13 +219,14 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                             value={contact}
                             onChange={(e) => setContact(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                            placeholder="Enter contact number"
+
+                            placeholder="07X XXX XXXX"
                         />
                     </div>
 
                     {/* Address */}
                     <div>
-                        <label htmlFor="address" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="address" className="block text-xl font-medium text-gray-700">
                             Address
                         </label>
                         <textarea
@@ -156,7 +240,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                     {/* Gender */}
                     <div>
-                        <label htmlFor="Gender" className="block text-sm font-medium text-gray-700">Gender</label>
+                        <label htmlFor="Gender" className="block text-xl font-medium text-gray-700">Gender</label>
 
                         <select name="Gender" id="Gender" className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                             onChange={(e) => setGender(e.target.value)}
@@ -170,49 +254,49 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                     {/* Weight */}
                     <div>
-                        <label htmlFor="Weight" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="Weight" className="block text-xl font-medium text-gray-700">
                             Weight
                         </label>
                         <input
-                            type="text"
+                            type="number"
                             id="Weight"
                             value={weight}
                             onChange={(e) => setWeight(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                            placeholder="Enter Weight"
+                            placeholder="Enter Weight KG"
                         />
                     </div>
 
                     {/* Heidght */}
                     <div>
-                        <label htmlFor="Height" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="Height" className="block text-xl font-medium text-gray-700">
                             Height
                         </label>
                         <input
-                            type="text"
+                            type="number"
                             id="Height"
                             value={height}
                             onChange={(e) => setHeight(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                            placeholder="Enter Height"
+                            placeholder="Enter Height CM"
                         />
                     </div>
 
                     {/* Gramaniladari division */}
                     <div>
-                        <label>Gramaniladari Division</label>
+                        <label className="block text-xl font-medium text-gray-700">Gramaniladari Division</label>
                         <select name="GramaDivision" id="GramaDivision"
                             onChange={(e) => setGramaDivision(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
-                            <option value="1">Kotagedara</option>
-                            <option value="2">Kolahakada</option>
-                            <option value="3">Pahalawela</option>
+                            {GramaniladariDivision.map((option) => (
+                                <option value={option} >{option}</option>
+                            ))}
 
                         </select>
                     </div>
                     {/* Marital State */}
                     <div>
-                        <label>Marital State</label>
+                        <label className="block text-xl font-medium text-gray-700">Marital State</label>
 
                         <select name="MaritalState" id="MaritalState"
                             onChange={(e) => setMaritalstate(e.target.value)}
@@ -226,7 +310,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                     </div>
                     {/* Religion */}
                     <div>
-                        <label>Religion</label>
+                        <label className="block text-xl font-medium text-gray-700">Religion</label>
                         <select name="Religion" id="Religion"
                             onChange={(e) => setReligion(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
@@ -240,7 +324,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                     {/* Education Level */}
                     <div>
-                        <label>Education level</label>
+                        <label className="block text-xl font-medium text-gray-700">Education level</label>
                         <select name="Educationlevel" id="Educationlevel"
                             onChange={(e) => setEducation(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
@@ -258,7 +342,7 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                     {/* Job Details */}
                     <div>
-                        <label>Job Details</label>
+                        <label className="block text-xl font-medium text-gray-700">Job Details</label>
                         <select name="jobDetails" id="jobDetails"
                             onChange={(e) => setjob(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
@@ -273,17 +357,17 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                     {/* Addicteds */}
                     <div className="col-span-2">
-                        <label>Addicteds</label>
+                        <label className="block text-xl font-medium text-gray-700">Addicteds</label>
                         <div className="gap-4 mt-3 ml-3 flex">
                             {addictedlist.map((option) => (
                                 <label key={option} className="flex items-center gap-2">
-                                    {option}
                                     <input
                                         type="checkbox"
                                         value={option}
                                         checked={addicteds.includes(option)}
                                         onChange={handleAddicted}
                                     />
+                                    {option}
                                 </label>
                             ))}
 
@@ -309,17 +393,17 @@ const RegistrationPage: FC<RegistrationProps> = () => {
 
                 {/* Alergies */}
                 <div className="col-span-2">
-                    <label>Allergies</label>
+                    <label className="block text-xl font-medium text-gray-700" >Allergies</label>
                     <div className="gap-4 mt-3 ml-3 flex">
                         {alergydlist.map((option) => (
                             <label key={option} className="flex items-center gap-2">
-                                {option}
                                 <input
                                     type="checkbox"
                                     value={option}
                                     // check={alergydlist.includes(option)}
                                     onChange={handleAllergy}
                                 />
+                                {option}
                             </label>
                         ))}
 
@@ -327,43 +411,41 @@ const RegistrationPage: FC<RegistrationProps> = () => {
                 </div>
 
 
-
-
+                {/* Chronic Desease */}
+                <div className="mt-5 mb-8 ">
+                    <label className="block text-xl font-medium text-gray-700">Chronic Desease</label>
+                    <div className="gap-4 mt-3 ml-3 grid items-center grid-cols-4">
+                        {chronicDeseaselist.map((option) => (
+                            <label key={option} className="flex items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    value={option}
+                                    // checked={chronicDeseases.includes(option)}
+                                    onChange={HandleChronicDesease}
+                                />
+                                {option}
+                            </label>
+                        ))}
+                    </div>
+                </div>
 
                 {/* Clinic Details */}
-                <div className="mt-5 mb-8" >
-                    <label className="mb-50">Attendent Clinic</label>
-                    <div className="gap-4 mt-3 ml-3 flex">
-                        <div className="flex gap-2 justify-content-center">
-
-                            <label htmlFor="Smoke">Medical Clinic</label>
-                            <input type="checkbox" name="Smoke" id="Smoke" />
-                        </div>
-                        <div className="flex gap-2 justify-content-center">
-                            <label>HCL</label>
-                            <input type="checkbox" name="" id="" />
-                        </div>
-                        <div className="flex gap-2 justify-content-center">
-                            <label>Dental Clinic</label>
-                            <input type="checkbox" name="" id="" />
-                        </div>
-                        <div className="flex gap-2 justify-content-center">
-                            <label>Specialist Clinic</label>
-                            <input type="checkbox" name="" id="" />
-                        </div>
+                <div className="mt-5 mb-8 ">
+                    <label className="block text-xl font-medium text-gray-700">Attenden Clinic</label>
+                    <div className="gap-4 mt-3 ml-3 grid items-center grid-cols-4">
+                        {Cliniclist.map((option) => (
+                            <label key={option} className="flex items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    value={option}
+                                    // checked={clinics.includes(option)}
+                                    onChange={HandleClinics}
+                                />
+                                {option}
+                            </label>
+                        ))}
                     </div>
-
                 </div>
-
-
-                <div className="grid gap-15">
-                    <DetailTable TableName={"Chronical Diseaes"} Colunms={[{ title: "Name" }, { title: "Medicine" }, { title: "Time Period" }, { title: "Venue" }]} Data={ChronicDesease} />
-                    {/* <DetailTable TableName={"Surgery"} Colunms={[{ title: "Surgery Name" }, { title: "Reason" }, { title: "Time" }, { title: "Venue" }]} /> */}
-
-                </div>
-
-
-
 
 
 
@@ -382,4 +464,4 @@ const RegistrationPage: FC<RegistrationProps> = () => {
     );
 };
 
-export default RegistrationPage;
+export default ResidentRegistrationPage;

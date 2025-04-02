@@ -8,8 +8,13 @@
     "start": "node dist/server.js",
     "test": "jest",
     "migrate": "sequelize db:migrate",
+    "migrate:create": "sequelize migration:create --name ",
     "migrate:undo": "sequelize db:migrate:undo",
-    "migrate:undo:all": "sequelize db:migrate:undo:all"
+    "migrate:undo:all": "sequelize db:migrate:undo:all",
+    "seed": "npx sequelize-cli db:seed:all",
+    "seed:create": "npx sequelize-cli seed:generate --name",
+    "seed:undo": "npx sequelize-cli db:seed:undo",
+    "seed:undo:all": "npx sequelize-cli db:seed:undo:all"
   },
   "keywords": [],
   "author": "",

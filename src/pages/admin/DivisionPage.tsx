@@ -4,7 +4,7 @@ import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
 import Modal from '../../components/layouts/overlays/Modal';
 
 const DivisionPage: FC = () => {
-    const [isOpen, setIsOpen] = React.useState(true);
+    const [isOpen, setIsOpen] = React.useState(false);
 
     const handleClose = () => {
         setIsOpen(false);
