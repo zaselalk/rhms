@@ -58,8 +58,8 @@ export class ResidentService {
         // const existingResident = await this.residentRepository.findById(id);
         // if (existingResident) throw new ValidationException("Resident already exists");
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-        console.log("Generated hash for '1234':", hashedPassword);
+        // const hashedPassword = await bcrypt.hash(password, 10);
+        // console.log("Generated hash for '1234':", hashedPassword);
 
 
         return this.residentRepository.createResident(

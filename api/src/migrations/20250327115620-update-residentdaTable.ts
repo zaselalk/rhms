@@ -28,7 +28,8 @@ module.exports = {
       type: sequelize.STRING,
     });
     await queryInterface.addColumn('residents', 'addicted', {
-      type: sequelize.JSON,
+      type: sequelize.JSON, // or DataTypes.JSON
+      allowNull: true,
     });
     await queryInterface.addColumn('residents', 'alergies', {
       type: sequelize.JSON,

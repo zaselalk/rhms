@@ -1,6 +1,7 @@
 "use strict";
-import { A } from "react-router/dist/development/route-data-H2S3hwhf";
-import { DataTypes, Model, Sequelize } from "sequelize";
+import { DataTypes, Model } from "sequelize";
+import sequelize from ".";
+import { J } from "react-router/dist/development/route-data-H2S3hwhf";
 
 interface ResidentAttributes {
   firstName: string;
@@ -18,9 +19,9 @@ interface ResidentAttributes {
   divisionId: number;
   maritalState: string;
   educationLevel: string;
-  addicted: Array<string>;
-  alergies: Array<string>;
-  chronicalDesease: Array<string>;
+  addicted: String[];
+  alergies: String[];
+  chronicalDesease: String[];
   height: string;
   weight: string;
 }
@@ -43,98 +44,99 @@ export class Resident
   public divisionId!: number;
   public maritalState!: string;
   public educationLevel!: string;
-  public addicted!: Array<string>;
-  public alergies!: Array<string>;
-  public chronicalDesease!: Array<string>;
+  public addicted!: String[];
+  public alergies!: String[];
+  public chronicalDesease!: String[];
   public height!: string;
   public weight!: string;
 }
 
-export default (sequelize: Sequelize) => {
-  Resident.init(
-    {
-      firstName: {
-        type: DataTypes.STRING,
-        validate: {
-          notEmpty: {
-            msg: "First Name cannot be empty",
-          },
-        },
-      },
-      lastName: {
-        type: DataTypes.STRING,
-      },
-      email: {
-        type: DataTypes.STRING,
-      },
-      password: {
-        type: DataTypes.STRING,
-      },
-      birthday: {
-        type: DataTypes.DATE,
-      },
-      bloodGroup: {
-        type: DataTypes.STRING,
-      },
-      gender: {
-        type: DataTypes.STRING,
-        validate: {
-          notEmpty: {
-            msg: "Sex cannot be empty",
-          },
-        },
-      },
-      bloodPressure: {
-        type: DataTypes.STRING,
-      },
 
-      heartRate: {
-        type: DataTypes.STRING,
-      },
-
-      nic: {
-        type: DataTypes.STRING,
-      },
-      address: {
-        type: DataTypes.STRING,
-      },
-      contactNumber: {
-        type: DataTypes.STRING,
-      },
-      divisionId: {
-        type: DataTypes.INTEGER,
-      },
-      maritalState: {
-        type: DataTypes.STRING,
-      },
-      educationLevel: {
-        type: DataTypes.STRING,
-      },
-      addicted: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
-        defaultValue: [],
-      },
-      alergies: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
-        defaultValue: [],
-      },
-      chronicalDesease: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
-        defaultValue: [],
-      },
-      height: {
-        type: DataTypes.STRING,
-      },
-      weight: {
-        type: DataTypes.STRING,
+Resident.init(
+  {
+    firstName: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: "First Name cannot be empty",
+        },
       },
     },
-    {
-      sequelize,
-      modelName: "Resident",
-      tableName: "residents",
-    }
-  );
+    lastName: {
+      type: DataTypes.STRING,
+    },
+    email: {
+      type: DataTypes.STRING,
+    },
+    password: {
+      type: DataTypes.STRING,
+    },
+    birthday: {
+      type: DataTypes.DATE,
+    },
+    bloodGroup: {
+      type: DataTypes.STRING,
+    },
+    gender: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: "Sex cannot be empty",
+        },
+      },
+    },
+    bloodPressure: {
+      type: DataTypes.STRING,
+    },
 
-  return Resident;
-};
+    heartRate: {
+      type: DataTypes.STRING,
+    },
+
+    nic: {
+      type: DataTypes.STRING,
+    },
+    address: {
+      type: DataTypes.STRING,
+    },
+    contactNumber: {
+      type: DataTypes.STRING,
+    },
+    divisionId: {
+      type: DataTypes.INTEGER,
+    },
+    maritalState: {
+      type: DataTypes.STRING,
+    },
+    educationLevel: {
+      type: DataTypes.STRING,
+    },
+    addicted: {
+      type: DataTypes.JSON,
+      defaultValue: [],
+    },
+    alergies: {
+      type: DataTypes.JSON,
+      defaultValue: [],
+    },
+    chronicalDesease: {
+      type: DataTypes.JSON,
+      defaultValue: [],
+    },
+    height: {
+      type: DataTypes.STRING,
+    },
+    weight: {
+      type: DataTypes.STRING,
+    },
+  },
+
+  {
+    sequelize: sequelize,
+    modelName: "Resident",
+    tableName: "residents",
+  }
+);
+
+
+export default Resident;
