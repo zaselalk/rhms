@@ -8,6 +8,7 @@ import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
 
 
 import 'leaflet/dist/leaflet.css';
+import { AdminNavbar } from '../../components/layouts/admin/AdminNavbar';
 
 const { BaseLayer } = LayersControl;
 
@@ -60,98 +61,99 @@ const AdminDashboard: React.FC = () => {
         { position: [6.492091667, 80.083858333], popup: "DEYAGALA19" },
         { position: [6.492096667, 80.084067500], popup: "DEYAGALA20" },
     ];
-        
 
 
 
 
-return (
-    <div className="min-h-screen bg-gray-100 flex">
-        {/* Reusable Sidebar */}
-        <AdminSlidebar />
 
-        {/* Main Content */}
-        <div className="flex-1 p-6">
-            <h2 className="text-2xl font-semibold text-[#008FFB] mb-6">Katugahahena Divisional Hospital</h2>
-            <div>
+    return (
+        <div className="min-h-screen bg-gray-100 flex">
+            {/* Reusable Sidebar */}
+            <AdminSlidebar />
 
-                {/* Map Section */}
-                <div className="bg-white p-6 rounded-lg shadow-md mb-6 w-full ">
-                    <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Hospital Location</h3>
-                    <MapContainer center={[6.4893, 80.0847]} zoom={100} style={{ height: '400px', width: '100%' }}>
-                        <LayersControl position="topright">
-                            <BaseLayer checked name="Satellite View">
-                                <TileLayer
+            {/* Main Content */}
+            <div className="flex-1 p-6">
+                <AdminNavbar />
+                <h2 className="text-2xl font-semibold text-[#008FFB] mb-6">Katugahahena Divisional Hospital</h2>
+                <div>
 
-                                    url="https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
+                    {/* Map Section */}
+                    <div className="bg-white p-6 rounded-lg shadow-md mb-6 w-full ">
+                        <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Hospital Location</h3>
+                        <MapContainer center={[6.4893, 80.0847]} zoom={100} style={{ height: '400px', width: '100%' }}>
+                            <LayersControl position="topright">
+                                <BaseLayer checked name="Satellite View">
+                                    <TileLayer
+
+                                        url="https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
                                     // attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
-                                />
-                            </BaseLayer>
-                            <BaseLayer name="Street View">
-                                <TileLayer
-                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    />
+                                </BaseLayer>
+                                <BaseLayer name="Street View">
+                                    <TileLayer
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                                     // attribution='&copy; <a href="https://www.openstreetmap.org/copyright"></a>'
-                                />
-                            </BaseLayer>
-                        </LayersControl>
+                                    />
+                                </BaseLayer>
+                            </LayersControl>
 
-                        {markers.map((marker, index) => (
-                            <Marker position={marker.position as [number, number]}>
-                                <Popup>{marker.popup}</Popup>
-                            </Marker>
-                        ))}
-
-
-
-                       
+                            {markers.map((marker, index) => (
+                                <Marker position={marker.position as [number, number]}>
+                                    <Popup>{marker.popup}</Popup>
+                                </Marker>
+                            ))}
 
 
 
-                    </MapContainer>
+
+
+
+
+                        </MapContainer>
+                    </div>
+
+
+
+
+
+
+                    {/* Stats Section */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                        {/* Residents Pie Chart */}
+                        <div className="bg-white p-6 rounded-lg shadow-md">
+                            <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Residents</h3>
+                            <Pie data={residentsData} />
+                        </div>
+
+                        {/* Non-Communicable Diseases Pie Chart */}
+                        <div className="bg-white p-6 rounded-lg shadow-md">
+                            <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Non Communicable Diseases</h3>
+                            <Pie data={nonCommunicableDiseasesData} />
+                        </div>
+
+
+                    </div>
+                    {/* Other Stats */}
+                    <div className="grid grid-cols-2 gap-6">
+                        <div className="bg-white p-6 rounded-lg shadow-md">
+                            <h3 className="text-xl font-semibold text-[#008FFB]">100 Houses</h3>
+                        </div>
+                        <div className="bg-white p-6 rounded-lg shadow-md">
+                            <h3 className="text-xl font-semibold text-[#008FFB]">236 Members</h3>
+                        </div>
+                        <div className="bg-white p-6 rounded-lg shadow-md">
+                            <h3 className="text-xl font-semibold text-[#008FFB]">12 Divisions</h3>
+                        </div>
+                        <div className="bg-white p-6 rounded-lg shadow-md">
+                            <h3 className="text-xl font-semibold text-[#008FFB]">5 Diseases</h3>
+                        </div>
+                    </div>
                 </div>
 
 
-
-
-
-
-                {/* Stats Section */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                    {/* Residents Pie Chart */}
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Residents</h3>
-                        <Pie data={residentsData} />
-                    </div>
-
-                    {/* Non-Communicable Diseases Pie Chart */}
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Non Communicable Diseases</h3>
-                        <Pie data={nonCommunicableDiseasesData} />
-                    </div>
-
-
-                </div>
-                {/* Other Stats */}
-                <div className="grid grid-cols-2 gap-6">
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h3 className="text-xl font-semibold text-[#008FFB]">100 Houses</h3>
-                    </div>
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h3 className="text-xl font-semibold text-[#008FFB]">236 Members</h3>
-                    </div>
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h3 className="text-xl font-semibold text-[#008FFB]">12 Divisions</h3>
-                    </div>
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h3 className="text-xl font-semibold text-[#008FFB]">5 Diseases</h3>
-                    </div>
-                </div>
             </div>
-
-
         </div>
-    </div>
-);
+    );
 };
 
 export default AdminDashboard;

@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { useNavigate } from 'react-router';
 import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
+import { AdminNavbar } from '../../components/layouts/admin/AdminNavbar';
 
 const HouseholdPage: FC = () => {
     const navigate = useNavigate();
@@ -14,6 +15,7 @@ const HouseholdPage: FC = () => {
 
             {/* Main Content */}
             <div className="flex-1 p-6">
+                <AdminNavbar />
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-semibold text-[#008FFB]">Household Details</h2>
                     {/* <div className="px-4 py-2 bg-[#008FFB] text-white rounded-lg">8 Houses</div> */}
