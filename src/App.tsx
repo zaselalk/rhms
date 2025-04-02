@@ -83,9 +83,8 @@ function App() {
           {/* Clinic Paths*/}
           <Route path="clinic">
             <Route path="" element={<ClinicOverviewPage />} />
-            <Route path="diabetic" element={<ClinicDetailPage />} />
-            <Route path="diabetic/:id" element={<ClinicDetailPage />} />
-            <Route path="diabetic/attendance" element={<ClinicAttendancePage/>} />
+            <Route path=":clinic/attendance" element={<ClinicAttendancePage/>} />
+            <Route path=":clinic" element={<ClinicDetailPage />} />
           </Route>
 
 
