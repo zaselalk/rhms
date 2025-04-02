@@ -2,6 +2,7 @@
 import React, { FC } from 'react';
 import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
 import Modal from '../../components/layouts/overlays/Modal';
+import { AdminNavbar } from '../../components/layouts/admin/AdminNavbar';
 
 const DivisionPage: FC = () => {
     const [isOpen, setIsOpen] = React.useState(false);
@@ -37,6 +38,7 @@ const DivisionPage: FC = () => {
                     </div>
                 </Modal>
                 <div className="flex-1 p-6">
+                    <AdminNavbar />
                     <div className="flex justify-between items-center mb-6">
                         <h2 className="text-2xl font-semibold text-[#008FFB]">Division Details</h2>
                         <button className="px-4 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]" onClick={handleOpen}>New</button>

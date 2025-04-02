@@ -3,6 +3,7 @@
 import { Link } from "react-router";
 import AdminSidebar from "../../components/layouts/admin/AdminSlidebar";
 import { useState } from "react";
+import { AdminNavbar } from "../../components/layouts/admin/AdminNavbar";
 
 
 
@@ -27,23 +28,24 @@ const ResidentListPage = () => {
   console.log(residents);
   return (
 
-    <div className="flex">
+    <div className=" min-h-screen bg-gray-100 flex">
       {/* Sidebar */}
       <AdminSidebar />
 
       {/* Main Content */}
-      <div className="p-6 w-full bg-gray-100 min-h-screen">
+      <div className="w-full bg-gray-100 ">
+        <AdminNavbar />
         {/* Header Section */}
         {/* <div className="flex justify-between items-center mb-6 bg-white p-4 shadow rounded-lg">
         <div className="flex items-center space-x-3"> */}
 
         <div className="flex justify-between items-center mb-6 pl-5 pr-5 gap-5" >
-         
-          <input type="text" name="search" id="search" 
-          placeholder="Search Resident"
-          //  value={seachkeyword}
-           onChange={(e) => setSeacrhKeyword(e.target.value)}
-           className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+
+          <input type="text" name="search" id="search"
+            placeholder="Search Resident"
+            //  value={seachkeyword}
+            onChange={(e) => setSeacrhKeyword(e.target.value)}
+            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
           />
           <button>Seach</button>
         </div>
@@ -64,14 +66,14 @@ const ResidentListPage = () => {
               </tr>
             </thead>
             <tbody>
-              {residents.filter((item)=>{
-                if(seachkeyword === ""){
+              {residents.filter((item) => {
+                if (seachkeyword === "") {
                   return item;
-                }else if(item.name.toLowerCase().includes(seachkeyword.toLowerCase())){
+                } else if (item.name.toLowerCase().includes(seachkeyword.toLowerCase())) {
                   return item;
-                }else if(item.id.toLowerCase().includes(seachkeyword.toLowerCase())){
+                } else if (item.id.toLowerCase().includes(seachkeyword.toLowerCase())) {
                   return item;
-                }else if(item.contact.toLowerCase().includes(seachkeyword.toLowerCase())){
+                } else if (item.contact.toLowerCase().includes(seachkeyword.toLowerCase())) {
                   return item;
                 }
 
