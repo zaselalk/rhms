@@ -23,8 +23,8 @@ interface Newesident {
     addicted: Array<string>,
     alergies: Array<string>,
     chronicalDesease: Array<string>,
-    height: string,
-    weight: string,
+    height: number,
+    weight: number,
 }
 
 export class ResidentService {
@@ -50,16 +50,16 @@ export class ResidentService {
         addicted: Array<string>,
         alergies: Array<string>,
         chronicalDesease: Array<string>,
-        height: string,
-        weight: string,
+        height: number,
+        weight: number,
     ): Promise<Resident> {
 
-        // Resident want id
+        // // Resident want id
         // const existingResident = await this.residentRepository.findById(id);
         // if (existingResident) throw new ValidationException("Resident already exists");
 
-        // const hashedPassword = await bcrypt.hash(password, 10);
-        // console.log("Generated hash for '1234':", hashedPassword);
+        const hashedPassword = await bcrypt.hash(password, 10);
+        console.log("Generated hash for '1234':", hashedPassword);
 
 
         return this.residentRepository.createResident(
@@ -67,7 +67,7 @@ export class ResidentService {
             lastName,
             nic,
             email,
-            password,
+            hashedPassword,
             birthday,
             bloodGroup,
             gender,

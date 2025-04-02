@@ -22,8 +22,8 @@ interface ResidentAttributes {
   addicted: String[];
   alergies: String[];
   chronicalDesease: String[];
-  height: string;
-  weight: string;
+  height: number;
+  weight: number;
 }
 
 export class Resident
@@ -47,8 +47,8 @@ export class Resident
   public addicted!: String[];
   public alergies!: String[];
   public chronicalDesease!: String[];
-  public height!: string;
-  public weight!: string;
+  public height!: number;
+  public weight!: number;
 }
 
 
@@ -124,10 +124,10 @@ Resident.init(
       defaultValue: [],
     },
     height: {
-      type: DataTypes.STRING,
+      type: DataTypes.NUMBER,
     },
     weight: {
-      type: DataTypes.STRING,
+      type: DataTypes.NUMBER,
     },
   },
 
