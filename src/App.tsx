@@ -23,6 +23,7 @@ import ClinicOverviewPage from "./pages/admin/ClinicOverviewPage";
 import ClinicDetailPage from "./pages/admin/ClinicDetailPage";
 import Resident from "./pages/admin/Resident";
 import ResidentDashboard from "./pages/resident/ResidentDashboard";
+import ClinicAttendancePage from "./pages/admin/ClinicAttendances";
 
 function App() {
   return (
@@ -83,6 +84,8 @@ function App() {
           <Route path="clinic">
             <Route path="" element={<ClinicOverviewPage />} />
             <Route path="diabetic" element={<ClinicDetailPage />} />
+            <Route path="diabetic/:id" element={<ClinicDetailPage />} />
+            <Route path="diabetic/attendance" element={<ClinicAttendancePage/>} />
           </Route>
 
 
