@@ -2,8 +2,7 @@ import React from "react";
 import { FaClinicMedical, FaTrash } from "react-icons/fa";
 import { FiPlusCircle } from "react-icons/fi";
 import { Link } from "react-router";
-import AdminSidebar from "../../components/layouts/admin/AdminSlidebar";
-import { AdminNavbar } from "../../components/layouts/admin/AdminNavbar";
+import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 
 const ClinicOverview: React.FC = () => {
   // Sample data for clinic categories
@@ -14,13 +13,8 @@ const ClinicOverview: React.FC = () => {
   ];
 
   return (
-    <div className="flex">
-      {/* Sidebar */}
-      <AdminSidebar />
+    <DashboardContainer>
 
-      {/* Main Content */}
-      <div className="p-6 w-full bg-gray-100 min-h-screen">
-        <AdminNavbar />
         {/* Header Section */}
         <div className="flex justify-between items-center mb-6 bg-white p-4 shadow rounded-lg">
           <div className="flex items-center space-x-3">
@@ -59,8 +53,8 @@ const ClinicOverview: React.FC = () => {
             </Link>
           ))}
         </div>
-      </div>
-    </div>
+     
+      </DashboardContainer>
   );
 };
 
