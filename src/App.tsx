@@ -73,12 +73,14 @@ function App() {
           </Route>
 
 
-          <Route path="division" element={<DivisionPage />} />
-          <Route path="single-division" element={<SingleDivisionPage />} />
+          <Route path="division">
+            <Route path="" element={<DivisionPage />} />
+            <Route path=":id" element={<SingleDivisionPage />} />
+          </Route>
 
 
           {/* Clinic Paths*/}
-          <Route path="clinic" element={<ClinicOverviewPage />} >
+          <Route path="clinic">
             <Route path="" element={<ClinicOverviewPage />} />
             <Route path="diabetic" element={<ClinicDetailPage />} />
           </Route>

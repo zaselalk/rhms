@@ -1,14 +1,16 @@
 import { FC } from 'react';
 import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
+import { AdminNavbar } from '../../components/layouts/admin/AdminNavbar';
 
 const SingleDivisionPage: FC = () => {
     return (
         <div className="flex min-h-screen bg-gray-100">
-             {/* Reusable Sidebar */}
-             <AdminSlidebar />
+            {/* Reusable Sidebar */}
+            <AdminSlidebar />
 
             {/* Main Content */}
             <div className="flex-1 p-6">
+                <AdminNavbar />
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-semibold text-[#008FFB]">Kotagedara</h2>
                 </div>
