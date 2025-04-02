@@ -1,12 +1,11 @@
 import { FC } from 'react';
 import { useNavigate } from 'react-router';
 import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
+import { AdminNavbar } from '../../components/layouts/admin/AdminNavbar';
 
 const ResidentProfilePage: FC = () => {
     const navigate = useNavigate();
-    const handleLogout = () => {
-        navigate('/resident-login');
-    };
+
     const handleEditProfile = () => {
         navigate('/resident-profile-edit');
     };
@@ -15,22 +14,11 @@ const ResidentProfilePage: FC = () => {
         <div className="min-h-screen bg-gray-100 flex">
             {/* Sidebar */}
             <AdminSlidebar />
-
             {/* Main Content */}
             <div className="flex flex-col w-full">
+                <AdminNavbar />
                 {/* Navbar */}
-                <div className="bg-[#008FFB] p-4 flex justify-between items-center w-full">
-                    <h2 className="text-2xl font-semibold text-white">Resident Profile</h2>
-                    <div className="flex items-center">
-                        <span className="text-sm text-white mr-4">Ravindu (Admin)</span>
-                        <button
-                            className="text-white border border-white rounded-md px-4 py-2 hover:bg-[#006fbb]"
-                            onClick={handleLogout}
-                        >
-                            Logout
-                        </button>
-                    </div>
-                </div>
+
 
                 {/* Page Content */}
                 <div className="p-6">
