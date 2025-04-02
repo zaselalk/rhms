@@ -9,8 +9,6 @@ import { FaLocationDot } from "react-icons/fa6";
 import { FaCircleUser } from "react-icons/fa6";
 import { HiUsers } from "react-icons/hi";
 
-
-
 const AdminSidebar: FC = () => {
     return (
         <div className=" bg-white shadow-lg p-6">
