@@ -40,4 +40,13 @@ export class ResidentRepository {
 
 
     }
+    async findById(id: number): Promise<Resident | null> {
+        return Resident.findOne({
+            where: {
+                id,
+            },
+        });
+    }
+
+    
 }

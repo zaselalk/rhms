@@ -73,7 +73,16 @@ class ResidentController {
     }
     return res.json(resident);
   }
-  
+
+  residentfindById = async (req: Request, res: Response): Promise<Response | void> => {
+    const { id } = req.params;
+    const resident = await this.residentService.findById(Number(id));
+    if (!resident) {
+      return res.status(404).json({ message: "Resident not found" });
+    }
+    return res.json(resident);
+  }
+
 
 
 }
