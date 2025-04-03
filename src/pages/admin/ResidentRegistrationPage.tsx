@@ -7,21 +7,25 @@ type ResidentRegistrationProps = {};
 const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [dob, setDob] = useState("");
-    const [contact, setContact] = useState("");
+    const [nic, setNic] = useState("");
+    const [email, setEmail] = useState("");
+    const [birthday, setDob] = useState("");
+    const [bloodGroup, setBloodGroup] = useState("");
+    const [contactNumber, setContact] = useState("");
     const [address, setAddress] = useState("");
-    const [Gender, setGender] = useState("");
-    const [JobDetail, setjob] = useState("");
+    const [gender, setGender] = useState("");
+    const [jobState, setjob] = useState("");
     const [weight, setWeight] = useState("");
     const [height, setHeight] = useState("");
-    const [GramaDivision, setGramaDivision] = useState("");
+    const [divisionId, setGramaDivision] = useState("");
     const [maritalState, setMaritalstate] = useState("");
     const [religion, setReligion] = useState("");
-    const [education, setEducation] = useState("");
-    const [addicteds, setAddictedd] = useState<string[]>([]);
-    const [allergies, setAllergies] = useState<string[]>([]);
-    const [chronicDiseases, setChronicDisease] = useState<string[]>([]);
+    const [educationLevel, setEducation] = useState("");
+    const [addicted, setAddictedd] = useState<string[]>([]);
+    const [alergies, setAllergies] = useState<string[]>([]);
+    const [chronicalDesease, setChronicDisease] = useState<string[]>([]);
     const [clinics, setClinic] = useState<string[]>([]);
+    const [birthCertificateNumber, setBirthCertificateNumber] = useState("");
 
 
 
@@ -72,11 +76,14 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
 
     ];
 
-    const GramaniladariDivision = [
-        "Kotagedara",
-        "Kolahakada",
-        "Pahalawela",
 
+    const GramaniladariDivision = [
+        { id: 1, name: "Kotagedara" },
+        { id: 2, name: "Kolahakada" },
+        { id: 3, name: "Pahalawela" },
+        { id: 4, name: "alpitiya" },
+        { id: 5, name: "Diyagala" },
+        { id: 6, name: "Kolahakada" },
     ];
 
 
@@ -113,21 +120,18 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
         );
     }
 
-
-
-
-
-
-
     const handleRegister = () => {
 
-        // Validate the form data
-        if (contact.length != 10) {
+        let errors = [];
 
-            if (contact.match(/^[0-9]{10}$/)) {
-                setContact(contact);
+        // Validate the form data
+        if (contactNumber.length != 10) {
+
+            if (contactNumber.match(/^[0-9]{10}$/)) {
+                setContact(contactNumber);
             }
             else {
+                errors.push("Please enter a valid 10-digit contact number.");
                 alert("Please enter only number in contact");
             }
         }
@@ -137,6 +141,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                 setWeight(weight);
             }
             else {
+                errors.push("Please enter a valid weight.");
                 alert("Please enter weight Correctly");
             }
         }
@@ -146,25 +151,66 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                 setHeight(height);
             }
             else {
+                errors.push("Please enter a valid height.");
                 alert("Please enter height Correctly");
             }
         }
 
-        // Handle the registration logic here (e.g., save to database, send request to API)
-        console.log("Registered:", { firstName, lastName, dob, contact, address, Gender, addicteds, weight, height, GramaDivision, maritalState, religion, education, JobDetail, allergies, chronicDiseases, clinics });
+        if (!/^[0-9]{9}[VXvx]$/.test(nic) && !/^[0-9]{12}$/.test(nic)) {
+            errors.push("Please enter a valid Sri Lankan NIC (9 digits + 'V'/'X' or 12 digits).");
+        } else {
+            setNic(nic);
+        }
+
+
+        if (errors.length > 0) {
+            alert(errors.join("\n"));
+            return;
+        }
+
+
+        //log
+        console.log("Registered:", { firstName, lastName, birthday, contactNumber, address, gender, addicted, weight, height, divisionId, maritalState, religion, educationLevel, jobState, alergies, chronicalDesease, clinics, bloodGroup, birthCertificateNumber });
+
+
+        // Example API call
+        fetch("http://localhost:3001/resident/createResident", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                firstName,
+                lastName,
+                nic,
+                email,
+                password: "",
+                birthday,
+                bloodGroup,
+                gender,
+                bloodPressure: "",
+                heartRate: "",
+                address,
+                contactNumber,
+                divisionId,
+                maritalState,
+                religion,
+                jobState,
+                educationLevel,
+                addicted,
+                alergies,
+                chronicalDesease,
+                height,
+                weight
+            })
+        })
+            .then(response => response.json())
+            .then(data => console.log("Registration successful:", data))
+            .catch(error => console.error("Error:", error));
+
+
     };
-
-
-
-
-
-
 
     return (
         <DashboardContainer>
-            {/* Reusable Sidebar */}
-            
-
             {/* Registration Form Container */}
             <div className="bg-white p-8 rounded-lg shadow-lg w-full ">
                 <h2 className="text-2xl font-semibold text-[#008FFB] mb-6 text-center">Resident Registration</h2>
@@ -204,6 +250,27 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                         />
                     </div>
 
+
+                    {/* Nic */}
+                    <div>
+                        <label htmlFor="NIC" className="block text-xl font-medium text-gray-700">
+                            NIC
+                        </label>
+                        <input
+                            type="text"
+                            id="NIC"
+                            maxLength={12}
+                            minLength={10}
+                            pattern="[0-9]{9}[V]"
+                            title="Please enter a valid NIC number (9 digits followed by 'V')"
+                            value={nic}
+                            onChange={(e) => setNic(e.target.value)}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                            placeholder="Enter NIC "
+                        />
+                    </div>
+
+
                     {/* Date of Birth */}
                     <div>
                         <label htmlFor="dob" className="block text-xl font-medium text-gray-700">
@@ -215,7 +282,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                             // max="2005-12-31"
                             max={caldate2}
                             id="dob"
-                            value={dob}
+                            value={birthday}
                             onChange={(e) => setDob(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                         />
@@ -229,11 +296,29 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                         <input
                             type="text"
                             id="contact"
-                            value={contact}
+                            minLength={10}
+                            maxLength={10}
+
+                            value={contactNumber}
                             onChange={(e) => setContact(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
 
                             placeholder="0XX XXX XXXX"
+                        />
+                    </div>
+
+                    {/* Email */}
+                    <div>
+                        <label htmlFor="email" className="block text-xl font-medium text-gray-700">
+                            Email
+                        </label>
+                        <input
+                            type="email"
+                            id="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                            placeholder="Enter email"
                         />
                     </div>
 
@@ -266,34 +351,58 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                     </div>
 
 
-
-
-                    {/* Gramaniladari division */}
+                    {/* Grama Division Dropdown */}
                     <div>
-                        <label className="block text-xl font-medium text-gray-700">Gramaniladari Division</label>
-                        <select name="GramaDivision" id="GramaDivision"
+                        <label htmlFor="division" className="block text-xl font-medium text-gray-700">Grama Division</label>
+                        <select
+                            id="division"
+                            // value={divisionId}
                             onChange={(e) => setGramaDivision(e.target.value)}
-                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
-                            {GramaniladariDivision.map((option) => (
-                                <option value={option} >{option}</option>
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                        >
+                            <option value="" disabled>Select Grama Division</option>
+                            {GramaniladariDivision.map((division) => (
+                                <option key={division.id} value={division.id}>
+                                    {division.name}
+                                </option>
                             ))}
-
                         </select>
                     </div>
+
                     {/* Marital State */}
                     <div>
                         <label className="block text-xl font-medium text-gray-700">Marital State</label>
 
-                        <select name="MaritalState" id="MaritalState"
+                        <select
+                            name="MaritalState"
+                            id="MaritalState"
                             onChange={(e) => setMaritalstate(e.target.value)}
-
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
-                            <option value="Married">Married</option>
+                            <option value="Married" >Married</option>
                             <option value="Unmarried">Unmarried</option>
                             <option value="Unmarried">Widowed</option>
                             <option value="Divorced">Divorced</option>
                         </select>
                     </div>
+                    {/* BirthCertificate Number */}
+
+                    <div>
+                        <label htmlFor="bcnum" className="block text-xl font-medium text-gray-700">
+                            BirthCertificate Number
+                        </label>
+                        <input
+                            type="text"
+                            id="bcnum"
+                            value={birthCertificateNumber}
+                            onChange={(e) => setBirthCertificateNumber(e.target.value)}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                            placeholder="Enter Birth Certificate Number "
+                        />
+                    </div>
+
+
+
+
                     {/* Religion */}
                     <div>
                         <label className="block text-xl font-medium text-gray-700">Religion</label>
@@ -329,7 +438,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                     {/* Job Details */}
                     <div>
                         <label className="block text-xl font-medium text-gray-700">Job Details</label>
-                        <select name="jobDetails" id="jobDetails"
+                        <select name="jobState" id="jobState"
                             onChange={(e) => setjob(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
                             <option value="No Formal Education">Worker</option>
@@ -371,6 +480,22 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                             placeholder="Enter Weight kg"
                         />
                     </div>
+                    {/* Blood Group */}
+                    <div>
+                        <label className="block text-xl font-medium text-gray-700">Blood Group</label>
+                        <select name="bloodGroup" id="bloodGroup"
+                            onChange={(e) => setBloodGroup(e.target.value)}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none">
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
                     {/* Addicteds */}
                     <div className="col-span-2">
                         <label className="block text-xl font-medium text-gray-700">Addicteds</label>
@@ -380,7 +505,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                                     <input
                                         type="checkbox"
                                         value={option}
-                                        checked={addicteds.includes(option)}
+                                        checked={addicted.includes(option)}
                                         onChange={handleAddicted}
                                     />
                                     {option}
