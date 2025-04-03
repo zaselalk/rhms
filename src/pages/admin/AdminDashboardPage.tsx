@@ -9,6 +9,7 @@ import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
 
 import 'leaflet/dist/leaflet.css';
 import { AdminNavbar } from '../../components/layouts/admin/AdminNavbar';
+import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
 
 const { BaseLayer } = LayersControl;
 
@@ -67,13 +68,13 @@ const AdminDashboard: React.FC = () => {
 
 
     return (
-        <div className="min-h-screen bg-gray-100 flex">
+        <DashboardContainer>
             {/* Reusable Sidebar */}
-            <AdminSlidebar />
+            
 
             {/* Main Content */}
-            <div className="flex-1 p-6">
-                <AdminNavbar />
+            <div>
+                
                 <h2 className="text-2xl font-semibold text-[#008FFB] mb-6">Katugahahena Divisional Hospital</h2>
                 <div>
 
@@ -152,7 +153,7 @@ const AdminDashboard: React.FC = () => {
 
 
             </div>
-        </div>
+        </DashboardContainer>
     );
 };
 

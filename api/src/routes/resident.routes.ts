@@ -2,14 +2,18 @@ import { Router } from "express";
 import ResidentController from "../controllers/ResidentController";
 import { protectRoute } from "../middleware/authjwt.middleware";
 import catchAsync from "../util/catchAsync";
+import { valiadteResident } from "../validation/resident";
+
 
 const ResidentRouter: Router = Router();
 const residentController = new ResidentController();
 
-ResidentRouter.get("/ping", protectRoute, catchAsync(residentController.ping));
+ResidentRouter.get("/ping",protectRoute, catchAsync(residentController.residentPing));
 ResidentRouter.post(
-  "/create",
-  protectRoute,
-  catchAsync(residentController.create)
+  "/createResident",
+
+  valiadteResident,
+  // protectRoute,
+  catchAsync(residentController.residentRegister)
 );
 export default ResidentRouter;

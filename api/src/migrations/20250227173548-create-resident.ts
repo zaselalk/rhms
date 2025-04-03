@@ -28,7 +28,7 @@ module.exports = {
       },
       birthday: {
 
-        type: DataTypes.INTEGER
+        type: DataTypes.DATE
       },
       bloodGroup: {
 
