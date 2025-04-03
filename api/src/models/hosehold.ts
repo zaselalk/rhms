@@ -1,10 +1,15 @@
-"use strict";
-import { DataTypes, IntegerDataType, Model, Sequelize } from "sequelize";
+
+import { Model, DataTypes } from "sequelize";
+import sequelize from ".";
+
 
 interface HouseholdAttributes {
-  houseid: string;
+  houseid:number;
   password: string;
-  name: string;
+  houseowner: string;
+  grama_division: string;
+  income_range: number;
+  location: string;
   familyMember: number;
 
 }
@@ -13,18 +18,21 @@ export class Household
   extends Model<HouseholdAttributes>
   implements HouseholdAttributes
 {
-  public houseid!: string;
+  public houseid!: number;
   public password!: string;
-  public name!: string;
+  public houseowner!: string;
+  public grama_division!: string;
+  public income_range!: number;
+  public location!: string;
   public familyMember!: number;
  
 }
 
-export default (sequelize: Sequelize) => {
+
   Household.init(
     {
       houseid: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         validate: {
           notEmpty: {
             msg: "House Id cannot be empty",
@@ -39,7 +47,7 @@ export default (sequelize: Sequelize) => {
           },
         },
       },
-      name: {
+      houseowner: {
         type: DataTypes.STRING,
         validate: {
           notEmpty: {
@@ -49,15 +57,40 @@ export default (sequelize: Sequelize) => {
       },
       familyMember:{
         type: DataTypes.INTEGER,
-      }
+      },
+      grama_division: {
+        type: DataTypes.STRING,
+        validate: {
+          notEmpty: {
+            msg: "Grama Division cannot be empty",
+          },
+        },
+      },
+      income_range: {
+        type: DataTypes.INTEGER,
+        validate: {
+          notEmpty: {
+            msg: "Income Range cannot be empty",
+          },
+        },
+      },
+      location: {
+        type: DataTypes.STRING,
+        validate: {
+          notEmpty: {
+            msg: "Location cannot be empty",
+          },
+        },
+      },
       
     },
     {
       sequelize,
-      modelName: "Household",
+      modelName: "household",
       tableName: "household",
+      timestamps: true,
     }
   );
 
-  return Household;
-};
+  export default Household;
+

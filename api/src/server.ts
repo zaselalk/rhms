@@ -9,10 +9,11 @@ import cors from "cors";
 import { Resident } from "./models/resident";
 import ResidentRouter from "./routes/resident.routes";
 
+
 dotenv.config();
 
 // env variables
-const PORT: number =
+const PORT: number = 
   parseInt(process.env.APPLICATION_PORT as string, 10) || 3001;
 const app: Application = express();
 
