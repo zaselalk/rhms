@@ -1,9 +1,7 @@
 import { FC } from 'react';
-import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
 import { AdminNavbar } from '../../components/layouts/admin/AdminNavbar';
-import { UNSAFE_createClientRoutesWithHMRRevalidationOptOut, useParams } from 'react-router';
+import {  useParams } from 'react-router';
 import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
-import DiseasesPage from './DiseasesPage'; // Assuming you have a DiseasesPage component to import
 
 // Sample data structure (same as DiseasesPage)
 const diseasesData = {
@@ -25,11 +23,11 @@ const SingleDiseasePage: FC = () => {
     const patientCount = diseasesData[diseaseName as keyof typeof diseasesData] || 0; // Default to 0 if not found
 
 
-    if(!diseaseName) {
+    if(diseaseName) {
     return (
         <DashboardContainer>
             <div className="flex-1 p-6">
-                <AdminNavbar />
+
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-semibold text-[#008FFB]">{diseaseName}</h2>
                     <div className="px-4 py-2 bg-[#008FFB] text-white rounded-lg">{patientCount} Total</div>

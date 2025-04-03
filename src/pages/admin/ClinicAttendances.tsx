@@ -30,6 +30,7 @@ const ClinicAttendances: React.FC = () => {
     status: false, // Default status is absent
   })));
 
+
   // Filter patients based on search term
   const filteredPatients = patients.filter((patient) =>
     patient.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -58,7 +59,7 @@ const ClinicAttendances: React.FC = () => {
         {/* Back Button */}
         <div className="mb-6">
           <button
-            onClick={() => navigate("/clinic-details")}
+            onClick={() => navigate(-1)} // Navigates to the previous page
             className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition"
           >
             <FaArrowLeft className="mr-2" />
