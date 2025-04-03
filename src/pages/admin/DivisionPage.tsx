@@ -2,6 +2,8 @@
 import React, { FC } from 'react';
 import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
 import Modal from '../../components/layouts/overlays/Modal';
+import { AdminNavbar } from '../../components/layouts/admin/AdminNavbar';
+import { Link } from 'react-router';
 
 const DivisionPage: FC = () => {
     const [isOpen, setIsOpen] = React.useState(false);
@@ -37,6 +39,7 @@ const DivisionPage: FC = () => {
                     </div>
                 </Modal>
                 <div className="flex-1 p-6">
+                    <AdminNavbar />
                     <div className="flex justify-between items-center mb-6">
                         <h2 className="text-2xl font-semibold text-[#008FFB]">Division Details</h2>
                         <button className="px-4 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]" onClick={handleOpen}>New</button>
@@ -44,27 +47,31 @@ const DivisionPage: FC = () => {
 
                     {/* Division Cards */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        {/* Card 1 */}
-                        <div className="bg-white p-4 rounded-lg shadow-md flex justify-between items-center">
-                            <div>
-                                <p className="text-lg font-semibold text-gray-800">Katugahahena</p>
-                                <p className="text-sm text-gray-600">236</p>
+                        <Link to={"1"} className="bg-white p-4 rounded-lg shadow-md flex justify-between items-center">
+                            {/* Card 1 */}
+                            <div className="bg-white p-4 rounded-lg shadow-md flex justify-between items-center">
+                                <div>
+                                    <p className="text-lg font-semibold text-gray-800">Katugahahena</p>
+                                    <p className="text-sm text-gray-600">236</p>
+                                </div>
+                                <button className="text-red-500">
+                                    <i className="fas fa-trash"></i>
+                                </button>
                             </div>
-                            <button className="text-red-500">
-                                <i className="fas fa-trash"></i>
-                            </button>
-                        </div>
+                        </Link>
 
-                        {/* Card 2 */}
-                        <div className="bg-white p-4 rounded-lg shadow-md flex justify-between items-center">
-                            <div>
-                                <p className="text-lg font-semibold text-gray-800">Kotagedara</p>
-                                <p className="text-sm text-gray-600">100</p>
+                        <Link to={"2"} className="bg-white p-4 rounded-lg shadow-md flex justify-between items-center">
+                            {/* Card 2 */}
+                            <div className="bg-white p-4 rounded-lg shadow-md flex justify-between items-center">
+                                <div>
+                                    <p className="text-lg font-semibold text-gray-800">Kotagedara</p>
+                                    <p className="text-sm text-gray-600">100</p>
+                                </div>
+                                <button className="text-red-500">
+                                    <i className="fas fa-trash"></i>
+                                </button>
                             </div>
-                            <button className="text-red-500">
-                                <i className="fas fa-trash"></i>
-                            </button>
-                        </div>
+                        </Link>
 
                         {/* Repeat for other cards */}
                         <div className="bg-white p-4 rounded-lg shadow-md flex justify-between items-center">
