@@ -2,7 +2,7 @@
 
 import { Model, DataTypes, Sequelize } from "sequelize";
 interface RoleAttributes {
-  id: number;
+  id?: number;
   role: string;
 }
 
@@ -12,6 +12,8 @@ export class Role extends Model<RoleAttributes> implements RoleAttributes {
 }
 
 export default (sequelize: Sequelize) => {
+  // role has many-to-many relationship with permission through permission_role
+
   Role.init(
     {
       id: {
