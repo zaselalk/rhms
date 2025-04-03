@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router';
 import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
+import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
 
 const HouseholdManagePage: FC = () => {
     // Sample data for residents in a household
@@ -14,11 +15,27 @@ const HouseholdManagePage: FC = () => {
     const [newName, setNewName] = useState('');
     const [newAge, setNewAge] = useState('');
     const [newRelation, setNewRelation] = useState('');
+    const [errors, setErrors] = useState<{ name?: string; age?: string; relation?: string }>({});
     const navigate = useNavigate();
+
+    // Validate input fields
+    const validateForm = () => {
+        let formErrors: { name?: string; age?: string; relation?: string } = {};
+
+        if (!newName.trim()) formErrors.name = 'Name is required.';
+        if (!newAge.trim() || isNaN(Number(newAge)) || Number(newAge) <= 0)
+            formErrors.age = 'Enter a valid age.';
+        if (!newRelation.trim()) formErrors.relation = 'Relation is required.';
+        if (residents.some(resident => resident.name.toLowerCase() === newName.toLowerCase()))
+            formErrors.name = 'Resident with this name already exists.';
+
+        setErrors(formErrors);
+        return Object.keys(formErrors).length === 0;
+    };
 
     // Add a new resident to the list
     const handleAddResident = () => {
-        if (newName && newAge && newRelation) {
+        if (validateForm()) {
             const newResident = {
                 id: residents.length + 1,
                 name: newName,
@@ -44,6 +61,7 @@ const HouseholdManagePage: FC = () => {
     };
 
     return (
+        <DashboardContainer>
         <div className="min-h-screen bg-gray-100">
 
             {/* Navbar */}
@@ -74,6 +92,7 @@ const HouseholdManagePage: FC = () => {
                                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                                 placeholder="Enter resident's name"
                             />
+                            {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Age</label>
@@ -84,6 +103,7 @@ const HouseholdManagePage: FC = () => {
                                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                                 placeholder="Enter resident's age"
                             />
+                            {errors.age && <p className="text-red-500 text-xs mt-1">{errors.age}</p>}
                         </div>
                         <div className="sm:col-span-2">
                             <label className="block text-sm font-medium text-gray-700">Relation</label>
@@ -94,6 +114,8 @@ const HouseholdManagePage: FC = () => {
                                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                                 placeholder="Enter relation to household"
                             />
+                            {errors.relation && <p className="text-red-500 text-xs mt-1">{errors.relation}</p>}
+                            </div>
                         </div>
                     </div>
                     <div className="mt-4 flex justify-end">
@@ -138,7 +160,8 @@ const HouseholdManagePage: FC = () => {
                     </table>
                 </div>
             </div>
-        </div>
+        
+        </DashboardContainer>
     );
 };
 

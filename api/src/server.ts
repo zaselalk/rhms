@@ -6,12 +6,11 @@ import AuthRouter from "./routes/auth.routes";
 import sequelize from "./models";
 import DisaseRouter from "./routes/disease.routes";
 import cors from "cors";
-import PermissionRouter from "./routes/permission.routes";
 
 dotenv.config();
 
 // env variables
-const PORT: number =
+const PORT: number = 
   parseInt(process.env.APPLICATION_PORT as string, 10) || 3001;
 const app: Application = express();
 
@@ -33,7 +32,6 @@ app.use(passport.session());
 app.use("/auth", AuthRouter);
 app.use("/disease", DisaseRouter);
 app.use("/resident", DisaseRouter);
-app.use("/permission", PermissionRouter);
 
 app.listen(PORT, async () => {
   sequelize.sync();
