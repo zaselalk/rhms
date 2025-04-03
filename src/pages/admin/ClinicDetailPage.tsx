@@ -50,15 +50,20 @@ const ClinicDetail: React.FC = () => {
 
   const [editModalOpen, setEditModalOpen] = useState(false); // Modal state for editing session
   const [selectedSession, setSelectedSession] = useState<ClinicSession | null>(null); // Selected session to edit
+  const [error, setError] = useState<string>(""); // Error message state
   const navigate = useNavigate(); // Initialize the navigate function for routing
 
   const addClinicSession = () => {
-    if (newSession.sessionName && newSession.date) {
-      const newSessionId = `session${clinicSessions.length + 1}`;
-      const session = { id: newSessionId, ...newSession };
-      setClinicSessions([...clinicSessions, session]);
-      setNewSession({ sessionName: "", date: "" });
+    if (!newSession.sessionName || !newSession.date) {
+      setError("Session Name and Date cannot be empty!");
+      return; // Don't proceed if fields are empty
     }
+
+    const newSessionId = `session${clinicSessions.length + 1}`;
+    const session = { id: newSessionId, ...newSession };
+    setClinicSessions([...clinicSessions, session]);
+    setNewSession({ sessionName: "", date: "" });
+    setError(""); // Clear any previous error
   };
 
   const removeClinicSession = (sessionId: string) => {
@@ -158,6 +163,7 @@ const ClinicDetail: React.FC = () => {
         {/* Add Session Form Section */}
         <div className="bg-white p-6 shadow-md rounded-lg mt-6">
           <h3 className="text-xl font-semibold mb-4">Add Session</h3>
+          {error && <p className="text-red-500 mb-4">{error}</p>} {/* Error message */}
           <div className="mb-4">
             <input
               type="text"
