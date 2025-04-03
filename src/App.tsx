@@ -3,8 +3,8 @@ import RegistrationPage from "./pages/admin/ResidentRegistrationPage";
 import LoginPage from "./pages/LoginPage";
 import DivisionPage from "./pages/admin/DivisionPage";
 import SingleDivisionPage from "./pages/admin/SingleDivisionPage";
-import DiseasesPage from "./pages/admin/DiseasesPage";
-import SingleDiseasePage from "./pages/admin/SingleDiseasePage";
+// import DiseasesPage from "./pages/admin/DiseasesPage";
+// import SingleDiseasePage from "./pages/admin/SingleDiseasePage";
 import UsersPage from "./pages/admin/UsersPage";
 import AddUserPage from "./pages/admin/AddUserPage";
 import HouseholdPage from "./pages/admin/HouseholdPage";
@@ -24,6 +24,11 @@ import ClinicDetailPage from "./pages/admin/ClinicDetailPage";
 import Resident from "./pages/admin/Resident";
 import ResidentDashboard from "./pages/resident/ResidentDashboard";
 import ResidentClinicDetail from "./pages/resident/ResidentClinicDetail";
+import ClinicAttendancePage from "./pages/admin/ClinicAttendances";
+import DiseasesPage from "./pages/admin/DiseasesPage";
+import SingleDiseasePage from "./pages/admin/SingleDiseasePage";
+import ProfilePage from "./pages/admin/ProfilePage";
+
 
 function App() {
   return (
@@ -37,6 +42,9 @@ function App() {
           <Route path="dashboard" element={<AdminDashboardPage />} />
           <Route path="login" element={<LoginPage />} />
 
+          {/*Profile  */}
+          <Route path="profile" element={<ProfilePage />} />
+
           {/* /admin/resident */}
           <Route path="residents" >
             <Route path="" element={<Resident />} />
@@ -46,7 +54,7 @@ function App() {
           {/* /admin/diseases  */}
           <Route path="diseases" >
             <Route path="" element={<DiseasesPage />} />
-            <Route path="single" element={<SingleDiseasePage />} />
+            <Route path="single/:diseaseName" element={<SingleDiseasePage />} />
           </Route>
 
           {/* /admin/users routs */}
@@ -55,9 +63,11 @@ function App() {
             <Route path="add" element={<AddUserPage />} />
           </Route>
 
+          {/* /admin/households routes */}
           <Route path="households" >
             <Route path="" element={<HouseholdPage />} />
-            <Route path="new" element={<CreateHouseholdPage />} />
+            <Route path="create" element={<CreateHouseholdPage />} />
+            <Route path="manage/:id" element={<HouseholdManagePage />} />
           </Route>
 
           {/* /admin/residents routes */}
@@ -83,7 +93,8 @@ function App() {
           {/* Clinic Paths*/}
           <Route path="clinic">
             <Route path="" element={<ClinicOverviewPage />} />
-            <Route path="diabetic" element={<ClinicDetailPage />} />
+            <Route path=":clinic/attendance" element={<ClinicAttendancePage />} />
+            <Route path=":clinic" element={<ClinicDetailPage />} />
           </Route>
 
 
@@ -94,6 +105,8 @@ function App() {
           <Route path="login" element={<HouseholdLoginPage />} />
           <Route path="" element={<HouseholdManagePage />} />
         </Route>
+
+
 
         {/* Resident Paths*/}
         <Route path="/resident" >

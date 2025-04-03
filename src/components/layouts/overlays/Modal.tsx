@@ -28,9 +28,9 @@ const Modal: FC<ModalProps> = ({ children, isOpen, handleClose, title }) => {
                         {title}
                         <button
                             onClick={handleClose}
-                            className="bg-slate-200 hover:bg-slate-300  p-2 rounded-full"
+                            className="bg-slate-200 hover:bg-slate-300  rounded-full cursor-pointer"
                         >
-                            <IoMdCloseCircle />
+                            <IoMdCloseCircle size={32} />
                         </button>
                     </div>
                     {children}
