@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { useNavigate } from 'react-router';
 import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
 import { AdminNavbar } from '../../components/layouts/admin/AdminNavbar';
+import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
 
 const ResidentProfilePage: FC = () => {
     const navigate = useNavigate();
@@ -11,16 +12,7 @@ const ResidentProfilePage: FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 flex">
-            {/* Sidebar */}
-            <AdminSlidebar />
-            {/* Main Content */}
-            <div className="flex flex-col w-full">
-                <AdminNavbar />
-                {/* Navbar */}
-
-
-                {/* Page Content */}
+        <DashboardContainer>
                 <div className="p-6">
                     <div className="flex justify-between items-center mb-6 flex-col sm:flex-row">
                         <h2 className="text-2xl font-semibold text-[#008FFB]">Resident Profile</h2>
@@ -103,7 +95,7 @@ const ResidentProfilePage: FC = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </DashboardContainer>
     );
 };
 

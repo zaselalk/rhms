@@ -24,6 +24,9 @@ import ClinicDetailPage from "./pages/admin/ClinicDetailPage";
 import Resident from "./pages/admin/Resident";
 import ResidentDashboard from "./pages/resident/ResidentDashboard";
 import ClinicAttendancePage from "./pages/admin/ClinicAttendances";
+import DiseasesPage from "./pages/admin/DiseasesPage";
+import SingleDiseasePage from "./pages/admin/SingleDiseasePage";
+
 
 function App() {
   return (
@@ -46,7 +49,7 @@ function App() {
           {/* /admin/diseases  */}
           <Route path="diseases" >
             <Route path="" element={<DiseasesPage />} />
-            <Route path="single" element={<SingleDiseasePage />} />
+            <Route path="single/:diseaseName" element={<SingleDiseasePage />} />
           </Route>
 
           {/* /admin/users routs */}
@@ -55,9 +58,11 @@ function App() {
             <Route path="add" element={<AddUserPage />} />
           </Route>
 
+          {/* /admin/households routes */}
           <Route path="households" >
             <Route path="" element={<HouseholdPage />} />
-            <Route path="new" element={<CreateHouseholdPage />} />
+            <Route path="create" element={<CreateHouseholdPage />} />
+            <Route path="manage/:id" element={<HouseholdManagePage />} />
           </Route>
 
           {/* /admin/residents routes */}

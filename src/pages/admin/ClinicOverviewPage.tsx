@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { FaClinicMedical, FaTrash } from "react-icons/fa";
 import { FiPlusCircle, FiEdit } from "react-icons/fi"; // Import the edit icon
-import { Link } from "react-router-dom"; // Import Link for navigation
 import Modal from "../../components/layouts/overlays/Modal"; // Ensure Modal is correctly imported
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer"; // Ensure DashboardContainer is correctly imported
+import { Link } from "react-router";
+import AdminSidebar from "../../components/layouts/admin/AdminSlidebar";
+import { AdminNavbar } from "../../components/layouts/admin/AdminNavbar";
+
 
 const ClinicOverview: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -87,7 +90,6 @@ const ClinicOverview: React.FC = () => {
     <DashboardContainer>
       {/* Main Content */}
       <div className="p-6 w-full bg-gray-100 min-h-screen">
-        
         {/* Header Section */}
         <div className="flex justify-between items-center mb-6 bg-white p-4 shadow rounded-lg">
           <div className="flex items-center space-x-3">
