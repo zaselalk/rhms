@@ -5,20 +5,20 @@ import { DashboardContainer } from "../../components/layouts/overlays/DashboardC
 
 const CreateHouseholdPage: FC = () => {
     // State to handle form inputs
-    // const [householdName, setHouseholdName] = useState("");
-    // const [address, setAddress] = useState("");
-    // const [contact, setContact] = useState("");
-    // const [members, setMembers] = useState("");
+    const [householdName, setHouseholdName] = useState("");
+    const [address, setAddress] = useState("");
+    const [contact, setContact] = useState("");
+    const [members, setMembers] = useState("");
 
-    // const handleCreateHousehold = () => {
-    //     // Handle the logic for creating a household (e.g., save to backend or state)
-    //     console.log("Household Created:", {
-    //         householdName,
-    //         address,
-    //         contact,
-    //         members,
-    //     });
-    // };
+    const handleCreateHousehold = () => {
+        // Handle the logic for creating a household (e.g., save to backend or state)
+        console.log("Household Created:", {
+            householdName,
+            address,
+            contact,
+            members,
+        });
+    };
 
     return (
         <DashboardContainer>
