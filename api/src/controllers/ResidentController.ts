@@ -65,6 +65,16 @@ class ResidentController {
     return res.json(resident);
   }
 
+  residentfindByNic = async (req: Request, res: Response): Promise<Response | void> => {
+    const { nic } = req.params;
+    const resident = await this.residentService.findByNic(nic);
+    if (!resident) {
+      return res.status(404).json({ message: "Resident not found" });
+    }
+    return res.json(resident);
+  }
+  
+
 
 }
 

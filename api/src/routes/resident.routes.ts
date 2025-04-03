@@ -16,4 +16,5 @@ ResidentRouter.post(
   // protectRoute,
   catchAsync(residentController.residentRegister)
 );
+ResidentRouter.get('/:nic', catchAsync(residentController.residentfindByNic));
 export default ResidentRouter;

@@ -86,9 +86,15 @@ export class ResidentService {
         );
     }
 
+    async findByNic(nic: string): Promise<Resident | null> {
+        const resident = this.residentRepository.findByNic(nic);
+        if (!resident) throw new Error("Resident not found");
+        return resident;
+    }
 
-    
-    
+
+
+
 
 
 }
