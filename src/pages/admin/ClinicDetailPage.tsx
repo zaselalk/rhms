@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { FaClinicMedical, FaEdit, FaTrash, FaClipboardList, FaPlus } from "react-icons/fa";
-
 import { useNavigate } from "react-router-dom"; // Import useNavigate for routing
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
-
+import Modal from "../../components/layouts/overlays/Modal"; // Import the Modal component
 
 interface Patient {
   id: string;
@@ -49,6 +48,8 @@ const ClinicDetail: React.FC = () => {
     date: "",
   });
 
+  const [editModalOpen, setEditModalOpen] = useState(false); // Modal state for editing session
+  const [selectedEvent, setSelectedEvent] = useState<ClinicEvent | null>(null); // Selected event to edit
   const navigate = useNavigate(); // Initialize the navigate function for routing
 
   const addClinicEvent = () => {
@@ -61,29 +62,42 @@ const ClinicDetail: React.FC = () => {
   };
 
   const removeClinicEvent = (eventId: string) => {
-    // Ask for confirmation before deleting
     const confirmDelete = window.confirm("Are you sure you want to delete this event?");
     if (confirmDelete) {
       setClinicEvents(clinicEvents.filter((event) => event.id !== eventId));
     }
   };
 
+  const openEditModal = (event: ClinicEvent) => {
+    setSelectedEvent(event);
+    setEditModalOpen(true); // Open the modal to edit the selected event
+  };
+
+  const closeEditModal = () => {
+    setSelectedEvent(null);
+    setEditModalOpen(false); // Close the modal
+  };
+
+  const handleSaveEditedEvent = () => {
+    if (selectedEvent) {
+      setClinicEvents(
+        clinicEvents.map((event) =>
+          event.id === selectedEvent.id
+            ? { ...event, eventName: selectedEvent.eventName, date: selectedEvent.date }
+            : event
+        )
+      );
+    }
+    closeEditModal(); // Close the modal after saving
+  };
+
   return (
-   <DashboardContainer>
-      
+    <DashboardContainer>
       <div className="p-6 w-full bg-gray-100 min-h-screen">
         <div className="flex justify-between items-center mb-6 bg-white p-4 shadow rounded-lg">
           <div className="flex items-center space-x-3">
             <FaClinicMedical className="text-blue-600 text-3xl" />
             <h2 className="text-lg font-bold">Clinic Details</h2>
-          </div>
-          <div className="flex space-x-3">
-            <button className="bg-green-500 text-white px-4 py-2 flex items-center rounded-lg shadow hover:bg-green-600 transition">
-              <FaEdit className="mr-2" /> Edit
-            </button>
-            <button className="bg-red-500 text-white px-4 py-2 flex items-center rounded-lg shadow hover:bg-red-600 transition">
-              <FaTrash className="mr-2" /> Delete
-            </button>
           </div>
         </div>
 
@@ -166,7 +180,6 @@ const ClinicDetail: React.FC = () => {
             <FaPlus className="mr-2" /> Add Session
           </button>
         </div>
-        
 
         {/* Clinic Events Table */}
         <div className="bg-white p-6 shadow-md rounded-lg mt-6">
@@ -192,6 +205,12 @@ const ClinicDetail: React.FC = () => {
                       <FaClipboardList className="mr-2" /> Get Attendance
                     </button>
                     <button
+                      onClick={() => openEditModal(event)} // Open edit modal
+                      className="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow hover:bg-yellow-600 transition"
+                    >
+                      <FaEdit className="mr-2" /> Edit Session
+                    </button>
+                    <button
                       className="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition"
                       onClick={() => removeClinicEvent(event.id)}
                     >
@@ -204,6 +223,47 @@ const ClinicDetail: React.FC = () => {
           </table>
         </div>
       </div>
+
+      {/* Edit Session Modal */}
+      <Modal
+        isOpen={editModalOpen}
+        handleClose={closeEditModal}
+        title="Edit Session"
+      >
+        <div className="space-y-4">
+          <input
+            type="text"
+            value={selectedEvent?.eventName || ""}
+            onChange={(e) =>
+              setSelectedEvent({ ...selectedEvent!, eventName: e.target.value })
+            }
+            className="border p-2 w-full rounded-lg"
+            placeholder="Event Name"
+          />
+          <input
+            type="date"
+            value={selectedEvent?.date || ""}
+            onChange={(e) =>
+              setSelectedEvent({ ...selectedEvent!, date: e.target.value })
+            }
+            className="border p-2 w-full rounded-lg"
+          />
+          <div className="flex justify-end space-x-3">
+            <button
+              onClick={closeEditModal}
+              className="bg-gray-300 px-4 py-2 rounded-lg"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSaveEditedEvent}
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </Modal>
     </DashboardContainer>
   );
 };
