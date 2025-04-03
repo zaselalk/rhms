@@ -80,6 +80,11 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
 
     ];
 
+    
+    const caldate2 = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+
+
+
 
 
     const handleAddicted = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,7 +100,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
             checked ? [...prev, value] : prev.filter((item) => item !== value)
         );
     }
-    
+
     const handleChronicDisease = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value, checked } = event.target;
         setChronicDisease((prev) =>
@@ -111,12 +116,8 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
 
 
 
-    const today= new Date();
-    alert(today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear());
-   const caldate=today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear();
     
 
-    
 
 
     const handleRegister = () => {
@@ -211,8 +212,9 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                         </label>
                         <input
                             type="date"
-                            
-                            max={caldate}
+
+                            // max="2005-12-31"
+                            max={caldate2}
                             id="dob"
                             value={dob}
                             onChange={(e) => setDob(e.target.value)}
@@ -275,7 +277,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                             value={weight}
                             onChange={(e) => setWeight(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                            placeholder="Enter Weight KG"
+                            placeholder="Enter Weight kg"
                         />
                     </div>
 
@@ -290,7 +292,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                             value={height}
                             onChange={(e) => setHeight(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                            placeholder="Enter Height CM"
+                            placeholder="Enter Height cm"
                         />
                     </div>
 
