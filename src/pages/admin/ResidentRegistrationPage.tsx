@@ -21,8 +21,8 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     const [religion, setReligion] = useState("");
     const [education, setEducation] = useState("");
     const [addicteds, setAddictedd] = useState<string[]>([]);
-    const [allergys, setAllergy] = useState<string[]>([]);
-    const [chronicDeseases, setChronicDesease] = useState<string[]>([]);
+    const [allergies, setAllergies] = useState<string[]>([]);
+    const [chronicDiseases, setChronicDisease] = useState<string[]>([]);
     const [clinics, setClinic] = useState<string[]>([]);
 
 
@@ -64,7 +64,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
         "HCL",
         "Dental Clinic",
         "Specialist Clinic",
-        "Eye Clinc",
+        "Eye Clinic",
         "ENT Clinic",
         "Skin Clinic",
         "Diabetic Clinic",
@@ -82,6 +82,11 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     ];
 
 
+    const caldate2 = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+
+
+
+
 
     const handleAddicted = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value, checked } = event.target;
@@ -92,13 +97,14 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
 
     const handleAllergy = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value, checked } = event.target;
-        setAllergy((prev) =>
+        setAllergies((prev) =>
             checked ? [...prev, value] : prev.filter((item) => item !== value)
         );
     }
-    const HandleChronicDesease = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+    const handleChronicDisease = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value, checked } = event.target;
-        setChronicDesease((prev) =>
+        setChronicDisease((prev) =>
             checked ? [...prev, value] : prev.filter((item) => item !== value)
         );
     }
@@ -108,6 +114,11 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
             checked ? [...prev, value] : prev.filter((item) => item !== value)
         );
     }
+
+
+
+
+
 
 
     const handleRegister = () => {
@@ -142,7 +153,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
         }
 
         // Handle the registration logic here (e.g., save to database, send request to API)
-        console.log("Registered:", { firstName, lastName, dob, contact, address, Gender, addicteds, weight, height, GramaDivision, maritalState, religion, education, JobDetail, allergys, chronicDeseases, clinics });
+        console.log("Registered:", { firstName, lastName, dob, contact, address, Gender, addicteds, weight, height, GramaDivision, maritalState, religion, education, JobDetail, allergies, chronicDiseases, clinics });
     };
 
 
@@ -202,6 +213,9 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                         </label>
                         <input
                             type="date"
+
+                            // max="2005-12-31"
+                            max={caldate2}
                             id="dob"
                             value={dob}
                             onChange={(e) => setDob(e.target.value)}
@@ -221,7 +235,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                             onChange={(e) => setContact(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
 
-                            placeholder="07X XXX XXXX"
+                            placeholder="0XX XXX XXXX"
                         />
                     </div>
 
@@ -253,35 +267,8 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
 
                     </div>
 
-                    {/* Weight */}
-                    <div>
-                        <label htmlFor="Weight" className="block text-xl font-medium text-gray-700">
-                            Weight
-                        </label>
-                        <input
-                            type="number"
-                            id="Weight"
-                            value={weight}
-                            onChange={(e) => setWeight(e.target.value)}
-                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                            placeholder="Enter Weight KG"
-                        />
-                    </div>
 
-                    {/* Heidght */}
-                    <div>
-                        <label htmlFor="Height" className="block text-xl font-medium text-gray-700">
-                            Height
-                        </label>
-                        <input
-                            type="number"
-                            id="Height"
-                            value={height}
-                            onChange={(e) => setHeight(e.target.value)}
-                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                            placeholder="Enter Height CM"
-                        />
-                    </div>
+
 
                     {/* Gramaniladari division */}
                     <div>
@@ -356,6 +343,36 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                         </select>
                     </div>
 
+
+
+                    {/* Heidght */}
+                    <div>
+                        <label htmlFor="Height" className="block text-xl font-medium text-gray-700">
+                            Height
+                        </label>
+                        <input
+                            type="number"
+                            id="Height"
+                            value={height}
+                            onChange={(e) => setHeight(e.target.value)}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                            placeholder="Enter Height cm"
+                        />
+                    </div>
+                    {/* Weight */}
+                    <div>
+                        <label htmlFor="Weight" className="block text-xl font-medium text-gray-700">
+                            Weight
+                        </label>
+                        <input
+                            type="number"
+                            id="Weight"
+                            value={weight}
+                            onChange={(e) => setWeight(e.target.value)}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                            placeholder="Enter Weight kg"
+                        />
+                    </div>
                     {/* Addicteds */}
                     <div className="col-span-2">
                         <label className="block text-xl font-medium text-gray-700">Addicteds</label>
@@ -374,6 +391,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
 
                         </div>
                     </div>
+
 
 
 
@@ -422,7 +440,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                                     type="checkbox"
                                     value={option}
                                     // checked={chronicDeseases.includes(option)}
-                                    onChange={HandleChronicDesease}
+                                    onChange={handleChronicDisease}
                                 />
                                 {option}
                             </label>
@@ -432,7 +450,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
 
                 {/* Clinic Details */}
                 <div className="mt-5 mb-8 ">
-                    <label className="block text-xl font-medium text-gray-700">Attenden Clinic</label>
+                    <label className="block text-xl font-medium text-gray-700">Attendant Clinic</label>
                     <div className="gap-4 mt-3 ml-3 grid items-center grid-cols-4">
                         {Cliniclist.map((option) => (
                             <label key={option} className="flex items-center gap-2">
