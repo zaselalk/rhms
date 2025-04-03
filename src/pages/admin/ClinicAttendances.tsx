@@ -54,7 +54,7 @@ const ClinicAttendances: React.FC = () => {
 
   return (
     <DashboardContainer>
-      <div className="p-6 w-full bg-gray-100 min-h-screen">
+      <div className="p-6 w-full min-h-screen">
         {/* Back Button */}
         <div className="mb-6">
           <button
