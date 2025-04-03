@@ -65,13 +65,6 @@ function App() {
             <Route path="manage/:id" element={<HouseholdManagePage />} />
           </Route>
 
-          {/* /admin/residents routes */}
-          {/* <Route path="residents">
-            <Route path="" element={<ResidentLandingPage />} />
-            <Route path="registration" element={<RegistrationPage />} />
-            <Route path="profile" element={<ResidentProfilePage />} />
-          </Route> */}
-
           <Route path="residents" >
             <Route path="" element={<Resident />} />
             <Route path="create" element={<RegistrationPage />} />
