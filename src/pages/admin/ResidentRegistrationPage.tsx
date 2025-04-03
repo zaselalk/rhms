@@ -1,6 +1,4 @@
 import { FC, useState } from "react";
-import AdminSlidebar from "../../components/layouts/admin/AdminSlidebar";
-import DetailTable from "../../components/Common/DetailTable";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 
 

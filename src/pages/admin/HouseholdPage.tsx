@@ -4,6 +4,9 @@ import { Modal, Select, message } from 'antd';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
 import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { HouseholdCreateModal } from '../../components/features/household-management/HouseholdCreateModal';
+import { Button } from '../../components/Common/Button';
+
 
 const HouseholdPage: FC = () => {
     const navigate = useNavigate();
@@ -11,6 +14,9 @@ const HouseholdPage: FC = () => {
     const [isEditModalVisible, setEditModalVisible] = useState(false);
     const [selectedHousehold, setSelectedHousehold] = useState<any>(null);
     const [newOwner, setNewOwner] = useState('');
+    const [deleteReason, setDeleteReason] = useState('');
+    const [isOpen, setIsOpen] = useState(false);
+    const deleteOptions = ['Moved Out', 'Deceased', 'Duplicate Entry', 'Other'];
     
     const householdData = [
         { division: 'Kotagedara', count: 10 },
@@ -33,6 +39,7 @@ const HouseholdPage: FC = () => {
          
     ]);
     
+
     const residents = [
         { id: 'R001', name: 'Alice Johnson' },
         { id: 'R002', name: 'Bob Williams' },
@@ -42,6 +49,7 @@ const HouseholdPage: FC = () => {
     const handleAddHousehold = () => {
         navigate('/admin/households/create');
     };
+
 
     const handleViewHousehold = (householdid: string) => {
         navigate(`/admin/households/manage/${householdid}`);
@@ -69,15 +77,16 @@ const HouseholdPage: FC = () => {
     
     return (
         <DashboardContainer>
+            <HouseholdCreateModal isOpen={isOpen} handleClose={()=>setIsOpen(false)}/>
             <div>
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-semibold text-[#008FFB]">Household Management</h2>
-                    <button 
+                    <Button 
                         className="px-4 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
-                        onClick={handleAddHousehold}
+                        onClick={()=> setIsOpen(true) }
                     >
                         + Add Household
-                    </button>
+                    </Button>
                 </div>
 
                 {/* Info Cards */}
