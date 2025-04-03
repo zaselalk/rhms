@@ -80,7 +80,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
 
     ];
 
-    
+
     const caldate2 = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
 
 
@@ -116,7 +116,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
 
 
 
-    
+
 
 
 
@@ -266,35 +266,8 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
 
                     </div>
 
-                    {/* Weight */}
-                    <div>
-                        <label htmlFor="Weight" className="block text-xl font-medium text-gray-700">
-                            Weight
-                        </label>
-                        <input
-                            type="number"
-                            id="Weight"
-                            value={weight}
-                            onChange={(e) => setWeight(e.target.value)}
-                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                            placeholder="Enter Weight kg"
-                        />
-                    </div>
 
-                    {/* Heidght */}
-                    <div>
-                        <label htmlFor="Height" className="block text-xl font-medium text-gray-700">
-                            Height
-                        </label>
-                        <input
-                            type="number"
-                            id="Height"
-                            value={height}
-                            onChange={(e) => setHeight(e.target.value)}
-                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                            placeholder="Enter Height cm"
-                        />
-                    </div>
+
 
                     {/* Gramaniladari division */}
                     <div>
@@ -369,6 +342,36 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                         </select>
                     </div>
 
+
+
+                    {/* Heidght */}
+                    <div>
+                        <label htmlFor="Height" className="block text-xl font-medium text-gray-700">
+                            Height
+                        </label>
+                        <input
+                            type="number"
+                            id="Height"
+                            value={height}
+                            onChange={(e) => setHeight(e.target.value)}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                            placeholder="Enter Height cm"
+                        />
+                    </div>
+                    {/* Weight */}
+                    <div>
+                        <label htmlFor="Weight" className="block text-xl font-medium text-gray-700">
+                            Weight
+                        </label>
+                        <input
+                            type="number"
+                            id="Weight"
+                            value={weight}
+                            onChange={(e) => setWeight(e.target.value)}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                            placeholder="Enter Weight kg"
+                        />
+                    </div>
                     {/* Addicteds */}
                     <div className="col-span-2">
                         <label className="block text-xl font-medium text-gray-700">Addicteds</label>
@@ -387,6 +390,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
 
                         </div>
                     </div>
+
 
 
 
