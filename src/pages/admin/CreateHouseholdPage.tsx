@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
 import AdminSidebar from "../../components/layouts/admin/AdminSlidebar";
+import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 
 
 const CreateHouseholdPage: FC = () => {
@@ -20,9 +21,7 @@ const CreateHouseholdPage: FC = () => {
     // };
 
     return (
-        <div className="min-h-screen bg-gray-100 flex">
-            {/* Reusable Sidebar */}
-            <AdminSidebar />
+        <DashboardContainer>
 
             {/* Main Content */}
             <div className="flex-1 p-6">
@@ -100,7 +99,7 @@ const CreateHouseholdPage: FC = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </DashboardContainer>
     );
 };
 
