@@ -1,9 +1,8 @@
 import { FC } from 'react';
 import { Link } from 'react-router';
-import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
 import { AdminNavbar } from '../../components/layouts/admin/AdminNavbar';
 import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
-import SingleDiseasePage from './SingleDiseasePage'; 
+
         
 
 const diseasesData = [

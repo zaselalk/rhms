@@ -1,28 +1,25 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router";
+import { BrowserRouter, Routes, Route} from "react-router";
 import RegistrationPage from "./pages/admin/ResidentRegistrationPage";
 import LoginPage from "./pages/LoginPage";
 import DivisionPage from "./pages/admin/DivisionPage";
 import SingleDivisionPage from "./pages/admin/SingleDivisionPage";
-// import DiseasesPage from "./pages/admin/DiseasesPage";
-// import SingleDiseasePage from "./pages/admin/SingleDiseasePage";
 import UsersPage from "./pages/admin/UsersPage";
 import AddUserPage from "./pages/admin/AddUserPage";
 import HouseholdPage from "./pages/admin/HouseholdPage";
 import ResidentProfilePage from "./pages/admin/ResidentProfilePage";
-import CreateResidentPage from "./pages/admin/CreateResidentPage";
 import ResidentLoginPage from "./pages/resident/ResidentLoginPage";
 import EditResidentProfilePage from "./pages/resident/EditResidentProfilePage";
 import ForgottenPasswordPage from "./pages/ForgottenPasswordPage";
 import HouseholdLoginPage from "./pages/household/HouseholdLoginPage";
 import HouseholdManagePage from "./pages/admin/HouseholdManagePage";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
-import ResidentLandingPage from "./pages/resident/ResidentLandingPage";
 import CreateHouseholdPage from "./pages/admin/CreateHouseholdPage";
 import LandingPage from "./pages/LandingPage";
 import ClinicOverviewPage from "./pages/admin/ClinicOverviewPage";
 import ClinicDetailPage from "./pages/admin/ClinicDetailPage";
 import Resident from "./pages/admin/Resident";
 import ResidentDashboard from "./pages/resident/ResidentDashboard";
+import ResidentClinicDetail from "./pages/resident/ResidentClinicDetail";
 import ClinicAttendancePage from "./pages/admin/ClinicAttendances";
 import DiseasesPage from "./pages/admin/DiseasesPage";
 import SingleDiseasePage from "./pages/admin/SingleDiseasePage";
@@ -65,7 +62,6 @@ function App() {
           {/* /admin/households routes */}
           <Route path="households" >
             <Route path="" element={<HouseholdPage />} />
-            <Route path="create" element={<CreateHouseholdPage />} />
             <Route path="manage/:id" element={<HouseholdManagePage />} />
           </Route>
 
@@ -115,6 +111,7 @@ function App() {
           <Route path="edit" element={<EditResidentProfilePage />} />
           <Route path="forgotten-password" element={<ForgottenPasswordPage />} />
           <Route path="login" element={<ResidentLoginPage />} />
+          <Route path="clinicDetails" element={<ResidentClinicDetail/>} />
         </Route>
 
 
