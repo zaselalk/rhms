@@ -62,7 +62,6 @@ function App() {
           {/* /admin/households routes */}
           <Route path="households" >
             <Route path="" element={<HouseholdPage />} />
-            <Route path="create" element={<CreateHouseholdPage />} />
             <Route path="manage/:id" element={<HouseholdManagePage />} />
           </Route>
 
