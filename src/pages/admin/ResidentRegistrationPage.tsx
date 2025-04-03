@@ -20,8 +20,8 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     const [religion, setReligion] = useState("");
     const [education, setEducation] = useState("");
     const [addicteds, setAddictedd] = useState<string[]>([]);
-    const [allergys, setAllergy] = useState<string[]>([]);
-    const [chronicDeseases, setChronicDesease] = useState<string[]>([]);
+    const [allergies, setAllergies] = useState<string[]>([]);
+    const [chronicDiseases, setChronicDisease] = useState<string[]>([]);
     const [clinics, setClinic] = useState<string[]>([]);
 
 
@@ -63,7 +63,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
         "HCL",
         "Dental Clinic",
         "Specialist Clinic",
-        "Eye Clinc",
+        "Eye Clinic",
         "ENT Clinic",
         "Skin Clinic",
         "Diabetic Clinic",
@@ -91,13 +91,14 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
 
     const handleAllergy = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value, checked } = event.target;
-        setAllergy((prev) =>
+        setAllergies((prev) =>
             checked ? [...prev, value] : prev.filter((item) => item !== value)
         );
     }
-    const HandleChronicDesease = (event: React.ChangeEvent<HTMLInputElement>) => {
+    
+    const handleChronicDisease = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value, checked } = event.target;
-        setChronicDesease((prev) =>
+        setChronicDisease((prev) =>
             checked ? [...prev, value] : prev.filter((item) => item !== value)
         );
     }
@@ -107,6 +108,15 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
             checked ? [...prev, value] : prev.filter((item) => item !== value)
         );
     }
+
+
+
+    const today= new Date();
+    alert(today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear());
+   const caldate=today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear();
+    
+
+    
 
 
     const handleRegister = () => {
@@ -141,7 +151,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
         }
 
         // Handle the registration logic here (e.g., save to database, send request to API)
-        console.log("Registered:", { firstName, lastName, dob, contact, address, Gender, addicteds, weight, height, GramaDivision, maritalState, religion, education, JobDetail, allergys, chronicDeseases, clinics });
+        console.log("Registered:", { firstName, lastName, dob, contact, address, Gender, addicteds, weight, height, GramaDivision, maritalState, religion, education, JobDetail, allergies, chronicDiseases, clinics });
     };
 
 
@@ -201,6 +211,8 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                         </label>
                         <input
                             type="date"
+                            
+                            max={caldate}
                             id="dob"
                             value={dob}
                             onChange={(e) => setDob(e.target.value)}
@@ -220,7 +232,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                             onChange={(e) => setContact(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
 
-                            placeholder="07X XXX XXXX"
+                            placeholder="0XX XXX XXXX"
                         />
                     </div>
 
@@ -421,7 +433,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                                     type="checkbox"
                                     value={option}
                                     // checked={chronicDeseases.includes(option)}
-                                    onChange={HandleChronicDesease}
+                                    onChange={handleChronicDisease}
                                 />
                                 {option}
                             </label>
