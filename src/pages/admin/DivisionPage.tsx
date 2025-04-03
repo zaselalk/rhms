@@ -186,7 +186,8 @@ const DivisionPage: FC = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         {divisions.map((division) => (
                             <Link
-                                to={`/${division.id}`}
+                                // to={`/${division.id}`}
+                                to={"SingleDivisionPage"}
                                 key={division.id}
                                 className="bg-white p-4 rounded-lg shadow-md flex justify-between items-center"
                             >
@@ -195,7 +196,7 @@ const DivisionPage: FC = () => {
                                     <p className="text-sm text-gray-600">{division.population}</p>
                                 </div>
                                 <button
-                                    className="text-red-500"
+                                    className="text-red-500 cursor-pointer hover:text-red-700"
                                     onClick={(e) => {
                                         e.preventDefault(); // Prevent navigation
                                         handleDelete(division);
