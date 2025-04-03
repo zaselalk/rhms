@@ -3,15 +3,11 @@ import { DataTypes, Model, Sequelize } from "sequelize";
 interface ClinicAttributes {
   id: string;
   name: string;
-  category: string;
-  patient_count: number;
 }
 
 export class Clinic extends Model<ClinicAttributes> implements ClinicAttributes {
   public id!: string;
   public name!: string;
-  public category!: string;
-  public patient_count!: number; 
 }
 
 export default (sequelize: Sequelize) => {
@@ -31,24 +27,12 @@ export default (sequelize: Sequelize) => {
           },
         },
       },
-      category: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            msg: "Category cannot be empty",
-          },
-        },
-      },
-      patient_count: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0,
-      },
     },
     {
       sequelize,
       modelName: "Clinic",
       tableName: "clinics",
+      timestamps: false, 
     }
   );
 

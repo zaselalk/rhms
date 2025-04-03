@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
 import AdminSlidebar from "../../components/layouts/admin/AdminSlidebar";
 import DetailTable from "../../components/Common/DetailTable";
+import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 
 
 type ResidentRegistrationProps = {};
@@ -151,9 +152,9 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
 
 
     return (
-        <div className="min-h-screen bg-gray-100 flex ">
+        <DashboardContainer>
             {/* Reusable Sidebar */}
-            <AdminSlidebar />
+            
 
             {/* Registration Form Container */}
             <div className="bg-white p-8 rounded-lg shadow-lg w-full ">
@@ -460,7 +461,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                 </div>
 
             </div>
-        </div>
+        </DashboardContainer>
     );
 };
 
