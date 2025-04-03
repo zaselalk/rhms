@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaClinicMedical, FaTrash } from "react-icons/fa";
 import { FiPlusCircle } from "react-icons/fi";
-import { Link } from "react-router-dom"; // Correct import for react-router-dom
+import { Link } from "react-router"; // Correct import for react-router-dom
 import Modal from "../../components/layouts/overlays/Modal"; // Ensure Modal is correctly imported
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer"; // Ensure DashboardContainer is correctly imported
 
