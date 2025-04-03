@@ -1,7 +1,5 @@
 import { FC } from 'react';
 import { useNavigate } from 'react-router';
-import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
-import { AdminNavbar } from '../../components/layouts/admin/AdminNavbar';
 import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
 
 const ResidentProfilePage: FC = () => {

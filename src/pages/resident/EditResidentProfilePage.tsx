@@ -1,109 +1,110 @@
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router';
-import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
-
-
 
 const EditResidentProfilePage: FC = () => {
     // State to handle form inputs
-    const [firstName, setFirstName] = useState('Ravindu');
-    const [lastName, setLastName] = useState('Harshana');
-    const [birthday, setBirthday] = useState('1995-05-15');
-    const [contact, setContact] = useState('0711287298');
-    const [address, setAddress] = useState('Katugahahena');
+    const [formData, setFormData] = useState({
+        contact: '0711287298',
+        password: ''
+    });
+    const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+
+        if (name === 'contact') {
+            // Validate contact number (only digits & exactly 10 characters)
+            if (!/^\d{0,10}$/.test(value)) {
+                return; // Prevents input if it's not a number or exceeds 10 digits
+            }
+        }
+
+        setFormData({ ...formData, [name]: value });
+        setErrorMessage(''); // Clear error message on change
+    };
+
+    const validateForm = () => {
+        if (formData.contact.length !== 10) {
+            setErrorMessage('Contact number must be exactly 10 digits.');
+            return false;
+        }
+        return true;
+    };
+
     const handleSave = () => {
-        // Logic to save the updated profile data
-        console.log('Profile Updated:', { firstName, lastName, birthday, contact, address });
-        navigate('/resident');
+        if (!validateForm()) return;
+
+        // Logic to save the updated contact and password
+        console.log('Profile Updated:', formData);
+        setSuccessMessage('Profile updated successfully!');
+        setTimeout(() => navigate('/resident'), 2000);
     };
 
     return (
-        <div className="min-h-screen bg-gray-100">
-            {/* Reusable Sidebar */}
+        <div className="flex-1 p-6">
+            <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-semibold text-[#008FFB]">Edit Profile</h2>
+            </div>
 
-            {/* Navbar */}
-            {/* <div className="bg-[#008FFB] p-4 flex justify-between items-center">
-                <h2 className="text-2xl font-semibold text-white">Hospital Management</h2>
-                <div className="flex items-center">
-                    <span className="text-sm text-white mr-4">Ravindu (Admin)</span>
-                    <button className="text-white border border-white rounded-md px-4 py-2 hover:bg-[#006fbb]">
-                        Logout
-                    </button>
-                </div>
-            </div> */}
-
-            {/* Main Content */}
-            <div className="p-6">
-                <div className="flex justify-between items-center mb-6 flex-col sm:flex-row">
-                    <h2 className="text-2xl font-semibold text-[#008FFB]">Edit Profile</h2>
-                </div>
-
-                {/* Edit Profile Form */}
-                <div className="bg-white p-6 rounded-lg shadow-md">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">First Name</label>
-                            <input
-                                type="text"
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
-                                className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                                placeholder="First Name"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">Last Name</label>
-                            <input
-                                type="text"
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
-                                className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                                placeholder="Last Name"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">Birthday</label>
-                            <input
-                                type="date"
-                                value={birthday}
-                                onChange={(e) => setBirthday(e.target.value)}
-                                className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">Contact</label>
-                            <input
-                                type="text"
-                                value={contact}
-                                onChange={(e) => setContact(e.target.value)}
-                                className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                                placeholder="Contact"
-                            />
-                        </div>
-                        <div className="sm:col-span-2">
-                            <label className="block text-sm font-medium text-gray-700">Address</label>
-                            <input
-                                type="text"
-                                value={address}
-                                onChange={(e) => setAddress(e.target.value)}
-                                className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                                placeholder="Address"
-                            />
-                        </div>
+            <div className="bg-white p-6 rounded-lg shadow-md">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Contact</label>
+                        <input
+                            type="text"
+                            name="contact"
+                            value={formData.contact}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                            placeholder="Contact"
+                            maxLength={10} // Prevents input beyond 10 digits
+                        />
+                        {errorMessage && (
+                            <p className="text-red-600 text-sm mt-1">{errorMessage}</p>
+                        )}
                     </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Password</label>
+                        <input
+                            type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                            placeholder="New Password"
+                        />
+                    </div>
+                </div>
+
+                {/* Buttons Section */}
+                <div className="mt-6 flex justify-between">
+                    {/* Back Button */}
+                    <button
+                        onClick={() => navigate(-1)}
+                        className="px-6 py-2 bg-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-400"
+                    >
+                        Back
+                    </button>
 
                     {/* Save Button */}
-                    <div className="mt-6 flex justify-end">
-                        <button
-                            onClick={handleSave}
-                            className="px-6 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
-                        >
-                            Save Changes
-                        </button>
-                    </div>
+                    <button
+                        onClick={handleSave}
+                        className={`px-6 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb] 
+                            ${errorMessage ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        disabled={!!errorMessage} // Disable button if error exists
+                    >
+                        Save Changes
+                    </button>
                 </div>
+
+                {/* Success Message */}
+                {successMessage && (
+                    <div className="mt-4 p-4 bg-green-100 text-green-700 rounded-lg">
+                        {successMessage}
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -4,9 +4,7 @@ import { FiPlusCircle, FiEdit } from "react-icons/fi"; // Import the edit icon
 import Modal from "../../components/layouts/overlays/Modal"; // Ensure Modal is correctly imported
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer"; // Ensure DashboardContainer is correctly imported
 import { Link } from "react-router";
-import AdminSidebar from "../../components/layouts/admin/AdminSlidebar";
-import { AdminNavbar } from "../../components/layouts/admin/AdminNavbar";
-
+// Ensure AdminNavbar is correctly imported
 
 const ClinicOverview: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -14,9 +12,9 @@ const ClinicOverview: React.FC = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [clinicTitle, setClinicTitle] = useState("");
   const [clinicCategories, setClinicCategories] = useState([
-    { name: "Diabetic", count: 236, change: "10%", increase: true },
-    { name: "Hypo lipid", count: 34, change: "10%", increase: false },
-    { name: "Asthma", count: 45, change: "10%", increase: false },
+    { id: "clinic1", name: "Diabetic", count: 236, change: "10%", increase: true },
+    { id: "clinic2", name: "Hypo lipid", count: 34, change: "10%", increase: false },
+    { id: "clinic3", name: "Asthma", count: 45, change: "10%", increase: false },
   ]);
   const [clinicToDelete, setClinicToDelete] = useState<string | null>(null);
   const [clinicToEdit, setClinicToEdit] = useState<string | null>(null);
@@ -25,6 +23,7 @@ const ClinicOverview: React.FC = () => {
   const handleCreateClinic = () => {
     if (clinicTitle.trim()) {
       const newClinic = {
+        id: `clinic${clinicCategories.length + 1}`, 
         name: clinicTitle,
         count: 0,
         change: "0%",
@@ -37,8 +36,8 @@ const ClinicOverview: React.FC = () => {
   };
 
   // Handle deleting a clinic (show confirmation modal)
-  const handleDeleteClick = (clinicName: string) => {
-    setClinicToDelete(clinicName); // Set the clinic name to be deleted
+  const handleDeleteClick = (clinicId: string) => {
+    setClinicToDelete(clinicId); // Set the clinic id to be deleted
     setShowConfirmDeleteModal(true); // Show the confirmation modal
   };
 
@@ -46,7 +45,7 @@ const ClinicOverview: React.FC = () => {
   const handleConfirmDelete = () => {
     if (clinicToDelete) {
       setClinicCategories((prevCategories) =>
-        prevCategories.filter((clinic) => clinic.name !== clinicToDelete)
+        prevCategories.filter((clinic) => clinic.id !== clinicToDelete)
       );
     }
     setShowConfirmDeleteModal(false); // Close the confirmation modal
@@ -60,8 +59,8 @@ const ClinicOverview: React.FC = () => {
   };
 
   // Handle editing a clinic's name
-  const handleEditClick = (clinicName: string) => {
-    setClinicToEdit(clinicName); // Set the clinic to be edited
+  const handleEditClick = (clinicId: string) => {
+    setClinicToEdit(clinicId); // Set the clinic id to be edited
     setShowEditModal(true); // Show the edit modal
   };
 
@@ -70,7 +69,7 @@ const ClinicOverview: React.FC = () => {
     if (clinicToEdit && clinicTitle.trim()) {
       setClinicCategories((prevCategories) =>
         prevCategories.map((clinic) =>
-          clinic.name === clinicToEdit ? { ...clinic, name: clinicTitle } : clinic
+          clinic.id === clinicToEdit ? { ...clinic, name: clinicTitle } : clinic
         )
       );
       setShowEditModal(false); // Close the edit modal
@@ -89,7 +88,7 @@ const ClinicOverview: React.FC = () => {
   return (
     <DashboardContainer>
       {/* Main Content */}
-      <div className="p-6 w-full bg-gray-100 min-h-screen">
+      <div className="p-6 w-full min-h-screen">
         {/* Header Section */}
         <div className="flex justify-between items-center mb-6 bg-white p-4 shadow rounded-lg">
           <div className="flex items-center space-x-3">
@@ -110,9 +109,9 @@ const ClinicOverview: React.FC = () => {
         {/* Clinic Categories Section */}
         <h3 className="text-xl font-semibold mb-4">Clinic Categories</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {clinicCategories.map((clinic, index) => (
+          {clinicCategories.map((clinic) => (
             <Link
-              key={index}
+              key={clinic.id}
               to={`/admin/clinic/${clinic.name.toLowerCase().replace(/\s+/g, "-")}`} // Dynamic link based on clinic name
               className="bg-white p-4 shadow-md rounded-lg flex justify-between items-center cursor-pointer hover:shadow-lg transition"
             >
@@ -131,9 +130,9 @@ const ClinicOverview: React.FC = () => {
                 <button
                   onClick={(e) => {
                     e.preventDefault(); // Prevent Link navigation on edit click
-                    handleEditClick(clinic.name);
+                    handleEditClick(clinic.id);
                   }}
-                  className="text-blue-500 hover:text-blue-700 transition"
+                  className="text-blue-500 hover:text-blue-700 transition cursor-pointer"
                 >
                   <FiEdit className="text-lg" /> {/* Edit icon */}
                 </button>
@@ -142,7 +141,7 @@ const ClinicOverview: React.FC = () => {
                   className="text-gray-500 cursor-pointer hover:text-red-600 transition"
                   onClick={(e) => {
                     e.preventDefault(); // Prevent Link navigation on delete click
-                    handleDeleteClick(clinic.name);
+                    handleDeleteClick(clinic.id);
                   }}
                 />
               </div>

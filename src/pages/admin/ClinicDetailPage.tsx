@@ -98,7 +98,7 @@ const ClinicDetail: React.FC = () => {
 
   return (
     <DashboardContainer>
-      <div className="p-6 w-full bg-gray-100 min-h-screen">
+      <div className="p-6 w-full min-h-screen">
         <div className="flex justify-between items-center mb-6 bg-white p-4 shadow rounded-lg">
           <div className="flex items-center space-x-3">
             <FaClinicMedical className="text-blue-600 text-3xl" />
