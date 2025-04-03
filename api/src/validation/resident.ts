@@ -11,14 +11,14 @@ export const valiadteResident: RequestHandler[] = [
         .matches(/^(A|B|AB|O)[+-]$/).withMessage("Blood group must be A+, A-, B+, B-, AB+, AB-, O+, or O-")
         .notEmpty().withMessage("Blood group is required"),
     body("gender").notEmpty().withMessage("gender is required"),
-    body("bloodPressure").isNumeric().withMessage("Blood pressure must be numeric"),
-    body("heartRate").isNumeric().withMessage("Heart rate must be numeric"),
+    // body("bloodPressure").isNumeric().withMessage("Blood pressure must be numeric"),
+    // body("heartRate").isNumeric().withMessage("Heart rate must be numeric"),
     body("contactNumber")
         .isLength({ min: 10, max: 10 }).withMessage("Contact number must be 10 digits")
         .matches(/^\d+$/).withMessage("Contact number must be numeric")
         .notEmpty().withMessage("Contact number is required"),
 
-    body("divisionId").isNumeric().withMessage("Division ID must be numeric"),
+    // body("divisionId").isNumeric().withMessage("Division ID must be numeric"),
     body("maritalState").isAlpha().withMessage("Marital state must be alphabetic"),
     body("educationLevel").isAlpha().withMessage("Education level must be alphabetic"),
     body("height").isNumeric().withMessage("Height must be numeric"),
