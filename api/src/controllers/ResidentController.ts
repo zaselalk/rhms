@@ -16,7 +16,7 @@ class ResidentController {
   }
 
   residentRegister = async (req: Request, res: Response): Promise<Response | void> => {
-    const { 
+    const {
       firstName,
       lastName,
       nic,
@@ -81,6 +81,17 @@ class ResidentController {
       return res.status(404).json({ message: "Resident not found" });
     }
     return res.json(resident);
+  }
+
+  getAllResident = async (req: Request, res: Response): Promise<Response | void> => {
+
+    const residents = await this.residentService.getAllResident();
+    if (!residents) {
+      return res.status(404).json({ message: "Resident not found" });
+    } else {
+      res.status(200).json(residents);
+    }
+
   }
 
 

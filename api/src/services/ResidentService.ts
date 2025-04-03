@@ -92,8 +92,14 @@ export class ResidentService {
         return resident;
     }
 
-    async findById(id: number): Promise<Resident | null> {  
+    async findById(id: number): Promise<Resident | null> {
         const resident = this.residentRepository.findById(id);
+        if (!resident) throw new Error("Resident not found");
+        return resident;
+    }
+
+    async getAllResident(): Promise<Resident[] | null> {
+        const resident = this.residentRepository.getAllResident();
         if (!resident) throw new Error("Resident not found");
         return resident;
     }

@@ -1,5 +1,6 @@
 import { ar } from "react-router/dist/development/route-data-H2S3hwhf";
 import { Resident } from "../models/resident";
+import { promises } from "dns";
 
 
 export class ResidentRepository {
@@ -31,6 +32,7 @@ export class ResidentRepository {
     }
 
 
+    //Finf by nic
     async findByNic(nic: string): Promise<Resident | null> {
         return Resident.findOne({
             where: {
@@ -40,6 +42,8 @@ export class ResidentRepository {
 
 
     }
+
+    //Find by id
     async findById(id: number): Promise<Resident | null> {
         return Resident.findOne({
             where: {
@@ -48,5 +52,12 @@ export class ResidentRepository {
         });
     }
 
-    
+    async getAllResident(): Promise<Resident[] | null> {
+        const residents = await Resident.findAll();
+        return residents;
+    }
+
+
+
+
 }
