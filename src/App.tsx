@@ -5,7 +5,7 @@ import DivisionPage from "./pages/admin/DivisionPage";
 import SingleDivisionPage from "./pages/admin/SingleDivisionPage";
 import DiseasesPage from "./pages/admin/DiseasesPage";
 import SingleDiseasePage from "./pages/admin/SingleDiseasePage";
-import UsersPage from "./pages/UsersPage";
+import UsersPage from "./pages/admin/UsersPage";
 import AddUserPage from "./pages/admin/AddUserPage";
 import HouseholdPage from "./pages/admin/HouseholdPage";
 import ResidentProfilePage from "./pages/admin/ResidentProfilePage";
@@ -73,12 +73,14 @@ function App() {
           </Route>
 
 
-          <Route path="division" element={<DivisionPage />} />
-          <Route path="single-division" element={<SingleDivisionPage />} />
+          <Route path="division">
+            <Route path="" element={<DivisionPage />} />
+            <Route path=":id" element={<SingleDivisionPage />} />
+          </Route>
 
 
           {/* Clinic Paths*/}
-          <Route path="clinic" element={<ClinicOverviewPage />} >
+          <Route path="clinic">
             <Route path="" element={<ClinicOverviewPage />} />
             <Route path="diabetic" element={<ClinicDetailPage />} />
           </Route>

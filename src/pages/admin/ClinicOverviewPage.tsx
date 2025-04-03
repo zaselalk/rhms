@@ -30,6 +30,7 @@ const ClinicOverview: React.FC = () => {
 
       {/* Main Content */}
       <div className="p-6 w-full bg-gray-100 min-h-screen">
+        <AdminNavbar />
         {/* Header Section */}
         <div className="flex justify-between items-center mb-6 bg-white p-4 shadow rounded-lg">
           <div className="flex items-center space-x-3">
