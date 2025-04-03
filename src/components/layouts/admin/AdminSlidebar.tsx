@@ -6,6 +6,7 @@ import { FaHouseChimney } from "react-icons/fa6";
 import { FaHouseUser } from "react-icons/fa";
 import { FaUserDoctor } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6";
+import { FaCircleUser } from "react-icons/fa6";
 import { HiUsers } from "react-icons/hi";
 
 const AdminSidebar: FC = () => {
@@ -22,6 +23,8 @@ const AdminSidebar: FC = () => {
                         { path: "/admin/clinic", label: "Clinic", icon: <FaUserDoctor size={30} /> },
                         { path: "/admin/division", label: "Division", icon: <FaLocationDot size={30} /> },
                         { path: "/admin/users", label: "Users", icon: <HiUsers size={30} /> },
+                        { path: "/admin/profile", label: "Profile", icon: <FaCircleUser size={30} /> },
+
                     ].map((item) => (
                         <li key={item.path}>
                             <NavLink
@@ -41,7 +44,6 @@ const AdminSidebar: FC = () => {
                     ))}
                 </ul>
             </div>
-
             <div className="flex items-center">
                 <span className="text-sm mr-4">Ravindu (Admin)</span>
                 <Link to="/admin/profile">Profile</Link>
@@ -52,7 +54,6 @@ const AdminSidebar: FC = () => {
                     Logout
                 </button>
             </div>
-
         </div>
     );
 };

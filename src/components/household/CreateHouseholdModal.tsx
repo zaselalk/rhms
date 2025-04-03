@@ -1,14 +1,17 @@
-import { FC, useState } from "react";
-import AdminSidebar from "../../components/layouts/admin/AdminSlidebar";
-import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
+import React, { FC, useState } from 'react'
+import Modal from '../layouts/overlays/Modal';
 
+interface CreateHouseholdModalProps {
+    isOpen: boolean;
+    handleClose: () => void;
+}
 
-const CreateHouseholdPage: FC = () => {
-    // State to handle form inputs
+const CreateHouseholdModal: FC<CreateHouseholdModalProps> = ({ isOpen, handleClose }) => {
     const [householdName, setHouseholdName] = useState("");
     const [address, setAddress] = useState("");
     const [contact, setContact] = useState("");
     const [members, setMembers] = useState("");
+
 
     const handleCreateHousehold = () => {
         // Handle the logic for creating a household (e.g., save to backend or state)
@@ -19,11 +22,8 @@ const CreateHouseholdPage: FC = () => {
             members,
         });
     };
-
     return (
-        <DashboardContainer>
-
-            {/* Main Content */}
+        <Modal title='Create Household' isOpen={isOpen} handleClose={handleClose}>
             <div className="flex-1 p-6">
                 <h2 className="text-2xl font-semibold text-[#008FFB] mb-6">Create Household</h2>
 
@@ -99,8 +99,8 @@ const CreateHouseholdPage: FC = () => {
                     </div>
                 </div>
             </div>
-        </DashboardContainer>
-    );
-};
+        </Modal>
+    )
+}
 
-export default CreateHouseholdPage;
+export default CreateHouseholdModal
