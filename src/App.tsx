@@ -81,7 +81,7 @@ function App() {
 
           <Route path="division">
             <Route path="" element={<DivisionPage />} />
-            <Route path=":id" element={<SingleDivisionPage />} />
+            <Route path="SingleDivisionPage" element={<SingleDivisionPage />} />
           </Route>
 
 
