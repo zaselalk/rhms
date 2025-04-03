@@ -26,6 +26,7 @@ import ResidentDashboard from "./pages/resident/ResidentDashboard";
 import ClinicAttendancePage from "./pages/admin/ClinicAttendances";
 import DiseasesPage from "./pages/admin/DiseasesPage";
 import SingleDiseasePage from "./pages/admin/SingleDiseasePage";
+import ProfilePage from "./pages/admin/ProfilePage";
 
 
 function App() {
@@ -39,6 +40,9 @@ function App() {
         <Route path="/admin" >
           <Route path="dashboard" element={<AdminDashboardPage />} />
           <Route path="login" element={<LoginPage />} />
+
+          {/*Profile  */}
+          <Route path="profile" element={<ProfilePage />} />
 
           {/* /admin/resident */}
           <Route path="residents" >
@@ -100,6 +104,8 @@ function App() {
           <Route path="login" element={<HouseholdLoginPage />} />
           <Route path="" element={<HouseholdManagePage />} />
         </Route>
+
+
 
         {/* Resident Paths*/}
         <Route path="/resident" >
