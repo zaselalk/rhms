@@ -4,8 +4,7 @@ import { FiPlusCircle, FiEdit } from "react-icons/fi"; // Import the edit icon
 import Modal from "../../components/layouts/overlays/Modal"; // Ensure Modal is correctly imported
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer"; // Ensure DashboardContainer is correctly imported
 import { Link } from "react-router";
-import AdminSidebar from "../../components/layouts/admin/AdminSlidebar";
-import { AdminNavbar } from "../../components/layouts/admin/AdminNavbar";
+// Ensure AdminNavbar is correctly imported
 
 const ClinicOverview: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -133,7 +132,7 @@ const ClinicOverview: React.FC = () => {
                     e.preventDefault(); // Prevent Link navigation on edit click
                     handleEditClick(clinic.id);
                   }}
-                  className="text-blue-500 hover:text-blue-700 transition"
+                  className="text-blue-500 hover:text-blue-700 transition cursor-pointer"
                 >
                   <FiEdit className="text-lg" /> {/* Edit icon */}
                 </button>
