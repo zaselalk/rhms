@@ -1,11 +1,23 @@
 import { Router } from "express";
 import { UserController } from "../controllers/UserController";
 import catchAsync from "../util/catchAsync";
+import {
+  userLoginValidation,
+  userRegisterValidation,
+} from "../validation/user";
 
 const AuthRouter: Router = Router();
 const userController = new UserController();
 
-AuthRouter.post("/login", catchAsync(userController.login));
-AuthRouter.post("/register", catchAsync(userController.register));
+AuthRouter.post(
+  "/login",
+  userLoginValidation,
+  catchAsync(userController.login)
+);
+AuthRouter.post(
+  "/register",
+  userRegisterValidation,
+  catchAsync(userController.register)
+);
 
 export default AuthRouter;

@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 import { MdDashboard } from "react-icons/md";
 import { CiPill } from "react-icons/ci";
 import { FaHouseChimney } from "react-icons/fa6";
@@ -10,6 +10,10 @@ import { FaCircleUser } from "react-icons/fa6";
 import { HiUsers } from "react-icons/hi";
 
 const AdminSidebar: FC = () => {
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        navigate('/admin/login');
+    };
     return (
         <div className="bg-white shadow-lg p-6 h-full fixed flex-col justify-between w-1/6 hidden md:flex">
             <h2 className="text-xl font-semibold text-[#008FFB]">RHMS</h2>
@@ -49,7 +53,7 @@ const AdminSidebar: FC = () => {
                 <Link to="/admin/profile">Profile</Link>
                 <button
                     className=" rounded-md px-4 py-2 hover:bg-[#006fbb]"
-                // onClick={handleLogout}
+                    onClick={handleLogout}
                 >
                     Logout
                 </button>
