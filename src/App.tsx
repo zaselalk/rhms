@@ -45,7 +45,7 @@ function App() {
           {/* /admin/diseases  */}
           <Route path="diseases" >
             <Route path="" element={<DiseasesPage />} />
-            <Route path="single/:diseaseName" element={<SingleDiseasePage />} />
+            <Route path=":diseaseName" element={<SingleDiseasePage />} />
           </Route>
 
           {/* /admin/users routs */}
