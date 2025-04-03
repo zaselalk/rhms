@@ -1,24 +1,34 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useNavigate } from 'react-router';
 import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
+import CreateHouseholdModal from '../../components/household/CreateHouseholdModal';
 import { AdminNavbar } from '../../components/layouts/admin/AdminNavbar';
 
+
 const HouseholdPage: FC = () => {
-    const navigate = useNavigate();
+    const [isOpen, setIsOpen] = useState(true);
+
     const handleHouseholdCreate = () => {
-        navigate('/admin/households/new');
+        setIsOpen(true);
     }
+
+    const handleClose = () => {
+        setIsOpen(false);
+    }
+
+
     return (
         <div className="min-h-screen bg-gray-100 flex">
             {/* Reusable Sidebar */}
             <AdminSlidebar />
+
+            <CreateHouseholdModal isOpen={isOpen} handleClose={handleClose} />
 
             {/* Main Content */}
             <div className="flex-1 p-6">
                 <AdminNavbar />
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-semibold text-[#008FFB]">Household Details</h2>
-                    {/* <div className="px-4 py-2 bg-[#008FFB] text-white rounded-lg">8 Houses</div> */}
                     <button className="px-4 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]" onClick={handleHouseholdCreate}>+ Add Household</button>
                 </div>
 
@@ -40,16 +50,14 @@ const HouseholdPage: FC = () => {
                         <thead>
                             <tr>
                                 <th className="text-left px-4 py-2 text-sm text-gray-600">ID</th>
-                                <th className="text-left px-4 py-2 text-sm text-gray-600">Name</th>
-                                {/* <th className="text-left px-4 py-2 text-sm text-gray-600">Permissions</th> */}
+                                <th className="text-left px-4 py-2 text-sm text-gray-600">Name</th>                           
                                 <th className="text-left px-4 py-2 text-sm text-gray-600">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td className="px-4 py-2 text-sm text-gray-700">#STF001</td>
-                                <td className="px-4 py-2 text-sm text-gray-700">Dr. Ravindu Harshana</td>
-                                {/* <td className="px-4 py-2 text-sm text-gray-700">Dashboard, Diseases, HouseHold</td> */}
+                                <td className="px-4 py-2 text-sm text-gray-700">Dr. Ravindu Harshana</td>                             
                                 <td className="px-4 py-2 text-sm text-gray-700">
                                     <button className="text-[#008FFB] hover:text-[#00C1A7]">
                                         <i className="fas fa-edit"></i>
@@ -62,7 +70,6 @@ const HouseholdPage: FC = () => {
                             <tr>
                                 <td className="px-4 py-2 text-sm text-gray-700">#STF001</td>
                                 <td className="px-4 py-2 text-sm text-gray-700">Dr. Ravindu Harshana</td>
-                                {/* <td className="px-4 py-2 text-sm text-gray-700">Dashboard</td> */}
                                 <td className="px-4 py-2 text-sm text-gray-700">
                                     <button className="text-[#008FFB] hover:text-[#00C1A7]">
                                         <i className="fas fa-edit"></i>
