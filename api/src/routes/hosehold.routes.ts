@@ -1,16 +1,18 @@
 import { Router } from "express";
-import HouseholdController from "../controllers/HoseholdController";
+
+
 import catchAsync from "../util/catchAsync";
 import { protectRoute } from "../middleware/authjwt.middleware";
+import { HouseholdController } from "../controllers/HoseholdController";
 
 const HouseholdRouter: Router = Router();
 const householdController = new HouseholdController();
 
-HouseholdRouter.get("/ping", protectRoute, catchAsync(householdController.ping));
+// HouseholdRouter.get("/ping", protectRoute, catchAsync(householdController.ping));
 HouseholdRouter.post(
     "/create",
-    protectRoute,
-    catchAsync(householdController.create)
-  );
+    // protectRoute,
+    catchAsync(householdController.createHousehold.bind(householdController))
+);
 
 export default HouseholdRouter;
