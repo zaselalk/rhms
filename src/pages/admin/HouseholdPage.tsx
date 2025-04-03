@@ -1,8 +1,11 @@
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router';
+import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
+import { AdminNavbar } from '../../components/layouts/admin/AdminNavbar';
 import { Modal, Select, message } from 'antd';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
+
 
 const HouseholdPage: FC = () => {
     const navigate = useNavigate();

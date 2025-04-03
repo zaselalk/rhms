@@ -3,14 +3,9 @@ import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js';
 import { MapContainer, TileLayer, Popup, Marker, LayersControl } from 'react-leaflet';
 import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
-
-
-
-
 import 'leaflet/dist/leaflet.css';
 import { AdminNavbar } from '../../components/layouts/admin/AdminNavbar';
 import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
-
 const { BaseLayer } = LayersControl;
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
@@ -63,21 +58,11 @@ const AdminDashboard: React.FC = () => {
         { position: [6.492096667, 80.084067500], popup: "DEYAGALA20" },
     ];
 
-
-
-
-
     return (
         <DashboardContainer>
-            {/* Reusable Sidebar */}
-            
-
-            {/* Main Content */}
-            <div>
-                
+            <div>    
                 <h2 className="text-2xl font-semibold text-[#008FFB] mb-6">Katugahahena Divisional Hospital</h2>
                 <div>
-
                     {/* Map Section */}
                     <div className="bg-white p-6 rounded-lg shadow-md mb-6 w-full ">
                         <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Hospital Location</h3>
@@ -103,21 +88,8 @@ const AdminDashboard: React.FC = () => {
                                     <Popup>{marker.popup}</Popup>
                                 </Marker>
                             ))}
-
-
-
-
-
-
-
                         </MapContainer>
                     </div>
-
-
-
-
-
-
                     {/* Stats Section */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                         {/* Residents Pie Chart */}
@@ -150,10 +122,9 @@ const AdminDashboard: React.FC = () => {
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </DashboardContainer>
+
     );
 };
 

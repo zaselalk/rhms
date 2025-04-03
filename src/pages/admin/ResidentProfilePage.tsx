@@ -13,15 +13,6 @@ const ResidentProfilePage: FC = () => {
 
     return (
         <DashboardContainer>
-            {/* Sidebar */}
-
-            {/* Main Content */}
-            <div className="flex flex-col w-full">
-
-                {/* Navbar */}
-
-
-                {/* Page Content */}
                 <div className="p-6">
                     <div className="flex justify-between items-center mb-6 flex-col sm:flex-row">
                         <h2 className="text-2xl font-semibold text-[#008FFB]">Resident Profile</h2>

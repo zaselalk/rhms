@@ -1,16 +1,9 @@
-{/*This is the Resident List Page. This page will display the list of residents in the system to the admin.
-  this will navigate to the ResidentProfilePage.tsx to view single resident details.*/}
+
 import { Link } from "react-router";
 import AdminSidebar from "../../components/layouts/admin/AdminSlidebar";
 import { useState } from "react";
 import { AdminNavbar } from "../../components/layouts/admin/AdminNavbar";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
-
-
-
-
-
-
 
 const residents = [
   { id: "STF001", name: "ravindu Harshana", contact: "0711287298", profilePic: "/avatars/1.jpg" },
@@ -19,23 +12,14 @@ const residents = [
   { id: "STF004", name: "Sara Connor", contact: "0778901234", profilePic: "/avatars/4.jpg" },
 ];
 
-
-
 const ResidentListPage = () => {
   const [seachkeyword, setSeacrhKeyword] = useState("");
 
-
-  console.log(seachkeyword);
-  console.log(residents);
   return (
 
     <DashboardContainer>
-      {/* Sidebar */}
-      
-
-      {/* Main Content */}
       <div className="w-full bg-gray-100 ">
-        
+        <AdminNavbar />
         {/* Header Section */}
         {/* <div className="flex justify-between items-center mb-6 bg-white p-4 shadow rounded-lg">
         <div className="flex items-center space-x-3"> */}
