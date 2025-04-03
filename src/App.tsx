@@ -23,6 +23,7 @@ import ClinicOverviewPage from "./pages/admin/ClinicOverviewPage";
 import ClinicDetailPage from "./pages/admin/ClinicDetailPage";
 import Resident from "./pages/admin/Resident";
 import ResidentDashboard from "./pages/resident/ResidentDashboard";
+import ResidentClinicDetail from "./pages/resident/ResidentClinicDetail";
 
 function App() {
   return (
@@ -102,6 +103,7 @@ function App() {
           <Route path="edit" element={<EditResidentProfilePage />} />
           <Route path="forgotten-password" element={<ForgottenPasswordPage />} />
           <Route path="login" element={<ResidentLoginPage />} />
+          <Route path="clinicDetails" element={<ResidentClinicDetail/>} />
         </Route>
 
 
