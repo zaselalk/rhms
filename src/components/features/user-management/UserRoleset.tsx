@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { FaUserCog } from 'react-icons/fa'
-import Modal from '../../layouts/overlays/Modal';
 import { Button } from '../../Common/Button';
 import { UserRoleCreateModal } from './UserRoleCreateModal';
 
