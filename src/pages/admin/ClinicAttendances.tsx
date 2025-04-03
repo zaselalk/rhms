@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // Import useNavigate and useLocation
+import { useNavigate, useLocation } from "react-router"; // Import useNavigate and useLocation
 import { FaSearch, FaArrowLeft } from "react-icons/fa";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer"; // Import DashboardContainer
 
@@ -97,11 +97,10 @@ const ClinicAttendances: React.FC = () => {
                   <td className="p-2">
                     <button
                       onClick={() => toggleAttendance(patient.id)}
-                      className={`px-4 py-2 rounded-lg shadow transition ${
-                        attendances.find((a) => a.patientId === patient.id)?.status
+                      className={`px-4 py-2 rounded-lg shadow transition ${attendances.find((a) => a.patientId === patient.id)?.status
                           ? "bg-green-500 text-white hover:bg-green-600"
                           : "bg-red-500 text-white hover:bg-red-600"
-                      }`}
+                        }`}
                     >
                       {attendances.find((a) => a.patientId === patient.id)?.status
                         ? "Present"

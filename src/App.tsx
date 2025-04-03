@@ -3,8 +3,8 @@ import RegistrationPage from "./pages/admin/ResidentRegistrationPage";
 import LoginPage from "./pages/LoginPage";
 import DivisionPage from "./pages/admin/DivisionPage";
 import SingleDivisionPage from "./pages/admin/SingleDivisionPage";
-import DiseasesPage from "./pages/admin/DiseasesPage";
-import SingleDiseasePage from "./pages/admin/SingleDiseasePage";
+// import DiseasesPage from "./pages/admin/DiseasesPage";
+// import SingleDiseasePage from "./pages/admin/SingleDiseasePage";
 import UsersPage from "./pages/admin/UsersPage";
 import AddUserPage from "./pages/admin/AddUserPage";
 import HouseholdPage from "./pages/admin/HouseholdPage";
@@ -88,7 +88,7 @@ function App() {
           {/* Clinic Paths*/}
           <Route path="clinic">
             <Route path="" element={<ClinicOverviewPage />} />
-            <Route path=":clinic/attendance" element={<ClinicAttendancePage/>} />
+            <Route path=":clinic/attendance" element={<ClinicAttendancePage />} />
             <Route path=":clinic" element={<ClinicDetailPage />} />
           </Route>
 

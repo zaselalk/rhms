@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaClinicMedical, FaEdit, FaTrash, FaClipboardList, FaPlus } from "react-icons/fa";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for routing
+import { useNavigate } from "react-router"; // Import useNavigate for routing
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import Modal from "../../components/layouts/overlays/Modal"; // Import the Modal component
 
