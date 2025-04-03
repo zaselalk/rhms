@@ -1,34 +1,35 @@
-// import necessary dependencies
 import React, { useState } from "react";
 import { FaClinicMedical, FaTrash } from "react-icons/fa";
 import { FiPlusCircle } from "react-icons/fi";
-import { Link } from "react-router";
-import AdminSidebar from "../../components/layouts/admin/AdminSlidebar";
-import Modal from '../../components/layouts/overlays/Modal';
-
+import { Link } from "react-router-dom"; // Correct import for react-router-dom
+import Modal from "../../components/layouts/overlays/Modal"; // Ensure Modal is correctly imported
+import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer"; // Ensure DashboardContainer is correctly imported
 
 const ClinicOverview: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [clinicTitle, setClinicTitle] = useState("");
-
-  // Sample data for clinic categories
-  const clinicCategories = [
+  const [clinicCategories, setClinicCategories] = useState([
     { name: "Diabetic", count: 236, change: "10%", increase: true },
     { name: "Hypo lipid", count: 34, change: "10%", increase: false },
     { name: "Asthma", count: 45, change: "10%", increase: false },
-  ];
+  ]);
 
   const handleCreateClinic = () => {
-    console.log("New clinic created:", clinicTitle);
-    setShowModal(false);
-    setClinicTitle(""); // Reset the input field
+    if (clinicTitle.trim()) {
+      const newClinic = {
+        name: clinicTitle,
+        count: 0,
+        change: "0%",
+        increase: false,
+      };
+      setClinicCategories([...clinicCategories, newClinic]); // Add new clinic to the list
+      setShowModal(false);
+      setClinicTitle(""); // Reset the input field
+    }
   };
 
   return (
-    <div className="flex">
-      {/* Sidebar */}
-      <AdminSidebar />
-
+    <DashboardContainer>
       {/* Main Content */}
       <div className="p-6 w-full bg-gray-100 min-h-screen">
         
@@ -38,7 +39,7 @@ const ClinicOverview: React.FC = () => {
             <FaClinicMedical className="text-blue-600 text-3xl" />
             <div>
               <h2 className="text-lg font-bold">Clinic Overview</h2>
-              <p className="text-gray-500 text-sm">Total Clinics: 23</p>
+              <p className="text-gray-500 text-sm">Total Clinics: {clinicCategories.length}</p>
             </div>
           </div>
           <button
@@ -51,11 +52,11 @@ const ClinicOverview: React.FC = () => {
 
         {/* Clinic Categories Section */}
         <h3 className="text-xl font-semibold mb-4">Clinic Categories</h3>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {clinicCategories.map((clinic, index) => (
             <Link
               key={index}
-              to={`/admin/clinic/${clinic.name.toLowerCase()}`}
+              to={`/admin/clinic/${clinic.name.toLowerCase().replace(/\s+/g, "-")}`}
               className="bg-white p-4 shadow-md rounded-lg flex justify-between items-center cursor-pointer hover:shadow-lg transition"
             >
               <div>
@@ -75,7 +76,7 @@ const ClinicOverview: React.FC = () => {
 
         {/* Modal for Creating New Clinic */}
         {showModal && (
-          <Modal onClose={() => setShowModal(false)}>
+          <Modal isOpen={showModal} handleClose={() => setShowModal(false)} title="Add Clinic">
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h2 className="text-lg font-bold mb-4">Add Clinic</h2>
               <input
@@ -97,7 +98,7 @@ const ClinicOverview: React.FC = () => {
           </Modal>
         )}
       </div>
-    </div>
+    </DashboardContainer>
   );
 };
 
