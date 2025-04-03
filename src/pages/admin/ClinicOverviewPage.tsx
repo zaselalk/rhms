@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaClinicMedical, FaTrash } from "react-icons/fa";
 import { FiPlusCircle, FiEdit } from "react-icons/fi"; // Import the edit icon
-import { Link } from "react-router-dom"; // Correct import for react-router-dom
+import { Link } from "react-router-dom"; // Import Link for navigation
 import Modal from "../../components/layouts/overlays/Modal"; // Ensure Modal is correctly imported
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer"; // Ensure DashboardContainer is correctly imported
 
@@ -109,8 +109,9 @@ const ClinicOverview: React.FC = () => {
         <h3 className="text-xl font-semibold mb-4">Clinic Categories</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {clinicCategories.map((clinic, index) => (
-            <div
+            <Link
               key={index}
+              to={`/admin/clinic/${clinic.name.toLowerCase().replace(/\s+/g, "-")}`} // Dynamic link based on clinic name
               className="bg-white p-4 shadow-md rounded-lg flex justify-between items-center cursor-pointer hover:shadow-lg transition"
             >
               <div>
@@ -126,7 +127,10 @@ const ClinicOverview: React.FC = () => {
               <div className="flex space-x-2">
                 {/* Edit Icon */}
                 <button
-                  onClick={() => handleEditClick(clinic.name)}
+                  onClick={(e) => {
+                    e.preventDefault(); // Prevent Link navigation on edit click
+                    handleEditClick(clinic.name);
+                  }}
                   className="text-blue-500 hover:text-blue-700 transition"
                 >
                   <FiEdit className="text-lg" /> {/* Edit icon */}
@@ -134,10 +138,13 @@ const ClinicOverview: React.FC = () => {
                 {/* Delete Icon */}
                 <FaTrash
                   className="text-gray-500 cursor-pointer hover:text-red-600 transition"
-                  onClick={() => handleDeleteClick(clinic.name)} // Call delete function on click
+                  onClick={(e) => {
+                    e.preventDefault(); // Prevent Link navigation on delete click
+                    handleDeleteClick(clinic.name);
+                  }}
                 />
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
