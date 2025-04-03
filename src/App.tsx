@@ -13,7 +13,6 @@ import ForgottenPasswordPage from "./pages/ForgottenPasswordPage";
 import HouseholdLoginPage from "./pages/household/HouseholdLoginPage";
 import HouseholdManagePage from "./pages/admin/HouseholdManagePage";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
-import CreateHouseholdPage from "./pages/admin/CreateHouseholdPage";
 import LandingPage from "./pages/LandingPage";
 import ClinicOverviewPage from "./pages/admin/ClinicOverviewPage";
 import ClinicDetailPage from "./pages/admin/ClinicDetailPage";
