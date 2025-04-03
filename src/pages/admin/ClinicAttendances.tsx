@@ -54,7 +54,7 @@ const ClinicAttendances: React.FC = () => {
 
   return (
     <DashboardContainer>
-      <div className="p-6 w-full bg-gray-100 min-h-screen">
+      <div className="p-6 w-full min-h-screen">
         {/* Back Button */}
         <div className="mb-6">
           <button
@@ -69,13 +69,16 @@ const ClinicAttendances: React.FC = () => {
 
         {/* Search Bar */}
         <div className="mb-4">
+          
           <input
             type="text"
             placeholder="Search Patient"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="border p-2 w-full rounded-lg"
-          />
+            className="border p-2 w-full rounded-lg">
+            {/* <FaSearch className="absolute right-4 top-2 text-gray-500" /> */}
+            </input>
+        
         </div>
 
         {/* Patients Table */}

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Routes, Route} from "react-router";
 import RegistrationPage from "./pages/admin/ResidentRegistrationPage";
 import LoginPage from "./pages/LoginPage";
 import DivisionPage from "./pages/admin/DivisionPage";
@@ -13,14 +13,17 @@ import ForgottenPasswordPage from "./pages/ForgottenPasswordPage";
 import HouseholdLoginPage from "./pages/household/HouseholdLoginPage";
 import HouseholdManagePage from "./pages/admin/HouseholdManagePage";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
+import CreateHouseholdPage from "./pages/admin/CreateHouseholdPage";
 import LandingPage from "./pages/LandingPage";
 import ClinicOverviewPage from "./pages/admin/ClinicOverviewPage";
 import ClinicDetailPage from "./pages/admin/ClinicDetailPage";
 import Resident from "./pages/admin/Resident";
 import ResidentDashboard from "./pages/resident/ResidentDashboard";
+import ResidentClinicDetail from "./pages/resident/ResidentClinicDetail";
 import ClinicAttendancePage from "./pages/admin/ClinicAttendances";
 import DiseasesPage from "./pages/admin/DiseasesPage";
 import SingleDiseasePage from "./pages/admin/SingleDiseasePage";
+import ProfilePage from "./pages/admin/ProfilePage";
 
 
 function App() {
@@ -34,6 +37,9 @@ function App() {
         <Route path="/admin" >
           <Route path="dashboard" element={<AdminDashboardPage />} />
           <Route path="login" element={<LoginPage />} />
+
+          {/*Profile  */}
+          <Route path="profile" element={<ProfilePage />} />
 
           {/* /admin/resident */}
           <Route path="residents" >
@@ -95,6 +101,8 @@ function App() {
           <Route path="" element={<HouseholdManagePage />} />
         </Route>
 
+
+
         {/* Resident Paths*/}
         <Route path="/resident" >
           <Route path="" element={<ResidentDashboard />} />
@@ -103,6 +111,7 @@ function App() {
           <Route path="edit" element={<EditResidentProfilePage />} />
           <Route path="forgotten-password" element={<ForgottenPasswordPage />} />
           <Route path="login" element={<ResidentLoginPage />} />
+          <Route path="clinicDetails" element={<ResidentClinicDetail/>} />
         </Route>
 
 

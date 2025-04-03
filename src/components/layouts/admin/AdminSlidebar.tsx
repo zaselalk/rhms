@@ -12,8 +12,8 @@ import { HiUsers } from "react-icons/hi";
 const AdminSidebar: FC = () => {
     return (
         <div className="bg-white shadow-lg p-6 h-full fixed flex-col justify-between w-1/6 hidden md:flex">
-            <div className="mt-8">
-                <h2 className="text-xl font-semibold text-[#008FFB]">Hospital Management</h2>
+            <h2 className="text-xl font-semibold text-[#008FFB]">RHMS</h2>
+            <div >
                 <ul className="space-y-4">
                     {[
                         { path: "/admin/dashboard", label: "Dashboard", icon: <MdDashboard size={35} /> },
