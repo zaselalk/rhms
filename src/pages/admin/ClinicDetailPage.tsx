@@ -9,9 +9,9 @@ interface Patient {
   name: string;
 }
 
-interface ClinicEvent {
+interface ClinicSession {
   id: string;
-  eventName: string;
+  sessionName: string;
   date: string;
 }
 
@@ -38,53 +38,53 @@ const ClinicDetail: React.FC = () => {
     { division: "Delgoda", count: 56 },
   ];
 
-  const [clinicEvents, setClinicEvents] = useState<ClinicEvent[]>([
-    { id: "event001", eventName: "Diabetes Awareness", date: "2025-04-01" },
-    { id: "event002", eventName: "Free Check-up", date: "2025-04-10" },
+  const [clinicSessions, setClinicSessions] = useState<ClinicSession[]>([
+    { id: "session001", sessionName: "Diabetes Awareness", date: "2025-04-01" },
+    { id: "session002", sessionName: "Free Check-up", date: "2025-04-10" },
   ]);
 
-  const [newEvent, setNewEvent] = useState({
-    eventName: "",
+  const [newSession, setNewSession] = useState({
+    sessionName: "",
     date: "",
   });
 
   const [editModalOpen, setEditModalOpen] = useState(false); // Modal state for editing session
-  const [selectedEvent, setSelectedEvent] = useState<ClinicEvent | null>(null); // Selected event to edit
+  const [selectedSession, setSelectedSession] = useState<ClinicSession | null>(null); // Selected session to edit
   const navigate = useNavigate(); // Initialize the navigate function for routing
 
-  const addClinicEvent = () => {
-    if (newEvent.eventName && newEvent.date) {
-      const newEventId = `event${clinicEvents.length + 1}`;
-      const event = { id: newEventId, ...newEvent };
-      setClinicEvents([...clinicEvents, event]);
-      setNewEvent({ eventName: "", date: "" });
+  const addClinicSession = () => {
+    if (newSession.sessionName && newSession.date) {
+      const newSessionId = `session${clinicSessions.length + 1}`;
+      const session = { id: newSessionId, ...newSession };
+      setClinicSessions([...clinicSessions, session]);
+      setNewSession({ sessionName: "", date: "" });
     }
   };
 
-  const removeClinicEvent = (eventId: string) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this event?");
+  const removeClinicSession = (sessionId: string) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this session?");
     if (confirmDelete) {
-      setClinicEvents(clinicEvents.filter((event) => event.id !== eventId));
+      setClinicSessions(clinicSessions.filter((session) => session.id !== sessionId));
     }
   };
 
-  const openEditModal = (event: ClinicEvent) => {
-    setSelectedEvent(event);
-    setEditModalOpen(true); // Open the modal to edit the selected event
+  const openEditModal = (session: ClinicSession) => {
+    setSelectedSession(session);
+    setEditModalOpen(true); // Open the modal to edit the selected session
   };
 
   const closeEditModal = () => {
-    setSelectedEvent(null);
+    setSelectedSession(null);
     setEditModalOpen(false); // Close the modal
   };
 
-  const handleSaveEditedEvent = () => {
-    if (selectedEvent) {
-      setClinicEvents(
-        clinicEvents.map((event) =>
-          event.id === selectedEvent.id
-            ? { ...event, eventName: selectedEvent.eventName, date: selectedEvent.date }
-            : event
+  const handleSaveEditedSession = () => {
+    if (selectedSession) {
+      setClinicSessions(
+        clinicSessions.map((session) =>
+          session.id === selectedSession.id
+            ? { ...session, sessionName: selectedSession.sessionName, date: selectedSession.date }
+            : session
         )
       );
     }
@@ -155,48 +155,48 @@ const ClinicDetail: React.FC = () => {
           </div>
         </div>
 
-        {/* Add Event Form Section */}
+        {/* Add Session Form Section */}
         <div className="bg-white p-6 shadow-md rounded-lg mt-6">
           <h3 className="text-xl font-semibold mb-4">Add Session</h3>
           <div className="mb-4">
             <input
               type="text"
-              placeholder="Event Name"
-              value={newEvent.eventName}
-              onChange={(e) => setNewEvent({ ...newEvent, eventName: e.target.value })}
+              placeholder="Session Name"
+              value={newSession.sessionName}
+              onChange={(e) => setNewSession({ ...newSession, sessionName: e.target.value })}
               className="border p-2 w-full rounded-lg mb-4"
             />
             <input
               type="date"
-              value={newEvent.date}
-              onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
+              value={newSession.date}
+              onChange={(e) => setNewSession({ ...newSession, date: e.target.value })}
               className="border p-2 w-full rounded-lg"
             />
           </div>
           <button
-            onClick={addClinicEvent}
+            onClick={addClinicSession}
             className="bg-blue-500 text-white px-4 py-2 flex items-center rounded-lg shadow hover:bg-blue-600 transition"
           >
             <FaPlus className="mr-2" /> Add Session
           </button>
         </div>
 
-        {/* Clinic Events Table */}
+        {/* Clinic Sessions Table */}
         <div className="bg-white p-6 shadow-md rounded-lg mt-6">
-          <h3 className="text-xl font-semibold mb-4">Clinic Session</h3>
+          <h3 className="text-xl font-semibold mb-4">Clinic Sessions</h3>
           <table className="w-full border-collapse">
             <thead>
               <tr className="border-b">
-                <th className="text-left p-2">Event Name</th>
+                <th className="text-left p-2">Session Name</th>
                 <th className="text-left p-2">Date</th>
                 <th className="text-left p-2">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {clinicEvents.map((event, index) => (
+              {clinicSessions.map((session, index) => (
                 <tr key={index} className="border-b">
-                  <td className="p-2">{event.eventName}</td>
-                  <td className="p-2">{event.date}</td>
+                  <td className="p-2">{session.sessionName}</td>
+                  <td className="p-2">{session.date}</td>
                   <td className="p-2 flex space-x-3">
                     <button
                       onClick={() => navigate("attendance")} // Navigate to the attendance page
@@ -205,14 +205,14 @@ const ClinicDetail: React.FC = () => {
                       <FaClipboardList className="mr-2" /> Get Attendance
                     </button>
                     <button
-                      onClick={() => openEditModal(event)} // Open edit modal
+                      onClick={() => openEditModal(session)} // Open edit modal
                       className="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow hover:bg-yellow-600 transition"
                     >
                       <FaEdit className="mr-2" /> Edit Session
                     </button>
                     <button
                       className="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition"
-                      onClick={() => removeClinicEvent(event.id)}
+                      onClick={() => removeClinicSession(session.id)}
                     >
                       <FaTrash className="mr-2" /> Remove Session
                     </button>
@@ -233,18 +233,18 @@ const ClinicDetail: React.FC = () => {
         <div className="space-y-4">
           <input
             type="text"
-            value={selectedEvent?.eventName || ""}
+            value={selectedSession?.sessionName || ""}
             onChange={(e) =>
-              setSelectedEvent({ ...selectedEvent!, eventName: e.target.value })
+              setSelectedSession({ ...selectedSession!, sessionName: e.target.value })
             }
             className="border p-2 w-full rounded-lg"
-            placeholder="Event Name"
+            placeholder="Session Name"
           />
           <input
             type="date"
-            value={selectedEvent?.date || ""}
+            value={selectedSession?.date || ""}
             onChange={(e) =>
-              setSelectedEvent({ ...selectedEvent!, date: e.target.value })
+              setSelectedSession({ ...selectedSession!, date: e.target.value })
             }
             className="border p-2 w-full rounded-lg"
           />
@@ -256,7 +256,7 @@ const ClinicDetail: React.FC = () => {
               Cancel
             </button>
             <button
-              onClick={handleSaveEditedEvent}
+              onClick={handleSaveEditedSession}
               className="bg-blue-500 text-white px-4 py-2 rounded-lg"
             >
               Save
