@@ -1,16 +1,17 @@
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router';
-import AdminSlidebar from '../../components/layouts/admin/AdminSlidebar';
-import { AdminNavbar } from '../../components/layouts/admin/AdminNavbar';
 import { Modal, Select, message } from 'antd';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
+import { HouseholdCreateModal } from '../../components/features/household-management/HouseholdCreateModal';
+import { Button } from '../../components/Common/Button';
 
 
 const HouseholdPage: FC = () => {
     const navigate = useNavigate();
     const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
     const [deleteReason, setDeleteReason] = useState('');
+    const [isOpen, setIsOpen] = useState(false);
     
     const deleteOptions = ['Moved Out', 'Deceased', 'Duplicate Entry', 'Other'];
     
@@ -26,9 +27,7 @@ const HouseholdPage: FC = () => {
         { id: 'H003', owner: 'Michael Brown', division: 'Bopitiya' },
     ];
     
-    const handleAddHousehold = () => {
-        navigate('/admin/households/create');
-    };
+
     
     const handleViewHousehold = (householdid: string) => {
         navigate(`/admin/households/manage/${householdid}`);
@@ -45,15 +44,16 @@ const HouseholdPage: FC = () => {
     
     return (
         <DashboardContainer>
+            <HouseholdCreateModal isOpen={isOpen} handleClose={()=>setIsOpen(false)}/>
             <div>
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-semibold text-[#008FFB]">Household Management</h2>
-                    <button 
+                    <Button 
                         className="px-4 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
-                        onClick={handleAddHousehold}
+                        onClick={()=> setIsOpen(true) }
                     >
                         + Add Household
-                    </button>
+                    </Button>
                 </div>
 
                 {/* Info Cards */}

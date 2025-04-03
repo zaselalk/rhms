@@ -8,8 +8,15 @@ interface ModalProps {
     isOpen: boolean,
     handleClose: () => void,
     title: string
+
 }
 
+interface ModalProps {
+    isOpen: boolean;
+    title: string;
+    children: React.ReactNode;
+    onClose?: () => void; // Added onClose property
+}
 const Modal: FC<ModalProps> = ({ children, isOpen, handleClose, title }) => {
     React.useEffect(() => {
         const handleEscape = (e: KeyboardEvent) => (e.key === "Escape" ? handleClose() : null);
