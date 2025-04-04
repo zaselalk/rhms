@@ -60,7 +60,7 @@ const ResidentLoginPage: FC = () => {
 
                     <div className="text-center">
                         {/* <a href="#" ></a> */}
-                        <Link to="/resident/forgotten-password" className="text-sm text-[#008FFB] hover:text-[#00C1A7]">Forgot password?</Link>
+                        <Link to="/admin/login" className="text-sm text-[#008FFB] hover:text-[#00C1A7]">Admin Login</Link>
                     </div>
                 </div>
             </div>

@@ -5,6 +5,7 @@ import { J } from "react-router/dist/development/route-data-H2S3hwhf";
 import Household from "./hosehold";
 
 interface ResidentAttributes {
+  id?: number;
   firstName: string;
   lastName: string;
   nic: string;

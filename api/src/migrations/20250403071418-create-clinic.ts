@@ -4,9 +4,8 @@ export const up = async (queryInterface: QueryInterface) => {
   // Create the 'clinics' table
   await queryInterface.createTable('clinics', {
     id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      allowNull: false,
+      type: DataTypes.INTEGER,
+      autoIncrement: true, // Automatically increment the ID
       primaryKey: true,
     },
     name: {

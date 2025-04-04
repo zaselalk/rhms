@@ -6,14 +6,20 @@ import AuthRouter from "./routes/auth.routes";
 import sequelize from "./models";
 import DisaseRouter from "./routes/disease.routes";
 import cors from "cors";
-import { Resident } from "./models/resident";
 import ResidentRouter from "./routes/resident.routes";
 import HouseholdRouter from "./routes/hosehold.routes";
+import ClinicRouter from "./routes/clinic.routes";
+import PermissionRouter from "./routes/permission.routes";
+import RoleRouter from "./routes/role.routes";
+
+
+
+;
 
 dotenv.config();
 
 // env variables
-const PORT: number = 
+const PORT: number =
   parseInt(process.env.APPLICATION_PORT as string, 10) || 3001;
 const app: Application = express();
 
@@ -36,7 +42,9 @@ app.use("/auth", AuthRouter);
 app.use("/disease", DisaseRouter);
 app.use("/resident", ResidentRouter);
 app.use("/household", HouseholdRouter);
-
+app.use("/clinic", ClinicRouter);
+app.use("/permission", PermissionRouter);
+app.use("/role", RoleRouter);
 
 
 app.listen(PORT, async () => {
