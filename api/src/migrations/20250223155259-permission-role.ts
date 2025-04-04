@@ -36,7 +36,7 @@ module.exports = {
 
   async down(queryInterface: QueryInterface) {
     try {
-      await queryInterface.dropTable("permission");
+      await queryInterface.dropTable("permission_roles");
     } catch (error) {
       console.log(error);
     }
