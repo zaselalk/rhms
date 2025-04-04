@@ -10,10 +10,10 @@ module.exports = {
     await queryInterface.addColumn("users", "roleId", {
       type: DataType.INTEGER,
       allowNull: false,
-      references: {
-        model: "roles",
-        key: "id",
-      },
+      // references: {
+      //   model: "roles",
+      //   key: "id",
+      // },
       onUpdate: "CASCADE",
       onDelete: "SET NULL",
     });

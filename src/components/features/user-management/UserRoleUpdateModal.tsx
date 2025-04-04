@@ -157,8 +157,8 @@ export const UserRoleUpdateModal: FC<UserRoleUpdateModalProps> = ({ isUpdatingRo
                                     </div>
 
                                     <div className="flex gap-2">
-                                        <button type="reset" className="w-full bg-red-400 text-white py-2 px-4 rounded-md">Clear</button>
-                                        <button type="submit" className="w-full bg-[#008FFB] text-white py-2 px-4 rounded-md hover:bg-[#00C1A7]">
+                                        <button type="reset" className="flex-1 w-full bg-red-400 text-white py-2 px-4 rounded-md">Clear</button>
+                                        <button type="submit" className="flex-3 w-full bg-[#008FFB] text-white py-2 px-4 rounded-md hover:bg-[#00C1A7]">
                                             Update Role
                                         </button>
                                     </div>
