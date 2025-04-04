@@ -86,9 +86,40 @@ export class ResidentService {
         );
     }
 
+    async findByNic(nic: string): Promise<Resident | null> {
+        const resident = this.residentRepository.findByNic(nic);
+        if (!resident) throw new Error("Resident not found");
+        return resident;
+    }
 
+    async findById(id: number): Promise<Resident | null> {
+        const resident = this.residentRepository.findById(id);
+        if (!resident) throw new Error("Resident not found");
+        return resident;
+    }
+
+    async getAllResident(): Promise<Resident[] | null> {
+        const resident = this.residentRepository.getAllResident();
+        if (!resident) throw new Error("Resident not found");
+        return resident;
+    }
+
+    async updateResident(id: number, data: Partial<Resident>): Promise<Resident | null> {
+        const resident =  await this.residentRepository.updateResident(id, data);
+        if (!resident) throw new Error("Resident not found");
+        return resident;
+    }
+
+    async deleteResident(id: number): Promise<boolean> {
+        const deleted = await this.residentRepository.deleteResident(id);
+        return deleted;
+    }
     
-    
+
+
+
+
+
 
 
 }

@@ -12,6 +12,9 @@ import PermissionRouter from "./routes/permission.routes";
 import { RoleController } from "./controllers/RoleController";
 import RoleRouter from "./routes/role.routes";
 
+
+;
+
 dotenv.config();
 
 // env variables
