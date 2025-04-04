@@ -7,20 +7,28 @@ import { DataType } from "sequelize-typescript";
 module.exports = {
   async up(queryInterface: QueryInterface) {
     // add roleId to users table
-    await queryInterface.addColumn("users", "roleId", {
-      type: DataType.INTEGER,
-      allowNull: false,
-      // references: {
-      //   model: "roles",
-      //   key: "id",
-      // },
-      onUpdate: "CASCADE",
-      onDelete: "SET NULL",
-    });
+    try {
+      await queryInterface.addColumn("users", "roleId", {
+        type: DataType.INTEGER,
+        allowNull: false,
+        // references: {
+        //   model: "roles",
+        //   key: "id",
+        // },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
+      });
+    } catch (error) {
+      console.log(error);
+    }
   },
 
   async down(queryInterface: QueryInterface) {
     // remove roleId from users table
-    await queryInterface.removeColumn("users", "roleId");
+    try {
+      await queryInterface.removeColumn("users", "roleId");
+    } catch (error) {
+      console.log(error);
+    }
   },
 };
