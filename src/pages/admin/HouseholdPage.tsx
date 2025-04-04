@@ -48,6 +48,8 @@ const HouseholdPage: FC = () => {
 
 
 
+    const totalResidents = residents.length;
+
 
     const handleViewHousehold = (householdid: string) => {
         navigate(`/admin/households/manage/${householdid}`);
@@ -90,11 +92,11 @@ const HouseholdPage: FC = () => {
                 {/* Info Cards */}
                 <div className="flex mb-6">
                     <div className="bg-white p-4 rounded-lg shadow-md mr-4 flex-1 text-center">
-                        <p className="text-lg font-semibold text-gray-800">{registeredHouseholds.length}</p>
+                        <p className="text-lg font-semibold text-gray-800">96</p>
                         <p className="text-sm text-gray-600">Total Households</p>
                     </div>
                     <div className="bg-white p-4 rounded-lg shadow-md flex-1 text-center">
-                        <p className="text-lg font-semibold text-gray-800">32</p>
+                        <p className="text-lg font-semibold text-gray-800">6542</p>
                         <p className="text-sm text-gray-600">Total Residents</p>
                     </div>
                 </div>
