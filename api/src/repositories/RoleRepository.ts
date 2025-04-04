@@ -64,4 +64,72 @@ export class RoleRepository {
 
     return role;
   }
+
+  /**
+   * Find all roles
+   * @returns {Promise<Role[]>} - An array of roles
+   */
+  async findAll(): Promise<Role[]> {
+    return Role.findAll();
+  }
+
+  /**
+   * Edit role permission
+   * @param roleId - The id of the role to edit
+   * @param Permissions - The permissions to add to the role
+   */
+  async editRolePermission(
+    roleId: number,
+    Permissions: string[]
+  ): Promise<Role | null> {
+    // Find the role by id
+    const foundRole = await Role.findByPk(roleId, {
+      include: PermissionRole,
+    });
+    if (!foundRole) {
+      return null;
+    }
+    // update permission
+
+    foundRole.permission = JSON.stringify(Permissions);
+    await foundRole.save();
+
+    return foundRole;
+  }
+
+  /**
+   * Delete a role by id
+   * @param id - The id of the role to delete
+   * @return {Promise<number>} - The number of rows deleted
+   */
+  async delete(id: number): Promise<number> {
+    return Role.destroy({
+      where: {
+        id,
+      },
+    });
+  }
+
+  /***
+   * Update  a role by id
+   * @param id - The id of the role to update
+   * @param roleData - The data to update the role with
+   */
+
+  async update(
+    id: number,
+    roleName: string,
+    permissionList: string
+  ): Promise<Role | null> {
+    const role = await Role.findByPk(id);
+    if (!role) {
+      return null;
+    }
+
+    console.log(roleName, permissionList);
+    role.role = roleName;
+    role.permission = JSON.stringify(permissionList);
+    await role.save();
+    return role;
+  }
 }

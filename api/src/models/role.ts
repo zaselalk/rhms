@@ -39,7 +39,7 @@ Role.init(
       primaryKey: true,
     },
     role: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       validate: {
         notEmpty: {
           msg: "Role cannot be empty",
@@ -48,6 +48,7 @@ Role.init(
     },
     permission: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         notEmpty: {
           msg: "Permissions cannot be empty",

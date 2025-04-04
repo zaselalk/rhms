@@ -76,12 +76,31 @@ export const UserRoleCreateModal: FC<UserRoleCreateModalProps> = ({ isCreateNewR
                         <Form onSubmit={handleSubmit}>
                             <div className="mb-4">
                                 <label htmlFor="roleName" className="block text-sm font-medium text-gray-700">Role Name</label>
+                                {/* Select All */}
+
                                 <Field
                                     type="text"
                                     name="roleName"
                                     id="roleName"
                                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-[#008FFB] focus:border-[#008FFB] p-2"
                                 />
+                                <div className="flex items-center mb-4">
+                                    <input
+                                        type="checkbox"
+                                        id="selectAll"
+                                        checked={values.permissionList.length === allPermissions.reduce((acc, { perms }) => acc + perms.length, 0)}
+                                        onChange={(e) => {
+                                            const checked = e.target.checked;
+                                            if (checked) {
+                                                setFieldValue('permissionList', allPermissions.reduce((acc, { perms }) => [...acc, ...perms], []));
+                                            } else {
+                                                setFieldValue('permissionList', []);
+                                            }
+                                        }}
+                                        className="mr-2"
+                                    />
+                                    <label htmlFor="selectAll">Select All</label>
+                                </div>
                                 {errors.roleName && touched.roleName && (
                                     <div className="text-red-500 text-sm mt-1">{errors.roleName}</div>
                                 )}

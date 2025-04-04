@@ -8,7 +8,7 @@ module.exports = {
   async up(queryInterface: QueryInterface) {
     // create column permission
     await queryInterface.addColumn("roles", "permission", {
-      type: DataType.STRING,
+      type: DataType.TEXT,
       allowNull: false,
     });
   },

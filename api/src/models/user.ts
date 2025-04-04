@@ -11,6 +11,7 @@ interface UserAttributes {
   name: string;
   email: string;
   password?: string;
+  roleId?: number;
 }
 
 /**
@@ -22,6 +23,16 @@ export class User extends Model<UserAttributes> implements UserAttributes {
   public name!: string;
   public email!: string;
   public password!: string;
+  public roleId!: number;
+
+  //association
+  static associate(models: any) {
+    // define association here
+    User.belongsTo(models.Role, {
+      foreignKey: "roleId",
+      as: "role",
+    });
+  }
 
   // validate password
   public async validatePassword(password: string): Promise<boolean> {
@@ -53,6 +64,10 @@ User.init(
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    roleId: {
+      type: DataTypes.INTEGER,
+      // allowNull: false,
     },
   },
 
