@@ -3,6 +3,7 @@ import sequelize from ".";
 import Resident from "./resident";
 
 interface HouseholdAttributes {
+  id: number;
   house_no: string;
   grama_division: string;
   longitude: string;
@@ -14,6 +15,7 @@ export class Household
   extends Model<HouseholdAttributes>
   implements HouseholdAttributes
 {
+  public id!: number;
   public house_no!: string;
   public grama_division!: string;
   public longitude!: string;
@@ -23,6 +25,13 @@ export class Household
 
 Household.init(
   {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false,
+    },
+  
     house_no: {
       type: DataTypes.STRING,
       allowNull: false,
