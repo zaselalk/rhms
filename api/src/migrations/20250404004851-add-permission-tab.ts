@@ -7,14 +7,22 @@ import { DataType } from "sequelize-typescript";
 module.exports = {
   async up(queryInterface: QueryInterface) {
     // create column permission
-    await queryInterface.addColumn("roles", "permission", {
-      type: DataType.TEXT,
-      allowNull: false,
-    });
+    try {
+      await queryInterface.addColumn("roles", "permission", {
+        type: DataType.TEXT,
+        allowNull: false,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   },
 
   async down(queryInterface: QueryInterface) {
     // remove column permission
-    await queryInterface.removeColumn("roles", "permission");
+    try {
+      await queryInterface.removeColumn("roles", "permission");
+    } catch (error) {
+      console.log(error);
+    }
   },
 };
