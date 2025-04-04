@@ -13,7 +13,6 @@ import ForgottenPasswordPage from "./pages/ForgottenPasswordPage";
 import HouseholdLoginPage from "./pages/household/HouseholdLoginPage";
 import HouseholdManagePage from "./pages/admin/HouseholdManagePage";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
-import CreateHouseholdPage from "./pages/admin/CreateHouseholdPage";
 import LandingPage from "./pages/LandingPage";
 import ClinicOverviewPage from "./pages/admin/ClinicOverviewPage";
 import ClinicDetailPage from "./pages/admin/ClinicDetailPage";
@@ -50,7 +49,7 @@ function App() {
           {/* /admin/diseases  */}
           <Route path="diseases" >
             <Route path="" element={<DiseasesPage />} />
-            <Route path="single/:diseaseName" element={<SingleDiseasePage />} />
+            <Route path=":diseaseName" element={<SingleDiseasePage />} />
           </Route>
 
           {/* /admin/users routs */}
@@ -64,13 +63,6 @@ function App() {
             <Route path="" element={<HouseholdPage />} />
             <Route path="manage/:id" element={<HouseholdManagePage />} />
           </Route>
-
-          {/* /admin/residents routes */}
-          {/* <Route path="residents">
-            <Route path="" element={<ResidentLandingPage />} />
-            <Route path="registration" element={<RegistrationPage />} />
-            <Route path="profile" element={<ResidentProfilePage />} />
-          </Route> */}
 
           <Route path="residents" >
             <Route path="" element={<Resident />} />

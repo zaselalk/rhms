@@ -13,7 +13,13 @@ export class UserController {
   register = async (req: Request, res: Response): Promise<Response | void> => {
     const { name, email, password } = req.body;
     const user = await this.userService.registerUser(name, email, password);
-    return res.json(user);
+    return res.json({
+      message: "User registered successfully",
+      data: {
+        name: user.name,
+        email: user.email,
+      },
+    });
   };
 
   login = async (req: Request, res: Response): Promise<Response | void> => {
