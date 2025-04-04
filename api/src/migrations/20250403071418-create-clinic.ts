@@ -1,22 +1,29 @@
-import { QueryInterface, DataTypes } from 'sequelize';
+import { QueryInterface, DataTypes } from "sequelize";
 
 export const up = async (queryInterface: QueryInterface) => {
   // Create the 'clinics' table
-  await queryInterface.createTable('clinics', {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      allowNull: false,
-      primaryKey: true,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false, // name column cannot be null
-    },
-  });
+  try {
+    await queryInterface.createTable("clinics", {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true, // Automatically increment the ID
+        primaryKey: true,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false, // name column cannot be null
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const down = async (queryInterface: QueryInterface) => {
   // Drop the 'clinics' table
-  await queryInterface.dropTable('clinics');
+  try {
+    await queryInterface.dropTable("clinics");
+  } catch (error) {
+    console.log(error);
+  }
 };

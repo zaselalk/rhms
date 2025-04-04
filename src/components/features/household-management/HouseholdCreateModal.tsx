@@ -7,6 +7,9 @@ interface HouseholdCreateModalProps {
 }
 
 export const HouseholdCreateModal:FC<HouseholdCreateModalProps> = ({isOpen,handleClose}) => {
+    // State variables for household creation
+        const [house_no, setHouseNo] = useState("");
+        const [grama_division, setGramaDivision] = useState("");
         const [longitude, setLongitude] = useState("");
         const [latitude, setLatitude] = useState("");
         const [residentId, setResidentId] = useState("");
@@ -14,19 +17,56 @@ export const HouseholdCreateModal:FC<HouseholdCreateModalProps> = ({isOpen,handl
 
     
         const handleSearchResident = () => {
-            // Mock function to fetch resident name by ID
-            setResidentName("John Doe");
+            // Make an API call to search resident by ID
+            fetch(`http://localhost:3001/api/resident/${residentId}`)
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.name) {
+                    setResidentName(data.name); // Set the resident name in state
+                } else {
+                    console.error('Resident not found');
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching resident data:', error);
+            });
         };
     
         const handleCreateHousehold = () => {
             if (window.confirm("Are you sure you want to create this household?")) {
-                console.log("Household Created:", { longitude, latitude, residentId, residentName });
+                console.log("Household Created:", { house_no,grama_division,longitude, latitude, residentId, residentName });
             }
         };
     
   return (
      <Modal isOpen={isOpen} handleClose={handleClose} title="Create Household">
                 <div className="space-y-4 p-4">
+                    {/* House No */}
+                    <div>
+                        <label htmlFor="house_no" className="block text-sm font-medium text-gray-700">House No</label>
+                        <input
+                            type="text"
+                            id="house_no"
+                            value={house_no}
+                            onChange={(e) => setHouseNo(e.target.value)}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 outline-none"
+                            placeholder="Enter house number"
+                        />
+                    </div>
+                                                    
+                        {/* Grama Division */}                                      
+                    <div>
+                        <label htmlFor="grama_division" className="block text-sm font-medium text-gray-700">Grama Division</label>
+                        <input
+                            type="text"
+                            id="grama_division"
+                            value={grama_division}
+                            onChange={(e) => setGramaDivision(e.target.value)}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 outline-none"
+                            placeholder="Enter grama division"
+                        />
+                    </div>
+
                     {/* Longitude */}
                     <div>
                         <label htmlFor="longitude" className="block text-sm font-medium text-gray-700">Longitude</label>

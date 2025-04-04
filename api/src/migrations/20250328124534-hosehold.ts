@@ -6,21 +6,38 @@ import { QueryInterface, DataTypes } from "sequelize";
 module.exports = {
   async up(queryInterface: QueryInterface) {
     try {
-      await queryInterface.createTable("user_roles", {
-        id: {
+      await queryInterface.createTable("households", {
+        houseid: {
           allowNull: false,
           autoIncrement: true,
           primaryKey: true,
           type: DataTypes.INTEGER,
         },
-        userId: {
+        password: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        houseowner: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        familyMember: {
           type: DataTypes.INTEGER,
           allowNull: false,
         },
-        roleId: {
+        grama_division: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        income_range: {
           type: DataTypes.INTEGER,
           allowNull: false,
         },
+        location: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+
         createdAt: {
           allowNull: false,
           type: DataTypes.DATE,
@@ -37,7 +54,7 @@ module.exports = {
 
   async down(queryInterface: QueryInterface) {
     try {
-      await queryInterface.dropTable("user_roles");
+      await queryInterface.dropTable("households");
     } catch (error) {
       console.log(error);
     }
