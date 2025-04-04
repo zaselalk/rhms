@@ -127,10 +127,10 @@ Resident.init(
       defaultValue: [],
     },
     height: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.FLOAT,
     },
     weight: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.FLOAT,
     },
   },
 
