@@ -1,4 +1,6 @@
-# Village - Hospital Management System
+# Resident Health Monitoring System 
+![image](https://github.com/user-attachments/assets/a835b7aa-1899-4636-8f87-a29e480f760c)
+
 
 ## Developer Document
 Devloper Doc : [Developer Doc](/docs) 
@@ -24,49 +26,13 @@ Database: MySQL (sequelize)
 Authentication:passport.js
 Hosting & Deployment: Azure
 
-Timeline
-
-1st week:
-Requirement gathering,
-Identifying main functionalities,
-Defining technologies,
-UI planning
-
-2nd week:
-Research about map APIs,
-Start designing UI,
-Creating wireframes,
-Creating project proposal
-
-3rd week:
-RDBMS → ER → SRS,
-Finalizing UI,
-Starting development
-
-4th week:
-Developing prototype (start).
-
-5th week:
-Working prototype.
-
-6th week - 9th week:
-Implementing project.
-
-10th week:
-Complete project ✅.
-
-11th - 12th week:
-Testing & maintenance.
-
-13th week:
-Completed project (final).
 
 Contributors
 
-Asela Priyadarshana
-Ravindu Harshana
-Ashfa Nisthar
-Dilukshi Nimasha
+- Asela Priyadarshana 
+- Ravindu Harshana
+- Ashfa Nisthar
+- Dilukshi Nimasha
 
 
 
