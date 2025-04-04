@@ -13,9 +13,6 @@ function LandingPage() {
         <Link to="/resident/login" className="px-6 py-3 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition">
           Resident Login
         </Link>
-        <Link to="/household/login" className="px-6 py-3 bg-purple-600 text-white rounded-lg shadow hover:bg-purple-700 transition">
-          Household Login
-        </Link>
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import { loginState } from '../types/login';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Alert } from 'antd';
+import { Link } from 'react-router';
 
 const LoginPage: FC = () => {
   const navigate = useNavigate();
@@ -98,6 +99,9 @@ const LoginPage: FC = () => {
               >
                 {mutation.isPending ? 'Loading...' : 'Login'}
               </button>
+              <Link to="/resident/login" className="text-sm text-blue-600 hover:underline mt-4 block text-center">
+                Resident Login
+              </Link>
             </form>
 
           </div>
