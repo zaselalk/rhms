@@ -13,6 +13,7 @@ const CreateHouseholdModal: FC<CreateHouseholdModalProps> = ({ isOpen, handleClo
     const [members, setMembers] = useState("");
 
 
+    
     const handleCreateHousehold = () => {
         // Handle the logic for creating a household (e.g., save to backend or state)
         console.log("Household Created:", {

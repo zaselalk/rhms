@@ -1,16 +1,15 @@
 
 import { Model, DataTypes } from "sequelize";
 import sequelize from ".";
+import Resident from "./resident";
 
 
 interface HouseholdAttributes {
-  houseid:number;
-  password: string;
-  houseowner: string;
+  house_no: string;
   grama_division: string;
-  income_range: number;
-  location: string;
-  familyMember: number;
+  longitude: string;
+  latitude: string;
+  owner_id?: number;
 
 }
 
@@ -18,67 +17,61 @@ export class Household
   extends Model<HouseholdAttributes>
   implements HouseholdAttributes
 {
-  public houseid!: number;
-  public password!: string;
-  public houseowner!: string;
+  public house_no!: string;
   public grama_division!: string;
-  public income_range!: number;
-  public location!: string;
-  public familyMember!: number;
+  public longitude!: string;
+  public latitude!: string;
+  public owner_id?: number;
+
  
 }
 
 
   Household.init(
     {
-      houseid: {
-        type: DataTypes.INTEGER,
-        validate: {
-          notEmpty: {
-            msg: "House Id cannot be empty",
-          },
-        },
-      },
-      password: {
+      house_no: {
         type: DataTypes.STRING,
+        allowNull: false,
         validate: {
           notEmpty: {
-            msg: "Password cannot be empty",
+            msg: "House No cannot be empty",
           },
         },
       },
-      houseowner: {
-        type: DataTypes.STRING,
-        validate: {
-          notEmpty: {
-            msg: "Name cannot be empty",
-          },
-        },
-      },
-      familyMember:{
-        type: DataTypes.INTEGER,
-      },
+
       grama_division: {
         type: DataTypes.STRING,
+        allowNull: false,
         validate: {
           notEmpty: {
             msg: "Grama Division cannot be empty",
           },
         },
       },
-      income_range: {
-        type: DataTypes.INTEGER,
+      longitude: {
+        type: DataTypes.STRING,
+        allowNull: false,
         validate: {
           notEmpty: {
-            msg: "Income Range cannot be empty",
+            msg: "Longitude cannot be empty",
           },
         },
       },
-      location: {
+      latitude: {
         type: DataTypes.STRING,
+        allowNull: false,
         validate: {
           notEmpty: {
-            msg: "Location cannot be empty",
+            msg: "Latitude cannot be empty",
+          },
+        },
+      },
+      owner_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        validate: {
+          isInt: {
+            msg: "Owner ID must be an integer",
           },
         },
       },
@@ -91,6 +84,8 @@ export class Household
       timestamps: true,
     }
   );
+
+  Household.belongsTo(Resident, { foreignKey: "owner_id",as : "owner" });
 
   export default Household;
 

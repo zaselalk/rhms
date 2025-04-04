@@ -2,6 +2,7 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from ".";
 import { J } from "react-router/dist/development/route-data-H2S3hwhf";
+import Household from "./hosehold";
 
 interface ResidentAttributes {
   firstName: string;
@@ -136,7 +137,15 @@ Resident.init(
     modelName: "Resident",
     tableName: "residents",
   }
+
 );
+
+  // Resident.hasMany(Household,{
+  //   foreignKey: "owner_id",
+  //   as: "households",
+  //   onDelete: "SET NULL",
+  // })
+
 
 
 export default Resident;

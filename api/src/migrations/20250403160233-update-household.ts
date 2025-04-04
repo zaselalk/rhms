@@ -1,0 +1,138 @@
+'use strict';
+
+import sequelize, { DataTypes, QueryInterface } from "sequelize";
+
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+  async up (queryInterface:QueryInterface) {
+    // change houseid column as houseno and change datatype to STRING
+    await queryInterface.renameColumn('household', 'houseid', 'house_no');
+    await queryInterface.changeColumn('household', 'house_no', {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "House No cannot be empty",
+        },
+      },
+    });
+
+    // drop column user id
+    await queryInterface.removeColumn('household', 'password');
+    // drop column houseowner
+    await queryInterface.removeColumn('household', 'houseowner');
+    // drop column familyMember
+    await queryInterface.removeColumn('household', 'familyMember');
+
+    // drop column income_range
+    await queryInterface.removeColumn('household', 'income_range');
+
+    // drop column location
+    await queryInterface.removeColumn('household', 'location');
+
+    // add column longitude
+    await queryInterface.addColumn('household', 'longitude', {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Longitude cannot be empty",
+        },
+      },
+    });
+
+    // add column latitude
+    await queryInterface.addColumn('Household', 'latitude', {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Latitude cannot be empty",
+        },
+      },
+    });
+
+    //add owner_id column referencing resident table
+    await queryInterface.addColumn('Household', 'owner_id', {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Residents',
+        key: 'id',
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL',
+    });
+
+
+  },
+
+  async down (queryInterface:QueryInterface) {
+    // revert houseid column to house_no and change datatype to INTEGER
+    await queryInterface.renameColumn('Households', 'house_no', 'houseid');
+    await queryInterface.changeColumn('Households', 'houseid', {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "House Id cannot be empty",
+        },
+      },
+    });
+
+    // add column password
+    await queryInterface.addColumn('Households', 'password', {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Password cannot be empty",
+        },
+      },
+    });
+
+    // add column houseowner
+    await queryInterface.addColumn('Households', 'houseowner', {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Name cannot be empty",
+        },
+      },
+    });
+
+    // add column familyMember
+    await queryInterface.addColumn('Households', 'familyMember', {
+      type: DataTypes.INTEGER,
+    });
+
+    // add column income_range
+    await queryInterface.addColumn('Households', 'income_range', {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Income Range cannot be empty",
+        },
+      },
+    });
+
+    // add column location
+    await queryInterface.addColumn('Households', 'location', {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Location cannot be empty",
+        },
+      },
+    });
+
+    // drop column longitude
+    await queryInterface.removeColumn('Households', 'longitude');
+    // drop column latitude
+    await queryInterface.removeColumn('Households', 'latitude');
+
+  }
+};
