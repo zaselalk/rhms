@@ -68,6 +68,7 @@ Resident.init(
       type: DataTypes.STRING,
     },
     email: {
+      unique: true,
       type: DataTypes.STRING,
     },
     password: {
