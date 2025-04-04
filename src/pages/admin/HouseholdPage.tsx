@@ -5,7 +5,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recha
 import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
 import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { HouseholdCreateModal } from '../../components/features/household-management/HouseholdCreateModal';
-import { Button } from '../../components/Common/Button';
+import { Button } from '../../components/common/Button';
 
 
 const HouseholdPage: FC = () => {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FaUserCog } from 'react-icons/fa'
-import { Button } from '../../Common/Button';
+import { Button } from '../../common/Button';
 import { UserRoleCreateModal } from './UserRoleCreateModal';
 import { useRoles } from '../../../hooks/useRoles';
 import { UserRoleUpdateModal } from './UserRoleUpdateModal';
