@@ -1,9 +1,7 @@
 import express, { Application } from "express";
 import dotenv from "dotenv";
 import passport from "./config/passport";
-import session from "express-session";
 import AuthRouter from "./routes/auth.routes";
-import sequelize from "./models";
 import DisaseRouter from "./routes/disease.routes";
 import cors from "cors";
 import ResidentRouter from "./routes/resident.routes";
@@ -11,10 +9,6 @@ import HouseholdRouter from "./routes/hosehold.routes";
 import ClinicRouter from "./routes/clinic.routes";
 import PermissionRouter from "./routes/permission.routes";
 import RoleRouter from "./routes/role.routes";
-
-
-
-;
 
 dotenv.config();
 
@@ -27,14 +21,6 @@ app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "secret",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -46,9 +32,7 @@ app.use("/clinic", ClinicRouter);
 app.use("/permission", PermissionRouter);
 app.use("/role", RoleRouter);
 
-
 app.listen(PORT, async () => {
-  sequelize.sync();
   console.log(`Server is running on http://localhost:${PORT}`);
 });
 
