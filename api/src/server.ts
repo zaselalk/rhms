@@ -8,9 +8,12 @@ import DisaseRouter from "./routes/disease.routes";
 import cors from "cors";
 import { Resident } from "./models/resident";
 import ResidentRouter from "./routes/resident.routes";
+import Clinic from "./models/clinic";
+import ClinicRouter from "./routes/clinic.routes";
 import PermissionRouter from "./routes/permission.routes";
 import { RoleController } from "./controllers/RoleController";
 import RoleRouter from "./routes/role.routes";
+
 
 
 ;
@@ -40,8 +43,10 @@ app.use(passport.session());
 app.use("/auth", AuthRouter);
 app.use("/disease", DisaseRouter);
 app.use("/resident", ResidentRouter);
+app.use("/clinic", ClinicRouter);
 app.use("/permission", PermissionRouter);
 app.use("/role", RoleRouter);
+
 
 app.listen(PORT, async () => {
   sequelize.sync();
