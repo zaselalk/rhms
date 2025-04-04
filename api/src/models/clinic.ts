@@ -1,22 +1,25 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
+import { AllowNull } from "sequelize-typescript";
+import sequelize from ".";
 
 interface ClinicAttributes {
-  id: string;
+  id?: number;
   name: string;
 }
 
 export class Clinic extends Model<ClinicAttributes> implements ClinicAttributes {
-  public id!: string;
+  public id!: number;
   public name!: string;
 }
 
-export default (sequelize: Sequelize) => {
+
   Clinic.init(
     {
       id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        type: DataTypes.INTEGER,
         primaryKey: true,
+        allowNull: false,
+        autoIncrement: true,
       },
       name: {
         type: DataTypes.STRING,
@@ -29,12 +32,12 @@ export default (sequelize: Sequelize) => {
       },
     },
     {
-      sequelize,
+      sequelize: sequelize, // Pass the `sequelize` instance to the model
       modelName: "Clinic",
       tableName: "clinics",
       timestamps: false, 
     }
   );
 
-  return Clinic;
-};
+
+export default Clinic;

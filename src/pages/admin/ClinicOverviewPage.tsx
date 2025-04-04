@@ -12,7 +12,7 @@ const ClinicOverview: React.FC = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [clinicTitle, setClinicTitle] = useState("");
   const [clinicCategories, setClinicCategories] = useState([
-    { id: "clinic1", name: "Diabetic", count: 236, change: "10%", increase: true },
+    { id: "clinic1", name: "Diabetic", count: 291, change: "10%", increase: true },
     { id: "clinic2", name: "Hypo lipid", count: 34, change: "10%", increase: false },
     { id: "clinic3", name: "Asthma", count: 45, change: "10%", increase: false },
   ]);
@@ -198,7 +198,7 @@ const ClinicOverview: React.FC = () => {
 
         {/* Modal for Editing Clinic Name */}
         {showEditModal && (
-          <Modal isOpen={showEditModal} handleClose={handleCancelEdit} title="Edit Clinic Name">
+          <Modal isOpen={showEditModal} handleClose={handleCancelEdit} title="">
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h2 className="text-lg font-bold mb-4">Edit Clinic Name</h2>
               <input

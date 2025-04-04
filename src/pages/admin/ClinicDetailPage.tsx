@@ -110,7 +110,7 @@ const ClinicDetail: React.FC = () => {
         <div className="flex justify-center items-center bg-white p-6 shadow-md rounded-lg mb-6">
           <FaClinicMedical className="text-blue-500 text-5xl mr-4" />
           <div>
-            <p className="text-4xl font-bold">236</p>
+            <p className="text-4xl font-bold">291</p>
             <p className="text-gray-500">Diabetic</p>
           </div>
         </div>

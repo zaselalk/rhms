@@ -14,6 +14,13 @@ export class Permission
 {
   public id!: number;
   public permission!: string;
+
+  static associate(models: any) {
+    // define association here
+    Permission.belongsToMany(models.Role, {
+      through: "PermissionRole",
+    });
+  }
 }
 
 Permission.init(

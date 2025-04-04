@@ -12,7 +12,25 @@ const householdController = new HouseholdController();
 HouseholdRouter.post(
     "/create",
     // protectRoute,
-    catchAsync(householdController.createHousehold.bind(householdController))
+    catchAsync(householdController.createHousehold)
 );
+
+// HouseholdRouter.get(
+//     "/get/:id",
+//     // protectRoute,
+//     catchAsync(householdController.getHousehold)
+// );
+
+// HouseholdRouter.put(
+//     "/update/:id",
+//     // protectRoute,
+//     catchAsync(householdController.updateHouseholdOwner)
+// );
+
+// HouseholdRouter.delete(
+//     "/delete/:house_no",
+//     // protectRoute,
+//     catchAsync(householdController.deleteHousehold)
+// );
 
 export default HouseholdRouter;
