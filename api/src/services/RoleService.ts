@@ -22,4 +22,8 @@ export class RoleService {
     const updatedRole = await this.roleRepositroy.update(id, role, permission);
     return updatedRole;
   };
+
+  deleteRole = async (id: number) => {
+    await this.roleRepositroy.delete(id);
+  };
 }

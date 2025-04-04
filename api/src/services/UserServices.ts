@@ -35,7 +35,6 @@ export class UserServices {
     if (!user) throw new ValidationException("Invalid username or password");
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    console.log("Password validation result:", isPasswordValid);
 
     //why - https://security.stackexchange.com/questions/17816/username-and-or-password-invalid-why-do-websites-show-this-kind-of-message-i
     if (!isPasswordValid)

@@ -1,6 +1,6 @@
 import { FiShield, FiUsers } from 'react-icons/fi'
 
-export const UserStatCards = () => {
+export const UserStatCards = ({ userCount, userRoleCount, }) => {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
             <div className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition duration-300 flex items-center space-x-4">
@@ -8,7 +8,7 @@ export const UserStatCards = () => {
                     <FiUsers />
                 </div>
                 <div>
-                    <p className="text-xl font-bold text-gray-800">15</p>
+                    <p className="text-xl font-bold text-gray-800">{userCount}</p>
                     <p className="text-sm text-gray-500">Users</p>
                 </div>
             </div>
@@ -18,7 +18,7 @@ export const UserStatCards = () => {
                     <FiShield />
                 </div>
                 <div>
-                    <p className="text-xl font-bold text-gray-800">10</p>
+                    <p className="text-xl font-bold text-gray-800">{userRoleCount}</p>
                     <p className="text-sm text-gray-500">Roles</p>
                 </div>
             </div>

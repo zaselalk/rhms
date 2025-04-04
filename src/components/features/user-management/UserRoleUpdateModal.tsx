@@ -34,7 +34,7 @@ export const UserRoleUpdateModal: FC<UserRoleUpdateModalProps> = ({ isUpdatingRo
     const Auth = new AuthServices();
     const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
 
-    const { data: roles, isLoading, isSuccess } = useSingleRole(roleId);
+    const { data: roles, isLoading, isSuccess, refetch } = useSingleRole(roleId);
 
     useEffect(() => {
         if (isSuccess && roles.data) {
@@ -59,6 +59,8 @@ export const UserRoleUpdateModal: FC<UserRoleUpdateModalProps> = ({ isUpdatingRo
                 content: "User Role Updated Successfully!",
             });
             // setIsUpdatingRole(false);
+
+            refetch();
         },
         onError: (error: any) => {
             messageApi.open({

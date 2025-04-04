@@ -54,6 +54,14 @@ export class RoleController {
     });
   };
 
+  deleteRole = async (req: any, res: any): Promise<any> => {
+    const { id } = req.params;
+    await this.roleService.deleteRole(id);
+    return res.status(200).json({
+      message: "Role deleted successfully",
+    });
+  };
+
   //   addPermissionsToRole = async (req: any, res: any): Promise<any> => {
   //     const { roleId, permissionId } = req.body;
   //     const updatedRole = await this.roleService.addPermissionsToRole(

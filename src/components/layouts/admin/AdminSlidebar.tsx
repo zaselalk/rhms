@@ -48,16 +48,19 @@ const AdminSidebar: FC = () => {
                     ))}
                 </ul>
             </div>
-            <div className="flex items-center">
-                <span className="text-sm mr-4">Ravindu (Admin)</span>
-                <Link to="/admin/profile">Profile</Link>
+            <div className="flex items-center gap-4 bg-white p-2 rounded-lg shadow-sm">
+                <span className="text-sm text-gray-700 font-medium">
+                    Asela <span className="text-blue-600">(Admin)</span>
+                </span>
+
                 <button
-                    className=" rounded-md px-4 py-2 hover:bg-[#006fbb]"
+                    className="text-white bg-[#008FFB] hover:bg-[#006fbb] px-4 py-2 rounded-md text-sm transition duration-200"
                     onClick={handleLogout}
                 >
                     Logout
                 </button>
             </div>
+
         </div>
     );
 };

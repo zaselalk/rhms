@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaUserCog } from 'react-icons/fa'
 import { Button } from '../../Common/Button';
 import { UserRoleCreateModal } from './UserRoleCreateModal';
@@ -6,21 +6,54 @@ import { useRoles } from '../../../hooks/useRoles';
 import { UserRoleUpdateModal } from './UserRoleUpdateModal';
 
 
-export const UserRoleset = () => {
+export const UserRoleset = ({ setUserRoleCount }) => {
     const [isCreateNewRole, setIsCreateNewRole] = useState(false);
     const [isUpdatingRole, setIsUpdatingRole] = useState(false);
     const [roleId, setRoleId] = useState<string>('');
-    const { data: roles = [], isLoading, error } = useRoles();
+    const { data: roles = [], isLoading, error, refetch } = useRoles();
+
+    useEffect(() => {
+        const totalRoles = roles.data ? roles.data.length : 0;
+        setUserRoleCount(totalRoles);
+    }, [roles]);
+
 
     const handleRoleEdit = (roleId: string) => {
         setRoleId(roleId);
         setIsUpdatingRole(true);
     }
 
+    const handleRoleDelete = (roleId: string) => {
+        setRoleId(roleId);
+        let isConfirm = confirm("Are you sure, you wanna delete ?")
+        if (isConfirm) {
+            // Call delete API here
+            fetch(`http://localhost:3001/role/${roleId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Role deleted successfully');
+                        refetch();
+                    } else {
+                        alert('Failed to delete role');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error deleting role');
+                })
+        }
+        return
+    }
+
 
     return (
         <div className='col-span-4'>
-            <UserRoleCreateModal isCreateNewRole={isCreateNewRole} setIsCreateNewRole={setIsCreateNewRole} />
+            <UserRoleCreateModal isCreateNewRole={isCreateNewRole} setIsCreateNewRole={setIsCreateNewRole} refetch={refetch} />
             {roleId && <UserRoleUpdateModal isUpdatingRole={isUpdatingRole} setIsUpdatingRole={setIsUpdatingRole} roleId={roleId} />}
             <div className="bg-white p-6 rounded-lg shadow-md">
                 <Button onClick={() => setIsCreateNewRole(true)}>
@@ -47,7 +80,7 @@ export const UserRoleset = () => {
                                         <button className="text-[#008FFB] hover:text-[#00C1A7] cursor-pointer">
                                             <i className="fas fa-edit" onClick={() => handleRoleEdit(role.id)}>Edit</i>
                                         </button>
-                                        <button className="ml-4 text-red-500 hover:text-red-700">
+                                        <button className="ml-4 text-red-500 hover:text-red-700" onClick={() => handleRoleDelete(role.id)}>
                                             <i className="fas fa-trash-alt">Delete</i>
                                         </button>
                                     </td>

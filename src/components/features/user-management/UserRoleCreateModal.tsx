@@ -11,6 +11,7 @@ import * as Yup from 'yup';
 interface UserRoleCreateModalProps {
     isCreateNewRole: boolean;
     setIsCreateNewRole: (isOpen: boolean) => void;
+    refetch: () => void;
 }
 
 const RoleSchema = Yup.object().shape({
@@ -18,7 +19,7 @@ const RoleSchema = Yup.object().shape({
     permissionList: Yup.array().min(1, 'Select at least one permission'),
 });
 
-export const UserRoleCreateModal: FC<UserRoleCreateModalProps> = ({ isCreateNewRole, setIsCreateNewRole }) => {
+export const UserRoleCreateModal: FC<UserRoleCreateModalProps> = ({ isCreateNewRole, setIsCreateNewRole, refetch }) => {
     const formikHelpersRef = useRef<FormikHelpers<{ roleName: string, permissionList: string[] }> | null>(null);
 
     const [messageApi, contextHolder] = message.useMessage();
@@ -37,6 +38,7 @@ export const UserRoleCreateModal: FC<UserRoleCreateModalProps> = ({ isCreateNewR
 
             //reset form
             formikHelpersRef.current?.resetForm();
+            refetch();
 
         },
         onError: (error: any) => {
@@ -146,8 +148,8 @@ export const UserRoleCreateModal: FC<UserRoleCreateModalProps> = ({ isCreateNewR
                             </div>
 
                             <div className="flex gap-2">
-                                <button type="reset" className="w-full bg-red-400 text-white py-2 px-4 rounded-md">Clear</button>
-                                <button type="submit" className="w-full bg-[#008FFB] text-white py-2 px-4 rounded-md hover:bg-[#00C1A7]">Create Role</button>
+                                <button type="reset" className="flex- 1w-full bg-red-400 text-white py-2 px-4 rounded-md cursor-pointer">Clear</button>
+                                <button type="submit" className="flex-3 w-full bg-[#008FFB] text-white py-2 px-4 rounded-md hover:bg-[#4f4f7e] cursor-pointer">Create Role</button>
                             </div>
                         </Form>
                     )}

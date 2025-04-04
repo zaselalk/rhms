@@ -9,5 +9,6 @@ RoleRouter.post("/", catchAsync(roleController.createRole));
 RoleRouter.get("/", catchAsync(roleController.getAllRoles));
 RoleRouter.get("/:id", catchAsync(roleController.getRoleById));
 RoleRouter.patch("/:id", catchAsync(roleController.updateRole));
+RoleRouter.delete("/:id", catchAsync(roleController.deleteRole));
 
 export default RoleRouter;
