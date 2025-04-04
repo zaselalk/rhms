@@ -10,6 +10,9 @@ import { Resident } from "./models/resident";
 import ResidentRouter from "./routes/resident.routes";
 
 
+
+;
+
 dotenv.config();
 
 // env variables

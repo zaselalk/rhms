@@ -19,5 +19,10 @@ ResidentRouter.post(
 ResidentRouter.get('/nic/:nic', catchAsync(residentController.residentfindByNic));
 ResidentRouter.get('/id/:id', catchAsync(residentController.residentfindById));
 ResidentRouter.get('/residents', catchAsync(residentController.getAllResident));
+ResidentRouter.put('/update/:id', catchAsync(residentController.updateResident));
+ResidentRouter.delete('/delete/:id', catchAsync(residentController.deleteResidentById));
+
+
+
 
 export default ResidentRouter;

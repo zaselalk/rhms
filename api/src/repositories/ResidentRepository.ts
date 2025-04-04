@@ -58,6 +58,26 @@ export class ResidentRepository {
     }
 
 
+    async updateResident(id: number, data: Partial<Resident>): Promise<Resident | null> {
+        const updatedRows = await Resident.update(data, {
+            where: { id },
+        });
+
+        if (updatedRows[0] === 0) return null; // No record updated
+
+        return Resident.findByPk(id); // Fetch updated resident
+    }
+
+    async deleteResident(id: number): Promise<boolean> {
+        const deletedRows = await Resident.destroy({
+            where: { id },
+        });
+        return deletedRows > 0;
+    }
+
+
+
+
 
 
 }

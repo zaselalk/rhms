@@ -104,6 +104,18 @@ export class ResidentService {
         return resident;
     }
 
+    async updateResident(id: number, data: Partial<Resident>): Promise<Resident | null> {
+        const resident =  await this.residentRepository.updateResident(id, data);
+        if (!resident) throw new Error("Resident not found");
+        return resident;
+    }
+
+    async deleteResident(id: number): Promise<boolean> {
+        const deleted = await this.residentRepository.deleteResident(id);
+        return deleted;
+    }
+    
+
 
 
 
