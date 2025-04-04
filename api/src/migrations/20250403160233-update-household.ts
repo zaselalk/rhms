@@ -52,18 +52,6 @@ module.exports = {
           },
         },
       });
-
-      //add owner_id column referencing resident table
-      await queryInterface.addColumn("households", "owner_id", {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: "Residents",
-          key: "id",
-        },
-        onUpdate: "CASCADE",
-        onDelete: "SET NULL",
-      });
     } catch (error) {
       console.log(error);
     }

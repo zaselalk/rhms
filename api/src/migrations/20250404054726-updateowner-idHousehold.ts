@@ -7,15 +7,9 @@ module.exports = {
   async up(queryInterface: QueryInterface) {
     // add owner_id column referencing resident table
     try {
-      await queryInterface.addColumn("Household", "owner_id", {
+      await queryInterface.addColumn("households", "owner_id", {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-          model: "Residents",
-          key: "id",
-        },
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
       });
     } catch (error) {
       console.log(error);
@@ -24,7 +18,7 @@ module.exports = {
 
   async down(queryInterface: QueryInterface) {
     try {
-      await queryInterface.removeColumn("Household", "owner_id");
+      await queryInterface.removeColumn("households", "owner_id");
     } catch (error) {
       console.log(error);
     }
