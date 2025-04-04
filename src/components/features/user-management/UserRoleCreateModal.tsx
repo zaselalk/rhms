@@ -1,191 +1,139 @@
-import React, { FC } from 'react'
+import { FC, useRef } from 'react'
 import Modal from '../../layouts/overlays/Modal'
 import { PermissionCard } from './role-management/PermissionCard';
+import { useMutation } from '@tanstack/react-query';
+import { message } from 'antd';
+import AuthServices from '../../../services/auth.service';
+import { Formik, Form, Field, FormikHelpers } from 'formik';
+
+import * as Yup from 'yup';
 
 interface UserRoleCreateModalProps {
     isCreateNewRole: boolean;
     setIsCreateNewRole: (isOpen: boolean) => void;
 }
 
+const RoleSchema = Yup.object().shape({
+    roleName: Yup.string().matches(/^[A-Za-z]+$/, 'Role name can only contain letters').required('Role name is required'),
+    permissionList: Yup.array().min(1, 'Select at least one permission'),
+});
+
 export const UserRoleCreateModal: FC<UserRoleCreateModalProps> = ({ isCreateNewRole, setIsCreateNewRole }) => {
-    const [permisionList, setPermissionList] = React.useState([]);
-    const [roleName, setRoleName] = React.useState('');
+    const formikHelpersRef = useRef<FormikHelpers<{ roleName: string, permissionList: string[] }> | null>(null);
 
-    const handlePermissionSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { id: permission, checked } = e.target;
-        setPermissionList((prev: any) => {
-            if (checked) {
-                return [...prev, permission]
-            }
-            return prev.filter((perm: any) => perm !== permission)
+    const [messageApi, contextHolder] = message.useMessage();
+    const Auth = new AuthServices();
 
-        })
-    }
+    const mutation = useMutation({
+        mutationFn: async ({ roleName, permissionList }: { roleName: string, permissionList: string[] }) => {
+            await Auth.crateUserRole(roleName, permissionList);
+        },
+        onSuccess: () => {
+            messageApi.open({
+                type: 'success',
+                content: "New User Role Created!",
+            });
+            // setIsCreateNewRole(false);
 
-    const handleRoleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { value } = e.target;
-        setRoleName(value);
-    }
+            //reset form
+            formikHelpersRef.current?.resetForm();
+
+        },
+        onError: (error: any) => {
+            messageApi.open({
+                type: 'error',
+                content: error.message,
+            });
+        }
+    });
+
+    const allPermissions = [
+        { group: 'User', perms: ['user:create', 'user:edit', 'user:delete', 'user:view'] },
+        { group: 'Role', perms: ['role:create', 'role:edit', 'role:delete', 'role:view'] },
+        { group: 'Clinic', perms: ['clinic:create', 'clinic:edit', 'clinic:delete', 'clinic:view'] },
+        { group: 'Disease', perms: ['disease:create', 'disease:edit', 'disease:delete', 'disease:view'] },
+        { group: 'Division', perms: ['division:create', 'division:edit', 'division:delete', 'division:view'] },
+        { group: 'HouseHold', perms: ['household:create', 'household:edit', 'household:delete', 'household:view'] },
+        { group: 'Resident', perms: ['resident:create', 'resident:edit', 'resident:delete', 'resident:view'] },
+    ];
 
     return (
-        <Modal title='Create New Role' isOpen={isCreateNewRole} handleClose={() => setIsCreateNewRole(false)} >
-            <div className="bg-white px-20 py-10 rounded-lg shadow-md">
+        <Modal title='Create New Role' isOpen={isCreateNewRole} handleClose={() => setIsCreateNewRole(false)}>
+            <div className="bg-white px-10 py-8 rounded-lg shadow-md">
+                {contextHolder}
 
-                <form className="mt-4">
-                    <div className="mb-4">
-                        <label htmlFor="roleName" className="block text-sm font-medium text-gray-700">Role Name</label>
-                        <input type="text" onChange={handleRoleNameChange} id="roleName" className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-[#008FFB] focus:border-[#008FFB] p-2" required />
-                    </div>
-                    <div className=" mb-4 align-top justify-around">
-                        <label htmlFor="roleName" className="block text-sm font-medium text-gray-700">Permission</label>
+                <Formik
+                    initialValues={{ roleName: '', permissionList: [] as string[] }}
+                    validationSchema={RoleSchema}
+                    onSubmit={(values, helpers) => {
+                        mutation.mutate(values);
+                        formikHelpersRef.current = helpers;
+                    }
 
-                        <div className="flex gap-4">
-                            <PermissionCard title='User'>
-                                <li>
-                                    <input type="checkbox" id="user:create" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="user:create">Create</label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="user:edit" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="user:edit">Edit</label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="user:delete" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="user:delete">Delete</label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="user:view" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="user:view">View</label>
-                                </li>
-                            </PermissionCard>
+                    }
+                >
+                    {({ values, handleSubmit, errors, touched, setFieldValue }) => (
+                        <Form onSubmit={handleSubmit}>
+                            <div className="mb-4">
+                                <label htmlFor="roleName" className="block text-sm font-medium text-gray-700">Role Name</label>
+                                <Field
+                                    type="text"
+                                    name="roleName"
+                                    id="roleName"
+                                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-[#008FFB] focus:border-[#008FFB] p-2"
+                                />
+                                {errors.roleName && touched.roleName && (
+                                    <div className="text-red-500 text-sm mt-1">{errors.roleName}</div>
+                                )}
+                            </div>
 
-                            <PermissionCard title='Role'>
-                                <li>
-                                    <input type="checkbox" id="role:create" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="role:create">Create</label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="role:edit" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="role:edit">Edit</label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="role:delete" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="role:delete">Delete</label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="role:view" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="role:view">View</label>
-                                </li>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700">Permissions</label>
+                                <div className="flex flex-wrap gap-4">
+                                    {allPermissions.map(({ group, perms }) => (
+                                        <PermissionCard key={group} title={group}>
+                                            {perms.map((perm) => (
+                                                <li key={perm}>
+                                                    <label>
+                                                        <input
+                                                            type="checkbox"
+                                                            name="permissionList"
+                                                            value={perm}
+                                                            checked={values.permissionList.includes(perm)}
+                                                            onChange={(e) => {
+                                                                const checked = e.target.checked;
+                                                                if (checked) {
+                                                                    setFieldValue('permissionList', [...values.permissionList, perm]);
+                                                                } else {
+                                                                    setFieldValue(
+                                                                        'permissionList',
+                                                                        values.permissionList.filter((item) => item !== perm)
+                                                                    );
+                                                                }
+                                                            }}
+                                                            className="mr-2"
+                                                        />
 
-                            </PermissionCard>
+                                                        {perm.split(':')[1]}
+                                                    </label>
+                                                </li>
+                                            ))}
+                                        </PermissionCard>
+                                    ))}
+                                </div>
+                                {errors.permissionList && touched.permissionList && (
+                                    <div className="text-red-500 text-sm mt-1">{errors.permissionList}</div>
+                                )}
+                            </div>
 
-                            <PermissionCard title="Clinic">
-                                <li>
-                                    <input type="checkbox" id="clinic:create" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="clinic:create">Create</label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="clinic:edit" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="clinic:edit">Edit</label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="clinic:delete" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="clinic:delete">Delete</label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="clinic:view" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="clinic:view">View</label>
-                                </li>
-                            </PermissionCard>
-
-                            <PermissionCard title="Disease">
-                                <li>
-                                    <input type="checkbox" id="disease:create" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="disease:create">Create</label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="disease:edit" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="disease:edit">Edit</label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="disease:delete" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="disease:delete">Delete</label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="disease:view" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="disease:view">View</label>
-                                </li>
-                            </PermissionCard>
-
-                            <PermissionCard title="Division">
-                                <li>
-                                    <input type="checkbox" id="division:create" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="division:create">Create </label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="division:edit" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="division:edit">Edit</label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="division:delete" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="division:delete">Delete</label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="division:view" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="division:view">View</label>
-                                </li>
-                            </PermissionCard>
-
-                            <PermissionCard title="HouseHold">
-                                <li>
-                                    <input type="checkbox" id="household:create" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="household:create">Create </label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="household:edit" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="household:edit">Edit </label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="household:delete" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="household:delete">Delete </label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="household:view" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="household:view">View </label>
-                                </li>
-                            </PermissionCard>
-
-                            <PermissionCard title="Resident">
-                                <li>
-                                    <input type="checkbox" id="resident:create" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="resident:create">Create </label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="resident:edit" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="resident:edit">Edit</label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="resident:delete" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="resident:delete">Delete</label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="resident:view" className="mr-2" onChange={handlePermissionSelect} />
-                                    <label htmlFor="resident:view">View</label>
-                                </li>
-                            </PermissionCard>
-
-                        </div>
-
-
-
-                    </div>
-
-                    <div className="flex gap-2">
-                        <button type="reset" className="w-full bg-red-400 text-white py-2 px-4 rounded-md ">Clear </button>
-                        <button type="submit" className="w-full bg-[#008FFB] text-white py-2 px-4 rounded-md hover:bg-[#00C1A7]">Create Role</button>
-                    </div>
-                </form>
-            </div >
-        </Modal >
-    )
+                            <div className="flex gap-2">
+                                <button type="reset" className="w-full bg-red-400 text-white py-2 px-4 rounded-md">Clear</button>
+                                <button type="submit" className="w-full bg-[#008FFB] text-white py-2 px-4 rounded-md hover:bg-[#00C1A7]">Create Role</button>
+                            </div>
+                        </Form>
+                    )}
+                </Formik>
+            </div>
+        </Modal>
+    );
 }

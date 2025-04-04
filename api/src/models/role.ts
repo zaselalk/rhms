@@ -1,41 +1,65 @@
 "use strict";
 
-import { Model, DataTypes, Sequelize } from "sequelize";
+import {
+  Model,
+  DataTypes,
+  BelongsToManyAddAssociationMixin,
+  BelongsToManyHasAssociationMixin,
+} from "sequelize";
+import sequelize from ".";
+import Permission from "./permission";
 interface RoleAttributes {
   id?: number;
   role: string;
+  permission: String;
 }
 
 export class Role extends Model<RoleAttributes> implements RoleAttributes {
   public id!: number;
   public role!: string;
+  public permission!: String;
+
+  //delcart association methods
+  public addPermission!: BelongsToManyAddAssociationMixin<Permission, any>;
+  public hasPermission!: BelongsToManyHasAssociationMixin<Permission, any>;
+
+  static associate(models: any) {
+    // define association here
+    Role.belongsToMany(models.Permission, {
+      through: "PermissionRole",
+    });
+  }
 }
 
-export default (sequelize: Sequelize) => {
-  // role has many-to-many relationship with permission through permission_role
-
-  Role.init(
-    {
-      id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-      },
-      role: {
-        type: DataTypes.STRING,
-        validate: {
-          notEmpty: {
-            msg: "Role cannot be empty",
-          },
+Role.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    role: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: "Role cannot be empty",
         },
       },
     },
-    {
-      sequelize,
-      modelName: "Role",
-      tableName: "roles",
-    }
-  );
+    permission: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: "Permissions cannot be empty",
+        },
+      },
+    },
+  },
+  {
+    sequelize,
+    modelName: "Role",
+    tableName: "roles",
+  }
+);
 
-  return Role;
-};
+export default Role;

@@ -1,3 +1,4 @@
+import Permission from "../models/permission";
 import { PermissionRole } from "../models/permission-role";
 import { Role } from "../models/role";
 
@@ -15,14 +16,23 @@ export class RoleRepository {
     return Role.findByPk(id);
   }
 
+  async findPermissionByName(permissionName: string) {
+    return Permission.findOne({
+      where: {
+        permission: permissionName,
+      },
+    });
+  }
+
   /**
    * Create a new role
    * @param roleData
    * @returns
    */
-  async create(roleName: roleCreateAttributes): Promise<Role> {
+  async create(roleName: string, permissions: string[]): Promise<Role> {
     return Role.create({
-      role: roleName.role,
+      role: roleName,
+      permission: JSON.stringify(permissions),
     });
   }
 
@@ -37,10 +47,20 @@ export class RoleRepository {
     role: Role,
     permission: PermissionRole
   ): Promise<Role | null> {
-    await PermissionRole.create({
-      roleId: role,
-      permissionId: PermissionRole,
+    // Find the role by id
+    const foundRole = await Role.findByPk(role.id, {
+      include: PermissionRole,
     });
+    if (!foundRole) {
+      return null;
+    }
+    // Check if the permission already exists in the role
+    const permissionExists = await foundRole.hasPermission(permission);
+    if (permissionExists) {
+      return foundRole;
+    }
+    // Add the permission to the role
+    await foundRole.addPermission(permission);
 
     return role;
   }
