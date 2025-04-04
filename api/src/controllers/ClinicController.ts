@@ -1,7 +1,15 @@
 import { Request, Response } from "express";
 import { Clinic } from "../models/clinic"; // Import Clinic model
+import { ClinicService } from "../services/ClinicService";
+import { promises } from "dns";
 
 class ClinicController {
+  private clinicService:ClinicService; // Define the type of clinicRepository
+
+  constructor() {
+    this.clinicService = new ClinicService(); // Initialize the clinicService
+  }
+
   // Ping function to check if the controller is active
   ping(req: Request, res: Response): Promise<Response> {
     return new Promise((resolve) => {
@@ -9,82 +17,57 @@ class ClinicController {
     });
   }
 
-  // Create a new clinic
-  async create(req: Request, res: Response): Promise<Response> {
-    const { id, name, patient_count, category } = req.body;
-
-    try {
-      const clinic = await Clinic.create({ id, name, patient_count, category });
-      return res.status(201).json(clinic);  // Return the created clinic with a 201 status
-    } catch (error) {
-      return res.status(500).json({ error: "Failed to create clinic", details: error });
-    }
+  // Function to create a new clinic
+  createClinic =async(req:Request,res:Response):Promise<Response | void> => {
+    const { name } = req.body; 
+    const clinic = await this.clinicService.createClinic(name); // Call the service to create a clinic
+    return res.status(201).json(clinic); // Return the created clinic with a 201 status code
+  };
+  //  // Get all clinics
+   getAllClinics = async (req: Request, res: Response): Promise<Response> => {
+    const clinics = await this.clinicService.getAllClinics();
+    return res.json(clinics);
   }
 
-  // Retrieve all clinics
-  async getAll(req: Request, res: Response): Promise<Response> {
-    try {
-      const clinics = await Clinic.findAll();  // Fetch all clinics from the database
-      return res.json(clinics);
-    } catch (error) {
-      return res.status(500).json({ error: "Failed to fetch clinics", details: error });
-    }
-  }
+  // // Get a clinic by ID
+  // getClinicById = async (req: Request, res: Response): Promise<Response> => {
+  //   const id = Number(req.params.id);
+  //   const clinic = await this.clinicService.getClinicById(id);
+  // }
 
-  // Retrieve a specific clinic by ID
-  async getById(req: Request, res: Response): Promise<Response> {
-    const { id } = req.params;
+  //   if (!clinic) {
+  //     return res.status(404).json({ message: "Clinic not found" });
+  //   }
 
-    try {
-      const clinic = await Clinic.findByPk(id);  // Find clinic by primary key (ID)
-      if (!clinic) {
-        return res.status(404).json({ error: "Clinic not found" });
-      }
-      return res.json(clinic);
-    } catch (error) {
-      return res.status(500).json({ error: "Failed to fetch clinic", details: error });
-    }
-  }
+  //   return res.json(clinic);
+  // };
 
-  // Update an existing clinic by ID
-  async update(req: Request, res: Response): Promise<Response> {
-    const { id } = req.params;
-    const { name, patient_count, category } = req.body;
+  // // Update a clinic
+  // updateClinic = async (req: Request, res: Response): Promise<Response> => {
+  //   const id = Number(req.params.id);
+  //   const updatedData = req.body;
 
-    try {
-      const clinic = await Clinic.findByPk(id);
-      if (!clinic) {
-        return res.status(404).json({ error: "Clinic not found" });
-      }
+  //   const updatedClinic = await this.clinicService.updateClinic(id, updatedData);
+  //   if (!updatedClinic) {
+  //     return res.status(404).json({ message: "Clinic not found" });
+  //   }
 
-      // Update clinic fields
-      clinic.name = name || clinic.name;
-      clinic.patient_count = patient_count || clinic.patient_count;
-      clinic.category = category || clinic.category;
+  //   return res.json(updatedClinic);
+  // };
 
-      await clinic.save();  // Save the updated clinic
-      return res.json(clinic);
-    } catch (error) {
-      return res.status(500).json({ error: "Failed to update clinic", details: error });
-    }
-  }
+  // // Delete a clinic
+  // deleteClinic = async (req: Request, res: Response): Promise<Response> => {
+  //   const id = Number(req.params.id);
+  //   const success = await this.clinicService.deleteClinic(id);
 
-  // Delete a clinic by ID
-  async delete(req: Request, res: Response): Promise<Response> {
-    const { id } = req.params;
+  //   if (!success) {
+  //     return res.status(404).json({ message: "Clinic not found" });
+  //   }
 
-    try {
-      const clinic = await Clinic.findByPk(id);
-      if (!clinic) {
-        return res.status(404).json({ error: "Clinic not found" });
-      }
-
-      await clinic.destroy();  // Delete the clinic
-      return res.json({ message: `Clinic with ID ${id} deleted successfully` });
-    } catch (error) {
-      return res.status(500).json({ error: "Failed to delete clinic", details: error });
-    }
-  }
+  //   return res.status(204).send();
+  // };
 }
+
+
 
 export default ClinicController;

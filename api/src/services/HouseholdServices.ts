@@ -16,30 +16,52 @@ export class HouseholdServices {
   }
 
   async registerHousehold(
-    houseid: number,
-    password: string,
-    houseowner: string,
+    house_no: string,
     grama_division: string,
-    income_range: number,
-    location: string,
-    familyMember: number
+    longitude: string,
+    latitude: string,
+    owner_id?: number
+
   ): Promise<Household> {
-    const excitingHousehold = await this.householdRepository.findByHouseid(houseid);
-    if (excitingHousehold) throw new HouseholdNotFoundException("Household ID already in use");
+    // const excitingHousehold = await this.householdRepository.findByHouseno(house_no);
+    // if (excitingHousehold) throw new HouseholdNotFoundException("Household ID already in use");
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    return this.householdRepository.createHousehold(houseid, hashedPassword, houseowner, grama_division, income_range, location, familyMember);
+   
+    return this.householdRepository.createHousehold(house_no, grama_division, longitude, latitude, owner_id);
   }
 
-  async loginHousehold(houseid: number, password: string): Promise<Household> {
-    const household = await this.householdRepository.findByHouseid(houseid);
-    if (!household) throw new ValidationException("Invalid username or password");
+  // // READ
+  // async getHouseholdDetails(id: number): Promise<{ house_no: string; grama_division: string; owner_name: string }> {
+  //   const household = await this.householdRepository.findByIdWithOwner(id);
+  //   if (!household) {
+  //     throw new HouseholdNotFoundException(`Household with ID ${id} not found.`);
+  //   }
 
-    const isPasswordValid = await bcrypt.compare(password, household.password);
+  //   return {
+  //     house_no: household.house_no,
+  //     grama_division: household.grama_division,
+  //     owner_name: household.owner.name,
+  //   };
+  // }
 
-    //why - https://security.stackexchange.com/questions/17816/username-and-or-password-invalid-why-do-websites-show-this-kind-of-message-i
-    if (!isPasswordValid) throw new Error("Invalid username or password");
+  // // UPDATE OWNER
+  // async updateOwner(id: number, new_owner_id: number): Promise<Household> {
+  //   const household = await this.householdRepository.findById(id);
+  //   if (!household) {
+  //     throw new HouseholdNotFoundException(`Household with ID ${id} not found.`);
+  //   }
 
-    return household;
-  }
+  //   return this.householdRepository.updateOwner(id, new_owner_id);
+  // }
+
+  // // DELETE
+  // async deleteHousehold(house_no: string): Promise<Household> {
+  //   const existing = await this.householdRepository.findByHouseno(house_no);
+  //   if (!existing) {
+  //     throw new HouseholdNotFoundException(`No household found with house number ${house_no}`);
+  //   }
+
+  //   return this.householdRepository.deleteByHouseNo(house_no);
+  // }
+
 }

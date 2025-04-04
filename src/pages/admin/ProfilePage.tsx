@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
 import { Input, message, Select } from 'antd';
-import { Button } from '../../components/Common/Button';
+import { Button } from '../../components/common/Button';
 
 const ProfilePage: FC = () => {
     const [user, setUser] = useState({
