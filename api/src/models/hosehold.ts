@@ -84,20 +84,17 @@ Household.init(
     modelName: "household",
     tableName: "households",
     timestamps: true,
+    engine: "InnoDB",
   }
 );
+// Define the association
+Household.hasMany(Resident, {
+  foreignKey: "household_id",
+  as: "residents",
+});
+Resident.belongsTo(Household, {
+  foreignKey: "household_id",
+  as: "household",
+});
 
-// Associations
-Household.belongsTo(Resident, {
-  foreignKey: "owner_id",
-  as: "owner",
-  onDelete: "SET NULL",
-  onUpdate: "CASCADE",
-});
-Resident.hasMany(Household, {
-  foreignKey: "owner_id",
-  as: "households",
-  onDelete: "SET NULL",
-  onUpdate: "CASCADE",
-});
 export default Household;

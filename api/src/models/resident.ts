@@ -144,6 +144,7 @@ Resident.init(
     sequelize: sequelize,
     modelName: "Resident",
     tableName: "residents",
+    engine:"InnoDB"
   }
 
 );
