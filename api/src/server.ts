@@ -11,6 +11,7 @@ import HouseholdRouter from "./routes/hosehold.routes";
 import ClinicRouter from "./routes/clinic.routes";
 import PermissionRouter from "./routes/permission.routes";
 import RoleRouter from "./routes/role.routes";
+import UserRouter from "./routes/user.routes";
 
 dotenv.config();
 
@@ -41,6 +42,7 @@ app.use("/household", HouseholdRouter);
 app.use("/clinic", ClinicRouter);
 app.use("/permission", PermissionRouter);
 app.use("/role", RoleRouter);
+app.use("/user", UserRouter);
 
 app.listen(PORT, async () => {
   sequelize.sync();

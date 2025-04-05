@@ -1,7 +1,10 @@
 import { FC, useEffect, useState } from 'react';
-import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Table, Button, Modal, Space, Typography, message } from 'antd';
+import { PlusOutlined, EditOutlined, DeleteOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Table, Button, Modal, Space, Typography, message, Spin } from 'antd';
 import { UserCreateModal } from './UserCreateModal';
+import { useQuery } from '@tanstack/react-query';
+import UserService from '../../../services/user.service';
+import { useRoles } from '../../../hooks/useRoles';
 
 const { Title } = Typography;
 
@@ -15,31 +18,25 @@ interface UserListProps {
 }
 
 export const UserList: FC<UserListProps> = ({ setUserCount }) => {
+    const userService: UserService = new UserService();
     const [isCreateUserOpen, setIsCreateUserOpen] = useState(false);
     const [editingUserIndex, setEditingUserIndex] = useState<number | null>(null);
 
-    const [userList, setUserList] = useState<User[]>([
-        { name: "Asela Priyadarshana", role: "Surgeon" },
-        { name: "Nimasha Jayasinghe", role: "Pediatrician" },
-        { name: "Ravindu Madushanka", role: "Radiologist" },
-        { name: "Dilukshi Perera", role: "Lab Technician" },
-        { name: "Tharindu Silva", role: "Pharmacist" },
-        { name: "Sanduni Weerasinghe", role: "Matron" },
-        { name: "Chamika Fernando", role: "Medical Officer" },
-        { name: "Isuru Rathnayake", role: "Emergency Responder" },
-        { name: "Shanali Gunasekara", role: "Physiotherapist" },
-        { name: "Malith Gamage", role: "Biomedical Engineer" },
-        { name: "Hiruni Ranasinghe", role: "Receptionist" },
-        { name: "Pasindu Jayalath", role: "Ward Attendant" },
-        { name: "Gayani Dissanayake", role: "Infection Control Nurse" },
-        { name: "Niroshan De Alwis", role: "Anesthesiologist" },
-        { name: "Kavindya Senanayake", role: "Nutritionist" }
-    ]);
+
+    const { data, isLoading, error, refetch } = useQuery({
+        queryKey: ["users"],
+        queryFn: () => userService.getAllUsers(),
+        staleTime: 1000 * 60 * 5 // cache for 5 mins
+    });
+
 
     useEffect(() => {
-        const totalUsers = userList.length;
-        setUserCount(totalUsers);
-    }, [setUserCount, userList]);
+        if (isLoading) return;
+        console.log(data)
+
+        // const totalUsers = userList.length;
+        setUserCount(3);
+    }, [setUserCount, isLoading]);
 
     const roleOptions = [
         "Surgeon",
@@ -101,31 +98,31 @@ export const UserList: FC<UserListProps> = ({ setUserCount }) => {
     };
 
     const handleDelete = (index: number) => {
-        const user = userList[index];
+        // const user = userList[index];
 
 
-        const isconfirm = confirm("Are you sure, you wanna delete ?")
-        if (isconfirm) {
-            setUserList(prev => prev.filter((_, i) => i !== index));
-            message.success('User deleted successfully');
-        } else {
-            message.error('Deletion cancelled');
-        }
+        // const isconfirm = confirm("Are you sure, you wanna delete ?")
+        // if (isconfirm) {
+        //     setUserList(prev => prev.filter((_, i) => i !== index));
+        //     message.success('User deleted successfully');
+        // } else {
+        //     message.error('Deletion cancelled');
+        // }
     };
 
     const handleSave = (user: User) => {
-        if (editingUserIndex !== null) {
-            const updatedList = [...userList];
-            updatedList[editingUserIndex] = user;
-            setUserList(updatedList);
-            message.success('User updated successfully');
-        } else {
-            setUserList(prev => [...prev, user]);
-            message.success('User created successfully');
-        }
+        // if (editingUserIndex !== null) {
+        //     const updatedList = [...userList];
+        //     updatedList[editingUserIndex] = user;
+        //     setUserList(updatedList);
+        //     message.success('User updated successfully');
+        // } else {
+        //     setUserList(prev => [...prev, user]);
+        //     message.success('User created successfully');
+        // }
 
-        setIsCreateUserOpen(false);
-        setEditingUserIndex(null);
+        // setIsCreateUserOpen(false);
+        // setEditingUserIndex(null);
     };
 
     const handleModalClose = () => {
@@ -135,13 +132,13 @@ export const UserList: FC<UserListProps> = ({ setUserCount }) => {
 
     return (
         <>
-            <UserCreateModal
+            {/* <UserCreateModal
                 isOpen={isCreateUserOpen}
                 handleClose={handleModalClose}
                 onSave={handleSave}
                 initialData={editingUserIndex !== null ? userList[editingUserIndex] : null}
-                roles={roleOptions}
-            />
+                roles={roles}
+            /> */}
 
 
 
@@ -160,13 +157,16 @@ export const UserList: FC<UserListProps> = ({ setUserCount }) => {
                             New User
                         </Button>
                     </div>
+                    <Spin spinning={isLoading} fullscreen />
+                    {isLoading && <Spin />}
+                    {error && <p>Error loading users: {error.message}</p>}
 
-                    <Table
-                        dataSource={userList}
+                    {data && (<Table
+                        dataSource={data.data}
                         columns={columns}
                         rowKey={(record) => record.name + record.role}
-                        pagination={{ pageSize: 8 }}
-                    />
+                        pagination={{ pageSize: 10 }}
+                    />)}
                 </div>
             </div>
         </>

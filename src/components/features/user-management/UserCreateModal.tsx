@@ -47,32 +47,36 @@ export const UserCreateModal = ({ isOpen, handleClose, onSave, initialData, role
             okText="Save"
         >
             <Form form={form} layout="vertical">
-                <Form.Item
-                    label="Full Name"
-                    name="name"
-                    rules={[{ required: true, message: 'Please enter full name' }]}
-                >
-                    <Input placeholder="Enter full name" />
-                </Form.Item>
-
-                <Form.Item
-                    label="Role"
-                    name="role"
-                    rules={[{ required: true, message: 'Please select a role' }]}
-                >
-                    <Select
-                        placeholder="Select role"
-                        showSearch
-                        optionFilterProp="children"
-                        allowClear
+                <div className="flex gap-3">
+                    <Form.Item
+                        label="Full Name"
+                        className='w-3/5'
+                        name="name"
+                        rules={[{ required: true, message: 'Please enter full name' }]}
                     >
-                        {roles.map(role => (
-                            <Option key={role} value={role}>
-                                {role}
-                            </Option>
-                        ))}
-                    </Select>
-                </Form.Item>
+                        <Input placeholder="Enter full name" />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Role"
+                        name="role"
+                        className='w-2/5'
+                        rules={[{ required: true, message: 'Please select a role' }]}
+                    >
+                        <Select
+                            placeholder="Select role"
+                            showSearch
+                            optionFilterProp="children"
+                            allowClear
+                        >
+                            {roles.map(role => (
+                                <Option key={role} value={role}>
+                                    {role}
+                                </Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+                </div>
 
                 <Form.Item
                     label="Email"
@@ -81,14 +85,25 @@ export const UserCreateModal = ({ isOpen, handleClose, onSave, initialData, role
                 >
                     <Input placeholder="Enter email" type="email" />
                 </Form.Item>
+                <div className="flex justify-between gap-4">
 
-                <Form.Item
-                    label="Password"
-                    name="password"
-                    rules={[{ required: true, message: 'Please enter password' }]}
-                >
-                    <Input.Password placeholder="Enter password" />
-                </Form.Item>
+                    <Form.Item
+                        label="Password"
+                        name="password"
+                        className='w-full'
+                        rules={[{ required: true, message: 'Please enter password' }]}
+                    >
+                        <Input.Password placeholder="Enter password" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Password"
+                        name="password"
+                        className='w-full'
+                        rules={[{ required: true, message: 'Please enter password' }]}
+                    >
+                        <Input.Password placeholder="Enter password" />
+                    </Form.Item>
+                </div>
 
             </Form>
         </Modal>

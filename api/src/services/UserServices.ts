@@ -26,7 +26,6 @@ export class UserServices {
     // console.log(password);
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log("Generated hash for '1234':", hashedPassword);
     return this.userRepository.createUser(name, email, hashedPassword);
   }
 
@@ -48,4 +47,15 @@ export class UserServices {
       token: token,
     };
   }
+
+  async getAllUsers(page: number, limit: number): Promise<User[]> {
+    const users = await this.userRepository.getAllUsers(page, limit);
+    if (!users) throw new UserNotFoundException("No users found");
+    return users;
+  }
+  // async getUserById(id: number): Promise<User> {
+  //   const user = await this.userRepository.getUserById(id);
+  //   if (!user) throw new UserNotFoundException("User not found");
+  //   return user;
+  // }
 }
