@@ -21,6 +21,7 @@ export class HouseholdRepository {
     owner_id?: number
   ): Promise<Household> {
     return await Household.create({
+      id: 0, // Assuming id is auto-incremented by the database
       house_no,
       grama_division,
       longitude,

@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { Resident } from "../models/resident";
 import { ResidentService } from "../services/ResidentService";
 import { ResidentRepository } from "../repositories/ResidentRepository";
+import { data } from "react-router";
+import { error } from "console";
 
 class ResidentController {
   private residentService: ResidentService;
@@ -12,7 +14,11 @@ class ResidentController {
   }
 
   residentPing = async (req: Request, res: Response): Promise<Response | void> => {
-    return res.json({ message: "Resident ping" });
+    return res.json({
+      message: "Resident ping"
+
+
+    });
   }
 
   residentRegister = async (req: Request, res: Response): Promise<Response | void> => {
@@ -62,60 +68,125 @@ class ResidentController {
       weight
     );
 
-    return res.json(resident);
+    return res.json({
+      message: "Resident registered successfully",
+      status: 200,
+      error: null,
+      data: resident
+    });
   }
 
   residentfindByNic = async (req: Request, res: Response): Promise<Response | void> => {
     const { nic } = req.params;
     const resident = await this.residentService.findByNic(nic);
     if (!resident) {
-      return res.status(404).json({ message: "Resident not found" });
+      return res.status(404).json({
+        message: null,
+        status: 404,
+        error: "Resident not found",
+        data: null
+      });
     }
-    return res.json(resident);
+    return res.json({
+      message: "Resident found",
+      status: 200,
+      error: null,
+      data: resident
+    }
+    );
   }
 
   residentfindById = async (req: Request, res: Response): Promise<Response | void> => {
     const { id } = req.params;
     const resident = await this.residentService.findById(Number(id));
     if (!resident) {
-      return res.status(404).json({ message: "Resident not found" });
+      return res.status(404).json({
+        message: null,
+        status: 404,
+        error: "Resident not found",
+        data: null
+      });
     }
-    return res.json(resident);
+    return res.json({
+      message: "Resident found",
+      status: 200,
+      error: null,
+      data: resident
+    }
+    );
   }
 
   getAllResident = async (req: Request, res: Response): Promise<Response | void> => {
 
     const residents = await this.residentService.getAllResident();
     if (!residents) {
-      return res.status(404).json({ message: "Resident not found" });
+      return res.status(404).json({
+        message: null,
+        status: 404,
+        error: "Resident not found",
+        data: null
+      });
     } else {
-      res.status(200).json(residents);
+      res.status(200).json(
+        {
+          message: "Resident found",
+          status: 200,
+          error: null,
+          data: residents
+        }
+      );
     }
-
   }
 
   updateResident = async (req: Request, res: Response): Promise<Response | void> => {
     try {
-        const id = Number(req.params.id);
-        if (isNaN(id)) {
-            return res.status(400).json({ message: "Invalid ID provided" });
-        }
+      const id = Number(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({
+          message: null,
+          status: 400,
+          error: "Resident Not Found",
+          data: null
+        });
+      }
 
-        const updateData = req.body;
-        if (Object.keys(updateData).length === 0) {
-            return res.status(400).json({ message: "No update data provided" });
-        }
+      const updateData = req.body;
+      if (Object.keys(updateData).length === 0) {
+        return res.status(400).json({
+          message: null,
+          status: 400,
+          error: "No update data provided",
+          data: null
 
-        const updatedResident = await this.residentService.updateResident(id, updateData);
+        });
+      }
 
-        if (!updatedResident) {
-            return res.status(404).json({ message: "Resident not found" });
-        }
+      const updatedResident = await this.residentService.updateResident(id, updateData);
 
-        return res.json({ message: "Resident updated successfully", resident: updatedResident });
+      if (!updatedResident) {
+        return res.status(404).json({
+          message: null,
+          status: 404,
+          error: "Not Update",
+          data: null
+
+        });
+      }
+      return res.json({
+        message: "Resident updated successfully",
+        status: 200,
+        error: null,
+        data: updatedResident
+      });
     } catch (error) {
-        console.error("Update Error:", error);
-        return res.status(500).json({ message: "Error updating resident"});
+      console.error("Update Error:", error);
+      return res.status(500).json({
+        message: null,
+        status: 500,
+        error: "Error updating resident",
+        data: null
+
+      });
     }
 
   }
@@ -123,23 +194,43 @@ class ResidentController {
 
   deleteResidentById = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const id = Number(req.params.id);
-        if (isNaN(id)) {
-            return res.status(400).json({ message: "Invalid ID provided" });
-        }
+      const id = Number(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({
+          message: null,
+          status: 400,
+          error: "Invalid ID provided",
+          data: null
+        });
+      }
 
-        const deleted = await this.residentService.deleteResident(id);
+      const deleted = await this.residentService.deleteResident(id);
 
-        if (!deleted) {
-            return res.status(404).json({ message: "Resident not found" });
-        }
+      if (!deleted) {
+        return res.status(404).json({
+          message: null,
+          status: 404,
+          error: "Resident not found",
+          data: null
+        });
+      }
 
-        return res.json({ message: "Resident deleted successfully" });
+      return res.json({
+        message: "Resident deleted successfully",
+        status: 200,
+        error: null,
+        data: deleted
+      });
     } catch (error) {
-        console.error("Delete Error:", error);
-        return res.status(500).json({ message: "Error deleting resident"});
+
+      return res.status(500).json({
+        message: null,
+        status: 500,
+        error: "Error deleting resident",
+        data: null
+      });
     }
-};
+  };
 
 
 }

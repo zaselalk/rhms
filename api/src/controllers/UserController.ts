@@ -27,4 +27,20 @@ export class UserController {
     const user = await this.userService.loginUser(email, password);
     return res.status(200).json({ message: "Login successful", user });
   };
+
+  getAllUsers = async (req: Request, res: Response): Promise<Response> => {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+
+    const users = await this.userService.getAllUsers(page, limit);
+
+    if (!users) throw new Error("No users found");
+    return res.status(200).json({
+      message: "Users fetched successfully",
+      status: 200,
+      page: page,
+      limit: limit,
+      data: users,
+    });
+  };
 }
