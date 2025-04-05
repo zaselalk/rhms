@@ -2,7 +2,6 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from ".";
 import { J } from "react-router/dist/development/route-data-H2S3hwhf";
-import Household from "./hosehold";
 
 interface ResidentAttributes {
   id?: number;
@@ -31,6 +30,7 @@ interface ResidentAttributes {
 export class Resident
   extends Model<ResidentAttributes>
   implements ResidentAttributes {
+  public id?: number;
   public firstName!: string;
   public lastName!: string;
   public email!: string;
@@ -56,6 +56,12 @@ export class Resident
 
 Resident.init(
   {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false,
+    },
     firstName: {
       type: DataTypes.STRING,
       validate: {
@@ -141,13 +147,5 @@ Resident.init(
   }
 
 );
-
-  // Resident.hasMany(Household,{
-  //   foreignKey: "owner_id",
-  //   as: "households",
-  //   onDelete: "SET NULL",
-  // })
-
-
 
 export default Resident;

@@ -87,6 +87,17 @@ Household.init(
   }
 );
 
-Household.belongsTo(Resident, { foreignKey: "owner_id", as: "owner" });
-
+// Associations
+Household.belongsTo(Resident, {
+  foreignKey: "owner_id",
+  as: "owner",
+  onDelete: "SET NULL",
+  onUpdate: "CASCADE",
+});
+Resident.hasMany(Household, {
+  foreignKey: "owner_id",
+  as: "households",
+  onDelete: "SET NULL",
+  onUpdate: "CASCADE",
+});
 export default Household;
