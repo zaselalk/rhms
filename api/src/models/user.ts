@@ -7,11 +7,13 @@ import jwt from "jsonwebtoken";
   Extra properties like id, createdAt, and updatedAt are added by default
   Note: id not defined here, as it is added by default
 */
-interface UserAttributes {
+export interface UserAttributes {
   name: string;
   email: string;
   password?: string;
   roleId?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 /**
@@ -24,6 +26,8 @@ export class User extends Model<UserAttributes> implements UserAttributes {
   public email!: string;
   public password!: string;
   public roleId!: number;
+  public createdAt!: Date;
+  public updatedAt!: Date;
 
   //association
   static associate(models: any) {
