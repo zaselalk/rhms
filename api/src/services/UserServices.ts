@@ -10,6 +10,7 @@ interface LoginUser {
   name: string;
   email: string;
   token: string;
+  role: string | null;
 }
 
 export class UserServices {
@@ -45,6 +46,7 @@ export class UserServices {
       name: user.name,
       email: user.email,
       token: token,
+      role: user.role || null,
     };
   }
 

@@ -1,5 +1,8 @@
-import Role from "../models/role";
-import User from "../models/user";
+import { Role, User } from "../models";
+
+interface LoginUser extends User {
+  role?: string;
+}
 
 export class UserRepository {
   async createUser(
@@ -14,11 +17,19 @@ export class UserRepository {
     });
   }
 
-  async findByEmail(email: string): Promise<User | null> {
+  async findByEmail(email: string): Promise<LoginUser | null> {
     return User.findOne({
       where: {
         email,
       },
+      attributes: ["id", "name", "email", "password"],
+      include: [
+        {
+          model: Role,
+          as: "role",
+          attributes: ["id", "role"],
+        },
+      ],
     });
   }
 
