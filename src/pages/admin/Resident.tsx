@@ -1,22 +1,49 @@
 import { Link } from "react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 
-const residents = [
-  { id: "01", name: "Kasun Perera", contact: "0712233445" },
-  { id: "02", name: "Tharushi Fernando", contact: "0723344556" },
-  { id: "03", name: "Lahiru Jayawardena", contact: "0754455667" },
-  { id: "04", name: "Anusha Rajapaksha", contact: "0775566778" },
-  { id: "05", name: "Nimal Bandara", contact: "0706677889" },
-  { id: "06", name: "Chamari Silva", contact: "0717788990" },
-  { id: "07", name: "Dineth Gunawardana", contact: "0728899001" },
-  { id: "08", name: "Isuru Rathnayaka", contact: "0759900112" },
-  { id: "09", name: "Ruvini Dissanayake", contact: "0770011223" },
-  { id: "10", name: "Sanjeewa Wijesinghe", contact: "0701122334" },
-];
+
 
 const ResidentListPage = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [residents2, setResidents] = useState<{
+     id: string; firstName: string; lastName: string ,contactNumber:String,address:string
+    
+    }[]>([]);
+
+
+
+  const fetchResidents = async () => {
+    console.log("click")
+    try {
+      // console.log("Send");
+      const response = await fetch("http://localhost:3001/resident", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const redata = await response.json();
+      // console.log(redata.data);
+      setResidents(redata.data);
+      console.log(residents2);
+
+
+
+    } catch (error) {
+      console.error("Error fetching residents:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchResidents();
+  }, []);
+
+
+
 
   return (
     <DashboardContainer>
@@ -28,6 +55,7 @@ const ResidentListPage = () => {
           </div>
 
 
+
           {/* Add Resident Button (Right-Aligned) */}
           <div className="flex justify-end mb-6">
             <Link to="create">
@@ -35,6 +63,7 @@ const ResidentListPage = () => {
                 Add Resident
               </button>
             </Link>
+
           </div>
 
           {/* Search Bar */}
@@ -56,32 +85,34 @@ const ResidentListPage = () => {
         <div className="bg-white shadow-lg rounded-lg p-4">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="bg-gray-200 text-left">
+              <tr className="bg-gray-50 text-center">
                 <th className="p-3">ID</th>
                 <th className="p-3">Name</th>
                 <th className="p-3">Contact</th>
-                <th className="p-3">Action</th>
+                <th className="p-3">Address</th>
+                <th className="p-3"></th>
               </tr>
             </thead>
             <tbody>
-              {residents
-                .filter((item) => {
-                  if (searchKeyword === "") return item;
+              {residents2
+                .filter((resident) => {
+                  const fullName = `${resident.firstName} ${resident.lastName}`;
                   return (
-                    item.name.toLowerCase().includes(searchKeyword.toLowerCase()) ||
-                    item.id.toLowerCase().includes(searchKeyword.toLowerCase()) ||
-                    item.contact.toLowerCase().includes(searchKeyword.toLowerCase())
+                    fullName.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+                    resident.id.toString().includes(searchKeyword)
                   );
                 })
                 .map((resident) => (
-                  <tr key={resident.id} className=" hover:bg-gray-100">
+                  <tr key={resident.id} className=" hover:bg-gray-100 text-center">
                     <td className="p-3">{resident.id}</td>
-                    <td className="p-3">{resident.name}</td>
-                    <td className="p-3">{resident.contact}</td>
+                    <td className="p-3">{resident.firstName} {resident.lastName}</td>
+                    <td className="p-3">{resident.contactNumber}</td>
+                    <td className="p-3">{resident.address}</td>
+
                     <td className="p-3">
                       <Link
                         to={`profile/${resident.id}`}
-                        className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+                        className="text-blue-600"
                       >
                         View
                       </Link>
