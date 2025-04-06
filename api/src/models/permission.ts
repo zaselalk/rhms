@@ -1,7 +1,7 @@
 "use strict";
 
 import { Model, DataTypes, Sequelize } from "sequelize";
-import sequelize from ".";
+import sequelize from "./sequelize";
 
 interface PermissionAttributes {
   id: number;
