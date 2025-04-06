@@ -27,45 +27,45 @@ class ClinicController {
    getAllClinics = async (req: Request, res: Response): Promise<Response> => {
     const clinics = await this.clinicService.getAllClinics();
     return res.json(clinics);
-  }
+  };
 
   // // Get a clinic by ID
-  // getClinicById = async (req: Request, res: Response): Promise<Response> => {
-  //   const id = Number(req.params.id);
-  //   const clinic = await this.clinicService.getClinicById(id);
-  // }
+  getClinicById = async (req: Request, res: Response): Promise<Response> => {
+    const id = Number(req.params.id);
+    const clinic = await this.clinicService.getClinicById(id);
 
-  //   if (!clinic) {
-  //     return res.status(404).json({ message: "Clinic not found" });
-  //   }
+    if (!clinic) {
+      return res.status(404).json({ message: "Clinic not found" });
+    }
 
-  //   return res.json(clinic);
-  // };
+    return res.json(clinic);
+};
+
 
   // // Update a clinic
-  // updateClinic = async (req: Request, res: Response): Promise<Response> => {
-  //   const id = Number(req.params.id);
-  //   const updatedData = req.body;
+  updateClinic = async (req: Request, res: Response): Promise<Response> => {
+    const id = Number(req.params.id);
+    const updatedData = req.body;
 
-  //   const updatedClinic = await this.clinicService.updateClinic(id, updatedData);
-  //   if (!updatedClinic) {
-  //     return res.status(404).json({ message: "Clinic not found" });
-  //   }
+    const updatedClinic = await this.clinicService.updateClinic(id, updatedData);
+    if (!updatedClinic) {
+      return res.status(404).json({ message: "Clinic not found" });
+    }
 
-  //   return res.json(updatedClinic);
-  // };
+    return res.json(updatedClinic);
+  };
 
   // // Delete a clinic
-  // deleteClinic = async (req: Request, res: Response): Promise<Response> => {
-  //   const id = Number(req.params.id);
-  //   const success = await this.clinicService.deleteClinic(id);
+  deleteClinic = async (req: Request, res: Response): Promise<Response> => {
+    const id = Number(req.params.id);
+    const success = await this.clinicService.deleteClinic(id);
 
-  //   if (!success) {
-  //     return res.status(404).json({ message: "Clinic not found" });
-  //   }
+    if (!success) {
+      return res.status(404).json({ message: "Clinic not found" });
+    }
 
-  //   return res.status(204).send();
-  // };
+    return res.status(204).send();
+  };
 }
 
 
