@@ -7,11 +7,11 @@ import { valiadteResident } from "../validation/resident";
 const ResidentRouter: Router = Router();
 const residentController = new ResidentController();
 
-ResidentRouter.get(
-  "/ping",
-  protectRoute,
-  catchAsync(residentController.residentPing)
-);
+// ResidentRouter.get(
+//   "/ping",
+//   protectRoute,
+//   catchAsync(residentController.residentPing)
+// );
 ResidentRouter.get("/", catchAsync(residentController.getAllResident));
 ResidentRouter.post(
   "/createResident",

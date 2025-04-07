@@ -18,17 +18,17 @@ export class ClinicService {
   }
 
   // // Get a clinic by ID
-  // async getClinicById(id: number): Promise<Clinic | null> {
-  //   return this.clinicRepository.getClinicById(id);
-  // }
+  async getClinicById(id: number): Promise<Clinic | null> {
+    return this.clinicRepository.getClinicById(id);
+  }
 
-  // // Update a clinic
-  // async updateClinic(id: number, data: Partial<Clinic>): Promise<Clinic | null> {
-  //   return this.clinicRepository.updateClinic(id, data);
-  // }
+  // Update a clinic
+  async updateClinic(id: number, data: Partial<Clinic>): Promise<Clinic | null> {
+    return this.clinicRepository.updateClinic(id, data);
+  }
 
   // // Delete a clinic
-  // async deleteClinic(id: number): Promise<boolean> {
-  //   return this.clinicRepository.deleteClinic(id);
-  // }
+  async deleteClinic(id: number): Promise<boolean> {
+    return this.clinicRepository.deleteClinic(id);
+  }
 }

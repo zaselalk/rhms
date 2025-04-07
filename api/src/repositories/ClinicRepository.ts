@@ -18,22 +18,22 @@ import { Clinic } from "../models/clinic";
   }
 
   // // Update a clinic by ID
-  // async updateClinic(id: number, updatedData: Partial<Clinic>): Promise<Clinic | null> {
-  //   const clinic = await Clinic.findByPk(id);
-  //   if (!clinic) return null;
+  async updateClinic(id: number, updatedData: Partial<Clinic>): Promise<Clinic | null> {
+    const clinic = await Clinic.findByPk(id);
+    if (!clinic) return null;
 
-  //   await clinic.update(updatedData);
-  //   return clinic;
-  // }
+    await clinic.update(updatedData);
+    return clinic;
+  }
 
   // // Delete a clinic by ID
-  // async deleteClinic(id: number): Promise<boolean> {
-  //   const deletedCount = await Clinic.destroy({
-  //     where: { id },
-  //   });
+  async deleteClinic(id: number): Promise<boolean> {
+    const deletedCount = await Clinic.destroy({
+      where: { id },
+    });
 
-  //   return deletedCount > 0;
-  // }
+    return deletedCount > 0;
+  }
 }
   
   

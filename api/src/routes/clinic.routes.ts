@@ -15,12 +15,12 @@ ClinicRouter.post("/createClinic", catchAsync(clinicController.createClinic));
 ClinicRouter.get("/getAllClinics", catchAsync(clinicController.getAllClinics));
 
 // // Get a clinic by ID
-// ClinicRouter.get("/:id", catchAsync(clinicController.getClinicById));
+ClinicRouter.get("/:id", catchAsync(clinicController.getClinicById));
 
 // // Update a clinic by ID
-// ClinicRouter.put("/:id", catchAsync(clinicController.updateClinic));
+ClinicRouter.put("/:id", catchAsync(clinicController.updateClinic));
 
 // // Delete a clinic by ID
-// ClinicRouter.delete("/:id", catchAsync(clinicController.deleteClinic));
+ClinicRouter.delete("/:id", catchAsync(clinicController.deleteClinic));
 
 export default ClinicRouter;
