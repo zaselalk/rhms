@@ -7,6 +7,7 @@ import {
   Strategy as JwtStrategy,
   StrategyOptionsWithoutRequest,
 } from "passport-jwt";
+import { Role } from "../models";
 
 passport.use(
   new LocalStrategy(
@@ -29,7 +30,16 @@ passport.use(
   "jwt",
   new JwtStrategy(jwtops, async (jwt_payload, done: DoneCallback) => {
     try {
-      const user: User | null = await User.findByPk(jwt_payload.id);
+      const user: User | null = await User.findByPk(jwt_payload.id, {
+        include: [
+          {
+            model: Role,
+            as: "role",
+            attributes: ["id", "role", "permission"],
+          },
+        ],
+      });
+
       if (!user) {
         return done(null, false);
       }
