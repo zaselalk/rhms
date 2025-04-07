@@ -1,10 +1,9 @@
-import { Sequelize } from "sequelize-typescript";
 import config from "../config/config";
 import { Dialect } from "sequelize";
 import { User } from "./user"; // Ensure this imports the model correctly
-import PermissionRole from "./permission-role";
 import Permission from "./permission";
-import UserRoles from "./user-roles";
+import Role from "./role";
+import sequelize from "./sequelize";
 
 // Determine environment configuration
 const env: string = process.env.NODE_ENV || "development";
@@ -21,15 +20,9 @@ interface DBConfig {
 const dbConfig: DBConfig = config[env] as DBConfig;
 
 // Initialize Sequelize
-const sequelize = new Sequelize({
-  username: dbConfig.username,
-  password: dbConfig.password,
-  database: dbConfig.database,
-  host: dbConfig.host,
-  dialect: dbConfig.dialect,
-});
 
-// Add models to Sequelize
+Role.associate({ User, Permission });
+User.associate({ Role });
 
 // Sync models with the database
 async function syncDatabase() {
@@ -45,3 +38,4 @@ async function syncDatabase() {
 syncDatabase();
 
 export default sequelize;
+export { User, Role, Permission };

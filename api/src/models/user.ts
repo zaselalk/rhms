@@ -1,7 +1,8 @@
 import { Model, DataTypes } from "sequelize";
-import sequelize from ".";
+import sequelize from "./sequelize";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import Role from "./role";
 
 /* Define the User model properties
   Extra properties like id, createdAt, and updatedAt are added by default

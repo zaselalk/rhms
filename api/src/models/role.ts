@@ -6,8 +6,9 @@ import {
   BelongsToManyAddAssociationMixin,
   BelongsToManyHasAssociationMixin,
 } from "sequelize";
-import sequelize from ".";
+import sequelize from "./sequelize";
 import Permission from "./permission";
+import User from "./user";
 interface RoleAttributes {
   id?: number;
   role: string;
@@ -27,6 +28,11 @@ export class Role extends Model<RoleAttributes> implements RoleAttributes {
     // define association here
     Role.belongsToMany(models.Permission, {
       through: "PermissionRole",
+    });
+
+    Role.hasMany(models.User, {
+      foreignKey: "roleId",
+      as: "users",
     });
   }
 }
