@@ -1,3 +1,4 @@
+
 import { Role, User } from "../models";
 
 interface LoginUser extends User {
@@ -30,6 +31,25 @@ export class UserRepository {
           attributes: ["id", "role"],
         },
       ],
+    });
+  }
+
+  async getAllUsers(page: number, limit: number): Promise<User[]> {
+    // maximum limit is 50
+    if (limit > 50) limit = 50;
+    const offset = (page - 1) * limit;
+    return User.findAll({
+      limit: limit,
+      offset: offset,
+      order: [["createdAt", "DESC"]],
+      attributes: ["id", "name", "email", "createdAt", "updatedAt"],
+      // include: [
+      //   {
+      //     model: Role,
+      //     as: "role",
+      //     attributes: ["id", "name"],
+      //   },
+      // ],
     });
   }
 
