@@ -40,7 +40,6 @@ passport.use(
         ],
       });
 
-      console.log(user);
       if (!user) {
         return done(null, false);
       }
