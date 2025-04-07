@@ -1,7 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import passport from "passport";
-import { permission } from "process";
-
 export const protectRoute =
   (permissions: string) =>
   (req: Request, res: Response, next: NextFunction) => {
