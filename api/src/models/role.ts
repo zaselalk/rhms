@@ -53,7 +53,7 @@ Role.init(
       },
     },
     permission: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
       validate: {
         notEmpty: {
