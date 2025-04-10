@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { data } from "react-router";
 
 
 type ResidentRegistrationProps = {};
@@ -181,11 +182,13 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
+                console.log("Registration successful:", response);
                 return response.json();
             })
             .then(data => {
                 console.log("Registration successful:", data);
                 toast.success("Registration successful!");
+                
             })
             .catch(error => {
                 console.error("Error:", error);
