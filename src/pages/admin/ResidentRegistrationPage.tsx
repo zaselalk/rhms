@@ -1,5 +1,8 @@
 import { FC, useState } from "react";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { data } from "react-router";
 
 
 type ResidentRegistrationProps = {};
@@ -121,57 +124,32 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     }
 
     const handleRegister = () => {
-
         let errors = [];
 
         // Validate the form data
-        if (contactNumber.length != 10) {
-
-            if (contactNumber.match(/^[0-9]{10}$/)) {
-                setContact(contactNumber);
-            }
-            else {
-                errors.push("Please enter a valid 10-digit contact number.");
-                alert("Please enter only number in contact");
-            }
+        if (contactNumber.length !== 10 || !contactNumber.match(/^[0-9]{10}$/)) {
+            errors.push("Please enter a valid 10-digit contact number.");
         }
 
-        if (weight != "") {
-            if (weight.match(/^[0-9]+(\.[0-9]+)?$/) && parseFloat(weight) > 0) {
-                setWeight(weight);
-            }
-            else {
-                errors.push("Please enter a valid weight.");
-                alert("Please enter weight Correctly");
-            }
+        if (weight !== "" && (!weight.match(/^[0-9]+(\.[0-9]+)?$/) || parseFloat(weight) <= 0)) {
+            errors.push("Please enter a valid weight.");
         }
 
-        if (height != "") {
-            if (height.match(/^[0-9]+(\.[0-9]+)?$/) && parseFloat(height) > 0) {
-                setHeight(height);
-            }
-            else {
-                errors.push("Please enter a valid height.");
-                alert("Please enter height Correctly");
-            }
+        if (height !== "" && (!height.match(/^[0-9]+(\.[0-9]+)?$/) || parseFloat(height) <= 0)) {
+            errors.push("Please enter a valid height.");
         }
 
         if (!/^[0-9]{9}[VXvx]$/.test(nic) && !/^[0-9]{12}$/.test(nic)) {
             errors.push("Please enter a valid Sri Lankan NIC (9 digits + 'V'/'X' or 12 digits).");
-        } else {
-            setNic(nic);
         }
 
-
         if (errors.length > 0) {
-            alert(errors.join("\n"));
+            errors.forEach(error => toast.error(error));
             return;
         }
 
-
-        //log
-        console.log("Registered:", { firstName, lastName, birthday, contactNumber, address, gender, addicted, weight, height, divisionId, maritalState, religion, educationLevel, jobState, alergies, chronicalDesease, clinics, bloodGroup, birthCertificateNumber });
-
+        // Log the registration data
+        // console.log("Registered:", { firstName, lastName, birthday, contactNumber, address, gender, addicted, weight, height, divisionId, maritalState, religion, educationLevel, jobState, alergies, chronicalDesease, clinics, bloodGroup, birthCertificateNumber });
 
         // Example API call
         fetch("http://localhost:3001/resident/createResident", {
@@ -186,8 +164,6 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                 birthday,
                 bloodGroup,
                 gender,
-                bloodPressure: "",
-                heartRate: "",
                 address,
                 contactNumber,
                 divisionId,
@@ -202,15 +178,27 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                 weight
             })
         })
-            .then(response => response.json())
-            .then(data => console.log("Registration successful:", data))
-            .catch(error => console.error("Error:", error));
-
-
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                console.log("Registration successful:", response);
+                return response.json();
+            })
+            .then(data => {
+                console.log("Registration successful:", data);
+                toast.success("Registration successful!");
+                
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                toast.error("Registration failed. Please try again.");
+            });
     };
 
     return (
         <DashboardContainer>
+            <ToastContainer />
             {/* Registration Form Container */}
             <div className="bg-white p-8 rounded-lg shadow-lg w-full ">
                 <h2 className="text-2xl font-semibold text-[#008FFB] mb-6 text-center">Resident Registration</h2>
