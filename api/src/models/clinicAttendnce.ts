@@ -1,7 +1,7 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import sequelize from "."; // Assuming the sequelize instance is already configured
 import Clinic from "./clinic"; // Importing the Clinic model
-import Session from "./clinic"; // Importing the Session model (assumed to exist)
+import Session from "./clinicSession"; // Importing the Session model (assumed to exist)
 import Resident from "./resident"; // Importing the Patient model (assumed to exist)
 
 interface ClinicAttendanceAttributes {
