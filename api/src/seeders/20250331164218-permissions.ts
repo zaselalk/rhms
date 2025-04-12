@@ -136,7 +136,7 @@ module.exports = {
         },
 
         /**
-         * Clinic Related permission
+         * Clinic related permission
          */
         {
           permission: "clinic:view",
