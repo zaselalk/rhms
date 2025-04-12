@@ -45,37 +45,51 @@ class ResidentController {
       weight,
     } = req.body;
 
-    const resident = await this.residentService.registerResident(
-      firstName,
-      lastName,
-      nic,
-      email,
-      password,
-      birthday,
-      bloodGroup,
-      gender,
-      bloodPressure,
-      heartRate,
-      address,
-      contactNumber,
-      divisionId,
-      maritalState,
-      educationLevel,
-      addicted,
-      alergies,
-      chronicalDesease,
-      height,
-      weight
-    );
 
-    return res.json({
-      message: "Resident registered successfully",
-      status: 200,
-      error: null,
-      data: resident
-    });
+
+    const residentfindByNic: Resident | null = await this.residentService.findByNic(nic);
+
+    if (residentfindByNic) {
+      return res.status(400).json({
+        message: "Resident already exists",
+        status: 400,
+        error: "Resident already exists",
+        data: null
+      });
+    } else if (residentfindByNic === null) {
+
+
+      const resident = await this.residentService.registerResident(
+        firstName,
+        lastName,
+        nic,
+        email,
+        password,
+        birthday,
+        bloodGroup,
+        gender,
+        bloodPressure,
+        heartRate,
+        address,
+        contactNumber,
+        divisionId,
+        maritalState,
+        educationLevel,
+        addicted,
+        alergies,
+        chronicalDesease,
+        height,
+        weight
+      );
+
+      return res.json({
+        message: "Resident registered successfully",
+        status: 200,
+        error: null,
+        data: resident
+      });
+    }
   }
-
   residentfindByNic = async (req: Request, res: Response): Promise<Response | void> => {
     const { nic } = req.params;
     const resident = await this.residentService.findByNic(nic);
