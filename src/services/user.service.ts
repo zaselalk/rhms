@@ -1,13 +1,10 @@
 export default class UserService {
   async getAllUsers() {
-    const requestHeaders = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    };
-
     const response = await fetch("http://localhost:3001/user", {
       method: "GET",
-      headers: requestHeaders,
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
 
     if (!response.ok) {
