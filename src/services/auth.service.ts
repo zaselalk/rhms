@@ -18,6 +18,9 @@ class AuthServices {
     }
 
     const data = await response.json();
+    // save the token to local storage for request
+    localStorage.setItem("token", data.user.token);
+
     return data;
   }
 
