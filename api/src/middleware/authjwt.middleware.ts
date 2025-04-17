@@ -3,7 +3,7 @@ export const protectRoute =
   (permissions: string) =>
   (req: Request, res: Response, next: NextFunction) => {
     // check if user is logged in
-    if (!req.user || !req.user) {
+    if (!req.user) {
       next({
         status: 401,
         message: "Unauthorized",
