@@ -12,6 +12,7 @@ import ClinicRouter from "./routes/clinic.routes";
 import PermissionRouter from "./routes/permission.routes";
 import RoleRouter from "./routes/role.routes";
 import UserRouter from "./routes/user.routes";
+import serializeUser from "./middleware/serializeuser.middleware";
 
 dotenv.config();
 
@@ -24,16 +25,17 @@ app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "secret",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+// app.use(
+//   session({
+//     secret: process.env.SESSION_SECRET || "secret",
+//     resave: false,
+//     saveUninitialized: false,
+//   })
+// );
 
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+app.use(serializeUser);
+// app.use(passport.session());
 
 app.use("/auth", AuthRouter);
 app.use("/disease", DisaseRouter);
