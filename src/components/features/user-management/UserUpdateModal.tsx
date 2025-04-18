@@ -12,7 +12,7 @@ interface Props {
     // roles: string[]; // List of role options passed from parent
 }
 
-export const UserCreateModal = ({ isOpen, handleClose, onSave, initialData }: Props) => {
+export const UserUpdateModal = ({ isOpen, handleClose, onSave, initialData }: Props) => {
     const [form] = Form.useForm();
 
     // this should be load from api
@@ -95,13 +95,13 @@ export const UserCreateModal = ({ isOpen, handleClose, onSave, initialData }: Pr
                     </Form.Item>
                 </div>
 
-                <Form.Item
+                {/* <Form.Item
                     label="Email"
                     name="email"
                     rules={[{ required: true, message: 'Please enter email' }]}
                 >
                     <Input placeholder="Enter email" type="email" />
-                </Form.Item>
+                </Form.Item> */}
                 <div className="flex justify-between gap-4">
 
                     <Form.Item
