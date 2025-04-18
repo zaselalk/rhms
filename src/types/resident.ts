@@ -14,9 +14,10 @@ export interface ResidentData {
     religion?: string;
     jobState?: string;
     educationLevel?: string;
-    addicted?: string;
-    alergies?: string;
-    chronicalDesease?: string;
+    addicted?: string[];
+    alergies?: string[];
+    chronicalDesease?: string[];
+    clinic?: string[];
     height?: string;
     weight?: string;
   }
