@@ -7,10 +7,13 @@ class ResidentService {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(newResidentData),
+            
         });
+        console.log("newResidentData", newResidentData);
 
         if (!response.ok) {
             const errorData = await response.json();
+            console.error("Error adding resident:", errorData);
             throw new Error(errorData.message || "Unable to add resident");
         }
 

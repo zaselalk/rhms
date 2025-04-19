@@ -11,6 +11,7 @@ export interface ResidentData {
     contactNumber: string;
     divisionId: string;
     maritalState?: string;
+    birthCertificateNumber?: string;
     religion?: string;
     jobState?: string;
     educationLevel?: string;
