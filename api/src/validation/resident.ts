@@ -20,7 +20,7 @@ export const valiadteResident: RequestHandler[] = [
 
     // body("divisionId").isNumeric().withMessage("Division ID must be numeric"),
     body("maritalState").isAlpha().withMessage("Marital state must be alphabetic"),
-    body("educationLevel").isAlpha().withMessage("Education level must be alphabetic"),
+    // body("educationLevel").isAlpha().withMessage("Education level must be alphabetic"),
     body("height").isNumeric().withMessage("Height must be numeric"),
     body("weight").isNumeric().withMessage("Weight must be numeric"),
 
