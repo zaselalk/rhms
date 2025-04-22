@@ -55,9 +55,22 @@ export class UserServices {
     if (!users) throw new UserNotFoundException("No users found");
     return users;
   }
-  // async getUserById(id: number): Promise<User> {
-  //   const user = await this.userRepository.getUserById(id);
-  //   if (!user) throw new UserNotFoundException("User not found");
-  //   return user;
-  // }
+
+  async addNewUser(
+    full_name: string,
+    role_id: number,
+    email: string,
+    password: string
+  ): Promise<User> {
+    const existingUser = await this.userRepository.findByEmail(email);
+    if (existingUser) throw new UserNotFoundException("Email already in use");
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    return this.userRepository.CreateUser(
+      full_name,
+      role_id,
+      email,
+      hashedPassword
+    );
+  }
 }

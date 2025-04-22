@@ -22,6 +22,29 @@ export class UserController {
     });
   };
 
+  addNewUser = async (
+    req: Request,
+    res: Response
+  ): Promise<Response | void> => {
+    const { full_name, role_id, email, password } = req.body;
+    const user = await this.userService.addNewUser(
+      full_name,
+      role_id,
+      email,
+      password
+    );
+    return res.status(201).json({
+      message: "User added successfully",
+      status: 201,
+      error: null,
+      data: {
+        full_name: user.name,
+        role_id: user.roleId,
+        email: user.email,
+      },
+    });
+  };
+
   login = async (req: Request, res: Response): Promise<Response | void> => {
     const { email, password } = req.body;
     const user = await this.userService.loginUser(email, password);

@@ -11,6 +11,13 @@ UserRouter.get(
   protectRoute("user:view"),
   catchAsync(userController.getAllUsers)
 );
+
+UserRouter.post(
+  "/",
+  protectRoute("user:create"),
+  catchAsync(userController.addNewUser)
+);
+
 // UserRouter.get("/:id", catchAsync(userController.getUserById))
 // UserRouter.put("/:id", catchAsync(userController.updateUser));
 // UserRouter.delete("/:id", catchAsync(userController.deleteUser));

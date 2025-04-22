@@ -44,4 +44,18 @@ export class UserRepository {
       attributes: ["id", "name", "email", "createdAt", "updatedAt"],
     });
   }
+
+  async CreateUser(
+    name: string,
+    roleId: number,
+    email: string,
+    password: string
+  ): Promise<User> {
+    return User.create({
+      name,
+      roleId,
+      email,
+      password,
+    });
+  }
 }
