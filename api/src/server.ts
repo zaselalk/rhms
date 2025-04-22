@@ -1,7 +1,5 @@
 import express, { Application } from "express";
 import dotenv from "dotenv";
-import passport from "./config/passport";
-import session from "express-session";
 import AuthRouter from "./routes/auth.routes";
 import sequelize from "./models";
 import DisaseRouter from "./routes/disease.routes";
@@ -12,6 +10,7 @@ import ClinicRouter from "./routes/clinic.routes";
 import PermissionRouter from "./routes/permission.routes";
 import RoleRouter from "./routes/role.routes";
 import UserRouter from "./routes/user.routes";
+import serializeUser from "./middleware/serializeuser.middleware";
 
 dotenv.config();
 
@@ -24,16 +23,9 @@ app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "secret",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-
-app.use(passport.initialize());
-app.use(passport.session());
+// Middleware to serialize user data
+// This middleware will be used to serialize user data before sending it in the response
+app.use(serializeUser);
 
 app.use("/auth", AuthRouter);
 app.use("/disease", DisaseRouter);
