@@ -72,4 +72,23 @@ export default class UserService {
       );
     }
   }
+
+  async createUser(
+    full_name: string,
+    email: string,
+    password: string,
+    role_id: number
+  ) {
+    try {
+      const response = await axiosInstance.post("/user", {
+        full_name,
+        email,
+        password,
+        role_id,
+      });
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || "Unable to create user");
+    }
+  }
 }
