@@ -4,6 +4,7 @@ import User from "../models/user";
 import { UserRepository } from "../repositories/UserRepository";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { RoleRepository } from "../repositories/RoleRepository";
 
 interface LoginUser {
   id: number;
@@ -56,6 +57,12 @@ export class UserServices {
     return users;
   }
 
+  async getUserById(id: number): Promise<User | null> {
+    const user = await this.userRepository.findById(id);
+    if (!user) throw new UserNotFoundException("User not found");
+    return user;
+  }
+
   async addNewUser(
     full_name: string,
     role_id: number,
@@ -72,5 +79,50 @@ export class UserServices {
       email,
       hashedPassword
     );
+  }
+
+  async updateUserFullNameById(
+    id: number,
+    full_name: string
+  ): Promise<User | null> {
+    const user = await this.userRepository.findById(id);
+    if (!user) throw new UserNotFoundException("User not found");
+
+    return this.userRepository.updateUserFullNameById(id, full_name);
+  }
+
+  async updateUserRoleById(id: number, role_id: number): Promise<User | null> {
+    // Check if the user exists
+    const user = await this.userRepository.findById(id);
+    if (!user) throw new UserNotFoundException("User not found");
+
+    // Check if the role exists
+    const roleRepository = new RoleRepository();
+    const role = await roleRepository.findById(role_id);
+
+    // throw error if role not found
+    if (!role) throw new UserNotFoundException("Role not found");
+
+    // Check if the user already has the role
+    if (user.roleId === role_id)
+      throw new ValidationException("Role already assigned");
+
+    return this.userRepository.updateUserRoleById(id, role_id);
+  }
+
+  async changeUserPassword(
+    id: number,
+    oldPassword: string,
+    newPassword: string
+  ): Promise<User | null> {
+    console.log(`oldPassword, newPassword`, oldPassword, newPassword);
+    const user = await this.userRepository.findByIdWithPassword(id);
+    if (!user) throw new UserNotFoundException("User not found");
+
+    const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+    if (!isPasswordValid) throw new ValidationException("Invalid old password");
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    return this.userRepository.changeUserPasswordById(id, hashedPassword);
   }
 }

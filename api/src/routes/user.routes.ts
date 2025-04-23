@@ -2,6 +2,11 @@ import { Router } from "express";
 import { UserController } from "../controllers/UserController";
 import catchAsync from "../util/catchAsync";
 import { protectRoute } from "../middleware/authjwt.middleware";
+import {
+  userFullNameUpdateValidation,
+  userPasswordUpdateValidation,
+  userRoleUpdateValidation,
+} from "../validation/user";
 
 const UserRouter: Router = Router();
 const userController = new UserController();
@@ -12,15 +17,37 @@ UserRouter.get(
   catchAsync(userController.getAllUsers)
 );
 
+UserRouter.get(
+  "/:id",
+  protectRoute("user:view"),
+  catchAsync(userController.getSingleUser)
+);
+
 UserRouter.post(
   "/",
   protectRoute("user:create"),
   catchAsync(userController.addNewUser)
 );
 
-// UserRouter.get("/:id", catchAsync(userController.getUserById))
-// UserRouter.put("/:id", catchAsync(userController.updateUser));
-// UserRouter.delete("/:id", catchAsync(userController.deleteUser));
+UserRouter.put(
+  "/:id/name",
+  protectRoute("user:edit"),
+  userFullNameUpdateValidation,
+  catchAsync(userController.updateUserFullNameById)
+);
+
+UserRouter.put(
+  "/:id/role",
+  protectRoute("user:edit"),
+  userRoleUpdateValidation,
+  catchAsync(userController.updateUserRoleById)
+);
+
+UserRouter.put(
+  "/:id/password",
+  protectRoute("user:edit"),
+  userPasswordUpdateValidation,
+  catchAsync(userController.changeUserPassword)
+);
 
 export default UserRouter;
-//

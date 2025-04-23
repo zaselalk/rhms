@@ -29,3 +29,47 @@ export const userLoginValidation: RequestHandler[] = [
     next();
   },
 ];
+
+export const userFullNameUpdateValidation: RequestHandler[] = [
+  body("full_name").notEmpty().withMessage("Full name is required"),
+
+  (req: Request, res: Response, next: NextFunction): void => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+      return;
+    }
+    next();
+  },
+];
+
+export const userRoleUpdateValidation: RequestHandler[] = [
+  body("role_id").isNumeric().withMessage("Role ID must be a number"),
+
+  (req: Request, res: Response, next: NextFunction): void => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+      return;
+    }
+    next();
+  },
+];
+
+export const userPasswordUpdateValidation: RequestHandler[] = [
+  body("password").notEmpty().withMessage("Password is required"),
+  body("new_password")
+    .notEmpty()
+    .withMessage("New password is required")
+    .isLength({ min: 6 })
+    .withMessage("New password must be at least 6 characters long"),
+
+  (req: Request, res: Response, next: NextFunction): void => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+      return;
+    }
+    next();
+  },
+];

@@ -11,6 +11,7 @@ import PermissionRouter from "./routes/permission.routes";
 import RoleRouter from "./routes/role.routes";
 import UserRouter from "./routes/user.routes";
 import serializeUser from "./middleware/serializeuser.middleware";
+import expressErrorHandler from "./util/expressErrorHandler";
 
 dotenv.config();
 
@@ -35,6 +36,9 @@ app.use("/clinic", ClinicRouter);
 app.use("/permission", PermissionRouter);
 app.use("/role", RoleRouter);
 app.use("/user", UserRouter);
+
+// error handling middleware
+app.use(expressErrorHandler);
 
 app.listen(PORT, async () => {
   sequelize.sync();
