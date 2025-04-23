@@ -86,6 +86,9 @@ function App() {
 
 
         </Route>
+        
+
+        
 
         {/* household paths*/}
         <Route path="/household">
