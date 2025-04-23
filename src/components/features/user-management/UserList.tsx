@@ -1,6 +1,15 @@
 import { FC, useEffect, useState } from "react";
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Table, Button, Modal, Space, Typography, message, Spin } from "antd";
+import {
+  Table,
+  Button,
+  Modal,
+  Space,
+  Typography,
+  message,
+  Spin,
+  Skeleton,
+} from "antd";
 import { UserCreateModal } from "./UserCreateModal";
 import { useQuery } from "@tanstack/react-query";
 import UserService from "../../../services/user.service";
@@ -107,9 +116,6 @@ export const UserList: FC<UserListProps> = ({ setUserCount }) => {
       <UserCreateModal
         isOpen={isCreateUserOpen}
         handleClose={() => setIsCreateUserOpen(false)}
-        onSave={handleSave}
-        initialData={null}
-        // roles={roleOptions}
       />
 
       <UserUpdateModal
@@ -135,7 +141,7 @@ export const UserList: FC<UserListProps> = ({ setUserCount }) => {
             </Button>
           </div>
           <Spin spinning={isLoading} fullscreen />
-          {isLoading && <Spin />}
+          {isLoading && <Skeleton />}
           {error && <p>Error loading users: {error.message}</p>}
 
           {data && (
