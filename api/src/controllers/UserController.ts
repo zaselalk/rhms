@@ -66,4 +66,105 @@ export class UserController {
       data: users,
     });
   };
+
+  getSingleUser = async (
+    req: Request,
+    res: Response
+  ): Promise<Response | void> => {
+    const { id } = req.params;
+    const user = await this.userService.getUserById(parseInt(id));
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        status: 404,
+        error: null,
+        data: null,
+      });
+    }
+    return res.status(200).json({
+      message: "User fetched successfully",
+      status: 200,
+      error: null,
+      data: user,
+    });
+  };
+
+  updateUserFullNameById = async (
+    req: Request,
+    res: Response
+  ): Promise<Response | void> => {
+    const { id } = req.params;
+    const { full_name } = req.body;
+    const user = await this.userService.updateUserFullNameById(
+      parseInt(id),
+      full_name
+    );
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        status: 404,
+        error: null,
+        data: null,
+      });
+    }
+    return res.status(200).json({
+      message: "User updated successfully",
+      status: 200,
+      error: null,
+      data: user,
+    });
+  };
+
+  updateUserRoleById = async (
+    req: Request,
+    res: Response
+  ): Promise<Response | void> => {
+    const { id } = req.params;
+    const { role_id } = req.body;
+    const user = await this.userService.updateUserRoleById(
+      parseInt(id),
+      role_id
+    );
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        status: 404,
+        error: null,
+        data: null,
+      });
+    }
+    return res.status(200).json({
+      message: "User updated successfully",
+      status: 200,
+      error: null,
+      data: user,
+    });
+  };
+
+  changeUserPassword = async (
+    req: Request,
+    res: Response
+  ): Promise<Response | void> => {
+    const { id } = req.params;
+    const { password: oldPassword, new_password: newPassword } = req.body;
+    const user = await this.userService.changeUserPassword(
+      parseInt(id),
+      oldPassword,
+      newPassword
+    );
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        status: 404,
+        error: null,
+        data: null,
+      });
+    }
+    return res.status(200).json({
+      message: "User password updated successfully",
+      status: 200,
+      error: null,
+      data: user,
+    });
+  };
 }
