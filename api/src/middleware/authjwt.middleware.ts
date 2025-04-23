@@ -4,9 +4,9 @@ export const protectRoute =
   (req: Request, res: Response, next: NextFunction) => {
     // check if user is logged in
     if (!req.user) {
-      next({
-        status: 401,
+      res.status(401).json({
         message: "Unauthorized",
+        status: 401,
       });
       return;
     }
@@ -19,9 +19,9 @@ export const protectRoute =
 
       // check if user has permission to access the route
       if (!user.role.permission.includes(permissions)) {
-        next({
-          status: 403,
+        res.status(403).json({
           message: "Forbidden",
+          status: 403,
         });
 
         return;
