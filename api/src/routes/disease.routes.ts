@@ -1,11 +1,17 @@
 import { Router } from "express";
-import DisaseController from "../controllers/DisaseController";
+
 import catchAsync from "../util/catchAsync";
 import { protectRoute } from "../middleware/authjwt.middleware";
+import { DiseaseController } from "../controllers/DiseaseController";
 
-const DisaseRouter: Router = Router();
-const disaseController = new DisaseController();
 
-// DisaseRouter.get("/ping", protectRoute, catchAsync(disaseController.ping));
+const DiseaseRouter: Router = Router();
+const diseaseController = new DiseaseController();
 
-export default DisaseRouter;
+DiseaseRouter.post(
+    "/create",
+    // protectRoute,
+    catchAsync(diseaseController.createDisease)
+);
+
+export default DiseaseRouter;

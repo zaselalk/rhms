@@ -1,11 +1,13 @@
-import { DataTypes, Model, Sequelize } from "sequelize";
+import sequelize from ".";
+import { DataTypes, Model } from "sequelize";
+
 
 interface diseaseAttributes {
   diseaseId: number;
   diseaseName: string;
 }
 
-export class Disease
+export class Disease 
   extends Model<diseaseAttributes>
   implements diseaseAttributes
 {
@@ -13,7 +15,7 @@ export class Disease
   public diseaseName!: string;
 }
 
-export default (sequelize: Sequelize) => {
+
   Disease.init(
     {
       diseaseId: {
@@ -30,8 +32,9 @@ export default (sequelize: Sequelize) => {
       sequelize,
       modelName: "Disease",
       tableName: "diseases",
+      timestamps: true,
     }
   );
 
-  return Disease;
-};
+  export default Disease;
+
