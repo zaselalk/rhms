@@ -1,10 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import {
-  PlusOutlined,
-  EditOutlined,
-  DeleteOutlined,
-  EyeOutlined,
-} from "@ant-design/icons";
+import { PlusOutlined, DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import {
   Table,
   Button,
@@ -37,7 +32,8 @@ interface UserListProps {
 export const UserList: FC<UserListProps> = ({ setUserCount }) => {
   const userService: UserService = new UserService();
   const [isCreateUserOpen, setIsCreateUserOpen] = useState(false);
-  const [isUserEditing, setIsUserEditing] = useState(false);
+  const [isUserViewMode, setIsUserViewMode] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["users"],
@@ -52,8 +48,8 @@ export const UserList: FC<UserListProps> = ({ setUserCount }) => {
   }, [setUserCount, isLoading]);
 
   const handleUserView = (user: User) => {
-    console.log(user);
-    setIsUserEditing(true);
+    setUser(user);
+    setIsUserViewMode(true);
   };
 
   const columns = [
@@ -115,8 +111,6 @@ export const UserList: FC<UserListProps> = ({ setUserCount }) => {
     });
   };
 
-  const handleSave = (user: User) => {};
-
   return (
     <>
       <UserCreateModal
@@ -124,13 +118,13 @@ export const UserList: FC<UserListProps> = ({ setUserCount }) => {
         handleClose={() => setIsCreateUserOpen(false)}
       />
 
-      <UserViewModal
-        isOpen={isUserEditing}
-        handleClose={() => setIsUserEditing(false)}
-        onSave={handleSave}
-        initialData={null}
-        // roles={roleOptions}
-      />
+      {user && (
+        <UserViewModal
+          isOpen={isUserViewMode}
+          handleClose={() => setIsUserViewMode(false)}
+          initialData={user}
+        />
+      )}
 
       <div className="col-span-8">
         <div className="bg-white p-6 rounded-lg shadow-md">

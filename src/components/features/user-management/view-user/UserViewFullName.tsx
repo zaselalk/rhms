@@ -4,7 +4,7 @@ import {
   EditFilled,
   SaveOutlined,
 } from "@ant-design/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface UserFullNameBlockProps {
   userFullName: string;
@@ -13,6 +13,13 @@ interface UserFullNameBlockProps {
 export const UserViewFullName = ({ userFullName }: UserFullNameBlockProps) => {
   const [isEdit, setIsEdit] = useState(false);
   const [fullName, setFullName] = useState(userFullName);
+
+  /**
+   *  useEffect to set the full name when the component mounts or when userFullName changes
+   */
+  useEffect(() => {
+    setFullName(userFullName);
+  }, [userFullName]);
 
   const handleFullNameChange = () => {
     setFullName(fullName);
