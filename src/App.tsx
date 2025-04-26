@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route} from "react-router";
+import { BrowserRouter, Routes, Route } from "react-router";
 import RegistrationPage from "./pages/admin/ResidentRegistrationPage";
 import LoginPage from "./pages/LoginPage";
 import DivisionPage from "./pages/admin/DivisionPage";
@@ -24,16 +24,14 @@ import DiseasesPage from "./pages/admin/DiseasesPage";
 import SingleDiseasePage from "./pages/admin/SingleDiseasePage";
 import ProfilePage from "./pages/admin/ProfilePage";
 
-
 function App() {
   return (
     <BrowserRouter>
-
       <Routes>
         <Route path="/" element={<LandingPage />} />
 
         {/* Admin Users */}
-        <Route path="/admin" >
+        <Route path="/admin">
           <Route path="dashboard" element={<AdminDashboardPage />} />
           <Route path="login" element={<LoginPage />} />
 
@@ -41,54 +39,50 @@ function App() {
           <Route path="profile" element={<ProfilePage />} />
 
           {/* /admin/resident */}
-          <Route path="residents" >
+          <Route path="residents">
             <Route path="" element={<Resident />} />
             <Route path="profile/:id" element={<ResidentProfilePage />} />
           </Route>
 
           {/* /admin/diseases  */}
-          <Route path="diseases" >
+          <Route path="diseases">
             <Route path="" element={<DiseasesPage />} />
             <Route path=":diseaseName" element={<SingleDiseasePage />} />
           </Route>
 
           {/* /admin/users routs */}
-          <Route path="users"  >
+          <Route path="users">
             <Route path="" element={<UsersPage />} />
             <Route path="add" element={<AddUserPage />} />
           </Route>
 
           {/* /admin/households routes */}
-          <Route path="households" >
+          <Route path="households">
             <Route path="" element={<HouseholdPage />} />
             <Route path="manage/:id" element={<HouseholdManagePage />} />
           </Route>
 
-          <Route path="residents" >
+          <Route path="residents">
             <Route path="" element={<Resident />} />
             <Route path="create" element={<RegistrationPage />} />
             <Route path="profile/:id" element={<ResidentProfilePage />} />
           </Route>
-
 
           <Route path="division">
             <Route path="" element={<DivisionPage />} />
             <Route path="SingleDivisionPage" element={<SingleDivisionPage />} />
           </Route>
 
-
           {/* Clinic Paths*/}
           <Route path="clinic">
             <Route path="" element={<ClinicOverviewPage />} />
-            <Route path=":clinic/attendance" element={<ClinicAttendancePage />} />
+            <Route
+              path=":clinic/attendance"
+              element={<ClinicAttendancePage />}
+            />
             <Route path=":clinic" element={<ClinicDetailPage />} />
           </Route>
-
-
         </Route>
-        
-
-        
 
         {/* household paths*/}
         <Route path="/household">
@@ -96,23 +90,22 @@ function App() {
           <Route path="" element={<HouseholdManagePage />} />
         </Route>
 
-
-
         {/* Resident Paths*/}
-        <Route path="/resident" >
+        <Route path="/resident">
           <Route path="" element={<ResidentDashboard />} />
           {/* <Route path="" element={<ResidentLandingPage />} /> */}
           <Route path="registration" element={<RegistrationPage />} />
           <Route path="edit" element={<EditResidentProfilePage />} />
-          <Route path="forgotten-password" element={<ForgottenPasswordPage />} />
+          <Route
+            path="forgotten-password"
+            element={<ForgottenPasswordPage />}
+          />
           <Route path="login" element={<ResidentLoginPage />} />
-          <Route path="clinicDetails" element={<ResidentClinicDetail/>} />
+          <Route path="clinicDetails" element={<ResidentClinicDetail />} />
         </Route>
-
-
       </Routes>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;
