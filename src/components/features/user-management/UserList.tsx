@@ -1,10 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import {
-  PlusOutlined,
-  EditOutlined,
-  DeleteOutlined,
-  EyeOutlined,
-} from "@ant-design/icons";
+import { PlusOutlined, DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import {
   Table,
   Button,
