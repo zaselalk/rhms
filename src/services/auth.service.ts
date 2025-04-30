@@ -1,7 +1,18 @@
 import axiosInstance from "./axios/axiosInstance";
 
+interface ReturnUser {
+  id: number;
+  name: string;
+  email: string;
+  role: {
+    id: number;
+    role: string;
+  };
+  token: string;
+}
+
 class AuthServices {
-  async login(email: string, password: string) {
+  async login(email: string, password: string): Promise<ReturnUser> {
     try {
       const response = await axiosInstance.post("/auth/login", {
         email,
@@ -10,6 +21,7 @@ class AuthServices {
 
       const data = response.data;
       localStorage.setItem("token", data.user.token);
+      return data.user;
     } catch (error: any) {
       throw new Error(
         error.response?.data?.message ||

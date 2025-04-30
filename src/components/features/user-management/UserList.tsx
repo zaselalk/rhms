@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { PlusOutlined, DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import {
   Table,
   Button,
@@ -13,7 +13,7 @@ import {
 import { UserCreateModal } from "./UserCreateModal";
 import { useQuery } from "@tanstack/react-query";
 import UserService from "../../../services/user.service";
-import { UserUpdateModal } from "./UserUpdateModal";
+import { UserViewModal } from "./UserViewModal";
 
 const { Title } = Typography;
 
@@ -32,7 +32,8 @@ interface UserListProps {
 export const UserList: FC<UserListProps> = ({ setUserCount }) => {
   const userService: UserService = new UserService();
   const [isCreateUserOpen, setIsCreateUserOpen] = useState(false);
-  const [isUserEditing, setIsUserEditing] = useState(false);
+  const [isUserViewMode, setIsUserViewMode] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["users"],
@@ -46,8 +47,9 @@ export const UserList: FC<UserListProps> = ({ setUserCount }) => {
     setUserCount(data.limit); // write seperate api to get count
   }, [setUserCount, isLoading]);
 
-  const handleUserEdit = (user: User) => {
-    setIsUserEditing(true);
+  const handleUserView = (user: User) => {
+    setUser(user);
+    setIsUserViewMode(true);
   };
 
   const columns = [
@@ -74,10 +76,10 @@ export const UserList: FC<UserListProps> = ({ setUserCount }) => {
         <Space>
           <Button
             type="link"
-            icon={<EditOutlined />}
-            onClick={() => handleUserEdit(data)}
+            icon={<EyeOutlined />}
+            onClick={() => handleUserView(data)}
           >
-            Edit
+            View
           </Button>
           <Button
             type="link"
@@ -109,8 +111,6 @@ export const UserList: FC<UserListProps> = ({ setUserCount }) => {
     });
   };
 
-  const handleSave = (user: User) => {};
-
   return (
     <>
       <UserCreateModal
@@ -118,13 +118,13 @@ export const UserList: FC<UserListProps> = ({ setUserCount }) => {
         handleClose={() => setIsCreateUserOpen(false)}
       />
 
-      <UserUpdateModal
-        isOpen={isUserEditing}
-        handleClose={() => setIsUserEditing(false)}
-        onSave={handleSave}
-        initialData={null}
-        // roles={roleOptions}
-      />
+      {user && (
+        <UserViewModal
+          isOpen={isUserViewMode}
+          handleClose={() => setIsUserViewMode(false)}
+          initialData={user}
+        />
+      )}
 
       <div className="col-span-8">
         <div className="bg-white p-6 rounded-lg shadow-md">
