@@ -1,9 +1,9 @@
 import { FC } from "react";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
-import { Input, Button } from "antd";
 import { useAppSelector } from "../../hooks/state/hooks";
 
 import { UpdateUserFullName } from "../../components/features/profile-management/UpdateUserFullName";
+import { UserChangeChangePassword } from "../../components/features/profile-management/UserChangeChangePassword";
 
 const ProfilePage: FC = () => {
   const user = useAppSelector((state) => state.auth.user);
@@ -31,34 +31,7 @@ const ProfilePage: FC = () => {
             </div>
           </div>
         </div>
-        <div className="bg-white shadow-md p-5 rounded-2xl mt-5">
-          <div>
-            <h3>Change Password</h3>
-            <div className="mb-4">
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Password
-              </label>
-              <Input
-                type="password"
-                onChange={(e) => handleInputChange("email", e.target.value)}
-                className="rounded-lg"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Confirm Password
-              </label>
-              <Input
-                type="password"
-                onChange={(e) => handleInputChange("email", e.target.value)}
-                className="rounded-lg"
-              />
-            </div>
-            <div className="mb-4">
-              <Button children="Change Password" />
-            </div>
-          </div>
-        </div>
+        <UserChangeChangePassword />
       </div>
     </DashboardContainer>
   );
