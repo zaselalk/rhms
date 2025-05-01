@@ -1,11 +1,9 @@
-
-"use strict";
-
+import { QueryInterface } from 'sequelize';
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, QueryInterface) {
-    await queryInterface.bulkInsert("household", [
+  async up(queryInterface: QueryInterface) {
+    await queryInterface.bulkInsert("households", [
       {
         house_no: "12/A",
         grama_division: "Nuvuththuduwa",
@@ -36,14 +34,9 @@ module.exports = {
     ]);
   },
 
-  async down (queryInterface, QueryInterface) {
-    await queryInterface.bulkDelete("household", {
-      house_no:[ "12/A",
-        "14/B",
-        "21/A",
-      ]
-
+  async down(queryInterface: QueryInterface) {
+    await queryInterface.bulkDelete("households", {
+      house_no: ["12/A", "14/B", "21/A"],
     });
   },
-}
-;
+};

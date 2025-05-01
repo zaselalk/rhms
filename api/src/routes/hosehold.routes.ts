@@ -15,11 +15,10 @@ HouseholdRouter.post(
     catchAsync(householdController.createHousehold)
 );
 
-// HouseholdRouter.get(
-//     "/get/:id",
-//     // protectRoute,
-//     catchAsync(householdController.getHousehold)
-// );
+HouseholdRouter.get(
+    "/read", 
+    catchAsync(householdController.getAllHouseholds)
+);
 
 // HouseholdRouter.put(
 //     "/update/:id",
