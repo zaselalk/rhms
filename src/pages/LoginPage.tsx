@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { FC } from "react";
-import { useNavigate } from "react-router";
+import { FC, useEffect } from "react";
+import { Navigate, useNavigate } from "react-router";
 import AuthServices from "../services/auth.service";
 import { loginState } from "../types/login";
 import { useFormik } from "formik";
@@ -8,13 +8,25 @@ import * as Yup from "yup";
 import { Alert } from "antd";
 import { Link } from "react-router";
 
-import { useAppDispatch } from "../hooks/state/hooks";
+import { useAppDispatch, useAppSelector } from "../hooks/state/hooks";
 import { login } from "../store/slices/authSlices";
 
 const LoginPage: FC = () => {
   const Auth = new AuthServices();
+  const auth = useAppSelector((state) => state.auth);
 
+  // // Check if user is already authenticated
+  // if (auth.isAuthenticated) {
+  //   return <Navigate to="/admin/dashboard" />;
+  // }
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (auth.isAuthenticated) {
+      navigate("/admin/dashboard");
+    }
+  }, [auth.isAuthenticated]);
+
   const dispatch = useAppDispatch();
 
   const mutation = useMutation({
