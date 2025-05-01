@@ -35,7 +35,7 @@ export const UserList: FC<UserListProps> = ({ setUserCount }) => {
   const [isUserViewMode, setIsUserViewMode] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["users"],
     queryFn: () => userService.getAllUsers(),
     staleTime: 1000 * 60 * 5, // cache for 5 mins
@@ -116,6 +116,7 @@ export const UserList: FC<UserListProps> = ({ setUserCount }) => {
       <UserCreateModal
         isOpen={isCreateUserOpen}
         handleClose={() => setIsCreateUserOpen(false)}
+        refetch={refetch}
       />
 
       {user && (
