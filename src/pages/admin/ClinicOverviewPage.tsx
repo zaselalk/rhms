@@ -1,37 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaClinicMedical, FaTrash } from "react-icons/fa";
 import { FiPlusCircle, FiEdit } from "react-icons/fi"; // Import the edit icon
 import Modal from "../../components/layouts/overlays/Modal"; // Ensure Modal is correctly imported
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer"; // Ensure DashboardContainer is correctly imported
 import { Link } from "react-router";
-// Ensure AdminNavbar is correctly imported
+import axiosInstance from "../../services/axios/axiosInstance";
 
 const ClinicOverview: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [clinicTitle, setClinicTitle] = useState("");
-  const [clinicCategories, setClinicCategories] = useState([
-    { id: "clinic1", name: "Diabetic", count: 291, change: "10%", increase: true },
-    { id: "clinic2", name: "Hypo lipid", count: 34, change: "10%", increase: false },
-    { id: "clinic3", name: "Asthma", count: 45, change: "10%", increase: false },
-  ]);
+  const [clinicCategories, setClinicCategories] = useState<any[]>([]);
   const [clinicToDelete, setClinicToDelete] = useState<string | null>(null);
   const [clinicToEdit, setClinicToEdit] = useState<string | null>(null);
 
+  // Fetch all clinics when the component mounts
+  useEffect(() => {
+    const fetchClinics = async () => {
+      try {
+        const response = await axiosInstance.get("/clinic/getAllClinics");
+        setClinicCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching clinics:", error);
+      }
+    };
+    fetchClinics();
+  }, []);
+
   // Handle creating a new clinic
-  const handleCreateClinic = () => {
+  const handleCreateClinic = async () => {
     if (clinicTitle.trim()) {
-      const newClinic = {
-        id: `clinic${clinicCategories.length + 1}`, 
-        name: clinicTitle,
-        count: 0,
-        change: "0%",
-        increase: false,
-      };
-      setClinicCategories([...clinicCategories, newClinic]); // Add new clinic to the list
-      setShowModal(false);
-      setClinicTitle(""); // Reset the input field
+      try {
+        const newClinic = {
+          name: clinicTitle,
+        };
+        const response = await axiosInstance.post("/clinic/createClinic", newClinic);
+        setClinicCategories([...clinicCategories, response.data]);
+        setShowModal(false);
+        setClinicTitle(""); // Reset the input field
+      } catch (error) {
+        console.error("Error creating clinic:", error);
+      }
     }
   };
 
@@ -42,11 +52,16 @@ const ClinicOverview: React.FC = () => {
   };
 
   // Confirm deletion of the clinic
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (clinicToDelete) {
-      setClinicCategories((prevCategories) =>
-        prevCategories.filter((clinic) => clinic.id !== clinicToDelete)
-      );
+      try {
+        await axiosInstance.delete(`/clinic/deleteClinic/${clinicToDelete}`);
+        setClinicCategories((prevCategories) =>
+          prevCategories.filter((clinic) => clinic.id !== clinicToDelete)
+        );
+      } catch (error) {
+        console.error("Error deleting clinic:", error);
+      }
     }
     setShowConfirmDeleteModal(false); // Close the confirmation modal
     setClinicToDelete(null); // Clear the clinic to delete
@@ -65,16 +80,23 @@ const ClinicOverview: React.FC = () => {
   };
 
   // Handle updating the clinic name
-  const handleUpdateClinicName = () => {
+  const handleUpdateClinicName = async () => {
     if (clinicToEdit && clinicTitle.trim()) {
-      setClinicCategories((prevCategories) =>
-        prevCategories.map((clinic) =>
-          clinic.id === clinicToEdit ? { ...clinic, name: clinicTitle } : clinic
-        )
-      );
-      setShowEditModal(false); // Close the edit modal
-      setClinicTitle(""); // Reset the input field
-      setClinicToEdit(null); // Clear the clinic to edit
+      try {
+        const response = await axiosInstance.put(`/clinic/updateClinic/${clinicToEdit}`, {
+          name: clinicTitle,
+        });
+        setClinicCategories((prevCategories) =>
+          prevCategories.map((clinic) =>
+            clinic.id === clinicToEdit ? { ...clinic, name: response.data.name } : clinic
+          )
+        );
+        setShowEditModal(false); // Close the edit modal
+        setClinicTitle(""); // Reset the input field
+        setClinicToEdit(null); // Clear the clinic to edit
+      } catch (error) {
+        console.error("Error updating clinic:", error);
+      }
     }
   };
 
