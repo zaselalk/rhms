@@ -34,9 +34,29 @@ export const HouseholdCreateModal:FC<HouseholdCreateModalProps> = ({isOpen,handl
     
         const handleCreateHousehold = () => {
             if (window.confirm("Are you sure you want to create this household?")) {
-                console.log("Household Created:", { house_no,grama_division,longitude, latitude, residentId, residentName });
+        const newHousehold = { house_no, grama_division, longitude, latitude, residentId };
+
+        fetch('http://localhost:3001/household/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newHousehold)
+        })
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error('Failed to create household');
             }
+            return res.json();
+        })
+        .then((data) => {
+            alert(data.message || 'Household created successfully!');
+            handleClose(); // Close modal
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('Error creating household');
+        });
         };
+    }
     
   return (
      <Modal isOpen={isOpen} handleClose={handleClose} title="Create Household">
@@ -55,17 +75,32 @@ export const HouseholdCreateModal:FC<HouseholdCreateModalProps> = ({isOpen,handl
                     </div>
                                                     
                         {/* Grama Division */}                                      
-                    <div>
-                        <label htmlFor="grama_division" className="block text-sm font-medium text-gray-700">Grama Division</label>
-                        <input
-                            type="text"
-                            id="grama_division"
-                            value={grama_division}
-                            onChange={(e) => setGramaDivision(e.target.value)}
-                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 outline-none"
-                            placeholder="Enter grama division"
-                        />
-                    </div>
+                        <div>
+                            <label htmlFor="grama_division" className="block text-sm font-medium text-gray-700">
+                                Grama Division
+                            </label>
+                            <select
+                                id="grama_division"
+                                value={grama_division}
+                                onChange={(e) => setGramaDivision(e.target.value)}
+                                className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 outline-none"
+                            >
+                                <option value="">Select a division</option>
+                                <option value="kotagedara">Kotagedara</option>
+                                <option value="navuththuduwa">Navuththuduwa</option>
+                                <option value="bopitiya">Bopitiya</option>
+                                <option value="maddegedara">Maddegedara</option>
+                                <option value="pahalawela">Pahalawela</option>
+                                <option value="kolahekada">Kolahekada</option>
+                                <option value="naravila">Naravila</option>
+                                <option value="yatadola">Yatadola</option>
+                                <option value="henpita">Henpita</option>
+                                <option value="pallegoda">Pallegoda</option>
+
+
+                                {/* Add more options as needed */}
+                            </select>
+                        </div>
 
                     {/* Longitude */}
                     <div>

@@ -32,15 +32,15 @@ export class HouseholdServices {
 
   // // READ
   // async getHouseholdDetails(id: number): Promise<{ house_no: string; grama_division: string; owner_name: string }> {
-  //   const household = await this.householdRepository.findByIdWithOwner(id);
+  //   const household = await this.householdRepository.findById(id);
   //   if (!household) {
   //     throw new HouseholdNotFoundException(`Household with ID ${id} not found.`);
   //   }
-
+    
   //   return {
   //     house_no: household.house_no,
   //     grama_division: household.grama_division,
-  //     owner_name: household.owner.name,
+  //     owner_name: household.resident.name,
   //   };
   // }
 

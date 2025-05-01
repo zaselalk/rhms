@@ -7,20 +7,22 @@ interface CreateHouseholdModalProps {
 }
 
 const CreateHouseholdModal: FC<CreateHouseholdModalProps> = ({ isOpen, handleClose }) => {
-    const [householdName, setHouseholdName] = useState("");
-    const [address, setAddress] = useState("");
-    const [contact, setContact] = useState("");
-    const [members, setMembers] = useState("");
+    const [house_no, sethouse_no] = useState("");
+    const [grama_division, setgrama_division] = useState("");
+    const [longitude, setlongitude] = useState("");
+    const [latitude, setlatitude] = useState("");
+    const [owner_id, setowner_id] = useState("");
 
 
     
     const handleCreateHousehold = () => {
         // Handle the logic for creating a household (e.g., save to backend or state)
         console.log("Household Created:", {
-            householdName,
-            address,
-            contact,
-            members,
+            house_no,
+            grama_division,
+            longitude,
+            latitude,
+            owner_id
         });
     };
     return (
@@ -32,60 +34,73 @@ const CreateHouseholdModal: FC<CreateHouseholdModalProps> = ({ isOpen, handleClo
                 <div className="space-y-4">
                     {/* Household Name */}
                     <div>
-                        <label htmlFor="householdName" className="block text-sm font-medium text-gray-700">
-                            Household Name
+                        <label htmlFor="house_no" className="block text-sm font-medium text-gray-700">
+                            House No
                         </label>
                         <input
                             type="text"
-                            id="householdName"
-                            value={householdName}
-                            onChange={(e) => setHouseholdName(e.target.value)}
+                            id="house_no"
+                            value={house_no}
+                            onChange={(e) => sethouse_no(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                            placeholder="Enter household name"
+                            placeholder="Enter household number"
                         />
                     </div>
 
                     {/* Address */}
                     <div>
-                        <label htmlFor="address" className="block text-sm font-medium text-gray-700">
-                            Address
+                        <label htmlFor="grama_division" className="block text-sm font-medium text-gray-700">
+                            Grama Division
                         </label>
                         <textarea
-                            id="address"
-                            value={address}
-                            onChange={(e) => setAddress(e.target.value)}
+                            id="grama_division"
+                            value={grama_division}
+                            onChange={(e) => setgrama_division(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                            placeholder="Enter address"
+                            placeholder="Enter grama division"
                         />
                     </div>
 
                     {/* Contact Number */}
                     <div>
-                        <label htmlFor="contact" className="block text-sm font-medium text-gray-700">
-                            Contact Number
+                        <label htmlFor="longitude" className="block text-sm font-medium text-gray-700">
+                            Longitude
                         </label>
                         <input
-                            type="text"
-                            id="contact"
-                            value={contact}
-                            onChange={(e) => setContact(e.target.value)}
+                            type="number"
+                            id="longitude"
+                            value={longitude}
+                            onChange={(e) => setlongitude(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                            placeholder="Enter contact number"
+                            placeholder="Enter Longitude"
                         />
                     </div>
 
                     {/* Household Members */}
                     <div>
-                        <label htmlFor="members" className="block text-sm font-medium text-gray-700">
-                            Household Members
+                        <label htmlFor="latitude" className="block text-sm font-medium text-gray-700">
+                            Latitude
                         </label>
                         <input
                             type="number"
-                            id="members"
-                            value={members}
-                            onChange={(e) => setMembers(e.target.value)}
+                            id="latitude"
+                            value={latitude}
+                            onChange={(e) => setlatitude(e.target.value)}
                             className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                            placeholder="Enter number of members"
+                            placeholder="Enter latitude"
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="owner_id" className="block text-sm font-medium text-gray-700">
+                            Owner ID
+                        </label>
+                        <input
+                            type="text"
+                            id="owner_id"
+                            value={owner_id}
+                            onChange={(e) => setowner_id(e.target.value)}
+                            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                            placeholder="Enter owner ID"
                         />
                     </div>
 

@@ -9,29 +9,29 @@ const HouseholdManagePage: FC = () => {
         { id: 3, name: 'Ravindu Harshana', age: 10, relation: 'Son' },
     ]);
     
-    const [addRequests, setAddRequests] = useState([
-        { id: 4, name: 'Ishara Prasadi', age: 12, relation: 'Daughter' },
-        { id: 5, name: 'Asiri Sadakan', age: 8, relation: 'Son' },
-        { id: 6, name: 'Dilukshi Nimasha', age: 15, relation: 'Daughter' },
-    ]);
+    // const [addRequests, setAddRequests] = useState([
+    //     { id: 4, name: 'Ishara Prasadi', age: 12, relation: 'Daughter' },
+    //     { id: 5, name: 'Asiri Sadakan', age: 8, relation: 'Son' },
+    //     { id: 6, name: 'Dilukshi Nimasha', age: 15, relation: 'Daughter' },
+    // ]);
 
     const [searchId, setSearchId] = useState('');
     const [relationToOwner, setRelationToOwner] = useState('');
     const navigate = useNavigate();
 
-    const handleApproveRequest = (requestId: number) => {
-        const request = addRequests.find(req => req.id === requestId);
-        if (request) {
-            setResidents([...residents, request]);
-            setAddRequests(addRequests.filter(req => req.id !== requestId));
-        }
-    };
+    // const handleApproveRequest = (requestId: number) => {
+    //     const request = addRequests.find(req => req.id === requestId);
+    //     if (request) {
+    //         setResidents([...residents, request]);
+    //         setAddRequests(addRequests.filter(req => req.id !== requestId));
+    //     }
+    // };
 
-    const handleDenyRequest = (requestId: number) => {
-        if (window.confirm('Are you sure you want to deny this request?')) {
-            setAddRequests(addRequests.filter(req => req.id !== requestId));
-        }
-    };
+    // const handleDenyRequest = (requestId: number) => {
+    //     if (window.confirm('Are you sure you want to deny this request?')) {
+    //         setAddRequests(addRequests.filter(req => req.id !== requestId));
+    //     }
+    // };
 
     const handleAddResident = () => {
         if (!searchId.trim() || !relationToOwner.trim()) return;
@@ -57,7 +57,7 @@ const HouseholdManagePage: FC = () => {
             <div className="min-h-screen bg-gray-100 p-6">
                 <h2 className="text-2xl font-semibold text-[#008FFB] mb-6">Manage Residents</h2>
                 
-                <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+                {/* <div className="bg-white p-6 rounded-lg shadow-md mb-6">
                     <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Resident Add Requests</h3>
                     {addRequests.length > 0 ? (
                         <ul>
@@ -74,7 +74,7 @@ const HouseholdManagePage: FC = () => {
                     ) : (
                         <p>No pending requests.</p>
                     )}
-                </div>
+                </div> */}
 
                 <div className="bg-white p-6 rounded-lg shadow-md mb-6">
                     <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Add Resident by ID</h3>
