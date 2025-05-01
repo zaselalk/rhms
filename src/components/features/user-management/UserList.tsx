@@ -124,6 +124,7 @@ export const UserList: FC<UserListProps> = ({ setUserCount }) => {
           isOpen={isUserViewMode}
           handleClose={() => setIsUserViewMode(false)}
           initialData={user}
+          refetch={refetch}
         />
       )}
 

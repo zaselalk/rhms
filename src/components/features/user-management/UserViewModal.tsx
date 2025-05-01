@@ -9,9 +9,15 @@ interface Props {
   isOpen: boolean;
   handleClose: () => void;
   initialData: User;
+  refetch: () => void;
 }
 
-export const UserViewModal = ({ isOpen, handleClose, initialData }: Props) => {
+export const UserViewModal = ({
+  isOpen,
+  handleClose,
+  initialData,
+  refetch,
+}: Props) => {
   return (
     <Modal
       title="View User"
@@ -28,7 +34,11 @@ export const UserViewModal = ({ isOpen, handleClose, initialData }: Props) => {
         </div>
         <h3 className="text-lg font-bold mt-5">Basic Information</h3>
         <div className="flex justify-between px-24 gap-2 mt-4">
-          <UserViewFullName userFullName={initialData.name} />
+          <UserViewFullName
+            userFullName={initialData.name}
+            userId={initialData.id}
+            refetch={refetch}
+          />
           <UserEmailViewComponent email={initialData.email} />
         </div>
 

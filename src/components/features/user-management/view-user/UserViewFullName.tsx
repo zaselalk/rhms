@@ -1,18 +1,40 @@
-import { Button, Input } from "antd";
+import { Button, Input, message } from "antd";
 import {
   CloseCircleOutlined,
   EditFilled,
   SaveOutlined,
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import ProfileService from "../../../../services/profile.service";
 
 interface UserFullNameBlockProps {
   userFullName: string;
+  userId: number;
+  refetch: () => void;
 }
 
-export const UserViewFullName = ({ userFullName }: UserFullNameBlockProps) => {
+export const UserViewFullName = ({
+  userFullName,
+  userId,
+  refetch,
+}: UserFullNameBlockProps) => {
   const [isEdit, setIsEdit] = useState(false);
   const [fullName, setFullName] = useState(userFullName);
+  const profileService = new ProfileService();
+
+  const mutation = useMutation({
+    mutationFn: async (data: { name: string }) => {
+      await profileService.updateUserFullNameById(userId, data.name);
+    },
+    onSuccess: () => {
+      message.success("Name updated successfully!");
+      refetch(); // Refetch the user data after successful update
+    },
+    onError: (error) => {
+      message.error("Failed to update Name: " + error.message);
+    },
+  });
 
   /**
    *  useEffect to set the full name when the component mounts or when userFullName changes
@@ -24,6 +46,11 @@ export const UserViewFullName = ({ userFullName }: UserFullNameBlockProps) => {
   const handleFullNameChange = () => {
     setFullName(fullName);
     setIsEdit(false);
+
+    const updatedData = {
+      name: fullName,
+    };
+    mutation.mutate(updatedData);
   };
 
   const handleFullNameCancel = () => {

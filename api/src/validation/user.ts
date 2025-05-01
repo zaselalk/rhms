@@ -1,5 +1,5 @@
 import { Request, RequestHandler, Response, NextFunction } from "express";
-import { body, validationResult } from "express-validator";
+import { body, validationResult, param } from "express-validator";
 
 export const userRegisterValidation: RequestHandler[] = [
   body("email").isEmail().withMessage("Email is not valid"),
@@ -32,6 +32,7 @@ export const userLoginValidation: RequestHandler[] = [
 
 export const userFullNameUpdateValidation: RequestHandler[] = [
   body("full_name").notEmpty().withMessage("Full name is required"),
+  param("id").isNumeric().withMessage("User ID must be a number"),
 
   (req: Request, res: Response, next: NextFunction): void => {
     const errors = validationResult(req);
