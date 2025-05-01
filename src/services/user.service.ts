@@ -91,4 +91,17 @@ export default class UserService {
       throw new Error(error.response?.data?.message || "Unable to create user");
     }
   }
+
+  async changeUserRole(userId: number, roleId: number) {
+    try {
+      const response = await axiosInstance.put(`/user/${userId}/role`, {
+        role_id: roleId,
+      });
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || "Unable to change user role"
+      );
+    }
+  }
 }

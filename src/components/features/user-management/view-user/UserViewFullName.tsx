@@ -63,7 +63,7 @@ export const UserViewFullName = ({
       <p className="text-md">Full Name</p>
       <div className="flex">
         {!isEdit && (
-          <>
+          <div className="flex items-center gap-2">
             <p className="text-gray-500">{fullName}</p>
             <Button
               type="link"
@@ -73,7 +73,7 @@ export const UserViewFullName = ({
             >
               Edit
             </Button>
-          </>
+          </div>
         )}
 
         {isEdit && (
@@ -88,6 +88,7 @@ export const UserViewFullName = ({
               className="ml-2"
               icon={<SaveOutlined />}
               onClick={handleFullNameChange}
+              disabled={fullName === "" || fullName === userFullName}
             >
               Save
             </Button>
