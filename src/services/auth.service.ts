@@ -7,6 +7,7 @@ interface ReturnUser {
   role: {
     id: number;
     role: string;
+    permission: string;
   };
   token: string;
 }
