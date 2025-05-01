@@ -179,7 +179,10 @@ export class UserController {
     });
   };
 
-  deleteUser = async (req: Request, res: Response): Promise<Response | void> => {
+  deleteUser = async (
+    req: Request,
+    res: Response
+  ): Promise<Response | void> => {
     const { id } = req.params;
     const deleted = await this.userService.deleteUserById(parseInt(id));
 
@@ -198,5 +201,38 @@ export class UserController {
       error: null,
       data: null,
     });
+  };
+
+  checkAuthStatus = async (
+    req: Request,
+    res: Response
+  ): Promise<Response | void> => {
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+      return res.status(401).json({
+        message: "No token provided",
+        status: 401,
+        error: null,
+        data: null,
+      });
+    }
+
+    try {
+      const userStatus = await this.userService.verifyToken(token);
+      return res.status(200).json({
+        message: "Token is valid",
+        status: 200,
+        error: null,
+        data: userStatus,
+      });
+    } catch (error) {
+      return res.status(401).json({
+        message: "Invalid token",
+        status: 401,
+        error: (error as Error).message,
+        data: null,
+      });
+    }
   };
 }
