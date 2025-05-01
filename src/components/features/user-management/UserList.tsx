@@ -49,7 +49,7 @@ export const UserList: FC<UserListProps> = ({ setUserCount }) => {
   useEffect(() => {
     if (isLoading) return;
 
-    setUserCount(data.data.length); // write seperate api to get count
+    setUserCount(data?.data?.length); // write seperate api to get count
   }, [setUserCount, isLoading]);
 
   const handleUserView = (user: User) => {
