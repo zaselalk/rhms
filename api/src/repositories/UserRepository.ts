@@ -64,10 +64,17 @@ export class UserRepository {
     if (limit > 50) limit = 50;
     const offset = (page - 1) * limit;
     return User.findAll({
-      limit: limit,
-      offset: offset,
-      order: [["createdAt", "DESC"]],
+      // limit: limit,
+      // offset: offset,
+      // order: [["createdAt", "DESC"]],
       attributes: ["id", "name", "email", "createdAt", "updatedAt"],
+      include: [
+        {
+          model: Role,
+          as: "role",
+          attributes: ["id", "role", "permission"],
+        },
+      ],
     });
   }
 
