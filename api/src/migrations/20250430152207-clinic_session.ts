@@ -2,7 +2,7 @@ import { QueryInterface, DataTypes } from 'sequelize';
 
 module.exports = {
   async up(queryInterface: QueryInterface): Promise<void> {
-    await queryInterface.createTable('sessions', {
+    await queryInterface.createTable('clinicSessions', {
       sessionId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
