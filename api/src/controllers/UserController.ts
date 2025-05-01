@@ -147,6 +147,17 @@ export class UserController {
   ): Promise<Response | void> => {
     const { id } = req.params;
     const { password: oldPassword, new_password: newPassword } = req.body;
+
+    // if the password is same
+    if (oldPassword === newPassword) {
+      return res.status(400).json({
+        message: "New password cannot be the same as the old password",
+        status: 400,
+        error: null,
+        data: null,
+      });
+    }
+
     const user = await this.userService.changeUserPassword(
       parseInt(id),
       oldPassword,

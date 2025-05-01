@@ -58,11 +58,9 @@ export const userRoleUpdateValidation: RequestHandler[] = [
 
 export const userPasswordUpdateValidation: RequestHandler[] = [
   body("password").notEmpty().withMessage("Password is required"),
-  body("new_password")
-    .notEmpty()
-    .withMessage("New password is required")
-    .isLength({ min: 6 })
-    .withMessage("New password must be at least 6 characters long"),
+  body("new_password").notEmpty().withMessage("New password is required"),
+  // .isLength({ min: 6 })
+  // .withMessage("New password must be at least 6 characters long"),
 
   (req: Request, res: Response, next: NextFunction): void => {
     const errors = validationResult(req);
