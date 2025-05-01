@@ -89,4 +89,20 @@ export class ResidentRepository {
     });
     return deletedRows > 0;
   }
+
+  async getResidentOverview(): Promise<Resident[] | null> {
+    const residents = await Resident.findAll({
+      attributes: [
+        "id",
+        "firstName",
+        "lastName",
+        "nic",
+        "contactNumber",
+        "divisionId",
+        "address",
+      ],
+    });
+    return residents;
+
+  }
 }

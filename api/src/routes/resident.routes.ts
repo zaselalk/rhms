@@ -34,4 +34,9 @@ ResidentRouter.delete(
   catchAsync(residentController.deleteResidentById)
 );
 
+ResidentRouter.get(
+  "/residentOverview",
+  catchAsync(residentController.getResidentOverview)
+);
+
 export default ResidentRouter;

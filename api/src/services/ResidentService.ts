@@ -115,6 +115,11 @@ export class ResidentService {
         return deleted;
     }
     
+    async getResidentOverview(): Promise<Resident[] | null> {
+        const resident = this.residentRepository.getResidentOverview();
+        if (!resident) throw new Error("Resident not found");
+        return resident;
+    }
 
 
 

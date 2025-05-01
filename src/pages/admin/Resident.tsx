@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
+import residentService from "../../services/resident.service";
 
 
 
@@ -11,38 +12,29 @@ const ResidentListPage = () => {
     
     }[]>([]);
 
+    const residentRegister = residentService;
+    
+
+    
 
 
+
+  // Fetch residents data from the server
   const fetchResidents = async () => {
-    console.log("click")
+    
     try {
-      // console.log("Send");
-      const response = await fetch("http://localhost:3001/resident", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const redata = await response.json();
-      // console.log(redata.data);
-      setResidents(redata.data);
-      console.log(residents2);
-
-
-
+      const data = await residentRegister.getResidentOverview();
+      setResidents(data.data);
+      console.log(data.data);
     } catch (error) {
       console.error("Error fetching residents:", error);
     }
   };
 
+  // Fetch data when loading the component
   useEffect(() => {
     fetchResidents();
   }, []);
-
-
 
 
   return (
@@ -79,9 +71,8 @@ const ResidentListPage = () => {
           </div>
 
         </div>
+
         {/* Resident Details Section */}
-
-
         <div className="bg-white shadow-lg rounded-lg p-4">
           <table className="w-full border-collapse">
             <thead>

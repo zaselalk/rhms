@@ -251,6 +251,31 @@ class ResidentController {
       });
     }
   };
+
+
+  getResidentOverview = async (
+    req: Request,
+    res: Response
+  ): Promise<Response | void> => {
+    const residentOverview = await this.residentService.getResidentOverview();
+    if (!residentOverview) {
+      return res.status(404).json({
+        message: null,
+        status: 404,
+        error: "Resident not found",
+        data: null,
+      });
+    } else {
+      res.status(200).json({
+        message: "Resident found",
+        status: 200,
+        error: null,
+        data: residentOverview,
+      });
+    }
+  };
+
+  
 }
 
 export default ResidentController;
