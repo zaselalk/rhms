@@ -92,6 +92,16 @@ class AuthServices {
       );
     }
   }
+
+  async checkToken() {
+    try {
+      const response = await axiosInstance.get("/auth/check");
+
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || "Unable to check token");
+    }
+  }
 }
 
 export default AuthServices;
