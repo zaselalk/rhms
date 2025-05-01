@@ -16,7 +16,7 @@ export const UserCreateModal = ({
   const userService = new UserService();
 
   //fetch roles from api and pass to this component
-  const { data: roles, isLoading, refetch, error } = useRoles();
+  const { data: roles, isLoading, error } = useRoles();
 
   const mutaion = useMutation({
     mutationFn: async ({
