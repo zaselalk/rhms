@@ -72,3 +72,16 @@ export const userPasswordUpdateValidation: RequestHandler[] = [
     next();
   },
 ];
+
+export const userDeleteValidation: RequestHandler[] = [
+  param("id").isNumeric().withMessage("User ID must be a number"),
+
+  (req: Request, res: Response, next: NextFunction): void => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+      return;
+    }
+    next();
+  },
+];

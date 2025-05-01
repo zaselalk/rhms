@@ -128,4 +128,9 @@ export class UserRepository {
     await user.save();
     return user;
   }
+
+  async deleteUserById(id: number): Promise<boolean> {
+    const deletedRows = await User.destroy({ where: { id } });
+    return deletedRows > 0;
+  }
 }

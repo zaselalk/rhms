@@ -6,6 +6,7 @@ import {
   userFullNameUpdateValidation,
   userPasswordUpdateValidation,
   userRoleUpdateValidation,
+  userDeleteValidation,
 } from "../validation/user";
 
 const UserRouter: Router = Router();
@@ -48,6 +49,13 @@ UserRouter.put(
   protectRoute("user:edit"),
   userPasswordUpdateValidation,
   catchAsync(userController.changeUserPassword)
+);
+
+UserRouter.delete(
+  "/:id",
+  protectRoute("user:delete"),
+  userDeleteValidation,
+  catchAsync(userController.deleteUser)
 );
 
 export default UserRouter;
