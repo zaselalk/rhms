@@ -11,7 +11,7 @@ import {
   Skeleton,
 } from "antd";
 import { UserCreateModal } from "./UserCreateModal";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import UserService from "../../../services/user.service";
 import { UserViewModal } from "./UserViewModal";
 
@@ -44,6 +44,17 @@ export const UserList: FC<UserListProps> = ({ setUserCount }) => {
     queryKey: ["users"],
     queryFn: () => userService.getAllUsers(),
     staleTime: 1000 * 60 * 5, // cache for 5 mins
+  });
+
+  const deleteUserMutation = useMutation({
+    mutationFn: (userId: number) => userService.deleteUser(userId),
+    onSuccess: () => {
+      message.success("User deleted successfully");
+      refetch();
+    },
+    onError: (error: any) => {
+      message.error(`Error deleting user: ${error.message}`);
+    },
   });
 
   useEffect(() => {
@@ -107,8 +118,7 @@ export const UserList: FC<UserListProps> = ({ setUserCount }) => {
       okType: "danger",
       cancelText: "No",
       onOk: () => {
-        // Call the delete API or perform the delete action here
-        message.success("User deleted successfully");
+        deleteUserMutation.mutate(user.id);
       },
       onCancel: () => {
         message.info("Deletion cancelled");
