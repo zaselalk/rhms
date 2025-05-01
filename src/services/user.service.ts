@@ -104,4 +104,13 @@ export default class UserService {
       );
     }
   }
+
+  async deleteUser(userId: number) {
+    try {
+      const response = await axiosInstance.delete(`/user/${userId}`);
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || "Unable to delete user");
+    }
+  }
 }
