@@ -125,4 +125,11 @@ export class UserServices {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     return this.userRepository.changeUserPasswordById(id, hashedPassword);
   }
+
+  async deleteUserById(id: number): Promise<boolean> {
+    const user = await this.userRepository.findById(id);
+    if (!user) throw new UserNotFoundException("User not found");
+
+    return this.userRepository.deleteUserById(id);
+  }
 }
