@@ -40,7 +40,7 @@ export class UserRepository {
         {
           model: Role,
           as: "role",
-          attributes: ["id", "role"],
+          attributes: ["id", "role", "permission"],
         },
       ],
     });

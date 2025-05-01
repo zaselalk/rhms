@@ -14,6 +14,12 @@ interface LoginUser {
   role: string | null;
 }
 
+// Define the shape of the decoded token
+interface DecodedToken {
+  id: number;
+  iat?: number; // issued at timestamp (optional)
+}
+
 export class UserServices {
   constructor(private userRepository: UserRepository) {}
 
@@ -131,5 +137,23 @@ export class UserServices {
     if (!user) throw new UserNotFoundException("User not found");
 
     return this.userRepository.deleteUserById(id);
+  }
+
+  async verifyToken(token: string): Promise<DecodedToken> {
+    try {
+      const decoded = jwt.verify(
+        token,
+        process.env.JWT_SECRET as string
+      ) as DecodedToken;
+      console.log(decoded.id);
+      // get the user id from the decoded token
+      const userId = decoded.id;
+      const user = await this.userRepository.findById(userId);
+      if (!user) throw new UserNotFoundException("User not found");
+
+      return user;
+    } catch (error) {
+      throw new ValidationException("Invalid token");
+    }
   }
 }
