@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
 import Modal from '../../layouts/overlays/Modal';
-import { createHousehold, getResidentById } from '../../../services/household.service';
+import { createHousehold } from '../../../services/household.service';
+import axios from 'axios';
 
 interface HouseholdCreateModalProps {
   isOpen: boolean;
@@ -12,32 +13,75 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({ isOpen, ha
   const [grama_division, setGramaDivision] = useState('');
   const [longitude, setLongitude] = useState('');
   const [latitude, setLatitude] = useState('');
-  const [residentId, setResidentId] = useState('');
-  const [residentName, setResidentName] = useState('');
+  const [residentSearchId, setResidentSearchId] = useState("");  // ID for resident search
+  const [foundResidentName, setFoundResidentName] = useState("");
+  const [owner_id, setOwnerId] = useState("");
 
-  const handleSearchResident = async () => {
+   // Feedback state
+   const [message, setMessage] = useState("");
+   const [error, setError] = useState("");
+
+   // Function to search resident by ID
+   const handleSearchResident = async () => {
+    setMessage("");
+    setError("");
+  
+    if (!residentSearchId || isNaN(Number(residentSearchId))) {
+      setError("Please enter a valid numeric Resident ID");
+      return;
+    }
+  
     try {
-      const data = await getResidentById(residentId);
-      if (data?.name) {
-        setResidentName(data.name);
-      } else {
-        console.error('Resident not found');
+      const res = await axios.get(`http://localhost:3001/resident/id/${Number(residentSearchId)}`);
+      
+      const data = res.data.data; // Accessing the correct structure
+  
+      if (!data) {
+        setFoundResidentName("");
+        setOwnerId("");
+        setError("Resident not found");
+        return;
       }
-    } catch (error) {
-      console.error('Error fetching resident data:', error);
+      console.log("Fetched resident data:", data);
+      setFoundResidentName(`${data.firstName} ${data.lastName}` || "Name not available");
+      setOwnerId(res.data.id); // Corrected: use 'id', not '_id'
+    } catch (err) {
+      console.error("Fetch error:", err);
+      setFoundResidentName("");
+      setOwnerId("");
+      setError("Resident not found");
     }
   };
+  
 
+
+  // Function to create a household
   const handleCreateHousehold = async () => {
+    const parsedOwnerId = Number(residentSearchId); // convert once and reuse
+  
+    if (!residentSearchId || isNaN(parsedOwnerId)) {
+      alert('Invalid owner ID');
+      return;
+    }
+  
     if (window.confirm('Are you sure you want to create this household?')) {
       try {
+        console.log({
+          house_no,
+          grama_division,
+          longitude,
+          latitude,
+          owner_id: parsedOwnerId,
+        });
+  
         const data = await createHousehold({
           house_no,
           grama_division,
           longitude,
           latitude,
-          residentId,
+          owner_id: parsedOwnerId,
         });
+  
         alert(data.message || 'Household created successfully!');
         handleClose();
       } catch (error) {
@@ -46,6 +90,8 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({ isOpen, ha
       }
     }
   };
+  
+  
 
   return (
     <Modal isOpen={isOpen} handleClose={handleClose} title="Create Household">
@@ -127,10 +173,10 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({ isOpen, ha
           </label>
           <div className="flex space-x-2">
             <input
-              type="text"
-              id="residentId"
-              value={residentId}
-              onChange={(e) => setResidentId(e.target.value)}
+              type="number"
+              id="residentSearchId"
+              value={residentSearchId}
+              onChange={(e) => setResidentSearchId(e.target.value)}
               className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 outline-none"
               placeholder="Enter resident ID"
             />
@@ -141,9 +187,12 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({ isOpen, ha
               Search
             </button>
           </div>
-          {residentName && (
-            <p className="mt-2 text-sm text-gray-600">Resident: {residentName}</p>
+          {foundResidentName && (
+            <p className="text-green-600 mt-2">
+              Found: <strong>{foundResidentName}</strong>
+            </p>
           )}
+          {error && <p className="text-red-500 mt-2">{error}</p>}
         </div>
 
         {/* Submit Button */}
