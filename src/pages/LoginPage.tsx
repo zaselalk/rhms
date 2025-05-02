@@ -37,6 +37,8 @@ const LoginPage: FC = () => {
           id: user.id,
           name: user.name,
           email: user.email,
+          role: user.role.role,
+          permissions: JSON.parse(user.role.permission),
         })
       );
     },
