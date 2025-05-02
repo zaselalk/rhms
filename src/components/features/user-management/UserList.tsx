@@ -14,6 +14,7 @@ import { UserCreateModal } from "./UserCreateModal";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import UserService from "../../../services/user.service";
 import { UserViewModal } from "./UserViewModal";
+import { useUserContext } from "../../../pages/admin/UsersPage";
 
 const { Title } = Typography;
 
@@ -30,11 +31,9 @@ export interface User {
   };
 }
 
-interface UserListProps {
-  setUserCount: (count: number) => void;
-}
+export const UserList: FC = () => {
+  const { setUserCount } = useUserContext();
 
-export const UserList: FC<UserListProps> = ({ setUserCount }) => {
   const userService: UserService = new UserService();
   const [isCreateUserOpen, setIsCreateUserOpen] = useState(false);
   const [isUserViewMode, setIsUserViewMode] = useState(false);
@@ -60,8 +59,8 @@ export const UserList: FC<UserListProps> = ({ setUserCount }) => {
   useEffect(() => {
     if (isLoading) return;
 
-    setUserCount(data?.data?.length); // write seperate api to get count
-  }, [setUserCount, isLoading]);
+    setUserCount(data?.data?.length); // write separate API to get count
+  }, [setUserCount, data]);
 
   const handleUserView = (user: User) => {
     setUser(user);
