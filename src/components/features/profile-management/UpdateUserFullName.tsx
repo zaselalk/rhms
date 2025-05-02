@@ -1,12 +1,14 @@
 import { Button, Input, message } from "antd";
 import { useState } from "react";
-import { useAppSelector } from "../../../hooks/state/hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/state/hooks";
 import { SaveOutlined } from "@ant-design/icons";
 import { useMutation } from "@tanstack/react-query";
 import ProfileService from "../../../services/profile.service";
+import { changeName } from "../../../store/slices/authSlices";
 
 export const UpdateUserFullName = () => {
   const user = useAppSelector((state) => state.auth.user);
+  const dispatch = useAppDispatch();
   const [fullName, setFullName] = useState(user?.name || "");
   const profileService = new ProfileService();
 
@@ -16,6 +18,7 @@ export const UpdateUserFullName = () => {
     },
     onSuccess: () => {
       message.success("Profile updated successfully!");
+      dispatch(changeName(fullName));
     },
     onError: (error) => {
       message.error("Failed to update profile: " + error.message);
