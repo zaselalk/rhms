@@ -4,6 +4,14 @@ interface LoginUser extends User {
   role?: string;
 }
 
+export interface UserWithPermission extends User {
+  role?: {
+    id: number;
+    role: string;
+    permission: string[];
+  };
+}
+
 export class UserRepository {
   async createUser(
     name: string,
@@ -33,6 +41,24 @@ export class UserRepository {
     });
   }
 
+  async findByEmailWithPermission(
+    email: string
+  ): Promise<UserWithPermission | null> {
+    return User.findOne<UserWithPermission>({
+      where: {
+        email,
+      },
+      attributes: ["id", "name", "email", "password"],
+      include: [
+        {
+          model: Role,
+          as: "role",
+          attributes: ["id", "role", "permission"],
+        },
+      ],
+    });
+  }
+
   async findById(id: number): Promise<User | null> {
     return User.findByPk(id, {
       attributes: ["id", "name", "email"],
@@ -40,7 +66,7 @@ export class UserRepository {
         {
           model: Role,
           as: "role",
-          attributes: ["id", "role"],
+          attributes: ["id", "role", "permission"],
         },
       ],
     });
@@ -64,10 +90,17 @@ export class UserRepository {
     if (limit > 50) limit = 50;
     const offset = (page - 1) * limit;
     return User.findAll({
-      limit: limit,
-      offset: offset,
-      order: [["createdAt", "DESC"]],
+      // limit: limit,
+      // offset: offset,
+      // order: [["createdAt", "DESC"]],
       attributes: ["id", "name", "email", "createdAt", "updatedAt"],
+      include: [
+        {
+          model: Role,
+          as: "role",
+          attributes: ["id", "role", "permission"],
+        },
+      ],
     });
   }
 
@@ -120,5 +153,10 @@ export class UserRepository {
     user.password = hashedPassword;
     await user.save();
     return user;
+  }
+
+  async deleteUserById(id: number): Promise<boolean> {
+    const deletedRows = await User.destroy({ where: { id } });
+    return deletedRows > 0;
   }
 }

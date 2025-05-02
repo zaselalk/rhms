@@ -7,6 +7,7 @@ interface ReturnUser {
   role: {
     id: number;
     role: string;
+    permission: string;
   };
   token: string;
 }
@@ -90,6 +91,16 @@ class AuthServices {
       throw new Error(
         error.response?.data?.message || "Unable to fetch role by ID"
       );
+    }
+  }
+
+  async checkToken() {
+    try {
+      const response = await axiosInstance.get("/auth/check");
+
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || "Unable to check token");
     }
   }
 }

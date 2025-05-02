@@ -12,6 +12,25 @@ interface LoginUser {
   email: string;
   token: string;
   role: string | null;
+  permissions?: string[] | null;
+}
+
+interface LoginUserWithPermissionObjectWithToken {
+  id: number;
+  name: string;
+  email: string;
+  token: string;
+  role: {
+    id: number | undefined;
+    role: string | undefined;
+    permission: string[] | undefined;
+  };
+}
+
+// Define the shape of the decoded token
+interface DecodedToken {
+  id: number;
+  iat?: number; // issued at timestamp (optional)
 }
 
 export class UserServices {
@@ -31,8 +50,11 @@ export class UserServices {
     return this.userRepository.createUser(name, email, hashedPassword);
   }
 
-  async loginUser(email: string, password: string): Promise<LoginUser> {
-    const user = await this.userRepository.findByEmail(email);
+  async loginUser(
+    email: string,
+    password: string
+  ): Promise<LoginUserWithPermissionObjectWithToken | null> {
+    const user = await this.userRepository.findByEmailWithPermission(email);
     if (!user) throw new ValidationException("Invalid username or password");
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -47,7 +69,11 @@ export class UserServices {
       name: user.name,
       email: user.email,
       token: token,
-      role: user.role || null,
+      role: {
+        id: user?.role?.id,
+        role: user?.role?.role,
+        permission: user?.role?.permission,
+      },
     };
   }
 
@@ -124,5 +150,30 @@ export class UserServices {
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     return this.userRepository.changeUserPasswordById(id, hashedPassword);
+  }
+
+  async deleteUserById(id: number): Promise<boolean> {
+    const user = await this.userRepository.findById(id);
+    if (!user) throw new UserNotFoundException("User not found");
+
+    return this.userRepository.deleteUserById(id);
+  }
+
+  async verifyToken(token: string): Promise<DecodedToken> {
+    try {
+      const decoded = jwt.verify(
+        token,
+        process.env.JWT_SECRET as string
+      ) as DecodedToken;
+      console.log(decoded.id);
+      // get the user id from the decoded token
+      const userId = decoded.id;
+      const user = await this.userRepository.findById(userId);
+      if (!user) throw new UserNotFoundException("User not found");
+
+      return user;
+    } catch (error) {
+      throw new ValidationException("Invalid token");
+    }
   }
 }
