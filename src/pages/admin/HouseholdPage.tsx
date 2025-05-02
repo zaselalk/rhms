@@ -1,12 +1,11 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Modal, Select, message } from 'antd';
+import { Modal, Select, message, Button } from 'antd';
+import axios from 'axios';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
 import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { HouseholdCreateModal } from '../../components/features/household-management/HouseholdCreateModal';
-import { Button } from 'antd';
-
 
 const HouseholdPage: FC = () => {
     const navigate = useNavigate();
@@ -16,8 +15,10 @@ const HouseholdPage: FC = () => {
     const [newOwner, setNewOwner] = useState('');
     const [deleteReason, setDeleteReason] = useState('');
     const [isOpen, setIsOpen] = useState(false);
-    const deleteOptions = ['Moved Out', 'Deceased', 'Duplicate Entry', 'Other'];
+    const [registeredHouseholds, setRegisteredHouseholds] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
+    // Sample data for chart
     const householdData = [
         { division: 'Kotagedara', count: 10 },
         { division: 'Navuththuduwa', count: 15 },
@@ -31,25 +32,22 @@ const HouseholdPage: FC = () => {
         { division: 'Pallegoda', count: 13 },
     ];
 
-    const [registeredHouseholds, setRegisteredHouseholds] = useState([
-        { id: '5', owner: 'Kumara Padmasiri', division: 'Kotagedara' },
-        { id: '6', owner: 'Anura Sampath', division: 'Kotagedara' },
-        { id: '7', owner: 'Geetha Nandani', division: 'Bopitiya' },
-        { id: '8', owner: 'Kalum Priyantha', division: 'Navuththuduwa' },
+    // Fetch data from backend
+    useEffect(() => {
+        const fetchHouseholds = async () => {
+            try {
+                const response = await axios.get('http://localhost:3001/household/read'); // Replace with your actual endpoint
+                setRegisteredHouseholds(response.data);
+            } catch (error) {
+                console.error('Error fetching households:', error);
+                message.error('Failed to load households');
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
-    ]);
-
-
-    const residents = [
-        { id: 'R001', name: 'Alice Johnson' },
-        { id: 'R002', name: 'Bob Williams' },
-        { id: 'R003', name: 'Charlie Davis' },
-    ];
-
-
-
-    const totalResidents = residents.length;
-
+        fetchHouseholds();
+    }, []);
 
     const handleViewHousehold = (householdid: string) => {
         navigate(`/admin/households/manage/${householdid}`);
@@ -75,6 +73,11 @@ const HouseholdPage: FC = () => {
         setEditModalVisible(false);
     };
 
+    // Loading state check
+    if (isLoading) {
+        return <div>Loading households...</div>;
+    }
+
     return (
         <DashboardContainer>
             <HouseholdCreateModal isOpen={isOpen} handleClose={() => setIsOpen(false)} />
@@ -92,7 +95,7 @@ const HouseholdPage: FC = () => {
                 {/* Info Cards */}
                 <div className="flex mb-6">
                     <div className="bg-white p-4 rounded-lg shadow-md mr-4 flex-1 text-center">
-                        <p className="text-lg font-semibold text-gray-800">96</p>
+                        <p className="text-lg font-semibold text-gray-800">{registeredHouseholds.length}</p>
                         <p className="text-sm text-gray-600">Total Households</p>
                     </div>
                     <div className="bg-white p-4 rounded-lg shadow-md flex-1 text-center">
@@ -119,7 +122,7 @@ const HouseholdPage: FC = () => {
                     <table className="w-full table-auto">
                         <thead>
                             <tr>
-                                <th className="text-left px-4 py-2 text-sm text-gray-600">ID</th>
+                                <th className="text-left px-4 py-2 text-sm text-gray-600">House No</th>
                                 <th className="text-left px-4 py-2 text-sm text-gray-600">Owner</th>
                                 <th className="text-left px-4 py-2 text-sm text-gray-600">Division</th>
                                 <th className="text-left px-4 py-2 text-sm text-gray-600">Actions</th>
@@ -128,9 +131,9 @@ const HouseholdPage: FC = () => {
                         <tbody>
                             {registeredHouseholds.map((household) => (
                                 <tr key={household.id}>
-                                    <td className="px-4 py-2 text-sm text-gray-700">{household.id}</td>
-                                    <td className="px-4 py-2 text-sm text-gray-700">{household.owner}</td>
-                                    <td className="px-4 py-2 text-sm text-gray-700">{household.division}</td>
+                                    <td className="px-4 py-2 text-sm text-gray-700">{household.house_no}</td>
+                                    <td className="px-4 py-2 text-sm text-gray-700">{`${household.owner.firstName} ${household.owner.lastName}`}</td>
+                                    <td className="px-4 py-2 text-sm text-gray-700">{household.grama_division}</td>
                                     <td className="px-4 py-2 text-sm text-gray-700">
                                         <div className="flex space-x-2">
                                             <button
@@ -178,7 +181,10 @@ const HouseholdPage: FC = () => {
                     placeholder="Select new owner"
                     onChange={value => setNewOwner(value)}
                 >
-                    {residents.map(resident => <Select.Option key={resident.id} value={resident.name}>{resident.name}</Select.Option>)}
+                    {/* Assuming residents are available for selecting a new owner */}
+                    <Select.Option value="Alice Johnson">Alice Johnson</Select.Option>
+                    <Select.Option value="Bob Williams">Bob Williams</Select.Option>
+                    <Select.Option value="Charlie Davis">Charlie Davis</Select.Option>
                 </Select>
             </Modal>
         </DashboardContainer>
