@@ -1,24 +1,26 @@
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Modal, Select, message, Button } from 'antd';
+import { Modal, message, Button, Input } from 'antd';
 import axios from 'axios';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
 import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { HouseholdCreateModal } from '../../components/features/household-management/HouseholdCreateModal';
+import axiosInstance from '../../services/axios/axiosInstance';
+import { deleteHousehold } from '../../services/household.service';
 
 const HouseholdPage: FC = () => {
     const navigate = useNavigate();
     const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
     const [isEditModalVisible, setEditModalVisible] = useState(false);
     const [selectedHousehold, setSelectedHousehold] = useState<any>(null);
-    const [newOwner, setNewOwner] = useState('');
+    const [newOwnerId, setNewOwnerId] = useState('');
+    const [newOwnerName, setNewOwnerName] = useState('');
     const [deleteReason, setDeleteReason] = useState('');
     const [isOpen, setIsOpen] = useState(false);
     const [registeredHouseholds, setRegisteredHouseholds] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Sample data for chart
     const householdData = [
         { division: 'Kotagedara', count: 10 },
         { division: 'Navuththuduwa', count: 15 },
@@ -32,11 +34,10 @@ const HouseholdPage: FC = () => {
         { division: 'Pallegoda', count: 13 },
     ];
 
-    // Fetch data from backend
     useEffect(() => {
         const fetchHouseholds = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/household/read'); // Replace with your actual endpoint
+                const response = await axios.get('http://localhost:3001/household/read');
                 setRegisteredHouseholds(response.data);
             } catch (error) {
                 console.error('Error fetching households:', error);
@@ -45,38 +46,97 @@ const HouseholdPage: FC = () => {
                 setIsLoading(false);
             }
         };
-
         fetchHouseholds();
     }, []);
 
-    const handleViewHousehold = (householdid: string) => {
-        navigate(`/admin/households/manage/${householdid}`);
+    const handleViewHousehold = (householdId: string) => {
+        navigate(`/admin/households/manage/${householdId}`);
     };
 
-    const handleDeleteHousehold = (householdId: string) => {
-        setRegisteredHouseholds(prev => prev.filter(household => household.id !== householdId));
-        message.success('Household deleted successfully!');
-        setDeleteModalVisible(false);
+    const handleDeleteHousehold = (household: any) => {
+        setSelectedHousehold(household);
+        setDeleteModalVisible(true);
+    };
+
+    const confirmDeleteHousehold = async () => {
+        if (!selectedHousehold) return;
+        try {
+            // Call the deleteHousehold method to delete the selected household
+            await deleteHousehold(selectedHousehold.house_no);
+            setRegisteredHouseholds(prev =>
+                prev.filter(household => household.house_no !== selectedHousehold.house_no)
+            );
+            message.success('Household deleted successfully!');
+            setDeleteModalVisible(false);
+            setSelectedHousehold(null);
+            setDeleteReason('');
+        } catch (error) {
+            message.error('Failed to delete household');
+        }
     };
 
     const handleEditHousehold = (household: any) => {
         setSelectedHousehold(household);
+        setNewOwnerName(`${household.owner.firstName} ${household.owner.lastName}`);
         setEditModalVisible(true);
     };
 
-    const handleConfirmEdit = () => {
-        if (!newOwner) return message.error('Please select a new owner!');
-        setRegisteredHouseholds(prev => prev.map(household =>
-            household.id === selectedHousehold.id ? { ...household, owner: newOwner } : household
-        ));
-        message.success('Household owner updated successfully!');
-        setEditModalVisible(false);
+    const handleSearchResident = async () => {
+        if (!newOwnerId) return message.error('Please enter a valid Resident ID!');
+        try {
+            const response = await axios.get(`http://localhost:3001/resident/id/${newOwnerId}`);
+            if (response.data?.data) {
+                setNewOwnerName(`${response.data.data.firstName} ${response.data.data.lastName}`);
+                message.success('Resident found');
+            } else {
+                message.error('Resident not found');
+                setNewOwnerName('');  // Clear name if not found
+            }
+        } catch (error) {
+            console.error('Error searching resident:', error);
+            message.error('Failed to search resident');
+        }
     };
 
-    // Loading state check
-    if (isLoading) {
-        return <div>Loading households...</div>;
-    }
+    const handleConfirmEdit = async () => {
+        if (!newOwnerId) {
+            return message.error('Please enter a valid resident ID!');
+        }
+        if (!selectedHousehold || !selectedHousehold.owner) {
+            return message.error('Invalid household or owner selected!');
+        }
+
+        try {
+            // Make the API request to update the household owner
+            const response = await axios.put(
+                `http://localhost:3001/household/update/${selectedHousehold.house_no}`,
+                { newOwnerId }
+            );
+
+            if (response.status === 200 && response.data.owner) {
+                setRegisteredHouseholds(prev =>
+                    prev.map(household =>
+                        household.house_no === selectedHousehold.house_no
+                            ? { ...household, owner: response.data.owner }
+                            : household
+                    )
+                );
+                message.success('Household owner updated successfully!');
+                setEditModalVisible(false);
+            } else {
+                message.error('Failed to update owner');
+            }
+        } catch (error: any) {
+            console.error('Error updating household owner:', error);
+            if (error.response?.data?.message) {
+                message.error(error.response.data.message);
+            } else {
+                message.error('Failed to update household owner');
+            }
+        }
+    };
+
+    if (isLoading) return <div>Loading households...</div>;
 
     return (
         <DashboardContainer>
@@ -92,7 +152,6 @@ const HouseholdPage: FC = () => {
                     </Button>
                 </div>
 
-                {/* Info Cards */}
                 <div className="flex mb-6">
                     <div className="bg-white p-4 rounded-lg shadow-md mr-4 flex-1 text-center">
                         <p className="text-lg font-semibold text-gray-800">{registeredHouseholds.length}</p>
@@ -104,7 +163,6 @@ const HouseholdPage: FC = () => {
                     </div>
                 </div>
 
-                {/* Chart */}
                 <div className="bg-white p-6 rounded-lg shadow-md mb-6">
                     <h3 className="text-lg font-semibold text-gray-700 mb-4">Households Distribution</h3>
                     <ResponsiveContainer width="100%" height={300}>
@@ -117,7 +175,6 @@ const HouseholdPage: FC = () => {
                     </ResponsiveContainer>
                 </div>
 
-                {/* Household List */}
                 <div className="bg-white p-6 rounded-lg shadow-md">
                     <table className="w-full table-auto">
                         <thead>
@@ -137,31 +194,28 @@ const HouseholdPage: FC = () => {
                                     <td className="px-4 py-2 text-sm text-gray-700">
                                         <div className="flex space-x-2">
                                             <button
-                                                className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-full shadow-md hover:bg-blue-600 transition"
+                                                className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-full shadow-md hover:bg-blue-600"
                                                 onClick={() => handleViewHousehold(household.id)}
                                             >
                                                 <span className="mr-2">View</span>
                                                 <EyeOutlined />
                                             </button>
-
                                             <button
-                                                className="flex items-center px-4 py-2 bg-green-500 text-white rounded-full shadow-md hover:bg-green-600 transition"
+                                                className="flex items-center px-4 py-2 bg-green-500 text-white rounded-full shadow-md hover:bg-green-600"
                                                 onClick={() => handleEditHousehold(household)}
                                             >
                                                 <span className="mr-2">Edit</span>
                                                 <EditOutlined />
                                             </button>
-
                                             <button
-                                                className="flex items-center px-4 py-2 bg-red-500 text-white rounded-full shadow-md hover:bg-red-600 transition"
-                                                onClick={() => handleDeleteHousehold(household.id)}
+                                                className="flex items-center px-4 py-2 bg-red-500 text-white rounded-full shadow-md hover:bg-red-600"
+                                                onClick={() => handleDeleteHousehold(household)}
                                             >
                                                 <span className="mr-2">Delete</span>
                                                 <DeleteOutlined />
                                             </button>
                                         </div>
                                     </td>
-
                                 </tr>
                             ))}
                         </tbody>
@@ -169,23 +223,46 @@ const HouseholdPage: FC = () => {
                 </div>
             </div>
 
-            {/* Edit Household Modal */}
+            <Modal
+                title="Delete Household"
+                visible={isDeleteModalVisible}
+                onOk={confirmDeleteHousehold}
+                onCancel={() => setDeleteModalVisible(false)}
+                okText="Delete"
+                cancelText="Cancel"
+            >
+                <p>
+                    Are you sure you want to delete the household <strong>{selectedHousehold?.house_no}</strong>?
+                </p>
+                <Input
+                    type="text"
+                    placeholder="Reason for deletion"
+                    value={deleteReason}
+                    onChange={(e) => setDeleteReason(e.target.value)}
+                />
+            </Modal>
+
             <Modal
                 title="Edit Household Owner"
-                open={isEditModalVisible}
-                onCancel={() => setEditModalVisible(false)}
+                visible={isEditModalVisible}
                 onOk={handleConfirmEdit}
+                onCancel={() => setEditModalVisible(false)}
+                okText="Confirm"
+                cancelText="Cancel"
             >
-                <Select
-                    className="w-full"
-                    placeholder="Select new owner"
-                    onChange={value => setNewOwner(value)}
-                >
-                    {/* Assuming residents are available for selecting a new owner */}
-                    <Select.Option value="Alice Johnson">Alice Johnson</Select.Option>
-                    <Select.Option value="Bob Williams">Bob Williams</Select.Option>
-                    <Select.Option value="Charlie Davis">Charlie Davis</Select.Option>
-                </Select>
+                <div className="mb-4">
+                    <label className="block text-sm text-gray-700 mb-2">New Owner ID</label>
+                    <Input
+                        value={newOwnerId}
+                        onChange={(e) => setNewOwnerId(e.target.value)}
+                        onBlur={handleSearchResident}
+                        placeholder="Enter new owner's Resident ID"
+                    />
+                </div>
+                <div className="mb-4">
+                    <label className="block text-sm text-gray-700 mb-2">New Owner Name</label>
+                    <Input value={newOwnerName} disabled />
+                </div>
             </Modal>
         </DashboardContainer>
     );
