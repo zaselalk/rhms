@@ -4,6 +4,7 @@ import User from "../models/user";
 import { UserRepository } from "../repositories/UserRepository";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { RoleRepository } from "../repositories/RoleRepository";
 
 interface LoginUser {
   id: number;
@@ -11,6 +12,25 @@ interface LoginUser {
   email: string;
   token: string;
   role: string | null;
+  permissions?: string[] | null;
+}
+
+interface LoginUserWithPermissionObjectWithToken {
+  id: number;
+  name: string;
+  email: string;
+  token: string;
+  role: {
+    id: number | undefined;
+    role: string | undefined;
+    permission: string[] | undefined;
+  };
+}
+
+// Define the shape of the decoded token
+interface DecodedToken {
+  id: number;
+  iat?: number; // issued at timestamp (optional)
 }
 
 export class UserServices {
@@ -30,8 +50,11 @@ export class UserServices {
     return this.userRepository.createUser(name, email, hashedPassword);
   }
 
-  async loginUser(email: string, password: string): Promise<LoginUser> {
-    const user = await this.userRepository.findByEmail(email);
+  async loginUser(
+    email: string,
+    password: string
+  ): Promise<LoginUserWithPermissionObjectWithToken | null> {
+    const user = await this.userRepository.findByEmailWithPermission(email);
     if (!user) throw new ValidationException("Invalid username or password");
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -46,7 +69,11 @@ export class UserServices {
       name: user.name,
       email: user.email,
       token: token,
-      role: user.role || null,
+      role: {
+        id: user?.role?.id,
+        role: user?.role?.role,
+        permission: user?.role?.permission,
+      },
     };
   }
 
@@ -55,9 +82,98 @@ export class UserServices {
     if (!users) throw new UserNotFoundException("No users found");
     return users;
   }
-  // async getUserById(id: number): Promise<User> {
-  //   const user = await this.userRepository.getUserById(id);
-  //   if (!user) throw new UserNotFoundException("User not found");
-  //   return user;
-  // }
+
+  async getUserById(id: number): Promise<User | null> {
+    const user = await this.userRepository.findById(id);
+    if (!user) throw new UserNotFoundException("User not found");
+    return user;
+  }
+
+  async addNewUser(
+    full_name: string,
+    role_id: number,
+    email: string,
+    password: string
+  ): Promise<User> {
+    const existingUser = await this.userRepository.findByEmail(email);
+    if (existingUser) throw new UserNotFoundException("Email already in use");
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    return this.userRepository.CreateUser(
+      full_name,
+      role_id,
+      email,
+      hashedPassword
+    );
+  }
+
+  async updateUserFullNameById(
+    id: number,
+    full_name: string
+  ): Promise<User | null> {
+    const user = await this.userRepository.findById(id);
+    if (!user) throw new UserNotFoundException("User not found");
+
+    return this.userRepository.updateUserFullNameById(id, full_name);
+  }
+
+  async updateUserRoleById(id: number, role_id: number): Promise<User | null> {
+    // Check if the user exists
+    const user = await this.userRepository.findById(id);
+    if (!user) throw new UserNotFoundException("User not found");
+
+    // Check if the role exists
+    const roleRepository = new RoleRepository();
+    const role = await roleRepository.findById(role_id);
+
+    // throw error if role not found
+    if (!role) throw new UserNotFoundException("Role not found");
+
+    // Check if the user already has the role
+    if (user.roleId === role_id)
+      throw new ValidationException("Role already assigned");
+
+    return this.userRepository.updateUserRoleById(id, role_id);
+  }
+
+  async changeUserPassword(
+    id: number,
+    oldPassword: string,
+    newPassword: string
+  ): Promise<User | null> {
+    console.log(`oldPassword, newPassword`, oldPassword, newPassword);
+    const user = await this.userRepository.findByIdWithPassword(id);
+    if (!user) throw new UserNotFoundException("User not found");
+
+    const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+    if (!isPasswordValid) throw new ValidationException("Invalid old password");
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    return this.userRepository.changeUserPasswordById(id, hashedPassword);
+  }
+
+  async deleteUserById(id: number): Promise<boolean> {
+    const user = await this.userRepository.findById(id);
+    if (!user) throw new UserNotFoundException("User not found");
+
+    return this.userRepository.deleteUserById(id);
+  }
+
+  async verifyToken(token: string): Promise<DecodedToken> {
+    try {
+      const decoded = jwt.verify(
+        token,
+        process.env.JWT_SECRET as string
+      ) as DecodedToken;
+      console.log(decoded.id);
+      // get the user id from the decoded token
+      const userId = decoded.id;
+      const user = await this.userRepository.findById(userId);
+      if (!user) throw new UserNotFoundException("User not found");
+
+      return user;
+    } catch (error) {
+      throw new ValidationException("Invalid token");
+    }
+  }
 }

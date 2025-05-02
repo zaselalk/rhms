@@ -3,10 +3,10 @@ import Modal from '../../layouts/overlays/Modal'
 import { PermissionCard } from './role-management/PermissionCard';
 import { useMutation } from '@tanstack/react-query';
 import { message } from 'antd';
-import AuthServices from '../../../services/auth.service';
 import { Formik, Form, Field, FormikHelpers } from 'formik';
 
 import * as Yup from 'yup';
+import UserService from '../../../services/user.service';
 
 interface UserRoleCreateModalProps {
     isCreateNewRole: boolean;
@@ -23,11 +23,12 @@ export const UserRoleCreateModal: FC<UserRoleCreateModalProps> = ({ isCreateNewR
     const formikHelpersRef = useRef<FormikHelpers<{ roleName: string, permissionList: string[] }> | null>(null);
 
     const [messageApi, contextHolder] = message.useMessage();
-    const Auth = new AuthServices();
+
+    const User = new UserService();
 
     const mutation = useMutation({
         mutationFn: async ({ roleName, permissionList }: { roleName: string, permissionList: string[] }) => {
-            await Auth.crateUserRole(roleName, permissionList);
+            await User.crateUserRole(roleName, permissionList);
         },
         onSuccess: () => {
             messageApi.open({

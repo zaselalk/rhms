@@ -4,9 +4,9 @@ import { Field, Formik, Form } from 'formik';
 import { PermissionCard } from './role-management/PermissionCard';
 import { message } from 'antd';
 import { useMutation } from '@tanstack/react-query';
-import AuthServices from '../../../services/auth.service';
 import * as Yup from 'yup';
 import { useSingleRole } from '../../../hooks/useSingleRole';
+import UserService from '../../../services/user.service';
 
 interface UserRoleUpdateModalProps {
     isUpdatingRole: boolean;
@@ -31,7 +31,7 @@ const allPermissions = [
 
 export const UserRoleUpdateModal: FC<UserRoleUpdateModalProps> = ({ isUpdatingRole, setIsUpdatingRole, roleId }) => {
     const [messageApi, contextHolder] = message.useMessage();
-    const Auth = new AuthServices();
+    const User = new UserService();
     const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
 
     const { data: roles, isLoading, isSuccess, refetch } = useSingleRole(roleId);
@@ -51,7 +51,7 @@ export const UserRoleUpdateModal: FC<UserRoleUpdateModalProps> = ({ isUpdatingRo
 
     const mutation = useMutation({
         mutationFn: async ({ roleName, permissionList }: { roleName: string, permissionList: string[] }) => {
-            await Auth.updateUserRole(roleId, roleName, permissionList);
+            await User.updateUserRole(roleId, roleName, permissionList);
         },
         onSuccess: () => {
             messageApi.open({

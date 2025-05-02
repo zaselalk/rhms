@@ -3,20 +3,19 @@ import Modal from '../../components/layouts/overlays/Modal';
 import { Link } from 'react-router';
 import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
 import { FaTrash, FaPlus } from 'react-icons/fa';
-import { Line } from 'react-chartjs-2'; // Import Line chart from react-chartjs-2
+import { Bar } from 'react-chartjs-2'; // Changed from Line to Bar
 import {
     Chart as ChartJS,
     CategoryScale,
     LinearScale,
-    PointElement,
-    LineElement,
+    BarElement,
     Title,
     Tooltip,
     Legend,
 } from 'chart.js';
 
 // Register Chart.js components
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 interface Division {
     id: number;
@@ -33,20 +32,15 @@ const DivisionPage: FC = () => {
         { id: 4, name: "Nowthuduwa", population: 290 },
         { id: 6, name: "Pahalawela", population: 150 },
         { id: 7, name: "Madegedara", population: 250 },
-        { id: 8, name: "Boopitiya", population: 345},
+        { id: 8, name: "Boopitiya", population: 345 },
         { id: 9, name: "Karampethara", population: 250 },
     ]);
     const [newDivision, setNewDivision] = useState<Division | null>(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [divisionToDelete, setDivisionToDelete] = useState<Division | null>(null);
 
-    const handleClose = () => {
-        setIsOpen(false);
-    };
-
-    const handleOpen = () => {
-        setIsOpen(true);
-    };
+    const handleClose = () => setIsOpen(false);
+    const handleOpen = () => setIsOpen(true);
 
     const handleAddDivision = (name: string, population: number) => {
         const newDivision = {
@@ -81,15 +75,13 @@ const DivisionPage: FC = () => {
         const divisionPopulations = divisions.map(division => division.population);
 
         return {
-            labels: divisionNames, // X-axis labels: Division Names
+            labels: divisionNames,
             datasets: [
                 {
                     label: 'Population by Division',
-                    data: divisionPopulations, // Y-axis data: Population of each division
-                    borderColor: '#008FFB', // Line color
-                    backgroundColor: 'rgba(0, 143, 251, 0.2)', // Fill color under the line
-                    fill: true,
-                    tension: 0.4, // Smoothing of the line
+                    data: divisionPopulations,
+                    backgroundColor: '#008FFB',
+                    borderRadius: 5,
                 },
             ],
         };
@@ -151,7 +143,9 @@ const DivisionPage: FC = () => {
                 {isDeleteModalOpen && (
                     <Modal isOpen={isDeleteModalOpen} handleClose={cancelDelete} title="Confirm Deletion">
                         <div className="p-6">
-                            <p className="text-sm text-gray-600">Are you sure you want to delete the division {divisionToDelete?.name}?</p>
+                            <p className="text-sm text-gray-600">
+                                Are you sure you want to delete the division {divisionToDelete?.name}?
+                            </p>
                             <div className="flex justify-end mt-4">
                                 <button
                                     className="px-4 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
@@ -186,7 +180,6 @@ const DivisionPage: FC = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         {divisions.map((division) => (
                             <Link
-                                // to={`/${division.id}`}
                                 to={"SingleDivisionPage"}
                                 key={division.id}
                                 className="bg-white p-4 rounded-lg shadow-md flex justify-between items-center"
@@ -198,7 +191,7 @@ const DivisionPage: FC = () => {
                                 <button
                                     className="text-red-500 cursor-pointer hover:text-red-700"
                                     onClick={(e) => {
-                                        e.preventDefault(); // Prevent navigation
+                                        e.preventDefault();
                                         handleDelete(division);
                                     }}
                                 >
@@ -208,10 +201,10 @@ const DivisionPage: FC = () => {
                         ))}
                     </div>
 
-                    {/* Line Graph for Population of All Divisions */}
+                    {/* Bar Graph for Population of All Divisions */}
                     <div className="mt-6">
                         <h3 className="text-xl font-semibold text-gray-800">Population of All Divisions</h3>
-                        <Line data={generateChartData()} options={{ responsive: true }} />
+                        <Bar data={generateChartData()} options={{ responsive: true }} />
                     </div>
                 </div>
             </div>

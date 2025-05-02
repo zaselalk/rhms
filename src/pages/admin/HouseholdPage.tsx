@@ -5,7 +5,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recha
 import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
 import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { HouseholdCreateModal } from '../../components/features/household-management/HouseholdCreateModal';
-import { Button } from '../../components/common/Button';
+import { Button } from 'antd';
 
 
 const HouseholdPage: FC = () => {
@@ -32,10 +32,10 @@ const HouseholdPage: FC = () => {
     ];
 
     const [registeredHouseholds, setRegisteredHouseholds] = useState([
-        { id: 'H001', owner: 'John Doe', division: 'Kotagedara' },
-        { id: 'H002', owner: 'Jane Smith', division: 'Kotagedara' },
-        { id: 'H003', owner: 'Michael Brown', division: 'Bopitiya' },
-        { id: 'H004', owner: 'John White', division: 'Navuththuduwa' },
+        { id: '5', owner: 'Kumara Padmasiri', division: 'Kotagedara' },
+        { id: '6', owner: 'Anura Sampath', division: 'Kotagedara' },
+        { id: '7', owner: 'Geetha Nandani', division: 'Bopitiya' },
+        { id: '8', owner: 'Kalum Priyantha', division: 'Navuththuduwa' },
 
     ]);
 

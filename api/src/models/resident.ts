@@ -1,7 +1,6 @@
 "use strict";
 import { DataTypes, Model } from "sequelize";
 import sequelize from ".";
-import { J } from "react-router/dist/development/route-data-H2S3hwhf";
 
 interface ResidentAttributes {
   id?: number;
@@ -29,7 +28,8 @@ interface ResidentAttributes {
 
 export class Resident
   extends Model<ResidentAttributes>
-  implements ResidentAttributes {
+  implements ResidentAttributes
+{
   public id?: number;
   public firstName!: string;
   public lastName!: string;
@@ -52,7 +52,6 @@ export class Resident
   public height!: number;
   public weight!: number;
 }
-
 
 Resident.init(
   {
@@ -144,9 +143,8 @@ Resident.init(
     sequelize: sequelize,
     modelName: "Resident",
     tableName: "residents",
-    engine:"InnoDB"
+    engine: "InnoDB",
   }
-
 );
 
 export default Resident;

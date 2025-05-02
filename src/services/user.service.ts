@@ -1,22 +1,116 @@
+import axiosInstance from "./axios/axiosInstance";
+
 export default class UserService {
   async getAllUsers() {
-    const requestHeaders = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    };
-
-    const response = await fetch("http://localhost:3001/user", {
-      method: "GET",
-      headers: requestHeaders,
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Unable to fetch users");
+    try {
+      const response = await axiosInstance.get("/user");
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || "Unable to fetch users");
     }
+  }
 
-    const data = await response.json();
-    console.log(data);
-    return data;
+  async crateUserRole(roleName: string, permissionList: string[]) {
+    try {
+      const response = await axiosInstance.post("/role", {
+        roleName,
+        permissionList,
+      });
+
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || "Unable to Create User");
+    }
+  }
+
+  async getAllRoles() {
+    try {
+      const response = await axiosInstance.get("/role");
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || "Unable to fetch roles");
+    }
+  }
+
+  async updateUserRole(
+    roleId: string,
+    roleName: string,
+    permissionList: string[]
+  ) {
+    try {
+      const response = await axiosInstance.patch(`/role/${roleId}`, {
+        roleName,
+        permissionList,
+      });
+
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || "Unable to update User Role"
+      );
+    }
+  }
+
+  async deleteUserRole(roleId: string) {
+    try {
+      const response = await axiosInstance.delete(`/role/${roleId}`);
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || "Unable to delete User Role"
+      );
+    }
+  }
+
+  async getRoleById(roleId: string) {
+    try {
+      const response = await axiosInstance.get(`/role/${roleId}`);
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || "Unable to fetch role by ID"
+      );
+    }
+  }
+
+  async createUser(
+    full_name: string,
+    email: string,
+    password: string,
+    role_id: number
+  ) {
+    try {
+      const response = await axiosInstance.post("/user", {
+        full_name,
+        email,
+        password,
+        role_id,
+      });
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || "Unable to create user");
+    }
+  }
+
+  async changeUserRole(userId: number, roleId: number) {
+    try {
+      const response = await axiosInstance.put(`/user/${userId}/role`, {
+        role_id: roleId,
+      });
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || "Unable to change user role"
+      );
+    }
+  }
+
+  async deleteUser(userId: number) {
+    try {
+      const response = await axiosInstance.delete(`/user/${userId}`);
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || "Unable to delete user");
+    }
   }
 }
