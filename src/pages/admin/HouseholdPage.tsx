@@ -258,10 +258,13 @@ const HouseholdPage: FC = () => {
                         onBlur={handleSearchResident}
                         placeholder="Enter new owner's Resident ID"
                     />
+                    <Button onClick={handleSearchResident} type="primary">
+                Search
+            </Button>
                 </div>
                 <div className="mb-4">
                     <label className="block text-sm text-gray-700 mb-2">New Owner Name</label>
-                    <Input value={newOwnerName} disabled />
+                    <Input value={newOwnerName}  />
                 </div>
             </Modal>
         </DashboardContainer>
