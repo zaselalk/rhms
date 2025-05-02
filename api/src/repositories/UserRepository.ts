@@ -4,6 +4,14 @@ interface LoginUser extends User {
   role?: string;
 }
 
+export interface UserWithPermission extends User {
+  role?: {
+    id: number;
+    role: string;
+    permission: string[];
+  };
+}
+
 export class UserRepository {
   async createUser(
     name: string,
@@ -28,6 +36,24 @@ export class UserRepository {
           model: Role,
           as: "role",
           attributes: ["id", "role"],
+        },
+      ],
+    });
+  }
+
+  async findByEmailWithPermission(
+    email: string
+  ): Promise<UserWithPermission | null> {
+    return User.findOne<UserWithPermission>({
+      where: {
+        email,
+      },
+      attributes: ["id", "name", "email", "password"],
+      include: [
+        {
+          model: Role,
+          as: "role",
+          attributes: ["id", "role", "permission"],
         },
       ],
     });

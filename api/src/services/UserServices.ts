@@ -12,6 +12,19 @@ interface LoginUser {
   email: string;
   token: string;
   role: string | null;
+  permissions?: string[] | null;
+}
+
+interface LoginUserWithPermissionObjectWithToken {
+  id: number;
+  name: string;
+  email: string;
+  token: string;
+  role: {
+    id: number | undefined;
+    role: string | undefined;
+    permission: string[] | undefined;
+  };
 }
 
 // Define the shape of the decoded token
@@ -37,8 +50,11 @@ export class UserServices {
     return this.userRepository.createUser(name, email, hashedPassword);
   }
 
-  async loginUser(email: string, password: string): Promise<LoginUser> {
-    const user = await this.userRepository.findByEmail(email);
+  async loginUser(
+    email: string,
+    password: string
+  ): Promise<LoginUserWithPermissionObjectWithToken | null> {
+    const user = await this.userRepository.findByEmailWithPermission(email);
     if (!user) throw new ValidationException("Invalid username or password");
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -53,7 +69,11 @@ export class UserServices {
       name: user.name,
       email: user.email,
       token: token,
-      role: user.role || null,
+      role: {
+        id: user?.role?.id,
+        role: user?.role?.role,
+        permission: user?.role?.permission,
+      },
     };
   }
 
