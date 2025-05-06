@@ -30,10 +30,15 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.user = null;
     },
+    changeName: (state, action: PayloadAction<string>) => {
+      if (state.user) {
+        state.user.name = action.payload;
+      }
+    },
   },
 });
 
 // export actions
-export const { login, logout } = authSlice.actions;
+export const { login, logout, changeName } = authSlice.actions;
 // export reducer
 export default authSlice.reducer;

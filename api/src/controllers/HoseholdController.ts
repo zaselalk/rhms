@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { HouseholdServices } from "../services/HouseholdServices";
 import { HouseholdRepository } from "../repositories/HouseholdRepository";
-import { ResidentService } from "../services/ResidentService";
-import { ResidentRepository } from "../repositories/ResidentRepository";
-import { get } from "http";
+import Household from "../models/hosehold";
+import Resident from "../models/resident";
+
 
 export class HouseholdController {
   private householdService: HouseholdServices;
@@ -34,42 +34,29 @@ export class HouseholdController {
     return res.json(household);
   };
 
-  // // Read
-  // getHousehold = async (req: Request, res: Response): Promise<Response | void> => {
-  //   const id = parseInt(req.params.id);
-  //   const details = await this.householdService?.getHouseholdDetails(id);
 
-  //   if (!details) {
-  //     return res.status(404).json({ message: "Household not found" });
-  //   }
+  //Read all households
+  
+    // Inside HouseholdController class
 
-  //   return res.status(200).json(details);
-  // };
+getAllHouseholds = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const households = await Household.findAll({
+      attributes: ["house_no", "owner_id", "grama_division"],
+      include: [
+        {
+          model: Resident,
+          as: "owner",
+          attributes: ["firstName", "lastName"],
+        },
+      ],
+    });
 
-  // // Update
-  // updateHouseholdOwner = async (req: Request, res: Response): Promise<Response | void> => {
-  //   const id = parseInt(req.params.id);
-  //   const { new_owner_id } = req.body;
+    return res.json(households);
+  } catch (error) {
+    console.error("Error fetching households:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
 
-  //   const updated = await this.householdService?.updateOwner(id, new_owner_id);
-  //   if (!updated) {
-  //     return res.status(400).json({ message: "Failed to update owner" });
-  //   }
-
-  //   return res.status(200).json({ message: "Owner updated", data: updated });
-  // };
-
-
-  // // Delete by house_no
-  // deleteHousehold = async (req: Request, res: Response): Promise<Response | void> => {
-  //   const { house_no } = req.params;
-
-  //   const deleted = await this.householdService?.deleteHousehold(house_no);
-  //   if (!deleted) {
-  //     return res.status(404).json({ message: "Household not found or could not be deleted" });
-  //   }
-
-  //   return res.status(200).json({ message: "Household deleted", data: deleted });
-  // };
-}
-
+}  

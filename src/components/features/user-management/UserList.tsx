@@ -14,6 +14,7 @@ import { UserCreateModal } from "./UserCreateModal";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import UserService from "../../../services/user.service";
 import { UserViewModal } from "./UserViewModal";
+import { useUserContext } from "../../../pages/admin/UsersPage";
 
 const { Title } = Typography;
 
@@ -30,11 +31,9 @@ export interface User {
   };
 }
 
-interface UserListProps {
-  setUserCount: (count: number) => void;
-}
+export const UserList: FC = () => {
+  const { setUserCount } = useUserContext();
 
-export const UserList: FC<UserListProps> = ({ setUserCount }) => {
   const userService: UserService = new UserService();
   const [isCreateUserOpen, setIsCreateUserOpen] = useState(false);
   const [isUserViewMode, setIsUserViewMode] = useState(false);
@@ -60,8 +59,13 @@ export const UserList: FC<UserListProps> = ({ setUserCount }) => {
   useEffect(() => {
     if (isLoading) return;
 
-    setUserCount(data?.data?.length); // write seperate api to get count
-  }, [setUserCount, isLoading]);
+    setUserCount(data?.data?.length); // write separate API to get count
+    // update state of setUser
+    // const user = data?.data?.find((user: User) => user.id === user?.id);
+    // if (user) {
+    //   setUser(user);
+    // }
+  }, [setUserCount, data]);
 
   const handleUserView = (user: User) => {
     setUser(user);
@@ -83,7 +87,12 @@ export const UserList: FC<UserListProps> = ({ setUserCount }) => {
     {
       title: "Email",
       dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Role",
       key: "role",
+      render: (record: User) => record.role.role,
     },
     {
       title: "Actions",
