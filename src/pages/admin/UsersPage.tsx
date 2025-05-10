@@ -4,15 +4,26 @@ import { UserStatCards } from "../../components/features/user-management/UserSta
 import { UserList } from "../../components/features/user-management/UserList";
 import { UserRoleset } from "../../components/features/user-management/UserRoleset";
 
+interface UserContextType {
+  userCount: number;
+  setUserCount: (count: number) => void;
+  userRoleCount: number;
+  setUserRoleCount: (count: number) => void;
+}
+
 // Create a context for user management
 const UserContext = createContext({
   userCount: 0,
-  setUserCount: (count: number) => {},
+  setUserCount: (count: number) => {
+    console.log(count);
+  },
   userRoleCount: 0,
-  setUserRoleCount: (count: number) => {},
+  setUserRoleCount: (count: number) => {
+    console.log(count);
+  },
 });
 
-export const useUserContext = () => useContext(UserContext);
+export const useUserContext = () => useContext<UserContextType>(UserContext);
 
 const UsersPage: FC = () => {
   const [userCount, setUserCount] = useState(0);

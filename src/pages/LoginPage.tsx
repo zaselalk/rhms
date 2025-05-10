@@ -101,12 +101,7 @@ const LoginPage: FC = () => {
 
               {/* Login Button */}
               <Form.Item>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  className="w-full"
-                  loading={mutation.isLoading}
-                >
+                <Button type="primary" htmlType="submit" className="w-full">
                   Login
                 </Button>
               </Form.Item>

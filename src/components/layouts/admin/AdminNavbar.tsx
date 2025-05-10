@@ -1,8 +1,4 @@
-import React from "react";
-import { useNavigate } from "react-router";
-
 export const AdminNavbar = () => {
-  const navigate = useNavigate();
   const handleLogout = () => {
     // remove token from local storage
     localStorage.removeItem("token");
