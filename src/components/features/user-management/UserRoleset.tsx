@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { FaUserCog } from "react-icons/fa";
-// import { Button } from '../../common/Button';
 import { UsergroupAddOutlined } from "@ant-design/icons";
-
 import { UserRoleCreateModal } from "./UserRoleCreateModal";
 import { useRoles } from "../../../hooks/useRoles";
 import { UserRoleUpdateModal } from "./UserRoleUpdateModal";
 import { Button } from "antd";
 import Title from "antd/es/typography/Title";
+import { useUserContext } from "../../../pages/admin/UsersPage";
 
-export const UserRoleset = ({ setUserRoleCount }) => {
+export const UserRoleset = () => {
+  const { setUserRoleCount } = useUserContext();
+
   const [isCreateNewRole, setIsCreateNewRole] = useState(false);
   const [isUpdatingRole, setIsUpdatingRole] = useState(false);
   const [roleId, setRoleId] = useState<string>("");
