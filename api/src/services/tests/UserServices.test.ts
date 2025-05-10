@@ -129,4 +129,17 @@ describe("UserServices", () => {
       },
     });
   });
+
+  /**
+   * Test case for the getAllUsers method
+   * it should return a list of users
+   */
+
+  /**
+   * Test case for the getUserById method, It should throw error if user not found
+   */
+  it("Should throw userNotFound when getUserById user not found", async () => {
+    userRepository.findByEmail.mockResolvedValue(null);
+    expect(userServices.getUserById(1)).rejects.toThrow(UserNotFoundException);
+  });
 });
