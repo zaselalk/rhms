@@ -12,6 +12,10 @@ export const UpdateUserFullName = () => {
   const [fullName, setFullName] = useState(user?.name || "");
   const profileService = new ProfileService();
 
+  if (!user) {
+    return <div>User not found</div>;
+  }
+
   const mutation = useMutation({
     mutationFn: async (data: { name: string }) => {
       await profileService.updateUserFullNameById(user.id, data.name);
