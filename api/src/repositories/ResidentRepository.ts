@@ -105,4 +105,9 @@ export class ResidentRepository {
     return residents;
 
   }
+
+  async getResidentCount(): Promise<number> {
+    const count = await Resident.count();
+    return count;
+  }
 }
