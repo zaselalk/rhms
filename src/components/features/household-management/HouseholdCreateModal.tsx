@@ -1,78 +1,69 @@
-import { FC, useState } from "react";
-import Modal from "../../layouts/overlays/Modal";
-import { createHousehold } from "../../../services/household.service";
-import axios from "axios";
+import { FC, useState } from 'react';
+import Modal from '../../layouts/overlays/Modal';
+import { createHousehold } from '../../../services/household.service';
+import axios from 'axios';
 
 interface HouseholdCreateModalProps {
   isOpen: boolean;
   handleClose: () => void;
 }
 
-export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
-  isOpen,
-  handleClose,
-}) => {
-  const [house_no, setHouseNo] = useState("");
-  const [grama_division, setGramaDivision] = useState("");
-  const [longitude, setLongitude] = useState("");
-  const [latitude, setLatitude] = useState("");
-  const [residentSearchId, setResidentSearchId] = useState(""); // ID for resident search
+export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({ isOpen, handleClose }) => {
+  const [house_no, setHouseNo] = useState('');
+  const [grama_division, setGramaDivision] = useState('');
+  const [longitude, setLongitude] = useState('');
+  const [latitude, setLatitude] = useState('');
+  const [residentSearchId, setResidentSearchId] = useState("");  // ID for resident search
   const [foundResidentName, setFoundResidentName] = useState("");
   const [owner_id, setOwnerId] = useState("");
-  // Feedback state
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
 
-  console.log(owner_id);
+   // Feedback state
+   const [message, setMessage] = useState("");
+   const [error, setError] = useState("");
 
-  console.log(message);
-
-  // Function to search resident by ID
-  const handleSearchResident = async () => {
+   // Function to search resident by ID
+   const handleSearchResident = async () => {
     setMessage("");
     setError("");
-
+  
     if (!residentSearchId || isNaN(Number(residentSearchId))) {
-      setError("Please enter a valid numeric Resident ID");
+      setError('Please enter a valid numeric Resident ID');
       return;
     }
 
     try {
-      const res = await axios.get(
-        `http://localhost:3001/resident/id/${Number(residentSearchId)}`
-      );
-
+      const res = await axios.get(`http://localhost:3001/resident/id/${Number(residentSearchId)}`);
+      
       const data = res.data.data; // Accessing the correct structure
 
       if (!data) {
-        setFoundResidentName("");
-        setOwnerId("");
-        setError("Resident not found");
+        setFoundResidentName('');
+        setOwnerId('');
+        setError('Resident not found');
         return;
       }
       console.log("Fetched resident data:", data);
-      setFoundResidentName(
-        `${data.firstName} ${data.lastName}` || "Name not available"
-      );
+      setFoundResidentName(`${data.firstName} ${data.lastName}` || "Name not available");
       setOwnerId(res.data.id); // Corrected: use 'id', not '_id'
     } catch (err) {
-      console.error("Fetch error:", err);
-      setFoundResidentName("");
-      setOwnerId("");
-      setError("Resident not found");
+      console.error('Fetch error:', err);
+      setFoundResidentName('');
+      setOwnerId('');
+      setError('Resident not found');
     }
   };
 
   // Function to create a household
   const handleCreateHousehold = async () => {
+    setLoading(true);
     const parsedOwnerId = Number(residentSearchId); // convert once and reuse
 
     if (!residentSearchId || isNaN(parsedOwnerId)) {
-      alert("Invalid owner ID");
+      alert('Invalid owner ID');
       return;
     }
-
-    if (window.confirm("Are you sure you want to create this household?")) {
+  
+    if (window.confirm('Are you sure you want to create this household?')) {
       try {
         console.log({
           house_no,
@@ -81,7 +72,7 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
           latitude,
           owner_id: parsedOwnerId,
         });
-
+  
         const data = await createHousehold({
           house_no,
           grama_division,
@@ -89,12 +80,12 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
           latitude,
           owner_id: parsedOwnerId,
         });
-
-        alert(data.message || "Household created successfully!");
+  
+        alert(data.message || 'Household created successfully!');
         handleClose();
       } catch (error) {
-        console.error("Error:", error);
-        alert("Error creating household");
+        console.error('Error:', error);
+        alert('Error creating household');
       }
     }
   };
@@ -216,13 +207,17 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
           {error && <p className="text-red-500 mt-2">{error}</p>}
         </div>
 
+        {/* Feedback message */}
+        {message && <p className="text-blue-600 mt-2">{message}</p>}
+
         {/* Submit Button */}
         <div className="flex justify-end space-x-2">
           <button
             onClick={handleCreateHousehold}
             className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700"
+            disabled={loading}  // Disable button while loading
           >
-            Create Household
+            {loading ? 'Creating...' : 'Create Household'}
           </button>
         </div>
       </div>

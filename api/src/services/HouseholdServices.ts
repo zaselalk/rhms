@@ -1,12 +1,7 @@
-
 import { HouseholdNotFoundException } from "../exceptions/HouseholdNotFound";
-import { ValidationException } from "../exceptions/ValidatationError";
-import { Household } from "../models/hosehold";
-import bcrypt from "bcrypt";
+import Household from "../models/hosehold";
+
 import { HouseholdRepository } from "../repositories/HouseholdRepository";
-
-
-
 
 export class HouseholdServices {
   private householdRepository: HouseholdRepository;
@@ -21,18 +16,26 @@ export class HouseholdServices {
     longitude: string,
     latitude: string,
     owner_id?: number
-
   ): Promise<Household> {
-    // const excitingHousehold = await this.householdRepository.findByHouseno(house_no);
-    // if (excitingHousehold) throw new HouseholdNotFoundException("Household ID already in use");
-
-   
     return this.householdRepository.createHousehold(house_no, grama_division, longitude, latitude, owner_id);
   }
 
-  //Read
+  // Read
   async getAllHouseholdsWithOwnerName(): Promise<any[]> {
     return this.householdRepository.getAllHouseholdsWithOwnerName();
   }
-  
+
+  // Update Household Owner by house_no
+  async updateOwnerByHouseNo(house_no: string, owner_id: number): Promise<boolean> {
+    return this.householdRepository.updateOwnerByHouseNo(house_no, owner_id);
+  }
+
+  // Delete Household by house_no
+  async deleteHouseholdByHouseNo(house_no: string): Promise<boolean> {
+    const household = await this.householdRepository.findHouseholdByHouseNo(house_no);
+    if (!household) {
+      throw new HouseholdNotFoundException("Household not found");
+    }
+    return this.householdRepository.deleteHouseholdByHouseNo(house_no);
+  }
 }
