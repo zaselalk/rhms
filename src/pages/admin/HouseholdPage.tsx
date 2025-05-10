@@ -108,9 +108,8 @@ const HouseholdPage: FC = () => {
 
         try {
             // Make the API request to update the household owner
-            const response = await axios.put(
-                `http://localhost:3001/household/update/${selectedHousehold.house_no}`,
-                { newOwnerId }
+            const response = await axios.put(`http://localhost:3001/household/update/${selectedHousehold.house_no}`,
+                { owner_id:newOwnerId }
             );
 
             if (response.status === 200 && response.data.owner) {
@@ -121,8 +120,11 @@ const HouseholdPage: FC = () => {
                             : household
                     )
                 );
+                
                 message.success('Household owner updated successfully!');
                 setEditModalVisible(false);
+                console.log('Updated household:', response.data);
+
             } else {
                 message.error('Failed to update owner');
             }

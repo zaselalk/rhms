@@ -45,7 +45,7 @@ export class HouseholdController {
       if (!updated) {
         return res.status(404).json({ message: 'Household not found' });
       }
-      return res.json({ message: 'Household owner updated successfully' });
+      return res.json({ message: 'Household owner updated successfully',owner:updated });
     } catch (error) {
       console.error('Update error:', error);
       return res.status(500).json({ message: 'Internal server error' });

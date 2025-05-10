@@ -2,6 +2,7 @@ import { FC, useState } from 'react';
 import Modal from '../../layouts/overlays/Modal';
 import { createHousehold } from '../../../services/household.service';
 import axios from 'axios';
+import { useLocation, useNavigate } from 'react-router';
 
 interface HouseholdCreateModalProps {
   isOpen: boolean;
@@ -13,19 +14,23 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({ isOpen, ha
   const [grama_division, setGramaDivision] = useState('');
   const [longitude, setLongitude] = useState('');
   const [latitude, setLatitude] = useState('');
-  const [residentSearchId, setResidentSearchId] = useState("");  // ID for resident search
-  const [foundResidentName, setFoundResidentName] = useState("");
-  const [owner_id, setOwnerId] = useState("");
+  const [residentSearchId, setResidentSearchId] = useState('');
+  const [foundResidentName, setFoundResidentName] = useState('');
+  const [owner_id, setOwnerId] = useState('');
 
-   // Feedback state
-   const [message, setMessage] = useState("");
-   const [error, setError] = useState("");
+  // Feedback state
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-   // Function to search resident by ID
-   const handleSearchResident = async () => {
-    setMessage("");
-    setError("");
-  
+  const navigate = useNavigate();
+const location = useLocation();
+
+  // Function to search resident by ID
+  const handleSearchResident = async () => {
+    setMessage('');
+    setError('');
+
     if (!residentSearchId || isNaN(Number(residentSearchId))) {
       setError('Please enter a valid numeric Resident ID');
       return;
@@ -33,7 +38,6 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({ isOpen, ha
 
     try {
       const res = await axios.get(`http://localhost:3001/resident/id/${Number(residentSearchId)}`);
-      
       const data = res.data.data; // Accessing the correct structure
 
       if (!data) {
@@ -42,8 +46,8 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({ isOpen, ha
         setError('Resident not found');
         return;
       }
-      console.log("Fetched resident data:", data);
-      setFoundResidentName(`${data.firstName} ${data.lastName}` || "Name not available");
+      console.log('Fetched resident data:', data);
+      setFoundResidentName(`${data.firstName} ${data.lastName}` || 'Name not available');
       setOwnerId(res.data.id); // Corrected: use 'id', not '_id'
     } catch (err) {
       console.error('Fetch error:', err);
@@ -59,20 +63,13 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({ isOpen, ha
     const parsedOwnerId = Number(residentSearchId); // convert once and reuse
 
     if (!residentSearchId || isNaN(parsedOwnerId)) {
-      alert('Invalid owner ID');
+      setMessage('Invalid owner ID');
+      setLoading(false);
       return;
     }
-  
+
     if (window.confirm('Are you sure you want to create this household?')) {
       try {
-        console.log({
-          house_no,
-          grama_division,
-          longitude,
-          latitude,
-          owner_id: parsedOwnerId,
-        });
-  
         const data = await createHousehold({
           house_no,
           grama_division,
@@ -80,12 +77,21 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({ isOpen, ha
           latitude,
           owner_id: parsedOwnerId,
         });
-  
-        alert(data.message || 'Household created successfully!');
-        handleClose();
+
+        setMessage(data.message || 'Household created successfully!');
+        
+        handleClose(); // Close modal on success
+
+        setTimeout(() => {
+          navigate(location.pathname); // Redirect to the same page to refresh data
+        }, 500);
+
+        
       } catch (error) {
+        setMessage('Error creating household');
         console.error('Error:', error);
-        alert('Error creating household');
+      } finally {
+        setLoading(false);
       }
     }
   };
