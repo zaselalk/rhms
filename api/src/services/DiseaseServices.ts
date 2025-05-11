@@ -1,4 +1,4 @@
-import { D } from "react-router/dist/development/route-data-H2S3hwhf";
+
 import { DiseaseRepository } from "../repositories/DiseaseRepository";
 import Disease from "../models/disease";
 

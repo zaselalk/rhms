@@ -30,7 +30,7 @@ const DiseasesPage: FC = () => {
   const [diseasesData, setDiseasesData] = useState(initialDiseasesData);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
-  const [diseaseForm, setDiseaseForm] = useState({ diseaseName: '' });
+  
 
   const totalDiseases = diseasesData.length;
   const totalPatients = diseasesData.reduce((sum, disease) => sum + disease.patients, 0);
