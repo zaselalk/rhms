@@ -1,4 +1,5 @@
-import { Disease } from "../models/disease";
+import Disease from "../models/disease";
+
 
 export class DiseaseRepository {
   async createDisease(
