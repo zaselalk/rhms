@@ -1,7 +1,6 @@
 import { Router } from "express";
 
 import catchAsync from "../util/catchAsync";
-import { protectRoute } from "../middleware/authjwt.middleware";
 import { DiseaseController } from "../controllers/DiseaseController";
 
 
