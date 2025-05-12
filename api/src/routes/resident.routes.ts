@@ -39,4 +39,9 @@ ResidentRouter.get(
   catchAsync(residentController.getResidentOverview)
 );
 
+ResidentRouter.get(
+  "/residentCount",
+  catchAsync(residentController.getResidentCount)
+);
+
 export default ResidentRouter;
