@@ -17,12 +17,15 @@ const AdminSidebar: FC = () => {
   const user = useAppSelector((state) => state.auth.user);
   const [navbarArray, setNavbarArray] = useState<String[]>([]);
 
+
   useEffect(() => {
     const permissions =
       user?.permissions?.map((perm) => perm.split(":")[0]) || [];
+
     if (permissions.length > 0) {
       setNavbarArray(permissions);
     }
+
   }, [user?.permissions]);
 
   const handleLogout = () => {
