@@ -15,14 +15,10 @@ import { EyeOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { HouseholdCreateModal } from "../../components/features/household-management/HouseholdCreateModal";
 import { deleteHousehold } from "../../services/household.service";
 
-
-
 const HouseholdPage: FC = () => {
   const navigate = useNavigate();
 
-  const [isEditModalVisible, setEditModalVisible] = useState(false);
-  const [selectedHousehold, setSelectedHousehold] = useState<any>(null);
-  const [newOwner, setNewOwner] = useState("");
+  //   const [newOwner, setNewOwner] = useState("");
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isEditModalVisible, setEditModalVisible] = useState(false);
   const [selectedHousehold, setSelectedHousehold] = useState<any>(null);
@@ -35,21 +31,22 @@ const HouseholdPage: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [residentCount, setResidentCount] = useState(0);
 
-
   // //get the total number of registered residents
-        useEffect(() => {
-        const fetchResidentCount = async () => {
-          try {
-            const response = await axios.get("http://localhost:3001/residents/residentCount");
-            setResidentCount(response.data.count);
-          } catch (error) {
-            console.error("Error fetching resident count:", error);
-            message.error("Failed to load resident count");
-          }
-        };
+  useEffect(() => {
+    const fetchResidentCount = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3001/residents/residentCount"
+        );
+        setResidentCount(response.data.count);
+      } catch (error) {
+        console.error("Error fetching resident count:", error);
+        message.error("Failed to load resident count");
+      }
+    };
 
-        fetchResidentCount();
-      }, []);
+    fetchResidentCount();
+  }, []);
 
   const householdData = [
     { division: "Kotagedara", count: 10 },
@@ -178,8 +175,6 @@ const HouseholdPage: FC = () => {
 
   if (isLoading) return <div>Loading households...</div>;
 
-
-
   return (
     <DashboardContainer>
       <HouseholdCreateModal
@@ -207,7 +202,9 @@ const HouseholdPage: FC = () => {
             <p className="text-sm text-gray-600">Total Households</p>
           </div>
           <div className="bg-white p-4 rounded-lg shadow-md flex-1 text-center">
-            <p className="text-lg font-semibold text-gray-800">{residentCount}</p>
+            <p className="text-lg font-semibold text-gray-800">
+              {residentCount}
+            </p>
             <p className="text-sm text-gray-600">Total Residents</p>
           </div>
         </div>
