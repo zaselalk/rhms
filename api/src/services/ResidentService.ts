@@ -127,6 +127,10 @@ export class ResidentService {
         return count;
     }
 
+    async getDiseasePatientCounts(): Promise<Record<string, number>> {
+    return this.residentRepository.countPatientsByDisease();
+  }
+
 
 
 

@@ -19,4 +19,8 @@ export class DiseaseServices {
     
   }
 
+  async getAllDiseases(): Promise<Disease[]> {
+    return this.diseaseRepository.getAllDiseases();
+  }
+
 }

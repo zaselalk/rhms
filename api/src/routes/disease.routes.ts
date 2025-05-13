@@ -13,4 +13,9 @@ DiseaseRouter.post(
     catchAsync(diseaseController.createDisease)
 );
 
+DiseaseRouter.get(
+    "/all", 
+    catchAsync(diseaseController.getAllDiseases)
+);
+
 export default DiseaseRouter;
