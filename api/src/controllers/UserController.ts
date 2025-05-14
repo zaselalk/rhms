@@ -147,6 +147,17 @@ export class UserController {
   ): Promise<Response | void> => {
     const { id } = req.params;
     const { password: oldPassword, new_password: newPassword } = req.body;
+
+    // if the password is same
+    if (oldPassword === newPassword) {
+      return res.status(400).json({
+        message: "New password cannot be the same as the old password",
+        status: 400,
+        error: null,
+        data: null,
+      });
+    }
+
     const user = await this.userService.changeUserPassword(
       parseInt(id),
       oldPassword,
@@ -166,5 +177,62 @@ export class UserController {
       error: null,
       data: user,
     });
+  };
+
+  deleteUser = async (
+    req: Request,
+    res: Response
+  ): Promise<Response | void> => {
+    const { id } = req.params;
+    const deleted = await this.userService.deleteUserById(parseInt(id));
+
+    if (!deleted) {
+      return res.status(404).json({
+        message: "User not found",
+        status: 404,
+        error: null,
+        data: null,
+      });
+    }
+
+    return res.status(200).json({
+      message: "User deleted successfully",
+      status: 200,
+      error: null,
+      data: null,
+    });
+  };
+
+  checkAuthStatus = async (
+    req: Request,
+    res: Response
+  ): Promise<Response | void> => {
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+      return res.status(401).json({
+        message: "No token provided",
+        status: 401,
+        error: null,
+        data: null,
+      });
+    }
+
+    try {
+      const userStatus = await this.userService.verifyToken(token);
+      return res.status(200).json({
+        message: "Token is valid",
+        status: 200,
+        error: null,
+        data: userStatus,
+      });
+    } catch (error) {
+      return res.status(401).json({
+        message: "Invalid token",
+        status: 401,
+        error: (error as Error).message,
+        data: null,
+      });
+    }
   };
 }

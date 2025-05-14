@@ -1,12 +1,7 @@
-
 import { HouseholdNotFoundException } from "../exceptions/HouseholdNotFound";
-import { ValidationException } from "../exceptions/ValidatationError";
-import { Household } from "../models/hosehold";
-import bcrypt from "bcrypt";
+import Household from "../models/hosehold";
+
 import { HouseholdRepository } from "../repositories/HouseholdRepository";
-
-
-
 
 export class HouseholdServices {
   private householdRepository: HouseholdRepository;
@@ -21,47 +16,26 @@ export class HouseholdServices {
     longitude: string,
     latitude: string,
     owner_id?: number
-
   ): Promise<Household> {
-    // const excitingHousehold = await this.householdRepository.findByHouseno(house_no);
-    // if (excitingHousehold) throw new HouseholdNotFoundException("Household ID already in use");
-
-   
     return this.householdRepository.createHousehold(house_no, grama_division, longitude, latitude, owner_id);
   }
 
-  // // READ
-  // async getHouseholdDetails(id: number): Promise<{ house_no: string; grama_division: string; owner_name: string }> {
-  //   const household = await this.householdRepository.findByIdWithOwner(id);
-  //   if (!household) {
-  //     throw new HouseholdNotFoundException(`Household with ID ${id} not found.`);
-  //   }
+  // Read
+  async getAllHouseholdsWithOwnerName(): Promise<any[]> {
+    return this.householdRepository.getAllHouseholdsWithOwnerName();
+  }
 
-  //   return {
-  //     house_no: household.house_no,
-  //     grama_division: household.grama_division,
-  //     owner_name: household.owner.name,
-  //   };
-  // }
+  // Update Household Owner by house_no
+  async updateOwnerByHouseNo(house_no: string, owner_id: number): Promise<boolean> {
+    return this.householdRepository.updateOwnerByHouseNo(house_no, owner_id);
+  }
 
-  // // UPDATE OWNER
-  // async updateOwner(id: number, new_owner_id: number): Promise<Household> {
-  //   const household = await this.householdRepository.findById(id);
-  //   if (!household) {
-  //     throw new HouseholdNotFoundException(`Household with ID ${id} not found.`);
-  //   }
-
-  //   return this.householdRepository.updateOwner(id, new_owner_id);
-  // }
-
-  // // DELETE
-  // async deleteHousehold(house_no: string): Promise<Household> {
-  //   const existing = await this.householdRepository.findByHouseno(house_no);
-  //   if (!existing) {
-  //     throw new HouseholdNotFoundException(`No household found with house number ${house_no}`);
-  //   }
-
-  //   return this.householdRepository.deleteByHouseNo(house_no);
-  // }
-
+  // Delete Household by house_no
+  async deleteHouseholdByHouseNo(house_no: string): Promise<boolean> {
+    const household = await this.householdRepository.findHouseholdByHouseNo(house_no);
+    if (!household) {
+      throw new HouseholdNotFoundException("Household not found");
+    }
+    return this.householdRepository.deleteHouseholdByHouseNo(house_no);
+  }
 }

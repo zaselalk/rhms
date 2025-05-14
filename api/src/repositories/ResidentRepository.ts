@@ -89,4 +89,56 @@ export class ResidentRepository {
     });
     return deletedRows > 0;
   }
+
+  async getResidentOverview(): Promise<Resident[] | null> {
+    const residents = await Resident.findAll({
+      attributes: [
+        "id",
+        "firstName",
+        "lastName",
+        "nic",
+        "contactNumber",
+        "divisionId",
+        "address",
+      ],
+    });
+    return residents;
+
+  }
+
+  async getResidentCount(): Promise<number> {
+    const count = await Resident.count();
+    return count;
+  }
+
+
+  async countPatientsByDisease(): Promise<Record<string, number>> {
+    const residents = await Resident.findAll({ attributes: ['chronicalDesease'] });
+
+    const diseaseCounts: Record<string, number> = {};
+
+    for (const res of residents) {
+      const rawValue = res.getDataValue('chronicalDesease');
+
+      if (!rawValue || typeof rawValue !== 'string') continue;
+
+      let diseases: string[] = [];
+
+      try {
+        diseases = JSON.parse(rawValue);
+      } catch (e) {
+        console.warn(`Skipping invalid chronicalDesease value:`, rawValue);
+        continue;
+      }
+
+      for (const disease of diseases) {
+        if (!disease || disease.toLowerCase() === 'none') continue;
+
+        diseaseCounts[disease] = (diseaseCounts[disease] || 0) + 1;
+      }
+    }
+
+    return diseaseCounts;
+  }
+  
 }

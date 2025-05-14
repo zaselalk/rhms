@@ -15,22 +15,19 @@ HouseholdRouter.post(
     catchAsync(householdController.createHousehold)
 );
 
-// HouseholdRouter.get(
-//     "/get/:id",
-//     // protectRoute,
-//     catchAsync(householdController.getHousehold)
-// );
+HouseholdRouter.get(
+    "/read", 
+    catchAsync(householdController.getAllHouseholds)
+);
 
-// HouseholdRouter.put(
-//     "/update/:id",
-//     // protectRoute,
-//     catchAsync(householdController.updateHouseholdOwner)
-// );
+HouseholdRouter.put(
+    "/update/:house_no",
+    catchAsync(householdController.updateHouseholdOwner)
+);
 
-// HouseholdRouter.delete(
-//     "/delete/:house_no",
-//     // protectRoute,
-//     catchAsync(householdController.deleteHousehold)
-// );
+HouseholdRouter.delete(
+    "/delete/:house_no",
+    catchAsync(householdController.deleteHousehold)
+);
 
 export default HouseholdRouter;

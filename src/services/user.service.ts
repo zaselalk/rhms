@@ -1,7 +1,15 @@
 import axiosInstance from "./axios/axiosInstance";
 
+/**
+ * Service for managing users and roles.
+ */
 export default class UserService {
-  async getAllUsers() {
+  /**
+   * Fetches all users.
+   * @returns {Promise<any>} A promise that resolves to the list of users.
+   * @throws {Error} If unable to fetch users.
+   */
+  async getAllUsers(): Promise<any> {
     try {
       const response = await axiosInstance.get("/user");
       return response.data;
@@ -10,7 +18,17 @@ export default class UserService {
     }
   }
 
-  async crateUserRole(roleName: string, permissionList: string[]) {
+  /**
+   * Creates a new user role.
+   * @param {string} roleName - The name of the role.
+   * @param {string[]} permissionList - The list of permissions for the role.
+   * @returns {Promise<any>} A promise that resolves to the created role data.
+   * @throws {Error} If unable to create the user role.
+   */
+  async crateUserRole(
+    roleName: string,
+    permissionList: string[]
+  ): Promise<any> {
     try {
       const response = await axiosInstance.post("/role", {
         roleName,
@@ -23,7 +41,12 @@ export default class UserService {
     }
   }
 
-  async getAllRoles() {
+  /**
+   * Fetches all roles.
+   * @returns {Promise<any>} A promise that resolves to the list of roles.
+   * @throws {Error} If unable to fetch roles.
+   */
+  async getAllRoles(): Promise<any> {
     try {
       const response = await axiosInstance.get("/role");
       return response.data;
@@ -32,11 +55,19 @@ export default class UserService {
     }
   }
 
+  /**
+   * Updates a user role.
+   * @param {string} roleId - The ID of the role to update.
+   * @param {string} roleName - The new name of the role.
+   * @param {string[]} permissionList - The updated list of permissions for the role.
+   * @returns {Promise<any>} A promise that resolves to the updated role data.
+   * @throws {Error} If unable to update the user role.
+   */
   async updateUserRole(
     roleId: string,
     roleName: string,
     permissionList: string[]
-  ) {
+  ): Promise<any> {
     try {
       const response = await axiosInstance.patch(`/role/${roleId}`, {
         roleName,
@@ -51,7 +82,13 @@ export default class UserService {
     }
   }
 
-  async deleteUserRole(roleId: string) {
+  /**
+   * Deletes a user role.
+   * @param {string} roleId - The ID of the role to delete.
+   * @returns {Promise<any>} A promise that resolves to the deletion result.
+   * @throws {Error} If unable to delete the user role.
+   */
+  async deleteUserRole(roleId: string): Promise<any> {
     try {
       const response = await axiosInstance.delete(`/role/${roleId}`);
       return response.data;
@@ -62,7 +99,13 @@ export default class UserService {
     }
   }
 
-  async getRoleById(roleId: string) {
+  /**
+   * Fetches a role by its ID.
+   * @param {string} roleId - The ID of the role to fetch.
+   * @returns {Promise<any>} A promise that resolves to the role data.
+   * @throws {Error} If unable to fetch the role by ID.
+   */
+  async getRoleById(roleId: string): Promise<any> {
     try {
       const response = await axiosInstance.get(`/role/${roleId}`);
       return response.data;
@@ -73,12 +116,21 @@ export default class UserService {
     }
   }
 
+  /**
+   * Creates a new user.
+   * @param {string} full_name - The full name of the user.
+   * @param {string} email - The email address of the user.
+   * @param {string} password - The password for the user.
+   * @param {number} role_id - The ID of the role assigned to the user.
+   * @returns {Promise<any>} A promise that resolves to the created user data.
+   * @throws {Error} If unable to create the user.
+   */
   async createUser(
     full_name: string,
     email: string,
     password: string,
     role_id: number
-  ) {
+  ): Promise<any> {
     try {
       const response = await axiosInstance.post("/user", {
         full_name,
@@ -89,6 +141,41 @@ export default class UserService {
       return response.data;
     } catch (error: any) {
       throw new Error(error.response?.data?.message || "Unable to create user");
+    }
+  }
+
+  /**
+   * Changes the role of a user.
+   * @param {number} userId - The ID of the user whose role is to be changed.
+   * @param {number} roleId - The ID of the new role to assign to the user.
+   * @returns {Promise<any>} A promise that resolves to the updated user data.
+   * @throws {Error} If unable to change the user role.
+   */
+  async changeUserRole(userId: number, roleId: number): Promise<any> {
+    try {
+      const response = await axiosInstance.put(`/user/${userId}/role`, {
+        role_id: roleId,
+      });
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || "Unable to change user role"
+      );
+    }
+  }
+
+  /**
+   * Deletes a user.
+   * @param {number} userId - The ID of the user to delete.
+   * @returns {Promise<any>} A promise that resolves to the deletion result.
+   * @throws {Error} If unable to delete the user.
+   */
+  async deleteUser(userId: number): Promise<any> {
+    try {
+      const response = await axiosInstance.delete(`/user/${userId}`);
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || "Unable to delete user");
     }
   }
 }

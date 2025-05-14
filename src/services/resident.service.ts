@@ -1,3 +1,5 @@
+import axiosInstance from "./axios/axiosInstance";
+
 class ResidentService {
     // Add Resident
     async addResident(newResidentData: any) {
@@ -7,7 +9,7 @@ class ResidentService {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(newResidentData),
-            
+
         });
         console.log("newResidentData", newResidentData);
 
@@ -22,6 +24,32 @@ class ResidentService {
         // Check if the response contains a success message    
         return data;
     }
+
+    //resident Overview
+    async getResidentOverview() {
+        try {
+            const response = await axiosInstance.get("/resident/residentOverview");
+            return response.data;
+        } catch (error: any) {
+            throw new Error(error.response?.data?.message || "Unable to fetch residents overview");
+        }
+    }
+
+    // Get Resident Count
+    async getResidentCount() {
+        try {
+            const response = await axiosInstance.get("/resident/residentCount");
+            return response.data;
+        } catch (error: any) {
+            throw new Error(error.response?.data?.message || "Unable to fetch resident count");
+        }
+    }
+
+
+
+
+
 }
+
 
 export default new ResidentService();

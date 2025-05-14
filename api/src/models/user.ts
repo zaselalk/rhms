@@ -9,6 +9,7 @@ import Role from "./role";
   Note: id not defined here, as it is added by default
 */
 export interface UserAttributes {
+  id?: number;
   name: string;
   email: string;
   password?: string;

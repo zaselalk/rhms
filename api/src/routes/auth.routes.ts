@@ -2,6 +2,7 @@ import { Router } from "express";
 import { UserController } from "../controllers/UserController";
 import catchAsync from "../util/catchAsync";
 import {
+  checkAuthValidation,
   userLoginValidation,
   userRegisterValidation,
 } from "../validation/user";
@@ -18,6 +19,12 @@ AuthRouter.post(
   "/register",
   userRegisterValidation,
   catchAsync(userController.register)
+);
+
+AuthRouter.get(
+  "/check",
+  checkAuthValidation,
+  catchAsync(userController.checkAuthStatus)
 );
 
 export default AuthRouter;

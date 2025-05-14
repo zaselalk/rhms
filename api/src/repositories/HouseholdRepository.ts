@@ -1,17 +1,7 @@
-import { Household } from "../models/hosehold";
+// Adjust the import path as necessary
+import Household from "../models/hosehold";
 import Resident from "../models/resident";
 
-
-
-export class ResidentRepository {
-  async findresidentById(id: number) {
-    return await Household.findOne({
-      where: {
-        owner_id: id, // Ensure 'id' is part of HouseholdAttributes
-      },
-    });
-  }
-}
 export class HouseholdRepository {
   async createHousehold(
     house_no: string,
@@ -21,7 +11,7 @@ export class HouseholdRepository {
     owner_id?: number
   ): Promise<Household> {
     return await Household.create({
-      id: 0, // Assuming id is auto-incremented by the database
+      id: 0,  // Assuming id is auto-incremented by the database
       house_no,
       grama_division,
       longitude,
@@ -30,55 +20,43 @@ export class HouseholdRepository {
     });
   }
 
-  
-  // async findByHouseno(house_no: string) /*: Promise<Household | null>*/ {
-  //   console.log('househols model:',Household); // Debugging step
-  //   if (!Household) {
-  //     throw new Error("Household model is not defined");
-  //   }
+  // Read data
+  async getAllHouseholdsWithOwnerName(): Promise<any[]> {
+    return await Household.findAll({
+      attributes: ["house_no", "owner_id", "grama_division"],
+      include: [
+        {
+          model: Resident,
+          as: "owner", // match the alias used in the association
+          attributes: ["firstName", "lastName"], // only include resident name
+        },
+      ],
+    });
+  }
 
-  //   return await Household.findOne({
-  //     where: {
-  //       house_no,
-  //     },
-  //   });
-  // }
+  // Update Household Owner
+  async updateOwnerByHouseNo(house_no: string, owner_id: number): Promise<boolean> {
+    const household = await Household.findOne({ where: { house_no } });
+    if (!household) return false; // If no household found with house_no
 
-  //  // Find by ID
-  //  async findById(id: number): Promise<Household | null> {
-  //   return Household.findByPk(id);
-  // }
+    household.owner_id = owner_id;  // Update the owner_id
+    await household.save();  // Save the changes
+    return true;
+  }
 
-  // // Find by ID and include owner details
-  // async findByIdWithOwner(id: number): Promise<any> {
-  //   return Household.findByPk(id, {
-  //     include: [
-  //       {
-  //         model: Resident,
-  //         as: "owner", // Must match association alias
-  //         attributes: ["name"],
-  //       },
-  //     ],
-  //   });
-  // }
+  // Delete Household by house_no
+  async deleteHouseholdByHouseNo(house_no: string): Promise<boolean> {
+    const household = await Household.findOne({ where: { house_no } });
+    if (!household) {
+      return false; // Return false if the household is not found
+    }
 
-  // // Update household owner
-  // async updateOwner(id: number, new_owner_id: number): Promise<Household> {
-  //   const household = await Household.findByPk(id);
-  //   if (!household) throw new Error("Household not found");
+    await household.destroy(); // Delete the household
+    return true; // Return true after deleting the household
+  }
 
-  //   household.owner_id = new_owner_id;
-  //   await household.save();
-  //   return household;
-  // }
-
-  // // Delete by house number
-  // async deleteByHouseNo(house_no: string): Promise<Household> {
-  //   const household = await Household.findOne({ where: { house_no } });
-  //   if (!household) throw new Error("Household not found");
-
-  //   await household.destroy();
-  //   return household;
-  // }
-
+  // Find Household by house_no
+  async findHouseholdByHouseNo(house_no: string): Promise<Household | null> {
+    return Household.findOne({ where: { house_no } });
+  }
 }
