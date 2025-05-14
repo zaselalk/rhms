@@ -31,6 +31,17 @@ class DiseaseService {
             throw new Error(error.response?.data?.message || 'Unable to delete disease');
         }
     }
+
+
+     // Get patient counts for each disease
+    async getDiseasePatientCounts() {
+    try {
+      const response = await axiosInstance.get('/resident/disease-patient-counts');
+      return response.data; // Expected to return array: [{ name: string, patients: number }]
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || 'Unable to fetch disease patient counts');
+    }
+  }
 }
 
 export default new DiseaseService();

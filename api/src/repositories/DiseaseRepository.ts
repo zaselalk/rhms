@@ -10,4 +10,11 @@ export class DiseaseRepository {
       diseaseName
     });
   }
+
+  async getAllDiseases(): Promise<Disease[]> {
+    return await Disease.findAll({
+      attributes: ['diseaseName'],
+      order: [['diseaseName', 'ASC']] // Optional: to sort alphabetically
+    });
+  }
 }

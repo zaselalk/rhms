@@ -28,4 +28,13 @@ export class DiseaseController {
     }
   };
 
+  getAllDiseases = async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const diseases = await this.diseaseService.getAllDiseases();
+      return res.status(200).json(diseases);
+    } catch (error) {
+      return res.status(500).json({ message: "Internal server error", error });
+    }
+  };
+
 }

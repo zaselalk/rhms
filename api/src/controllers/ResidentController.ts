@@ -298,7 +298,14 @@ getResidentCount = async (
   }
 };
 
-
+getDiseasePatientCounts = async (req: Request, res: Response) => {
+  try {
+    const counts = await this.residentService.getDiseasePatientCounts();
+    res.status(200).json(counts);
+  } catch (error) {
+    res.status(500).json({ message: "Error counting diseases" });
+  }
+};
   
 }
 
