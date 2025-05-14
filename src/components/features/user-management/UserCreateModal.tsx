@@ -19,28 +19,14 @@ export const UserCreateModal = ({
   const { data: roles, isLoading, error } = useRoles();
 
   const mutaion = useMutation({
-    mutationFn: async ({
-      full_name,
-      email,
-      password,
-      role_id,
-    }: {
-      full_name: string;
-      email: string;
-      password: string;
-      role_id: number;
-    }) => {
+    mutationFn: async ({ full_name, email, password, role_id }: CreateUser) => {
       await userService.createUser(full_name, email, password, role_id);
     },
     mutationKey: ["createUser"],
     onSuccess: () => {
-      console.log("User created successfully");
       form.resetFields(); // Reset the form fields after successful submission
-
       message.success("User Created successfully");
       UserListRefetch(); // Refetch the user list to update the UI
-
-      // handleClose(); // Close the modal on success
     },
     onError: (error: any) => {
       console.error("Error creating user:", error);
@@ -71,11 +57,6 @@ export const UserCreateModal = ({
       okText="Save"
       maskClosable={false}
       keyboard={true}
-      // okButtonProps={{
-      //   disabled:
-      //     !form.isFieldsTouched(true) ||
-      //     form.getFieldsError().some(({ errors }) => errors.length > 0),
-      // }}
     >
       {isLoading && <Spin size="large" />}
       {error && <Alert type="error" message="Error loading roles" />}
@@ -90,4 +71,11 @@ interface Props {
   /** Function to close the modal */
   handleClose: () => void;
   refetch: () => void; // Optional refetch function to refresh data after creating a user
+}
+
+interface CreateUser {
+  full_name: string;
+  email: string;
+  password: string;
+  role_id: number;
 }
