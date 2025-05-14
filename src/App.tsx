@@ -82,6 +82,7 @@ function App() {
             />
             <Route path=":clinic" element={<ClinicDetailPage />} />
           </Route>
+          
         </Route>
 
         {/* household paths*/}

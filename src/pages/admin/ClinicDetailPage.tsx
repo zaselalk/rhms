@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaClinicMedical, FaEdit, FaTrash, FaClipboardList, FaPlus } from "react-icons/fa";
-import { useNavigate } from "react-router"; // Import useNavigate for routing
+import { useNavigate, useParams } from "react-router"; // Import useNavigate for routing
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import Modal from "../../components/layouts/overlays/Modal"; // Import the Modal component
+import { ClinicService } from "../../services/clinic.service";
 
 interface Patient {
   id: string;
@@ -96,6 +97,25 @@ const ClinicDetail: React.FC = () => {
     closeEditModal(); // Close the modal after saving
   };
 
+  const { clinic } = useParams(); // Get the clinic ID from the URL
+  const [clinicName, setClinicName] = useState("");
+
+  useEffect(() => {
+    const fetchClinicName = async () => {
+      try {
+        const data = await ClinicService.getClinicById(clinic!);
+        console.log("Clinic data:", data); 
+        setClinicName(data.name); 
+      } catch (error) {
+        console.error("Failed to fetch clinic name:", error);
+      }
+    };
+  
+    if (clinic) {
+      fetchClinicName();
+    }
+  }, [clinic]);
+    
   return (
     <DashboardContainer>
       <div className="p-6 w-full min-h-screen">
@@ -103,6 +123,7 @@ const ClinicDetail: React.FC = () => {
           <div className="flex items-center space-x-3">
             <FaClinicMedical className="text-blue-600 text-3xl" />
             <h2 className="text-lg font-bold">Clinic Details</h2>
+            <p className="text-sg font-bold">({clinic})</p>
           </div>
         </div>
 
@@ -110,8 +131,9 @@ const ClinicDetail: React.FC = () => {
         <div className="flex justify-center items-center bg-white p-6 shadow-md rounded-lg mb-6">
           <FaClinicMedical className="text-blue-500 text-5xl mr-4" />
           <div>
+          <p className="text-l font-bold">Patients</p>
             <p className="text-4xl font-bold">291</p>
-            <p className="text-gray-500">Diabetic</p>
+            
           </div>
         </div>
 

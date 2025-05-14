@@ -4,7 +4,7 @@ import { FaClinicMedical, FaTrash } from "react-icons/fa";
 import { FiPlusCircle, FiEdit } from "react-icons/fi";
 import Modal from "../../components/layouts/overlays/Modal";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
-import { Link } from "react-router"; // Corrected to 'react-router-dom'
+import { Link } from "react-router";
 import { ClinicService } from "../../services/clinic.service";
 
 const ClinicOverview: React.FC = () => {
@@ -32,6 +32,14 @@ const ClinicOverview: React.FC = () => {
   // Handle creating a new clinic
   const handleCreateClinic = async () => {
     if (clinicTitle.trim()) {
+      // Check for duplicate clinic name
+      const isDuplicate = clinicCategories.some((clinic) => clinic.name.toLowerCase() === clinicTitle.toLowerCase());
+      
+      if (isDuplicate) {
+        alert("A clinic with this name already exists. Please choose a different name.");
+        return;
+      }
+
       try {
         const newClinic = await ClinicService.createClinic({ name: clinicTitle });
         setClinicCategories((prevCategories) => [...prevCategories, newClinic]);
@@ -84,6 +92,16 @@ const ClinicOverview: React.FC = () => {
   // Handle updating the clinic name
   const handleUpdateClinicName = async () => {
     if (clinicToEdit && clinicTitle.trim()) {
+      // Check for duplicate clinic name (excluding the clinic being edited)
+      const isDuplicate = clinicCategories.some(
+        (clinic) => clinic.name.toLowerCase() === clinicTitle.toLowerCase() && clinic.id !== clinicToEdit
+      );
+      
+      if (isDuplicate) {
+        alert("A clinic with this name already exists. Please choose a different name.");
+        return;
+      }
+
       try {
         const updatedClinic = await ClinicService.updateClinicName(clinicToEdit, { name: clinicTitle });
         setClinicCategories((prevCategories) =>
@@ -139,9 +157,9 @@ const ClinicOverview: React.FC = () => {
               <div>
                 <h4 className="text-lg font-semibold">{clinic.name}</h4>
                 <p className="text-2xl font-bold">{clinic.count}</p>
-                <p className="text-gray-500 text-sm">Last month</p>
+                <p className="text-gray-500 text-sm">Attendance Trend </p>
                 <p className={`text-sm font-semibold ${clinic.increase ? "text-green-500" : "text-red-500"}`}>
-                  {clinic.change} {clinic.increase ? "▲" : "▼"}
+                  {clinic.change} {clinic.increase ? "▲" : "▼"} {clinic.percentage}%
                 </p>
               </div>
               <div className="flex space-x-2">

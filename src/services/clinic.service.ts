@@ -1,5 +1,3 @@
-// services/axios/clinic.servic
-
 import axiosInstance from "./axios/axiosInstance";
 
 // Define clinic API service functions
@@ -11,6 +9,17 @@ export const ClinicService = {
       return response.data;
     } catch (error) {
       console.error("Error fetching clinics:", error);
+      throw error;
+    }
+  },
+
+  // Get clinic by ID
+  getClinicById: async (clinicId: string) => {
+    try {
+      const response = await axiosInstance.get(`/clinic/${clinicId}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching clinic by ID:", error);
       throw error;
     }
   },
@@ -29,7 +38,7 @@ export const ClinicService = {
   // Delete a clinic
   deleteClinic: async (clinicId: string) => {
     try {
-        await axiosInstance.delete(`/clinic/${clinicId}`);
+      await axiosInstance.delete(`/clinic/${clinicId}`);
     } catch (error) {
       console.error("Error deleting clinic:", error);
       throw error;
@@ -39,11 +48,22 @@ export const ClinicService = {
   // Update clinic name
   updateClinicName: async (clinicId: string, clinicData: { name: string }) => {
     try {
-        const response = await axiosInstance.put(`/clinic/${clinicId}`, clinicData);
+      const response = await axiosInstance.put(`/clinic/${clinicId}`, clinicData);
       return response.data;
     } catch (error) {
       console.error("Error updating clinic:", error);
       throw error;
     }
   },
+
+  // Create a new session for a clinic
+  createClinicSession: async (clinicId: string, sessionData: { sessionName: string; date: string }) => {
+    try {
+      const response = await axiosInstance.post(`/clinic/${clinicId}/session`, sessionData);
+      return response.data;
+    } catch (error) {
+      console.error("Error creating clinic session:", error);
+      throw error;
+    }
+  }
 };
