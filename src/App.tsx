@@ -220,6 +220,7 @@ function App() {
               }
             />
           </Route>
+          
         </Route>
 
         {/* household paths*/}

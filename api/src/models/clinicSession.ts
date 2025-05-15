@@ -56,7 +56,7 @@ Session.init(
   {
     sequelize,
     modelName: "Session",
-    tableName: "sessions",
+    tableName: "clinicsessions",
     timestamps: false,
   }
 );

@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import sessionService from "../services/ClinicSessionService";
+import Resident from "../models/resident";
 
 const createSession = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -19,7 +20,7 @@ const getAllSessions = async (_req: Request, res: Response) => {
   }
 };
 
-const getSessionById = async (req: Request, res: Response, next?: NextFunction) =>   {
+const getSessionById = async (req: Request, res: Response) =>   {
   try {
     const session = await sessionService.getSessionById(Number(req.params.id));
     if (!session) {
