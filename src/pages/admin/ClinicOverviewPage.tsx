@@ -33,15 +33,21 @@ const ClinicOverview: React.FC = () => {
   const handleCreateClinic = async () => {
     if (clinicTitle.trim()) {
       // Check for duplicate clinic name
-      const isDuplicate = clinicCategories.some((clinic) => clinic.name.toLowerCase() === clinicTitle.toLowerCase());
-      
+      const isDuplicate = clinicCategories.some(
+        (clinic) => clinic.name.toLowerCase() === clinicTitle.toLowerCase()
+      );
+
       if (isDuplicate) {
-        alert("A clinic with this name already exists. Please choose a different name.");
+        alert(
+          "A clinic with this name already exists. Please choose a different name."
+        );
         return;
       }
 
       try {
-        const newClinic = await ClinicService.createClinic({ name: clinicTitle });
+        const newClinic = await ClinicService.createClinic({
+          name: clinicTitle,
+        });
         setClinicCategories((prevCategories) => [...prevCategories, newClinic]);
         setShowModal(false);
         setClinicTitle(""); // Reset the input field
@@ -94,19 +100,28 @@ const ClinicOverview: React.FC = () => {
     if (clinicToEdit && clinicTitle.trim()) {
       // Check for duplicate clinic name (excluding the clinic being edited)
       const isDuplicate = clinicCategories.some(
-        (clinic) => clinic.name.toLowerCase() === clinicTitle.toLowerCase() && clinic.id !== clinicToEdit
+        (clinic) =>
+          clinic.name.toLowerCase() === clinicTitle.toLowerCase() &&
+          clinic.id !== clinicToEdit
       );
-      
+
       if (isDuplicate) {
-        alert("A clinic with this name already exists. Please choose a different name.");
+        alert(
+          "A clinic with this name already exists. Please choose a different name."
+        );
         return;
       }
 
       try {
-        const updatedClinic = await ClinicService.updateClinicName(clinicToEdit, { name: clinicTitle });
+        const updatedClinic = await ClinicService.updateClinicName(
+          clinicToEdit,
+          { name: clinicTitle }
+        );
         setClinicCategories((prevCategories) =>
           prevCategories.map((clinic) =>
-            clinic.id === clinicToEdit ? { ...clinic, name: updatedClinic.name } : clinic
+            clinic.id === clinicToEdit
+              ? { ...clinic, name: updatedClinic.name }
+              : clinic
           )
         );
         setShowEditModal(false);
@@ -134,7 +149,9 @@ const ClinicOverview: React.FC = () => {
             <FaClinicMedical className="text-blue-600 text-3xl" />
             <div>
               <h2 className="text-lg font-bold">Clinic Overview</h2>
-              <p className="text-gray-500 text-sm">Total Clinics: {clinicCategories.length}</p>
+              <p className="text-gray-500 text-sm">
+                Total Clinics: {clinicCategories.length}
+              </p>
             </div>
           </div>
           <button
@@ -151,15 +168,20 @@ const ClinicOverview: React.FC = () => {
           {clinicCategories.map((clinic) => (
             <Link
               key={clinic.id}
-              to={`/admin/clinic/${clinic.name.toLowerCase().replace(/\s+/g, "-")}`}
+              to={`/admin/clinic/${clinic.id}`}
               className="bg-white p-4 shadow-md rounded-lg flex justify-between items-center cursor-pointer hover:shadow-lg transition"
             >
               <div>
                 <h4 className="text-lg font-semibold">{clinic.name}</h4>
                 <p className="text-2xl font-bold">{clinic.count}</p>
                 <p className="text-gray-500 text-sm">Attendance Trend </p>
-                <p className={`text-sm font-semibold ${clinic.increase ? "text-green-500" : "text-red-500"}`}>
-                  {clinic.change} {clinic.increase ? "▲" : "▼"} {clinic.percentage}%
+                <p
+                  className={`text-sm font-semibold ${
+                    clinic.increase ? "text-green-500" : "text-red-500"
+                  }`}
+                >
+                  {clinic.change} {clinic.increase ? "▲" : "▼"}{" "}
+                  {clinic.percentage}%
                 </p>
               </div>
               <div className="flex space-x-2">
@@ -188,7 +210,11 @@ const ClinicOverview: React.FC = () => {
 
         {/* Modal for Creating New Clinic */}
         {showModal && (
-          <Modal isOpen={showModal} handleClose={() => setShowModal(false)} title="Add Clinic">
+          <Modal
+            isOpen={showModal}
+            handleClose={() => setShowModal(false)}
+            title="Add Clinic"
+          >
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h2 className="text-lg font-bold mb-4">Add Clinic</h2>
               <input
@@ -212,9 +238,15 @@ const ClinicOverview: React.FC = () => {
 
         {/* Confirmation Modal for Deleting Clinic */}
         {showConfirmDeleteModal && (
-          <Modal isOpen={showConfirmDeleteModal} handleClose={handleCancelDelete} title="Confirm Deletion">
+          <Modal
+            isOpen={showConfirmDeleteModal}
+            handleClose={handleCancelDelete}
+            title="Confirm Deletion"
+          >
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <h2 className="text-lg font-bold mb-4">Are you sure you want to delete this clinic?</h2>
+              <h2 className="text-lg font-bold mb-4">
+                Are you sure you want to delete this clinic?
+              </h2>
               <div className="flex justify-end space-x-4">
                 <button
                   onClick={handleCancelDelete}
@@ -235,7 +267,11 @@ const ClinicOverview: React.FC = () => {
 
         {/* Modal for Editing Clinic Name */}
         {showEditModal && (
-          <Modal isOpen={showEditModal} handleClose={handleCancelEdit} title="Edit Clinic Name">
+          <Modal
+            isOpen={showEditModal}
+            handleClose={handleCancelEdit}
+            title="Edit Clinic Name"
+          >
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h2 className="text-lg font-bold mb-4">Edit Clinic Name</h2>
               <input

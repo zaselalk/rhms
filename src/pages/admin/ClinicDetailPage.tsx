@@ -17,12 +17,14 @@ interface ClinicSession {
 }
 
 const ClinicDetail: React.FC = () => {
-  const { clinic } = useParams();
-  const [, setClinicName] = useState("");
+  const { clinicId } = useParams();
+  const [clinicName, setClinicName] = useState("");
   const [clinicSessions, setClinicSessions] = useState<ClinicSession[]>([]);
   const [newSession, setNewSession] = useState({ name: "", sessionDate: "" });
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [selectedSession, setSelectedSession] = useState<ClinicSession | null>(null);
+  const [selectedSession, setSelectedSession] = useState<ClinicSession | null>(
+    null
+  );
   const [error, setError] = useState<string>("");
 
   const clinicPatients: Patient[] = [
@@ -47,9 +49,14 @@ const ClinicDetail: React.FC = () => {
     { division: "Delgoda", count: 56 },
   ];
 
+  if (!clinicId) {
+    console.error("Clinic ID is not available");
+    return <div>Error: Clinic ID is not available.</div>;
+  }
+
   const fetchClinicName = async () => {
     try {
-      const data = await ClinicService.getClinicById(clinic!);
+      const data = await ClinicService.getClinicById(clinicId);
       setClinicName(data.name);
     } catch (err) {
       console.error("Failed to fetch clinic name:", err);
@@ -58,7 +65,7 @@ const ClinicDetail: React.FC = () => {
 
   const fetchSessions = async () => {
     try {
-      const sessions = await ClinicService.getClinicSessions(clinic!);
+      const sessions = await ClinicService.getClinicSessions(clinicId);
       setClinicSessions(sessions);
     } catch (err) {
       console.error("Failed to fetch sessions:", err);
@@ -72,7 +79,10 @@ const ClinicDetail: React.FC = () => {
     }
 
     try {
-      const created = await ClinicService.createClinicSession(clinic!, newSession);
+      const created = await ClinicService.createClinicSession(
+        clinicId,
+        newSession
+      );
       setClinicSessions([...clinicSessions, created]);
       setNewSession({ name: "", sessionDate: "" });
       setError("");
@@ -83,7 +93,9 @@ const ClinicDetail: React.FC = () => {
   };
 
   const removeClinicSession = (sessionId: string) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this session?");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this session?"
+    );
     if (confirmDelete) {
       setClinicSessions(clinicSessions.filter((s) => s.id !== sessionId));
       // TODO: Add backend delete call if needed
@@ -104,7 +116,13 @@ const ClinicDetail: React.FC = () => {
     if (selectedSession) {
       setClinicSessions(
         clinicSessions.map((s) =>
-          s.id === selectedSession.id ? { ...s, sessionName: selectedSession.sessionName, date: selectedSession.date } : s
+          s.id === selectedSession.id
+            ? {
+                ...s,
+                sessionName: selectedSession.sessionName,
+                date: selectedSession.date,
+              }
+            : s
         )
       );
     }
@@ -112,11 +130,11 @@ const ClinicDetail: React.FC = () => {
   };
 
   useEffect(() => {
-    if (clinic) {
+    if (clinicId) {
       fetchClinicName();
       fetchSessions();
     }
-  }, [clinic]);
+  }, [clinicId]);
 
   return (
     <DashboardContainer>
@@ -125,7 +143,7 @@ const ClinicDetail: React.FC = () => {
           <div className="flex items-center space-x-3">
             <FaClinicMedical className="text-blue-600 text-3xl" />
             <h2 className="text-lg font-bold">Clinic Details</h2>
-            <p className="text-sg font-bold">({clinic})</p>
+            <p className="text-sg font-bold">({clinicName})</p>
           </div>
         </div>
 
@@ -159,7 +177,9 @@ const ClinicDetail: React.FC = () => {
           </div>
 
           <div className="bg-white p-6 shadow-md rounded-lg">
-            <h3 className="text-xl font-semibold mb-4">Clinic Patient Divisions</h3>
+            <h3 className="text-xl font-semibold mb-4">
+              Clinic Patient Divisions
+            </h3>
             <table className="w-full border-collapse">
               <thead>
                 <tr className="border-b">
@@ -188,15 +208,22 @@ const ClinicDetail: React.FC = () => {
               placeholder="Session Name"
               className="border p-2 rounded w-1/2"
               value={newSession.name}
-              onChange={(e) => setNewSession({ ...newSession, name: e.target.value })}
+              onChange={(e) =>
+                setNewSession({ ...newSession, name: e.target.value })
+              }
             />
             <input
               type="date"
               className="border p-2 rounded"
               value={newSession.sessionDate}
-              onChange={(e) => setNewSession({ ...newSession, sessionDate: e.target.value })}
+              onChange={(e) =>
+                setNewSession({ ...newSession, sessionDate: e.target.value })
+              }
             />
-            <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={addClinicSession}>
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+              onClick={addClinicSession}
+            >
               <FaPlus /> Add
             </button>
           </div>
@@ -218,8 +245,12 @@ const ClinicDetail: React.FC = () => {
                   <td className="p-2">{session.sessionName}</td>
                   <td className="p-2">{session.date}</td>
                   <td className="p-2 space-x-2">
-                    <button onClick={() => openEditModal(session)}><FaEdit className="text-yellow-500" /></button>
-                    <button onClick={() => removeClinicSession(session.id)}><FaTrash className="text-red-500" /></button>
+                    <button onClick={() => openEditModal(session)}>
+                      <FaEdit className="text-yellow-500" />
+                    </button>
+                    <button onClick={() => removeClinicSession(session.id)}>
+                      <FaTrash className="text-red-500" />
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -228,24 +259,46 @@ const ClinicDetail: React.FC = () => {
         </div>
 
         {editModalOpen && selectedSession && (
-          <Modal title="Add Session" isOpen={editModalOpen} handleClose={()=>setEditModalOpen(false)}>
+          <Modal
+            title="Add Session"
+            isOpen={editModalOpen}
+            handleClose={() => setEditModalOpen(false)}
+          >
             <div>
               <h3 className="text-xl font-semibold mb-4">Edit Session</h3>
               <input
                 type="text"
                 className="border p-2 rounded w-full mb-2"
                 value={selectedSession.sessionName}
-                onChange={(e) => setSelectedSession({ ...selectedSession, sessionName: e.target.value })}
+                onChange={(e) =>
+                  setSelectedSession({
+                    ...selectedSession,
+                    sessionName: e.target.value,
+                  })
+                }
               />
               <input
                 type="date"
                 className="border p-2 rounded w-full mb-4"
                 value={selectedSession.date}
-                onChange={(e) => setSelectedSession({ ...selectedSession, date: e.target.value })}
+                onChange={(e) =>
+                  setSelectedSession({
+                    ...selectedSession,
+                    date: e.target.value,
+                  })
+                }
               />
               <div className="flex justify-end space-x-2">
-                <button className="bg-gray-300 px-4 py-2 rounded" onClick={closeEditModal}>Cancel</button>
-                <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleSaveEditedSession}>
+                <button
+                  className="bg-gray-300 px-4 py-2 rounded"
+                  onClick={closeEditModal}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="bg-blue-500 text-white px-4 py-2 rounded"
+                  onClick={handleSaveEditedSession}
+                >
                   Save
                 </button>
               </div>

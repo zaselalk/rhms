@@ -212,7 +212,7 @@ function App() {
               }
             />
             <Route
-              path=":clinic"
+              path=":clinicId"
               element={
                 <ProtectedRoutesGuard>
                   <ClinicDetailPage />
@@ -220,7 +220,6 @@ function App() {
               }
             />
           </Route>
-          
         </Route>
 
         {/* household paths*/}
