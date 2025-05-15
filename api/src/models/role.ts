@@ -33,6 +33,7 @@ export class Role extends Model<RoleAttributes> implements RoleAttributes {
     Role.hasMany(models.User, {
       foreignKey: "roleId",
       as: "users",
+      onDelete: "RESTRICT",
     });
   }
 }

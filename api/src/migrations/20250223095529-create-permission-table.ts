@@ -39,7 +39,7 @@ module.exports = {
         `SELECT * FROM information_schema.tables WHERE table_name = 'permissionrole'`
       );
       if (tableExists[0].length > 0) {
-        console.log("permissionrole table has data, dropping the table");
+        console.log("permissionroles table has data, dropping the table");
         await queryInterface.dropTable("permissionrole");
       }
 

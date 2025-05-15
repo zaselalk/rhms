@@ -30,9 +30,9 @@ export const down = async (queryInterface: QueryInterface) => {
       console.log("clinicsessions table has data, dropping the table");
       // Drop the 'clinicsessions' table
       await queryInterface.dropTable("clinicsessions");
-      await queryInterface.dropTable("clinics");
-      return;
     }
+
+    await queryInterface.dropTable("clinics");
   } catch (error) {
     console.log(error);
   }
