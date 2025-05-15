@@ -35,6 +35,17 @@ class ResidentService {
         }
     }
 
+    // Get Resident Count
+    async getResidentCount() {
+        try {
+            const response = await axiosInstance.get("/resident/residentCount");
+            return response.data;
+        } catch (error: any) {
+            throw new Error(error.response?.data?.message || "Unable to fetch resident count");
+        }
+    }
+
+
 
 
 

@@ -7,9 +7,7 @@ import { debug } from "console";
 import app from "../server";
 import http from "http";
 import db from "../models";
-// const debug = require("debug")("remote-job-board:server");
-// const http = require("http");
-// const db = require("../models");
+
 let sequelize;
 
 /**
@@ -32,9 +30,9 @@ async function connectToDatabase() {
     alter = true;
   }
 
-  db.sequelize.sync().then(() => {
-    console.log("Connection has been established successfully.");
-  });
+  // db.sequelize..then(() => {
+  //   console.log("Connection has been established successfully.");
+  // });
 }
 
 connectToDatabase().then(() => {
@@ -47,7 +45,7 @@ connectToDatabase().then(() => {
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort(val) {
+function normalizePort(val: any) {
   const port = parseInt(val, 10);
 
   if (isNaN(port)) {
@@ -67,7 +65,7 @@ function normalizePort(val) {
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error) {
+function onError(error: any) {
   if (error.syscall !== "listen") {
     throw error;
   }
@@ -95,7 +93,7 @@ function onError(error) {
 
 function onListening() {
   const addr = server.address();
-  const bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
+  const bind = typeof addr === "string" ? "pipe " + addr : "port " + addr?.port;
   debug("Listening on " + bind);
 }
 

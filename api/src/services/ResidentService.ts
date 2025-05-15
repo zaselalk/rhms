@@ -121,6 +121,16 @@ export class ResidentService {
         return resident;
     }
 
+    async getResidentCount(): Promise<number> {
+        const count = await this.residentRepository.getResidentCount();
+        if (count === null) throw new Error("Resident not found");
+        return count;
+    }
+
+    async getDiseasePatientCounts(): Promise<Record<string, number>> {
+    return this.residentRepository.countPatientsByDisease();
+  }
+
 
 
 

@@ -1,6 +1,7 @@
 import Session from "../models/clinicSession";
 
 const createSession = async (sessionData: any) => {
+  console.log("Creating session with data:", sessionData);
   return await Session.create(sessionData);
 };
 

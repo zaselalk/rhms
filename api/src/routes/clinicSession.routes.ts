@@ -4,12 +4,12 @@ import clinicSessionController from "../controllers/clinicSessionController";
 const router = Router();
 
 // Create a new session
-router.post("/", clinicSessionController.createSession);
+router.post("/createSession", clinicSessionController.createSession);
 
 // Get all sessions
-router.get("/", clinicSessionController.getAllSessions);
+router.get("/getAllSession", clinicSessionController.getAllSessions);
 
-// Get a specific session by ID
+//Get a specific session by ID
 //router.get("/:id", clinicSessionController.getSessionById);
 
 // Update a session by ID

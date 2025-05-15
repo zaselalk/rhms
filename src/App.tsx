@@ -4,7 +4,6 @@ import LoginPage from "./pages/LoginPage";
 import DivisionPage from "./pages/admin/DivisionPage";
 import SingleDivisionPage from "./pages/admin/SingleDivisionPage";
 import UsersPage from "./pages/admin/UsersPage";
-import AddUserPage from "./pages/admin/AddUserPage";
 import HouseholdPage from "./pages/admin/HouseholdPage";
 import ResidentProfilePage from "./pages/admin/ResidentProfilePage";
 import ResidentLoginPage from "./pages/resident/ResidentLoginPage";
@@ -213,7 +212,7 @@ function App() {
               }
             />
             <Route
-              path=":clinic"
+              path=":clinicId"
               element={
                 <ProtectedRoutesGuard>
                   <ClinicDetailPage />

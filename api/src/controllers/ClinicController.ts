@@ -4,6 +4,9 @@ import { ClinicService } from "../services/ClinicService";
 import { promises } from "dns";
 
 class ClinicController {
+    getClinicByIdWithSession(getClinicByIdWithSession: any): import("express-serve-static-core").RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>> {
+        throw new Error("Method not implemented.");
+    }
   private clinicService:ClinicService; // Define the type of clinicRepository
 
   constructor() {
