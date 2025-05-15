@@ -1,4 +1,5 @@
 import axiosInstance from "./axios/axiosInstance";
+import { userRole } from "./types/user-role.types";
 
 /**
  * Service for managing users and roles.
@@ -46,10 +47,11 @@ export default class UserService {
    * @returns {Promise<any>} A promise that resolves to the list of roles.
    * @throws {Error} If unable to fetch roles.
    */
-  async getAllRoles(): Promise<any> {
+  async getAllRoles(): Promise<userRole[]> {
     try {
       const response = await axiosInstance.get("/role");
-      return response.data;
+
+      return response.data.data;
     } catch (error: any) {
       throw new Error(error.response?.data?.message || "Unable to fetch roles");
     }
@@ -88,7 +90,8 @@ export default class UserService {
    * @returns {Promise<any>} A promise that resolves to the deletion result.
    * @throws {Error} If unable to delete the user role.
    */
-  async deleteUserRole(roleId: string): Promise<any> {
+  async deleteUserRole(roleId: number): Promise<any> {
+    if (!roleId) throw new Error("Role ID is required");
     try {
       const response = await axiosInstance.delete(`/role/${roleId}`);
       return response.data;

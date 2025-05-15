@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import * as Yup from "yup";
 import { useSingleRole } from "../../../hooks/useSingleRole";
 import UserService from "../../../services/user.service";
+import allPermissions from "./role-management/data/allPermission";
 
 interface UserRoleUpdateModalProps {
   isUpdatingRole: boolean;
@@ -20,52 +21,6 @@ const RoleSchema = Yup.object().shape({
     .required("Role name is required"),
   permissionList: Yup.array().min(1, "Select at least one permission"),
 });
-
-const allPermissions = [
-  {
-    group: "User",
-    perms: ["user:create", "user:edit", "user:delete", "user:view"],
-  },
-  {
-    group: "Role",
-    perms: ["role:create", "role:edit", "role:delete", "role:view"],
-  },
-  {
-    group: "Clinic",
-    perms: ["clinic:create", "clinic:edit", "clinic:delete", "clinic:view"],
-  },
-  {
-    group: "Disease",
-    perms: ["disease:create", "disease:edit", "disease:delete", "disease:view"],
-  },
-  {
-    group: "Division",
-    perms: [
-      "division:create",
-      "division:edit",
-      "division:delete",
-      "division:view",
-    ],
-  },
-  {
-    group: "HouseHold",
-    perms: [
-      "household:create",
-      "household:edit",
-      "household:delete",
-      "household:view",
-    ],
-  },
-  {
-    group: "Resident",
-    perms: [
-      "resident:create",
-      "resident:edit",
-      "resident:delete",
-      "resident:view",
-    ],
-  },
-];
 
 export const UserRoleUpdateModal: FC<UserRoleUpdateModalProps> = ({
   isUpdatingRole,
