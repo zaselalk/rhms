@@ -81,13 +81,14 @@ export const ClinicService = {
   // Get all sessions for a specific clinic
   getClinicSessions: async (clinicId: string) => {
     try {
-      const response = await axiosInstance.get(`/clinic/${clinicId}/session`);
+      const response = await axiosInstance.get(`/clinic/${clinicId}/GetsessionForClinic`);
       return response.data;
     } catch (error) {
       console.error("Error fetching clinic sessions:", error);
       throw error;
     }
   },
+  //update a session for a clinic
   updateClinicSession: async (
     clinicId: string,
     sessionData: { id: string; name: string; sessionDate: string }
@@ -103,6 +104,8 @@ export const ClinicService = {
       throw error;
     }
   },
+
+  // Delete a session for a clinic
 
   deleteClinicSession: async (clinicId: string, sessionId: string) => {
     try {

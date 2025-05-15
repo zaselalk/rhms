@@ -204,7 +204,7 @@ function App() {
               }
             />
             <Route
-              path=":clinic/attendance"
+              path=":clinicID/:sessionID/attendance"
               element={
                 <ProtectedRoutesGuard>
                   <ClinicAttendancePage />
