@@ -1,4 +1,5 @@
-import React, {useEffect } from "react";
+import React, { useEffect } from "react";
+import { Pie } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   Title,
@@ -90,7 +91,6 @@ const AdminDashboard: React.FC = () => {
   const numberOfDiseases = 5; // Example data for the number of diseases
   const numberOfDivisions = 12;
   const numberOfHouses = 100;
-  const numberOfClinics = 5;
 
 
   return (
