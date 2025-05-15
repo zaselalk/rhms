@@ -34,6 +34,15 @@ module.exports = {
 
   async down(queryInterface: QueryInterface) {
     try {
+      // check if the "permissionrole" table exists before dropping
+      const tableExists = await queryInterface.sequelize.query(
+        `SELECT * FROM information_schema.tables WHERE table_name = 'permissionrole'`
+      );
+      if (tableExists[0].length > 0) {
+        console.log("permissionrole table has data, dropping the table");
+        await queryInterface.dropTable("permissionrole");
+      }
+
       await queryInterface.dropTable("permissions");
     } catch (error) {
       console.log(error);
