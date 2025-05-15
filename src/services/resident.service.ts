@@ -39,7 +39,7 @@ class ResidentService {
     async getResidentCount() {
         try {
             const response = await axiosInstance.get("/resident/residentCount");
-            return response.data;
+            return response.data.data.count;
         } catch (error: any) {
             throw new Error(error.response?.data?.message || "Unable to fetch resident count");
         }

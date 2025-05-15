@@ -30,36 +30,21 @@ const HouseholdPage: FC = () => {
   const [registeredHouseholds, setRegisteredHouseholds] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [residentCount, setResidentCount] = useState(0);
+  const [householdChartData, setHouseholdChartData] = useState<{ division: string; count: number }[]>([]);
 
-  // //get the total number of registered residents
-  useEffect(() => {
-    const fetchResidentCount = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3001/resident/residentCount"
-        );
-        setResidentCount(response.data.count);
-      } catch (error) {
-        console.error("Error fetching resident count:", error);
-        message.error("Failed to load resident count");
-      }
-    };
 
-    fetchResidentCount();
-  }, []);
-
-  const householdData = [
-    { division: "Kotagedara", count: 10 },
-    { division: "Navuththuduwa", count: 15 },
-    { division: "Bopitiya", count: 8 },
-    { division: "Maddegedara", count: 5 },
-    { division: "Pahalawela", count: 12 },
-    { division: "Kolahekada", count: 7 },
-    { division: "Narawila", count: 9 },
-    { division: "Yatadola", count: 11 },
-    { division: "Henpita", count: 6 },
-    { division: "Pallegoda", count: 13 },
-  ];
+  // const householdData = [
+  //   { division: "Kotagedara", count: 10 },
+  //   { division: "Navuththuduwa", count: 15 },
+  //   { division: "Bopitiya", count: 8 },
+  //   { division: "Maddegedara", count: 5 },
+  //   { division: "Pahalawela", count: 12 },
+  //   { division: "Kolahekada", count: 7 },
+  //   { division: "Narawila", count: 9 },
+  //   { division: "Yatadola", count: 11 },
+  //   { division: "Henpita", count: 6 },
+  //   { division: "Pallegoda", count: 13 },
+  // ];
 
   useEffect(() => {
     const fetchHouseholds = async () => {
@@ -68,6 +53,23 @@ const HouseholdPage: FC = () => {
           "http://localhost:3001/household/read"
         );
         setRegisteredHouseholds(response.data);
+
+        
+        // Compute counts per division
+      const divisionCounts: Record<string, number> = {};
+      response.data.forEach((household: any) => {
+        const division = household.grama_division || "Unknown";
+        divisionCounts[division] = (divisionCounts[division] || 0) + 1;
+      });
+
+      // Transform to array suitable for BarChart
+      const chartData = Object.entries(divisionCounts).map(([division, count]) => ({
+        division,
+        count,
+      }));
+
+      setHouseholdChartData(chartData);
+
       } catch (error) {
         console.error("Error fetching households:", error);
         message.error("Failed to load households");
@@ -76,6 +78,23 @@ const HouseholdPage: FC = () => {
       }
     };
     fetchHouseholds();
+  }, []);
+
+  
+  //get the total number of registered residents
+  useEffect(() => {
+    const fetchResidentCount = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3001/resident/residentCount"
+        );
+        setResidentCount(response.data.data.count);
+      } catch (error) {
+        console.error("Error fetching resident count:", error);
+        message.error("Failed to load resident count");
+      }
+    };
+    fetchResidentCount();
   }, []);
 
   const handleViewHousehold = (householdId: string) => {
@@ -214,7 +233,7 @@ const HouseholdPage: FC = () => {
             Households Distribution
           </h3>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={householdData}>
+            <BarChart data={householdChartData}>
               <XAxis dataKey="division" />
               <YAxis allowDecimals={false} />
               <Tooltip />
