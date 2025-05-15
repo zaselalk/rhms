@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaClinicMedical, FaEdit, FaTrash} from "react-icons/fa";
+import { FaClinicMedical, FaEdit, FaTrash, FaClipboardList} from "react-icons/fa";
 import { FiPlusCircle} from "react-icons/fi";
 import { useParams } from "react-router";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
@@ -336,6 +336,9 @@ const clinicPatients: Patient[] = [
                         className="text-red-600 hover:text-red-800"
                       >
                         <FaTrash />
+                      </button>
+                      <button>
+                        <FaClipboardList className="text-green-500 hover:text-green-700" />
                       </button>
                     </td>
                   </tr>
