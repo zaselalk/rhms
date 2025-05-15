@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { FaClinicMedical, FaEdit, FaTrash, FaPlus } from "react-icons/fa";
+import { FaClinicMedical, FaEdit, FaTrash} from "react-icons/fa";
+import { FiPlusCircle} from "react-icons/fi";
 import { useParams } from "react-router";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import Modal from "../../components/layouts/overlays/Modal";
@@ -28,19 +29,19 @@ const ClinicDetail: React.FC = () => {
   const [loadingClinicName, setLoadingClinicName] = useState(false);
 
   // Static data for demo
-  const clinicPatients: Patient[] = [
-    { id: "DB001", name: "Ashfa" },
-    { id: "DB002", name: "Asela" },
-    { id: "DB003", name: "Ravindu" },
-    { id: "DB004", name: "Dilukshi" },
-    { id: "DB005", name: "Ashfa" },
-    { id: "DB006", name: "Ashfa" },
-    { id: "DB007", name: "New Patient 7" },
-    { id: "DB008", name: "New Patient 8" },
-    { id: "DB009", name: "New Patient 9" },
-    { id: "DB010", name: "New Patient 10" },
-    { id: "DB011", name: "New Patient 11" },
-  ];
+const clinicPatients: Patient[] = [
+  { id: "DB001", name: "Nuwan Perera" },
+  { id: "DB002", name: "Asela Bandara" },
+  { id: "DB003", name: "Ravindu Jayasinghe" },
+  { id: "DB004", name: "Dilukshi Fernando" },
+  { id: "DB005", name: "Ashfa Nazeer" },
+  { id: "DB006", name: "Sanduni Wickramasinghe" },
+  { id: "DB007", name: "Tharindu Mendis" },
+  { id: "DB008", name: "Sachini Herath" },
+  { id: "DB009", name: "Isuru Gunaratne" },
+  { id: "DB010", name: "Kavindi Rajapaksha" },
+  { id: "DB011", name: "Lahiru Abeysekara" },
+];
 
   const patientDivisions = [
     { division: "Katugahahena", count: 20 },
@@ -210,18 +211,18 @@ const ClinicDetail: React.FC = () => {
       <div className="p-6 w-full min-h-screen">
         <div className="flex justify-between items-center mb-6 bg-white p-4 shadow rounded-lg">
           <div className="flex items-center space-x-3">
-            <FaClinicMedical className="text-blue-600 text-3xl" />
-            <h2 className="text-lg font-bold">Clinic Details</h2>
+            <FaClinicMedical className="text-[#008FFB] text-3xl" />
+            <h2 className="text-2xl font-bold text-[#008FFB]">Clinic Details</h2>
             {loadingClinicName ? (
               <p>Loading...</p>
             ) : (
-              <p className="text-sg font-bold">({clinicName})</p>
+              <p className="text-l font-semibold text-[#008FFB]">({clinicName})</p>
             )}
           </div>
         </div>
 
         <div className="flex justify-center items-center bg-white p-6 shadow-md rounded-lg mb-6">
-          <FaClinicMedical className="text-blue-500 text-5xl mr-4" />
+          <FaClinicMedical className="text-[#008FFB] text-5xl mr-4" />
           <div>
             <p className="text-l font-bold">Patients</p>
             <p className="text-4xl font-bold">{clinicPatients.length}</p>
@@ -297,11 +298,11 @@ const ClinicDetail: React.FC = () => {
               }
             />
             <button
-              className="bg-blue-500 text-white px-4 py-2 rounded"
+        
               onClick={addClinicSession}
-            >
-              <FaPlus className="inline mr-2" />
-              Add
+              className="bg-blue-500 text-white px-4 py-2 flex items-center rounded-lg shadow hover:bg-blue-600 transition"
+                        >
+                          <FiPlusCircle className="mr-2" /> New Session
             </button>
           </div>
 
@@ -326,7 +327,7 @@ const ClinicDetail: React.FC = () => {
                     <td className="p-2 text-center space-x-2">
                       <button
                         onClick={() => openEditModal(session)}
-                        className="text-blue-600 hover:text-blue-800"
+                        className="text-[#008FFB] hover:text-blue-800"
                       >
                         <FaEdit />
                       </button>
