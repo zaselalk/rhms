@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { FaClinicMedical, FaEdit, FaTrash, FaClipboardList, FaPlus } from "react-icons/fa";
-import { useNavigate, useParams } from "react-router";
+import { FaClinicMedical, FaEdit, FaTrash, FaPlus } from "react-icons/fa";
+import { useParams } from "react-router";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import Modal from "../../components/layouts/overlays/Modal";
 import { ClinicService } from "../../services/clinic.service";
@@ -18,7 +18,7 @@ interface ClinicSession {
 
 const ClinicDetail: React.FC = () => {
   const { clinic } = useParams();
-  const [clinicName, setClinicName] = useState("");
+  const [, setClinicName] = useState("");
   const [clinicSessions, setClinicSessions] = useState<ClinicSession[]>([]);
   const [newSession, setNewSession] = useState({ name: "", sessionDate: "" });
   const [editModalOpen, setEditModalOpen] = useState(false);
