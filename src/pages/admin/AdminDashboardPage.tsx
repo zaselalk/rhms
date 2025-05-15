@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use, useEffect } from "react";
 import { Pie } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -17,6 +17,7 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
+import { DashboardService } from "../../services/dashbord.service";
 const { BaseLayer } = LayersControl;
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
@@ -67,6 +68,32 @@ const AdminDashboard: React.FC = () => {
     { position: [6.492096667, 80.0840675], popup: "DEYAGALA20" },
   ];
 
+
+  const [residentCount, setResidentCount] = React.useState<number>(0);
+  const dashbordService = DashboardService;
+
+  // Fetch resident count from the server
+  const fetchdata = async () => {
+    try {
+      const data = await dashbordService.getresidentCount();
+      setResidentCount(data.data);
+    } catch (error) {
+      console.error("Error fetching residents:", error);
+    }
+  };
+
+  // Fetch data when loading the component
+  useEffect(() => {
+    fetchdata();
+  }, []);
+
+
+  const numberOfDiseases = 5; // Example data for the number of diseases
+  const numberOfDivisions = 12;
+  const numberOfHouses = 100;
+  const numberOfClinics = 5;
+
+
   return (
     <DashboardContainer>
       <div>
@@ -88,13 +115,13 @@ const AdminDashboard: React.FC = () => {
                 <BaseLayer checked name="Satellite View">
                   <TileLayer
                     url="https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
-                    // attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
+                  // attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
                   />
                 </BaseLayer>
                 <BaseLayer name="Street View">
                   <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    // attribution='&copy; <a href="https://www.openstreetmap.org/copyright"></a>'
+                  // attribution='&copy; <a href="https://www.openstreetmap.org/copyright"></a>'
                   />
                 </BaseLayer>
               </LayersControl>
@@ -128,22 +155,22 @@ const AdminDashboard: React.FC = () => {
           <div className="grid grid-cols-2 gap-6">
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-semibold text-[#008FFB]">
-                100 Houses
+                {numberOfHouses} Houses
               </h3>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-semibold text-[#008FFB]">
-                236 Members
+                {residentCount} Residents
               </h3>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-semibold text-[#008FFB]">
-                12 Divisions
+                {numberOfDivisions} Divisions
               </h3>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-semibold text-[#008FFB]">
-                5 Diseases
+                {numberOfDiseases} Diseases
               </h3>
             </div>
           </div>
