@@ -23,4 +23,9 @@ export class DiseaseServices {
     return this.diseaseRepository.getAllDiseases();
   }
 
+
+  async deleteDisease(diseaseName: string): Promise<number> {
+  return this.diseaseRepository.deleteDisease(diseaseName);
+}
+
 }

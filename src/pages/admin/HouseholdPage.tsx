@@ -36,7 +36,7 @@ const HouseholdPage: FC = () => {
     const fetchResidentCount = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3001/residents/residentCount"
+          "http://localhost:3001/resident/residentCount"
         );
         setResidentCount(response.data.count);
       } catch (error) {
