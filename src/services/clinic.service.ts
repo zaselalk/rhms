@@ -27,7 +27,10 @@ export const ClinicService = {
   // Create a new clinic
   createClinic: async (clinicData: { name: string }) => {
     try {
-      const response = await axiosInstance.post("/clinic/createClinic", clinicData);
+      const response = await axiosInstance.post(
+        "/clinic/createClinic",
+        clinicData
+      );
       return response.data;
     } catch (error) {
       console.error("Error creating clinic:", error);
@@ -48,7 +51,10 @@ export const ClinicService = {
   // Update clinic name
   updateClinicName: async (clinicId: string, clinicData: { name: string }) => {
     try {
-      const response = await axiosInstance.put(`/clinic/${clinicId}`, clinicData);
+      const response = await axiosInstance.put(
+        `/clinic/${clinicId}`,
+        clinicData
+      );
       return response.data;
     } catch (error) {
       console.error("Error updating clinic:", error);
@@ -57,9 +63,15 @@ export const ClinicService = {
   },
 
   // Create a new session for a clinic
-  createClinicSession: async (clinicId: string, sessionData: { name: string; sessionDate: string }) => {
+  createClinicSession: async (
+    clinicId: string,
+    sessionData: { name: string; sessionDate: string }
+  ) => {
     try {
-      const response = await axiosInstance.post(`/clinic/${clinicId}/session`, sessionData);
+      const response = await axiosInstance.post(`/clinic/${clinicId}/session`, {
+        clinicId,
+        ...sessionData,
+      });
       return response.data;
     } catch (error) {
       console.error("Error creating clinic session:", error);
@@ -67,14 +79,13 @@ export const ClinicService = {
     }
   },
   // Get all sessions for a specific clinic
-getClinicSessions: async (clinicId: string) => {
-  try {
-    const response = await axiosInstance.get(`/clinic/${clinicId}/session`);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching clinic sessions:", error);
-    throw error;
-  }
-}
-
+  getClinicSessions: async (clinicId: string) => {
+    try {
+      const response = await axiosInstance.get(`/clinic/${clinicId}/session`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching clinic sessions:", error);
+      throw error;
+    }
+  },
 };
