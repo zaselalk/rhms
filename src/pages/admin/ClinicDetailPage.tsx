@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { FaClinicMedical, FaEdit, FaTrash, FaPlus } from "react-icons/fa";
+import { FaClinicMedical, FaEdit, FaTrash, FaPlus, FaClipboardList  } from "react-icons/fa";
 import { useParams } from "react-router";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import Modal from "../../components/layouts/overlays/Modal";
 import { ClinicService } from "../../services/clinic.service";
+
 
 interface Patient {
   id: string;
@@ -12,20 +13,20 @@ interface Patient {
 
 interface ClinicSession {
   id: string;
-  sessionName: string;
-  date: string;
+  name: string;
+  sessionDate: string;
 }
 
 const ClinicDetail: React.FC = () => {
-  const { clinicId } = useParams();
+  const { clinicId } = useParams<{ clinicId: string }>();
   const [clinicName, setClinicName] = useState("");
   const [clinicSessions, setClinicSessions] = useState<ClinicSession[]>([]);
   const [newSession, setNewSession] = useState({ name: "", sessionDate: "" });
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [selectedSession, setSelectedSession] = useState<ClinicSession | null>(
-    null
-  );
+  const [selectedSession, setSelectedSession] = useState<ClinicSession | null>(null);
   const [error, setError] = useState<string>("");
+  const [loadingSessions, setLoadingSessions] = useState(false);
+  const [loadingClinicName, setLoadingClinicName] = useState(false);
 
   const clinicPatients: Patient[] = [
     { id: "DB001", name: "Ashfa" },
@@ -55,20 +56,28 @@ const ClinicDetail: React.FC = () => {
   }
 
   const fetchClinicName = async () => {
+    setLoadingClinicName(true);
     try {
       const data = await ClinicService.getClinicById(clinicId);
       setClinicName(data.name);
     } catch (err) {
       console.error("Failed to fetch clinic name:", err);
+      setError("Failed to load clinic name.");
+    } finally {
+      setLoadingClinicName(false);
     }
   };
 
   const fetchSessions = async () => {
+    setLoadingSessions(true);
     try {
       const sessions = await ClinicService.getClinicSessions(clinicId);
       setClinicSessions(sessions);
     } catch (err) {
       console.error("Failed to fetch sessions:", err);
+      setError("Failed to load sessions.");
+    } finally {
+      setLoadingSessions(false);
     }
   };
 
@@ -77,28 +86,27 @@ const ClinicDetail: React.FC = () => {
       setError("Session Name and Date cannot be empty!");
       return;
     }
-
+    setError("");
     try {
-      const created = await ClinicService.createClinicSession(
-        clinicId,
-        newSession
-      );
+      const created = await ClinicService.createClinicSession(clinicId, newSession);
       setClinicSessions([...clinicSessions, created]);
       setNewSession({ name: "", sessionDate: "" });
-      setError("");
     } catch (err) {
       console.error("Error creating session:", err);
       setError("Failed to create session.");
     }
   };
 
-  const removeClinicSession = (sessionId: string) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this session?"
-    );
-    if (confirmDelete) {
+  const removeClinicSession = async (sessionId: string) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this session?");
+    if (!confirmDelete) return;
+
+    try {
+      await ClinicService.deleteClinicSession(clinicId, sessionId);
       setClinicSessions(clinicSessions.filter((s) => s.id !== sessionId));
-      // TODO: Add backend delete call if needed
+    } catch (err) {
+      console.error("Failed to delete session:", err);
+      setError("Failed to delete session.");
     }
   };
 
@@ -110,23 +118,29 @@ const ClinicDetail: React.FC = () => {
   const closeEditModal = () => {
     setSelectedSession(null);
     setEditModalOpen(false);
+    setError("");
   };
 
-  const handleSaveEditedSession = () => {
-    if (selectedSession) {
+  const handleSaveEditedSession = async () => {
+    if (!selectedSession) return;
+
+    if (!selectedSession.name || !selectedSession.sessionDate) {
+      setError("Session Name and Date cannot be empty!");
+      return;
+    }
+
+    try {
+      await ClinicService.updateClinicSession(clinicId, selectedSession);
       setClinicSessions(
         clinicSessions.map((s) =>
-          s.id === selectedSession.id
-            ? {
-                ...s,
-                sessionName: selectedSession.sessionName,
-                date: selectedSession.date,
-              }
-            : s
+          s.id === selectedSession.id ? selectedSession : s
         )
       );
+      closeEditModal();
+    } catch (err) {
+      console.error("Failed to update session:", err);
+      setError("Failed to update session.");
     }
-    closeEditModal();
   };
 
   useEffect(() => {
@@ -143,7 +157,11 @@ const ClinicDetail: React.FC = () => {
           <div className="flex items-center space-x-3">
             <FaClinicMedical className="text-blue-600 text-3xl" />
             <h2 className="text-lg font-bold">Clinic Details</h2>
-            <p className="text-sg font-bold">({clinicName})</p>
+            {loadingClinicName ? (
+              <p>Loading...</p>
+            ) : (
+              <p className="text-sg font-bold">({clinicName})</p>
+            )}
           </div>
         </div>
 
@@ -177,9 +195,7 @@ const ClinicDetail: React.FC = () => {
           </div>
 
           <div className="bg-white p-6 shadow-md rounded-lg">
-            <h3 className="text-xl font-semibold mb-4">
-              Clinic Patient Divisions
-            </h3>
+            <h3 className="text-xl font-semibold mb-4">Clinic Patient Divisions</h3>
             <table className="w-full border-collapse">
               <thead>
                 <tr className="border-b">
@@ -229,62 +245,68 @@ const ClinicDetail: React.FC = () => {
           </div>
 
           <h3 className="text-xl font-semibold mb-4">Clinic Sessions</h3>
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="border-b">
-                <th className="text-left p-2">ID</th>
-                <th className="text-left p-2">Name</th>
-                <th className="text-left p-2">Date</th>
-                <th className="text-left p-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {clinicSessions.map((session) => (
-                <tr key={session.id} className="border-b">
-                  <td className="p-2">{session.id}</td>
-                  <td className="p-2">{session.sessionName}</td>
-                  <td className="p-2">{session.date}</td>
-                  <td className="p-2 space-x-2">
-                    <button onClick={() => openEditModal(session)}>
-                      <FaEdit className="text-yellow-500" />
-                    </button>
-                    <button onClick={() => removeClinicSession(session.id)}>
-                      <FaTrash className="text-red-500" />
-                    </button>
-                  </td>
+          {loadingSessions ? (
+            <p>Loading sessions...</p>
+          ) : (
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="border-b">
+                  <th className="text-left p-2">Name</th>
+                  <th className="text-left p-2">Date</th>
+                  <th className="text-left p-2">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {clinicSessions.map((session) => (
+                  <tr key={session.id} className="border-b">
+                    <td className="p-2">{session.name}</td>
+                    <td className="p-2">{session.sessionDate}</td>
+                    <td className="p-2 space-x-2">
+                      <button onClick={() => openEditModal(session)}>
+                        <FaEdit className="text-yellow-500" />
+                      </button>
+                      <button onClick={() => removeClinicSession(session.id)}>
+                        <FaTrash className="text-red-500" />
+                      </button>
+                      <button>
+                        <FaClipboardList  className="text-green-500" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
 
         {editModalOpen && selectedSession && (
           <Modal
-            title="Add Session"
+            title="Edit Session"
             isOpen={editModalOpen}
-            handleClose={() => setEditModalOpen(false)}
+            handleClose={closeEditModal}
           >
             <div>
               <h3 className="text-xl font-semibold mb-4">Edit Session</h3>
+              {error && <p className="text-red-500 mb-2">{error}</p>}
               <input
                 type="text"
                 className="border p-2 rounded w-full mb-2"
-                value={selectedSession.sessionName}
+                value={selectedSession.name}
                 onChange={(e) =>
                   setSelectedSession({
                     ...selectedSession,
-                    sessionName: e.target.value,
+                    name: e.target.value,
                   })
                 }
               />
               <input
                 type="date"
                 className="border p-2 rounded w-full mb-4"
-                value={selectedSession.date}
+                value={selectedSession.sessionDate}
                 onChange={(e) =>
                   setSelectedSession({
                     ...selectedSession,
-                    date: e.target.value,
+                    sessionDate: e.target.value,
                   })
                 }
               />

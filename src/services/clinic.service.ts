@@ -88,4 +88,28 @@ export const ClinicService = {
       throw error;
     }
   },
+  updateClinicSession: async (
+    clinicId: string,
+    sessionData: { id: string; name: string; sessionDate: string }
+  ) => {
+    try {
+      const response = await axiosInstance.put(
+        `/clinic/${clinicId}/session/${sessionData.id}`,
+        sessionData
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error updating clinic session:", error);
+      throw error;
+    }
+  },
+
+  deleteClinicSession: async (clinicId: string, sessionId: string) => {
+    try {
+      await axiosInstance.delete(`/clinic/${clinicId}/session/${sessionId}`);
+    } catch (error) {
+      console.error("Error deleting clinic session:", error);
+      throw error;
+    }
+  },
 };

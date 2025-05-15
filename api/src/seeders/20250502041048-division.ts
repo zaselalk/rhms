@@ -4,15 +4,32 @@ module.exports = {
   async up(queryInterface: QueryInterface): Promise<void> {
     await queryInterface.bulkInsert("divisions", [
       { divisionName: "Katugahahena" },
-      { divisionName: "Pahalawila" },
-      { divisionName: "Diagala" },
+      { divisionName: "Diyagala" },
       { divisionName: "Kotagedara" },
+      { divisionName: "Maddegadara" },
+      { divisionName: "Nawutthuduwa" },
+      { divisionName: "Kolahekada" },
+      { divisionName: "Hempita" },
+      { divisionName: "Karampathara" },
+      { divisionName: "Katugoda" },
+      { divisionName: "Delgoda" },
     ]);
   },
 
   async down(queryInterface: QueryInterface): Promise<void> {
     await queryInterface.bulkDelete("divisions", {
-      divisionName: ["katugahahena", "Pahalawila", "Diagala", "Kotagedra"],
+      divisionName: [
+        "Katugahahena",
+        "Diyagala",
+        "Kotagedara",
+        "Maddegadara",
+        "Nawutthuduwa",
+        "Kolahekada",
+        "Hempita",
+        "Karampathara",
+        "Katugoda",
+        "Delgoda",
+      ],
     });
   },
 };
