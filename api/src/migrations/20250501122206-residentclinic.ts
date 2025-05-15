@@ -14,22 +14,11 @@ module.exports = {
         residentId: {
           type: DataTypes.INTEGER,
           allowNull: false,
-          references: {
-            model: 'Residents',
-            key: 'id',
-          },
-          onDelete: 'CASCADE',
-          onUpdate: 'CASCADE',
         },
         clinicId: {
           type: DataTypes.INTEGER,
           allowNull: false,
-          references: {
-            model: 'Clinic',
-            key: 'id',
-          },
-          onDelete: 'CASCADE',
-          onUpdate: 'CASCADE',
+
         },
         createdAt: {
           type: DataTypes.DATE,
