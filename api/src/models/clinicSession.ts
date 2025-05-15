@@ -2,7 +2,6 @@ import { DataTypes, Model } from "sequelize";
 import sequelize from "."; // Assuming the sequelize instance is already configured
 import Clinic from "./clinic"; // Importing the Clinic model
 
-
 interface SessionAttributes {
   sessionId: number;
   clinicId: number;
@@ -10,7 +9,10 @@ interface SessionAttributes {
   sessionDate: Date; // Added sessionDate attribute
 }
 
-export class Session extends Model<SessionAttributes> implements SessionAttributes {
+export class Session
+  extends Model<SessionAttributes>
+  implements SessionAttributes
+{
   public sessionId!: number;
   public clinicId!: number;
   public name!: string;
@@ -56,7 +58,7 @@ Session.init(
   {
     sequelize,
     modelName: "Session",
-    tableName: "clinicsessions",
+    tableName: "clinic_sessions",
     timestamps: false,
   }
 );

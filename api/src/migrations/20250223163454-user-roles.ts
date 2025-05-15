@@ -20,6 +20,11 @@ module.exports = {
         roleId: {
           type: DataTypes.INTEGER,
           allowNull: false,
+          onDelete: "RESTRICT",
+          references: {
+            model: "roles",
+            key: "id",
+          },
         },
         createdAt: {
           allowNull: false,
