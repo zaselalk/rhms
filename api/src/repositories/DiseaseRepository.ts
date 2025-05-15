@@ -17,4 +17,11 @@ export class DiseaseRepository {
       order: [['diseaseName', 'ASC']] // Optional: to sort alphabetically
     });
   }
+
+  async deleteDisease(diseaseName: string): Promise<number> {
+  return await Disease.destroy({
+    where: { diseaseName }
+  });
+}
+
 }
