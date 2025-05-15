@@ -5,7 +5,7 @@ import { QueryInterface, DataTypes } from "sequelize";
 module.exports = {
   async up(queryInterface: QueryInterface) {
     try {
-      await queryInterface.createTable("disease", {
+      await queryInterface.createTable("diseases", {
         diseaseId: {
           allowNull: false,
           autoIncrement: true,
@@ -31,7 +31,7 @@ module.exports = {
   },
   async down(queryInterface: QueryInterface) {
     try {
-      await queryInterface.dropTable("disease");
+      await queryInterface.dropTable("diseases");
     } catch (error) {
       console.log(error);
     }
