@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Home, Users, LayoutGrid, Activity } from "lucide-react";
 import { Pie } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -151,24 +152,31 @@ const AdminDashboard: React.FC = () => {
             </div>
           </div>
           {/* Other Stats */}
-          <div className="grid grid-cols-2 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold text-[#008FFB]">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="bg-white rounded-xl shadow-md p-4 flex flex-col justify-center items-center aspect-square">
+              <Home className="text-[#008FFB]" size={40} />
+              <h3 className="text-lg font-semibold text-[#008FFB] mt-2 text-center">
                 {numberOfHouses} Houses
               </h3>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold text-[#008FFB]">
+
+            <div className="bg-white rounded-xl shadow-md p-4 flex flex-col justify-center items-center aspect-square">
+              <Users className="text-[#008FFB]" size={40} />
+              <h3 className="text-lg font-semibold text-[#008FFB] mt-2 text-center">
                 {residentCount} Residents
               </h3>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold text-[#008FFB]">
+
+            <div className="bg-white rounded-xl shadow-md p-4 flex flex-col justify-center items-center aspect-square">
+              <LayoutGrid className="text-[#008FFB]" size={40} />
+              <h3 className="text-lg font-semibold text-[#008FFB] mt-2 text-center">
                 {numberOfDivisions} Divisions
               </h3>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold text-[#008FFB]">
+
+            <div className="bg-white rounded-xl shadow-md p-4 flex flex-col justify-center items-center aspect-square">
+              <Activity className="text-[#008FFB]" size={40} />
+              <h3 className="text-lg font-semibold text-[#008FFB] mt-2 text-center">
                 {numberOfDiseases} Diseases
               </h3>
             </div>
