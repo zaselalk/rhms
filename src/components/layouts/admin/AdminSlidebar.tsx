@@ -17,7 +17,6 @@ const AdminSidebar: FC = () => {
   const user = useAppSelector((state) => state.auth.user);
   const [navbarArray, setNavbarArray] = useState<String[]>([]);
 
-
   useEffect(() => {
     const permissions =
       user?.permissions?.map((perm) => perm.split(":")[0]) || [];
@@ -25,7 +24,6 @@ const AdminSidebar: FC = () => {
     if (permissions.length > 0) {
       setNavbarArray(permissions);
     }
-
   }, [user?.permissions]);
 
   const handleLogout = () => {
@@ -119,16 +117,16 @@ const AdminSidebar: FC = () => {
         </span>
         <Link
           to="/admin/profile"
-          className="py-1 text-md flex items-center text-gray-700 hover:bg-[#00C1A7] rounded-md px-3"
+          className="py-1 text-md flex items-center text-gray-700 hover:bg-[#566c8c] hover:text-white rounded-md px-3"
         >
           <div className="p-1">
             <UserOutlined />
           </div>
-          <div>ViewProfile</div>
+          <div>View Profile</div>
         </Link>
       </div>
       <button
-        className="text-white bg-[#008FFB] hover:bg-[#006fbb] px-4 py-2 rounded-md text-sm transition duration-200"
+        className="text-white bg-[#008FFB] hover:bg-[#3d3d6d] px-4 py-2 rounded-md text-sm transition duration-200 cursor-pointer"
         onClick={handleLogout}
       >
         Logout
