@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaClinicMedical, FaEdit, FaTrash, FaClipboardList} from "react-icons/fa";
 import { FiPlusCircle} from "react-icons/fi";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import Modal from "../../components/layouts/overlays/Modal";
 import { ClinicService } from "../../services/clinic.service";
@@ -44,17 +44,17 @@ const clinicPatients: Patient[] = [
 ];
 
   const patientDivisions = [
-    { division: "Katugahahena", count: 20 },
-    { division: "Diyagala", count: 34 },
-    { division: "Kotagedara", count: 23 },
-    { division: "Maddegadara", count: 32 },
-    { division: "Nawutthuduwa", count: 23 },
-    { division: "Kolahekada", count: 34 },
-    { division: "Hempita", count: 34 },
-    { division: "Karampathara", count: 23 },
-    { division: "Katugoda", count: 12 },
-    { division: "Delgoda", count: 56 },
-    { division: "Extra Division 1", count: 15 },
+    { division: "Katugahahena", count: 2 },
+    { division: "Diyagala", count: 1 },
+    { division: "Kotagedara", count: 3 },
+    { division: "Maddegadara", count: 1 },
+    { division: "Nawutthuduwa", count: 0 },
+    { division: "Kolahekada", count: 2},
+    { division: "Hempita", count: 1 },
+    { division: "Karampathara", count: 0 },
+    { division: "Katugoda", count: 0 },
+    { division: "Delgoda", count: 0 },
+    { division: "Pahalawela", count: 1 },
   ];
 
   if (!clinicId) {
@@ -77,6 +77,13 @@ const clinicPatients: Patient[] = [
   const divisionEndIndex = divisionStartIndex + divisionsPerPage;
   const currentDivisions = patientDivisions.slice(divisionStartIndex, divisionEndIndex);
   const divisionTotalPages = Math.ceil(patientDivisions.length / divisionsPerPage);
+  const navigate = useNavigate();
+
+const handleClick = (sessionId: string) => {
+  navigate(`/admin/clinic/${clinicId}/${sessionId}/attendance`);
+};
+
+
 
   const fetchClinicName = async () => {
     setLoadingClinicName(true);
@@ -254,7 +261,7 @@ const clinicPatients: Patient[] = [
 
           {/* Patient Divisions Table */}
           <div className="bg-white p-6 shadow-md rounded-lg">
-            <h3 className="text-xl font-semibold mb-4">Clinic Patient Divisions</h3>
+            <h3 className="text-xl font-semibold mb-4">Patient Distribution Across Divisions</h3>
             <table className="w-full border-collapse">
               <thead>
                 <tr className="border-b">
@@ -337,7 +344,7 @@ const clinicPatients: Patient[] = [
                       >
                         <FaTrash />
                       </button>
-                      <button>
+                      <button onClick={() => handleClick(session.id)}>
                         <FaClipboardList className="text-green-500 hover:text-green-700" />
                       </button>
                     </td>

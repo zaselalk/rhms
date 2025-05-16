@@ -13,6 +13,8 @@ module.exports = {
       { divisionName: "Karampathara" },
       { divisionName: "Katugoda" },
       { divisionName: "Delgoda" },
+      { divisionName: "Pahalawela" },
+      {divisionName: "Boopitiya" },
     ]);
   },
 
