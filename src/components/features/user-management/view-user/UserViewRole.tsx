@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useRoles } from "../../../../hooks/useRoles";
 import UserService from "../../../../services/user.service";
 import { useMutation } from "@tanstack/react-query";
+import { userRole } from "../../../../services/types/user-role.types";
 
 interface UserViewRoleProps {
   roleName: string;
@@ -26,6 +27,8 @@ export const UserViewRole = ({
   const { data: roles = [], isLoading, error } = useRoles();
   const userService = new UserService();
 
+  console.log(roles);
+
   const mutation = useMutation({
     mutationFn: async (data: { roleId: number }) => {
       await userService.changeUserRole(userId, data.roleId);
@@ -41,7 +44,7 @@ export const UserViewRole = ({
   });
 
   const handleRoleChangeSave = () => {
-    const roleId = roles.data.find((role: any) => role.role === newRole)?.id;
+    const roleId = roles.find((role: any) => role.role === newRole)?.id;
     if (!roleId) {
       console.error("Role ID not found for the selected role:", newRole);
       return;
@@ -98,8 +101,8 @@ export const UserViewRole = ({
                 onChange={(value) => setNewRole(value)}
                 value={newRole}
               >
-                {roles.data.map((role: Role) => (
-                  <Option key={role.id} value={role.role}>
+                {roles.map((role: userRole) => (
+                  <Option key={role.id.toString()} value={role.role}>
                     {role.role}
                   </Option>
                 ))}

@@ -109,8 +109,8 @@ export class UserServices {
    * @returns A list of user objects.
    * @throws UserNotFoundException if no users are found.
    */
-  async getAllUsers(page: number, limit: number): Promise<User[]> {
-    const users = await this.userRepository.getAllUsers(page, limit);
+  async getAllUsers(page: number, limit: number, user: any): Promise<User[]> {
+    const users = await this.userRepository.getAllUsers(page, limit, user);
     if (!users) throw new UserNotFoundException("No users found");
     return users;
   }

@@ -16,6 +16,7 @@ export const UserRoleCreateModal: FC<UserRoleCreateModalProps> = ({
       footer={null}
       width={"80%"}
       style={{ top: 20 }}
+      onClose={() => refetch()}
     >
       <UserRoleCreateForm
         refetch={refetch}

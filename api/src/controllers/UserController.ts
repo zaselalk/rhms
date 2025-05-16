@@ -55,7 +55,7 @@ export class UserController {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
 
-    const users = await this.userService.getAllUsers(page, limit);
+    const users = await this.userService.getAllUsers(page, limit, req.user);
 
     if (!users) throw new Error("No users found");
     return res.status(200).json({

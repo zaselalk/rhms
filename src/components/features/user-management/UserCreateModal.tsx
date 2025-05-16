@@ -16,7 +16,7 @@ export const UserCreateModal = ({
   const userService = new UserService();
 
   //fetch roles from api and pass to this component
-  const { data: roles, isLoading, error } = useRoles();
+  // const { data: roles, isLoading, error } = useRoles();
 
   const mutaion = useMutation({
     mutationFn: async ({ full_name, email, password, role_id }: CreateUser) => {
@@ -58,9 +58,7 @@ export const UserCreateModal = ({
       maskClosable={false}
       keyboard={true}
     >
-      {isLoading && <Spin size="large" />}
-      {error && <Alert type="error" message="Error loading roles" />}
-      {!isLoading && <UserCreateForm form={form} roles={roles} />}
+      <UserCreateForm form={form} />
     </Modal>
   );
 };
