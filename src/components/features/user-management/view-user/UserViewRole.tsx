@@ -62,12 +62,6 @@ export const UserViewRole = ({
     setIsEdit(false);
   };
 
-  interface Role {
-    id: string;
-    role: string;
-    permissions: string;
-  }
-
   return (
     <div className="w-1/2 flex items-baseline gap-2">
       <p>Role</p>
