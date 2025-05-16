@@ -75,13 +75,13 @@ const AdminDashboard: React.FC = () => {
 
   // Fetch resident count from the server
   const fetchdata = async () => {
-    try {
-      const data = await dashbordService.getresidentCount();
-      setResidentCount(data.data);
-    } catch (error) {
-      console.error("Error fetching residents:", error);
-    }
-  };
+  try {
+    const data = await dashbordService.getresidentCount();
+    setResidentCount(data.count); 
+  } catch (error) {
+    console.error("Error fetching residents:", error);
+  }
+};
 
   // Fetch data when loading the component
   useEffect(() => {
