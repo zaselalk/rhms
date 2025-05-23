@@ -1,3 +1,4 @@
+import sequelize from "../models";
 import Disease from "../models/disease";
 
 
@@ -23,5 +24,20 @@ export class DiseaseRepository {
     where: { diseaseName }
   });
 }
+
+  async getDiseaseCountsByDivision(
+    diseaseName: string
+  ): Promise<{ division: number; count: number }[]> {
+    const results = await Disease.findAll({
+      where: { diseaseName },
+      attributes: [
+        'division',
+        [sequelize.fn('COUNT', sequelize.col('division')), 'count']
+      ],
+      group: ['division'],
+      raw: true
+    });
+    return results as unknown as { division: number; count: number }[];
+  }
 
 }

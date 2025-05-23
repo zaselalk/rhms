@@ -28,4 +28,10 @@ export class DiseaseServices {
   return this.diseaseRepository.deleteDisease(diseaseName);
 }
 
+  async getDiseaseCountsByDivision(
+    diseaseName: string
+  ): Promise<{ division: number; count: number }[]> {
+    return this.diseaseRepository.getDiseaseCountsByDivision(diseaseName);
+  }
+
 }

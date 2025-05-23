@@ -131,6 +131,14 @@ export class ResidentService {
     return this.residentRepository.countPatientsByDisease();
   }
 
+    async getDivisionPatientCounts(divisionId: number): Promise<number> {
+        return this.residentRepository.getPatientCountByDivision(divisionId);
+    }
+
+
+
+  
+
 
 
 

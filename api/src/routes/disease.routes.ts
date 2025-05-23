@@ -24,4 +24,9 @@ DiseaseRouter.delete(
   catchAsync(diseaseController.deleteDisease)
 );
 
+DiseaseRouter.get(
+  "/counts/:diseaseName",
+  catchAsync(diseaseController.getDiseaseCountsByDivision)
+);
+
 export default DiseaseRouter;

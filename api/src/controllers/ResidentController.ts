@@ -306,6 +306,20 @@ getDiseasePatientCounts = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Error counting diseases" });
   }
 };
+
+  getDivisionPatientCounts = async (req: Request, res: Response) => {
+    try {
+      const divisionId = Number(req.params.divisionId);
+      if (isNaN(divisionId)) {
+        return res.status(400).json({ message: "Invalid division ID" });
+      }
+      const counts = await this.residentService.getDivisionPatientCounts(divisionId);
+      res.status(200).json(counts);
+    } catch (error) {
+      res.status(500).json({ message: "Error counting divisions" });
+    }
+  };
+
   
 }
 

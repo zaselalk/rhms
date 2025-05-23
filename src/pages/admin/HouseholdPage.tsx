@@ -33,29 +33,16 @@ const HouseholdPage: FC = () => {
   const [householdChartData, setHouseholdChartData] = useState<{ division: string; count: number }[]>([]);
 
 
-  // const householdData = [
-  //   { division: "Kotagedara", count: 10 },
-  //   { division: "Navuththuduwa", count: 15 },
-  //   { division: "Bopitiya", count: 8 },
-  //   { division: "Maddegedara", count: 5 },
-  //   { division: "Pahalawela", count: 12 },
-  //   { division: "Kolahekada", count: 7 },
-  //   { division: "Narawila", count: 9 },
-  //   { division: "Yatadola", count: 11 },
-  //   { division: "Henpita", count: 6 },
-  //   { division: "Pallegoda", count: 13 },
-  // ];
 
-  useEffect(() => {
-    const fetchHouseholds = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3001/household/read"
-        );
-        setRegisteredHouseholds(response.data);
+  // Move fetchHouseholds to component so it can be reused
+  const fetchHouseholds = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3001/household/read"
+      );
+      setRegisteredHouseholds(response.data);
 
-        
-        // Compute counts per division
+      // Compute counts per division
       const divisionCounts: Record<string, number> = {};
       response.data.forEach((household: any) => {
         const division = household.grama_division || "Unknown";
@@ -70,13 +57,15 @@ const HouseholdPage: FC = () => {
 
       setHouseholdChartData(chartData);
 
-      } catch (error) {
-        console.error("Error fetching households:", error);
-        message.error("Failed to load households");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    } catch (error) {
+      console.error("Error fetching households:", error);
+      message.error("Failed to load households");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchHouseholds();
   }, []);
 
@@ -117,6 +106,7 @@ const HouseholdPage: FC = () => {
         )
       );
       message.success("Household deleted successfully!");
+      
       setDeleteModalVisible(false);
       setSelectedHousehold(null);
       setDeleteReason("");
@@ -178,7 +168,11 @@ const HouseholdPage: FC = () => {
 
         message.success("Household owner updated successfully!");
         setEditModalVisible(false);
+
+        await fetchHouseholds(); // Refresh the household list
+
         console.log("Updated household:", response.data);
+        
       } else {
         message.error("Failed to update owner");
       }

@@ -105,7 +105,7 @@ function App() {
               }
             />
             <Route
-              path=":diseaseName"
+              path="resident/:diseaseName"
               element={
                 <ProtectedRoutesGuard>
                   <SingleDiseasePage />

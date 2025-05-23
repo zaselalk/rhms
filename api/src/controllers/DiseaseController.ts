@@ -1,16 +1,20 @@
 import { Request, Response } from "express";
 import { DiseaseServices } from "../services/DiseaseServices";
 import { DiseaseRepository } from "../repositories/DiseaseRepository";
+import Resident from "../models/resident";  
+import { ResidentRepository } from "../repositories/ResidentRepository"; // Assuming you have a ResidentRepository
+
 
 export class DiseaseController {
   private diseaseService: DiseaseServices;
+  private residentRepository: ResidentRepository;
   
 
   constructor() {
     const diseasedRepository = new DiseaseRepository();
    
     this.diseaseService = new DiseaseServices(diseasedRepository);
-
+    this.residentRepository = new ResidentRepository(); // Initialize the ResidentRepository
   }
 
   createDisease = async (req: Request, res: Response): Promise<Response> => {
@@ -55,5 +59,19 @@ export class DiseaseController {
   }
 };
 
+getDiseaseCountsByDivision = async (req: Request, res: Response): Promise<Response> => {
+  const { diseaseName } = req.params;
+
+  if (!diseaseName) {
+    return res.status(400).json({ message: "Disease name is required" });
+  }
+
+  try {
+    const counts = await this.diseaseService.getDiseaseCountsByDivision(diseaseName);
+    return res.status(200).json(counts);
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+}
 
 }

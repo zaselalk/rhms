@@ -17,7 +17,7 @@ const CreateHouseholdModal: FC<CreateHouseholdModalProps> = ({
   const [owner_id, setowner_id] = useState("");
 
   const handleCreateHousehold = () => {
-    // Handle the logic for creating a household (e.g., save to backend or state)
+    
     console.log("Household Created:", {
       house_no,
       grama_division,

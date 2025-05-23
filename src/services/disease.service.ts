@@ -42,6 +42,16 @@ class DiseaseService {
       throw new Error(error.response?.data?.message || 'Unable to fetch disease patient counts');
     }
   }
+
+    // Get patient counts for a specific disease by division
+    async getDiseaseCountsByDivision(diseaseName: string) {
+        try {
+            const response = await axiosInstance.get(`/diseases/counts/${diseaseName}`);
+            return response.data; // Expected to return array: [{ division: string, count: number }]
+        } catch (error: any) {
+            throw new Error(error.response?.data?.message || 'Unable to fetch disease counts by division');
+        }
+    }
 }
 
 export default new DiseaseService();

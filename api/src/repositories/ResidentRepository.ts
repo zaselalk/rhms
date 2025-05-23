@@ -140,5 +140,14 @@ export class ResidentRepository {
 
     return diseaseCounts;
   }
+
+  async getPatientCountByDivision(divisionId: number): Promise<number> {
+    const count = await Resident.count({
+      where: {
+        divisionId,
+      },
+    });
+    return count;
+  }
   
 }

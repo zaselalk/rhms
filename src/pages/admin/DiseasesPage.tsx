@@ -78,6 +78,11 @@ const DiseasesPage: FC = () => {
         setDiseaseNames((prev) => 
           [...prev, addedDisease.diseaseName]
       );
+
+      //refresh and get data
+      await fetchDiseaseStats();
+
+
         form.resetFields();
         setIsModalOpen(false);
         message.success('Disease added successfully');
@@ -100,11 +105,14 @@ const handleDeleteDisease = async (diseaseName: string) => {
       // Call the backend API to delete the disease
       await diseaseService.deleteDisease(diseaseName);
 
-      // Update frontend state after successful deletion
+      // Update frontend after successful deletion
       setDiseaseNames((prev) => prev.filter((name) => name !== diseaseName));
       setDiseaseStats((prev) => prev.filter((d) => d.name !== diseaseName));
 
       message.success(`"${diseaseName}" deleted successfully.`);
+
+      await fetchDiseaseStats(); // Refresh the disease stats
+
     } catch (error) {
       console.error(error);
       message.error('Failed to delete disease.');
@@ -138,7 +146,20 @@ const handleDeleteDisease = async (diseaseName: string) => {
             <Form.Item
               name="disease"
               label="Disease Name"
-              rules={[{ required: true, message: 'Please enter the disease name' }]}
+              rules={[{ required: true, message: 'Please enter the disease name' },
+                {
+                  validator: async (_, value) => {
+                        if (
+                          value &&
+                          diseaseName.some(
+                            (existingName) => existingName.toLowerCase() === value.trim().toLowerCase()
+                          )
+                        ) {
+                          throw new Error('This disease already exists');
+                        }
+                      },
+                    },
+                  ]}
             >
               <Input placeholder="Enter disease name" />
             </Form.Item>
@@ -182,10 +203,10 @@ const handleDeleteDisease = async (diseaseName: string) => {
                         <td className="px-4 py-2 text-sm text-gray-700">{stat?.patients ?? 0}</td>
                         <td className="px-4 py-2 text-sm text-gray-700">
                           <Link
-                            to={`${name}`}
+                            to={`resident/${name}`}
                             className="text-[#008FFB] hover:text-[#00C1A7]"
                           >
-                            View
+                            
                           </Link>
                           <button
                             onClick={() => handleDeleteDisease(name)}
