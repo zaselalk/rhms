@@ -3,6 +3,7 @@ import InputFullName from "./form-component/InputFullName";
 import RoleSelect from "./form-component/RoleSelect";
 import InputEmail from "./form-component/InputEmail";
 import ConfirmPassword from "./form-component/ConfirmPassword";
+import { InputPhoneNumber } from "./form-component/InputPhoneNumber";
 
 /**
  * UserCreateFormProps defines the shape of the props for the UserCreateForm component.
@@ -23,6 +24,7 @@ const UserCreateForm = ({ form }: UserCreateForm) => {
         <RoleSelect />
       </div>
       <InputEmail />
+      <InputPhoneNumber />
       <ConfirmPassword />
     </Form>
   );

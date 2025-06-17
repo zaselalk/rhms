@@ -112,13 +112,15 @@ export class UserRepository {
     name: string,
     roleId: number,
     email: string,
-    password: string
+    password: string,
+    phone_number: string
   ): Promise<User> {
     return User.create({
       name,
       roleId,
       email,
       password,
+      phone_number,
     });
   }
 

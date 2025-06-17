@@ -17,8 +17,20 @@ export const UserCreateModal = ({
   // const { data: roles, isLoading, error } = useRoles();
 
   const mutaion = useMutation({
-    mutationFn: async ({ full_name, email, password, role_id }: CreateUser) => {
-      await userService.createUser(full_name, email, password, role_id);
+    mutationFn: async ({
+      full_name,
+      email,
+      password,
+      role_id,
+      phone_number,
+    }: CreateUser) => {
+      await userService.createUser(
+        full_name,
+        email,
+        password,
+        role_id,
+        phone_number
+      );
     },
     mutationKey: ["createUser"],
     onSuccess: () => {
@@ -42,6 +54,7 @@ export const UserCreateModal = ({
         email: values.email,
         password: values.password,
         role_id: values.role,
+        phone_number: values.phone_number,
       });
     });
   };
@@ -74,4 +87,5 @@ interface CreateUser {
   email: string;
   password: string;
   role_id: number;
+  phone_number: string;
 }
