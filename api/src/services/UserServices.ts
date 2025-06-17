@@ -109,8 +109,8 @@ export class UserServices {
    * @returns A list of user objects.
    * @throws UserNotFoundException if no users are found.
    */
-  async getAllUsers(page: number, limit: number): Promise<User[]> {
-    const users = await this.userRepository.getAllUsers(page, limit);
+  async getAllUsers(page: number, limit: number, user: any): Promise<User[]> {
+    const users = await this.userRepository.getAllUsers(page, limit, user);
     if (!users) throw new UserNotFoundException("No users found");
     return users;
   }
@@ -140,7 +140,8 @@ export class UserServices {
     full_name: string,
     role_id: number,
     email: string,
-    password: string
+    password: string,
+    phone_number: string
   ): Promise<User> {
     const existingUser = await this.userRepository.findByEmail(email);
     if (existingUser) throw new UserNotFoundException("Email already in use");
@@ -150,7 +151,8 @@ export class UserServices {
       full_name,
       role_id,
       email,
-      hashedPassword
+      hashedPassword,
+      phone_number
     );
   }
 

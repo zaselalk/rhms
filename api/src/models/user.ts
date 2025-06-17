@@ -16,6 +16,7 @@ export interface UserAttributes {
   roleId?: number;
   createdAt?: Date;
   updatedAt?: Date;
+  phone_number?: string;
 }
 
 /**
@@ -68,6 +69,10 @@ User.init(
       allowNull: false,
     },
     password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    phone_number: {
       type: DataTypes.STRING,
       allowNull: false,
     },

@@ -1,8 +1,6 @@
 // antd components
-import { Modal, Form, Spin, Alert, message } from "antd";
+import { Modal, Form, message } from "antd";
 
-// hooks
-import { useRoles } from "../../../hooks/useRoles";
 import UserCreateForm from "./create-user/UserCreateForm";
 import UserService from "../../../services/user.service";
 import { useMutation } from "@tanstack/react-query";
@@ -16,11 +14,23 @@ export const UserCreateModal = ({
   const userService = new UserService();
 
   //fetch roles from api and pass to this component
-  const { data: roles, isLoading, error } = useRoles();
+  // const { data: roles, isLoading, error } = useRoles();
 
   const mutaion = useMutation({
-    mutationFn: async ({ full_name, email, password, role_id }: CreateUser) => {
-      await userService.createUser(full_name, email, password, role_id);
+    mutationFn: async ({
+      full_name,
+      email,
+      password,
+      role_id,
+      phone_number,
+    }: CreateUser) => {
+      await userService.createUser(
+        full_name,
+        email,
+        password,
+        role_id,
+        phone_number
+      );
     },
     mutationKey: ["createUser"],
     onSuccess: () => {
@@ -44,6 +54,7 @@ export const UserCreateModal = ({
         email: values.email,
         password: values.password,
         role_id: values.role,
+        phone_number: values.phone_number,
       });
     });
   };
@@ -58,9 +69,7 @@ export const UserCreateModal = ({
       maskClosable={false}
       keyboard={true}
     >
-      {isLoading && <Spin size="large" />}
-      {error && <Alert type="error" message="Error loading roles" />}
-      {!isLoading && <UserCreateForm form={form} roles={roles} />}
+      <UserCreateForm form={form} />
     </Modal>
   );
 };
@@ -78,4 +87,5 @@ interface CreateUser {
   email: string;
   password: string;
   role_id: number;
+  phone_number: string;
 }
