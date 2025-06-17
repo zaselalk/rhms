@@ -38,7 +38,7 @@ export const UserRoleset = () => {
   const deleteUserRoleMutation = useMutation({
     mutationFn: (role: userRole) => userService.deleteUserRole(role.id),
     onSuccess: () => {
-      message.success("User deleted successfully");
+      message.success("Role deleted successfully");
       refetch();
     },
     onError: (error: any) => {
