@@ -35,5 +35,3 @@ export const deleteHousehold = async (house_no: string) => {
     throw error;
   }
 };
-
-
