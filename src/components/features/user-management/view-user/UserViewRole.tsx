@@ -27,8 +27,6 @@ export const UserViewRole = ({
   const { data: roles = [], isLoading, error } = useRoles();
   const userService = new UserService();
 
-  console.log(roles);
-
   const mutation = useMutation({
     mutationFn: async (data: { roleId: number }) => {
       await userService.changeUserRole(userId, data.roleId);
