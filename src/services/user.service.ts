@@ -51,8 +51,6 @@ export default class UserService {
     try {
       const response = await axiosInstance.get("/role");
 
-      console.log(response.data.data);
-
       return response.data.data;
     } catch (error: any) {
       throw new Error(error.response?.data?.message || "Unable to fetch roles");
@@ -134,7 +132,8 @@ export default class UserService {
     full_name: string,
     email: string,
     password: string,
-    role_id: number
+    role_id: number,
+    phone_number: string
   ): Promise<any> {
     try {
       const response = await axiosInstance.post("/user", {
@@ -142,6 +141,7 @@ export default class UserService {
         email,
         password,
         role_id,
+        phone_number,
       });
       return response.data;
     } catch (error: any) {
