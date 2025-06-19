@@ -68,15 +68,24 @@ export class RoleController {
   updateRole = async (req: any, res: any): Promise<any> => {
     const { id } = req.params;
     const { roleName, permissionList } = req.body;
-    const updatedRole = await this.roleService.updateRole(
-      id,
-      roleName,
-      permissionList
-    );
-    return res.status(200).json({
-      message: "Role updated successfully",
-      data: updatedRole,
-    });
+    try {
+      const updatedRole = await this.roleService.updateRole(
+        id,
+        roleName,
+        permissionList
+      );
+      return res.status(200).json({
+        message: "Role updated successfully",
+        data: updatedRole,
+      });
+    } catch (err: any) {
+      if (err.message && err.message.includes("super_user")) {
+        return res.status(403).json({ message: err.message });
+      }
+      return res
+        .status(500)
+        .json({ message: err.message || "Internal server error" });
+    }
   };
 
   /**
@@ -86,9 +95,18 @@ export class RoleController {
    */
   deleteRole = async (req: any, res: any): Promise<any> => {
     const { id } = req.params;
-    await this.roleService.deleteRole(id);
-    return res.status(200).json({
-      message: "Role deleted successfully",
-    });
+    try {
+      await this.roleService.deleteRole(id);
+      return res.status(200).json({
+        message: "Role deleted successfully",
+      });
+    } catch (err: any) {
+      if (err.message && err.message.includes("super_user")) {
+        return res.status(403).json({ message: err.message });
+      }
+      return res
+        .status(500)
+        .json({ message: err.message || "Internal server error" });
+    }
   };
 }
