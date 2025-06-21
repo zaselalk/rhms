@@ -1,7 +1,7 @@
-name: Run Jest Tests
+name: deploy the backend to Azure VM
 
 on:
-  pull_request:
+  push:
     branches:
       - main
       - stage
@@ -26,3 +26,25 @@ jobs:
       - name: 🧪 Run tests
         run: npm run test
         working-directory: api
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔍 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📝 Setup SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: 🔒 Add host key to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
+
+      - name: 🚀 Deploy to Azure VM
+        run: |
+          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "cd /home/azureuser/ciphersquad && git pull origin ${GITHUB_REF#refs/heads/} && cd api && npm install && pm2 restart your-app-name"
