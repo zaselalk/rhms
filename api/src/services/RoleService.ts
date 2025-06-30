@@ -1,8 +1,13 @@
 import { RoleRepository } from "../repositories/RoleRepository";
+import { UserRepository } from "../repositories/UserRepository";
 import { logSuperUserAction } from "../util/superUserLogger";
 
 export class RoleService {
-  constructor(private roleRepositroy: RoleRepository) {}
+  private userRepository: UserRepository;
+
+  constructor(private roleRepositroy: RoleRepository) {
+    this.userRepository = new UserRepository();
+  }
 
   createRole = async (role: string, permission: string[]) => {
     if (role === "super_user") {
@@ -48,6 +53,22 @@ export class RoleService {
       });
       throw new Error("Deleting the super_user role is forbidden.");
     }
-    await this.roleRepositroy.delete(id);
+
+    // Check if there are users associated with this role
+    const associatedUsers = await this.userRepository.findUsersByRoleId(id);
+    if (associatedUsers.length > 0) {
+      throw new Error("You can't delete this role, because it is associated with a user.");
+    }
+
+    try {
+      await this.roleRepositroy.delete(id);
+    } catch (error: any) {
+      // Handle foreign key constraint error as a fallback
+      if (error.message && error.message.includes("foreign key constraint")) {
+        throw new Error("You can't delete this role, because it is associated with a user.");
+      }
+      // Re-throw other errors
+      throw error;
+    }
   };
 }
