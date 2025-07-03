@@ -79,4 +79,52 @@ describe("RoleService", () => {
       expect(roleRepository.delete).toHaveBeenCalledWith(roleId);
     });
   });
+
+  describe("updateRole", () => {
+    it("Should throw error when role does not exist", async () => {
+      const roleId = 780;
+      const roleName = "Updated Role";
+      const permission = "user:create";
+
+      roleRepository.findById.mockResolvedValue(null);
+
+      await expect(roleService.updateRole(roleId, roleName, permission)).rejects.toThrow(
+        "Role not found"
+      );
+      expect(roleRepository.findById).toHaveBeenCalledWith(roleId);
+      expect(roleRepository.update).not.toHaveBeenCalled();
+    });
+
+    it("Should throw forbidden error for super_user role", async () => {
+      const roleId = 1;
+      const roleName = "Updated Role";
+      const permission = "user:create";
+      const mockRole = { id: roleId, role: "super_user" } as Role;
+
+      roleRepository.findById.mockResolvedValue(mockRole);
+
+      await expect(roleService.updateRole(roleId, roleName, permission)).rejects.toThrow(
+        "Modifying the super_user role is forbidden."
+      );
+      expect(roleRepository.findById).toHaveBeenCalledWith(roleId);
+      expect(roleRepository.update).not.toHaveBeenCalled();
+    });
+
+    it("Should update role successfully when role exists and is not super_user", async () => {
+      const roleId = 2;
+      const roleName = "Updated Role";
+      const permission = "user:create";
+      const mockRole = { id: roleId, role: "regular_role" } as Role;
+      const updatedRole = { id: roleId, role: roleName, permission: JSON.stringify(permission) } as Partial<Role>;
+
+      roleRepository.findById.mockResolvedValue(mockRole);
+      roleRepository.update.mockResolvedValue(updatedRole as Role);
+
+      const result = await roleService.updateRole(roleId, roleName, permission);
+
+      expect(result).toEqual(updatedRole);
+      expect(roleRepository.findById).toHaveBeenCalledWith(roleId);
+      expect(roleRepository.update).toHaveBeenCalledWith(roleId, roleName, permission);
+    });
+  });
 });

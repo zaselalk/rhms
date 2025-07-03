@@ -33,7 +33,10 @@ export class RoleService {
 
   updateRole = async (id: number, role: string, permission: string) => {
     const foundRole = await this.roleRepositroy.findById(id);
-    if (foundRole && foundRole.role === "super_user") {
+    if (!foundRole) {
+      throw new Error("Role not found");
+    }
+    if (foundRole.role === "super_user") {
       logSuperUserAction({
         userId: "system",
         action: `Attempted to update super_user role (id=${id}) via API`,
