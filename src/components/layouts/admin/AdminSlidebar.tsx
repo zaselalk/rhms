@@ -79,15 +79,21 @@ const AdminSidebar: FC = () => {
       <div>
         <ul className="space-y-4">
           <li>
-            <Link
+            <NavLink
               to="/admin/dashboard"
-              className="py-1 text-md flex items-center text-gray-700 hover:bg-[#00C1A7] rounded-md px-3"
+              className={({ isActive }) =>
+                `py-1 text-md flex items-center text-gray-700 ${
+                  isActive
+                    ? "bg-[#00C1A7] text-white"
+                    : "hover:bg-[#00C1A7]"
+                } rounded-md px-3`
+              }
             >
               <div className="p-1">
                 <MdDashboard size={25} />
               </div>
               <div>Dashboard</div>
-            </Link>
+            </NavLink>
           </li>
 
           {navItems
