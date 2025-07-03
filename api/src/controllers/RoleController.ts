@@ -82,6 +82,9 @@ export class RoleController {
       if (err.message && err.message.includes("super_user")) {
         return res.status(403).json({ message: err.message });
       }
+      if (err.message && err.message.includes("Role not found")) {
+        return res.status(404).json({ message: err.message });
+      }
       return res
         .status(500)
         .json({ message: err.message || "Internal server error" });
