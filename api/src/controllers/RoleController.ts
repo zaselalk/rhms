@@ -1,6 +1,11 @@
 import { RoleRepository } from "../repositories/RoleRepository";
 import { RoleService } from "../services/RoleService";
 
+/**
+ * RoleController class handles the role management operations.
+ * It provides methods to create, retrieve, update, and delete roles.
+ */
+
 export class RoleController {
   private roleService: RoleService;
 
@@ -9,6 +14,11 @@ export class RoleController {
     this.roleService = new RoleService(roleRepository);
   }
 
+  /**
+   * Creates a new role with the specified name and permissions.
+   * @param req - The request object containing role details.
+   * @param res - The response object to send the result.
+   */
   createRole = async (req: any, res: any): Promise<any> => {
     const { roleName, permissionList } = req.body;
     const newRole = await this.roleService.createRole(roleName, permissionList);
@@ -18,6 +28,11 @@ export class RoleController {
     });
   };
 
+  /**
+   * Retrieves all roles from the database.
+   * @param req - The request object.
+   * @param res - The response object to send the result.
+   */
   getAllRoles = async (req: any, res: any): Promise<any> => {
     const roles = await this.roleService.getAllRoles();
     return res.status(200).json({
@@ -26,6 +41,11 @@ export class RoleController {
     });
   };
 
+  /**
+   * Retrieves a role by its ID.
+   * @param req - The request object containing the role ID.
+   * @param res - The response object to send the result.
+   */
   getRoleById = async (req: any, res: any): Promise<any> => {
     const { id } = req.params;
     const role = await this.roleService.getRoleById(id);
@@ -40,37 +60,53 @@ export class RoleController {
     });
   };
 
+  /**
+   * Updates a role by its ID with the specified name and permissions.
+   * @param req - The request object containing the role ID and updated details.
+   * @param res - The response object to send the result.
+   */
   updateRole = async (req: any, res: any): Promise<any> => {
     const { id } = req.params;
     const { roleName, permissionList } = req.body;
-    const updatedRole = await this.roleService.updateRole(
-      id,
-      roleName,
-      permissionList
-    );
-    return res.status(200).json({
-      message: "Role updated successfully",
-      data: updatedRole,
-    });
+    try {
+      const updatedRole = await this.roleService.updateRole(
+        id,
+        roleName,
+        permissionList
+      );
+      return res.status(200).json({
+        message: "Role updated successfully",
+        data: updatedRole,
+      });
+    } catch (err: any) {
+      if (err.message && err.message.includes("super_user")) {
+        return res.status(403).json({ message: err.message });
+      }
+      return res
+        .status(500)
+        .json({ message: err.message || "Internal server error" });
+    }
   };
 
+  /**
+   * Deletes a role by its ID.
+   * @param req - The request object containing the role ID.
+   * @param res - The response object to send the result.
+   */
   deleteRole = async (req: any, res: any): Promise<any> => {
     const { id } = req.params;
-    await this.roleService.deleteRole(id);
-    return res.status(200).json({
-      message: "Role deleted successfully",
-    });
+    try {
+      await this.roleService.deleteRole(id);
+      return res.status(200).json({
+        message: "Role deleted successfully",
+      });
+    } catch (err: any) {
+      if (err.message && err.message.includes("super_user")) {
+        return res.status(403).json({ message: err.message });
+      }
+      return res
+        .status(500)
+        .json({ message: err.message || "Internal server error" });
+    }
   };
-
-  //   addPermissionsToRole = async (req: any, res: any): Promise<any> => {
-  //     const { roleId, permissionId } = req.body;
-  //     const updatedRole = await this.roleService.addPermissionsToRole(
-  //       roleId,
-  //       permissionId
-  //     );
-  //     return res.status(200).json({
-  //       message: "Permissions added to role successfully",
-  //       data: updatedRole,
-  //     });
-  //   };
 }

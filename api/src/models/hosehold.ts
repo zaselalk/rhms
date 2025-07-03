@@ -2,6 +2,7 @@ import { Model, DataTypes } from "sequelize";
 import sequelize from ".";
 import Resident from "./resident";
 
+
 interface HouseholdAttributes {
   id: number;
   house_no: string;
@@ -87,14 +88,6 @@ Household.init(
     engine: "InnoDB",
   }
 );
-// Define the association
-Household.hasMany(Resident, {
-  foreignKey: "household_id",
-  as: "residents",
-});
-Resident.belongsTo(Household, {
-  foreignKey: "household_id",
-  as: "household",
-});
+
 
 export default Household;

@@ -1,111 +1,91 @@
-import { Modal, Form, Input, Select } from 'antd';
-import { useEffect } from 'react';
+// antd components
+import { Modal, Form, message } from "antd";
 
-const { Option } = Select;
+import UserCreateForm from "./create-user/UserCreateForm";
+import UserService from "../../../services/user.service";
+import { useMutation } from "@tanstack/react-query";
 
-interface User {
-    name: string;
-    role: string;
-}
+export const UserCreateModal = ({
+  isOpen,
+  handleClose,
+  refetch: UserListRefetch,
+}: Props) => {
+  const [form] = Form.useForm();
+  const userService = new UserService();
+
+  //fetch roles from api and pass to this component
+  // const { data: roles, isLoading, error } = useRoles();
+
+  const mutaion = useMutation({
+    mutationFn: async ({
+      full_name,
+      email,
+      password,
+      role_id,
+      phone_number,
+    }: CreateUser) => {
+      await userService.createUser(
+        full_name,
+        email,
+        password,
+        role_id,
+        phone_number
+      );
+    },
+    mutationKey: ["createUser"],
+    onSuccess: () => {
+      form.resetFields(); // Reset the form fields after successful submission
+      message.success("User Created successfully");
+      UserListRefetch(); // Refetch the user list to update the UI
+    },
+    onError: (error: any) => {
+      console.error("Error creating user:", error);
+      message.error("Error creating user: " + error.message);
+    },
+  });
+
+  const handleSubmit = () => {
+    form.validateFields().then((values) => {
+      console.log(values);
+
+      // react query mutation
+      mutaion.mutate({
+        full_name: values.name,
+        email: values.email,
+        password: values.password,
+        role_id: values.role,
+        phone_number: values.phone_number,
+      });
+    });
+  };
+
+  return (
+    <Modal
+      title={"Create New User"}
+      open={isOpen}
+      onOk={handleSubmit}
+      onCancel={handleClose}
+      okText="Save"
+      maskClosable={false}
+      keyboard={true}
+    >
+      <UserCreateForm form={form} />
+    </Modal>
+  );
+};
 
 interface Props {
-    isOpen: boolean;
-    handleClose: () => void;
-    onSave: (user: User) => void;
-    initialData: User | null;
-    roles: string[]; // List of role options passed from parent
+  /** Indicates if the modal is open or closed */
+  isOpen: boolean;
+  /** Function to close the modal */
+  handleClose: () => void;
+  refetch: () => void; // Optional refetch function to refresh data after creating a user
 }
 
-export const UserCreateModal = ({ isOpen, handleClose, onSave, initialData, roles }: Props) => {
-    const [form] = Form.useForm();
-
-    useEffect(() => {
-        if (initialData) {
-            form.setFieldsValue(initialData);
-        } else {
-            form.resetFields();
-        }
-    }, [initialData, form]);
-
-    const handleSubmit = () => {
-        form
-            .validateFields()
-            .then(values => {
-                onSave(values);
-            })
-            .catch(info => {
-                console.log('Validation failed:', info);
-            });
-    };
-
-    return (
-        <Modal
-            title={initialData ? 'Edit User' : 'Create New User'}
-            open={isOpen}
-            onOk={handleSubmit}
-            onCancel={handleClose}
-            okText="Save"
-        >
-            <Form form={form} layout="vertical">
-                <div className="flex gap-3">
-                    <Form.Item
-                        label="Full Name"
-                        className='w-3/5'
-                        name="name"
-                        rules={[{ required: true, message: 'Please enter full name' }]}
-                    >
-                        <Input placeholder="Enter full name" />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Role"
-                        name="role"
-                        className='w-2/5'
-                        rules={[{ required: true, message: 'Please select a role' }]}
-                    >
-                        <Select
-                            placeholder="Select role"
-                            showSearch
-                            optionFilterProp="children"
-                            allowClear
-                        >
-                            {roles.map(role => (
-                                <Option key={role} value={role}>
-                                    {role}
-                                </Option>
-                            ))}
-                        </Select>
-                    </Form.Item>
-                </div>
-
-                <Form.Item
-                    label="Email"
-                    name="email"
-                    rules={[{ required: true, message: 'Please enter email' }]}
-                >
-                    <Input placeholder="Enter email" type="email" />
-                </Form.Item>
-                <div className="flex justify-between gap-4">
-
-                    <Form.Item
-                        label="Password"
-                        name="password"
-                        className='w-full'
-                        rules={[{ required: true, message: 'Please enter password' }]}
-                    >
-                        <Input.Password placeholder="Enter password" />
-                    </Form.Item>
-                    <Form.Item
-                        label="Password"
-                        name="password"
-                        className='w-full'
-                        rules={[{ required: true, message: 'Please enter password' }]}
-                    >
-                        <Input.Password placeholder="Enter password" />
-                    </Form.Item>
-                </div>
-
-            </Form>
-        </Modal>
-    );
-};
+interface CreateUser {
+  full_name: string;
+  email: string;
+  password: string;
+  role_id: number;
+  phone_number: string;
+}
