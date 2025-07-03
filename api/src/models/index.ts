@@ -24,18 +24,18 @@ const dbConfig: DBConfig = config[env] as DBConfig;
 Role.associate({ User, Permission });
 User.associate({ Role });
 
-// Sync models with the database
-async function syncDatabase() {
-  try {
-    await sequelize.sync({ alter: true }); // Safe in development, removes need for migrations
-    console.log("Database connected and models synced successfully.");
-  } catch (error) {
-    console.error("Error syncing database:", error);
-  }
-}
+// // Sync models with the database
+// async function syncDatabase() {
+//   try {
+//     await sequelize.sync({ alter: true }); // Safe in development, removes need for migrations
+//     console.log("Database connected and models synced successfully.");
+//   } catch (error) {
+//     console.error("Error syncing database:", error);
+//   }
+// }
 
-// Run the sync function
-syncDatabase();
+// // Run the sync function
+// syncDatabase();
 
 export default sequelize;
 export { User, Role, Permission };

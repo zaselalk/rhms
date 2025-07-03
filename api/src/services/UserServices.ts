@@ -5,6 +5,7 @@ import { UserRepository } from "../repositories/UserRepository";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { RoleRepository } from "../repositories/RoleRepository";
+import { logSuperUserAction } from "../util/superUserLogger";
 
 /**
  * Interface representing a logged-in user with basic details and permissions.
@@ -109,8 +110,8 @@ export class UserServices {
    * @returns A list of user objects.
    * @throws UserNotFoundException if no users are found.
    */
-  async getAllUsers(page: number, limit: number): Promise<User[]> {
-    const users = await this.userRepository.getAllUsers(page, limit);
+  async getAllUsers(page: number, limit: number, user: any): Promise<User[]> {
+    const users = await this.userRepository.getAllUsers(page, limit, user);
     if (!users) throw new UserNotFoundException("No users found");
     return users;
   }
@@ -140,8 +141,22 @@ export class UserServices {
     full_name: string,
     role_id: number,
     email: string,
-    password: string
+    password: string,
+    phone_number: string
   ): Promise<User> {
+    // Check if the role is super_user
+    const roleRepository = new RoleRepository();
+    const role = await roleRepository.findById(role_id);
+    if (role && role.role === "super_user") {
+      logSuperUserAction({
+        userId: email,
+        action: "Attempted to assign super_user role via API",
+      });
+      throw new ValidationException(
+        "Assigning the super_user role is forbidden via API."
+      );
+    }
+
     const existingUser = await this.userRepository.findByEmail(email);
     if (existingUser) throw new UserNotFoundException("Email already in use");
 
@@ -150,7 +165,8 @@ export class UserServices {
       full_name,
       role_id,
       email,
-      hashedPassword
+      hashedPassword,
+      phone_number
     );
   }
 
@@ -190,6 +206,17 @@ export class UserServices {
 
     // throw error if role not found
     if (!role) throw new UserNotFoundException("Role not found");
+
+    // Block super_user assignment
+    if (role.role === "super_user") {
+      logSuperUserAction({
+        userId: id,
+        action: "Attempted to update user to super_user role via API",
+      });
+      throw new ValidationException(
+        "Updating to super_user role is forbidden via API."
+      );
+    }
 
     // Check if the user already has the role
     if (user.roleId === role_id)
@@ -232,6 +259,15 @@ export class UserServices {
   async deleteUserById(id: number): Promise<boolean> {
     const user = await this.userRepository.findById(id);
     if (!user) throw new UserNotFoundException("User not found");
+
+    // Prevent deleting the super_user
+    // if (user.role && user.role.role === "super_user") {
+    //   logSuperUserAction({
+    //     userId: id,
+    //     action: "Attempted to delete super_user user via API",
+    //   });
+    //   throw new ValidationException("Deleting the super_user is forbidden.");
+    // }
 
     return this.userRepository.deleteUserById(id);
   }

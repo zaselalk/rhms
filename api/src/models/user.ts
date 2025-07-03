@@ -16,6 +16,7 @@ export interface UserAttributes {
   roleId?: number;
   createdAt?: Date;
   updatedAt?: Date;
+  phone_number?: string;
 }
 
 /**
@@ -28,6 +29,7 @@ export class User extends Model<UserAttributes> implements UserAttributes {
   public email!: string;
   public password!: string;
   public roleId!: number;
+  public phone_number?: string;
   public createdAt!: Date;
   public updatedAt!: Date;
 
@@ -70,6 +72,10 @@ User.init(
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    phone_number: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     roleId: {
       type: DataTypes.INTEGER,
