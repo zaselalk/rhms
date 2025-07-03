@@ -1,5 +1,12 @@
+import { useAppDispatch } from "../../../hooks/state/hooks";
+import { logout } from "../../../store/slices/authSlices";
+
 export const AdminNavbar = () => {
+  const dispatch = useAppDispatch();
+  
   const handleLogout = () => {
+    // remove user from redux store
+    dispatch(logout());
     // remove token from local storage
     localStorage.removeItem("token");
     // navigate("/resident-login");
