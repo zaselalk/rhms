@@ -165,4 +165,13 @@ export class UserRepository {
     const deletedRows = await User.destroy({ where: { id } });
     return deletedRows > 0;
   }
+
+  async findUsersByRoleId(roleId: number): Promise<User[]> {
+    return User.findAll({
+      where: {
+        roleId,
+      },
+      attributes: ["id", "name", "email"],
+    });
+  }
 }
