@@ -17,6 +17,10 @@ const AdminSidebar: FC = () => {
   const user = useAppSelector((state) => state.auth.user);
   const [navbarArray, setNavbarArray] = useState<String[]>([]);
 
+  // common css classes for nav item
+  const navItemClass =
+    "py-2 text-md flex items-center text-gray-700 hover:text-white rounded-md px-3";
+
   useEffect(() => {
     const permissions =
       user?.permissions?.map((perm) => perm.split(":")[0]) || [];
@@ -82,17 +86,17 @@ const AdminSidebar: FC = () => {
             <NavLink
               to="/admin/dashboard"
               className={({ isActive }) =>
-                `py-1 text-md flex items-center text-gray-700 ${
-                  isActive
-                    ? "bg-[#00C1A7] text-white"
-                    : "hover:bg-[#00C1A7]"
-                } rounded-md px-3`
+                `${navItemClass} ${
+                  isActive ? "bg-[#00C1A7] text-white" : "hover:bg-[#00C1A7]"
+                } `
               }
             >
-              <div className="p-1">
-                <MdDashboard size={25} />
+              <div className="flex items-center gap-2">
+                <div className="p-1">
+                  <MdDashboard size={25} />
+                </div>
+                <div>Dashboard</div>
               </div>
-              <div>Dashboard</div>
             </NavLink>
           </li>
 
@@ -103,15 +107,17 @@ const AdminSidebar: FC = () => {
                 <NavLink
                   to={item.path}
                   className={({ isActive }) =>
-                    `py-1 text-md flex items-center text-gray-700 ${
+                    `${navItemClass} ${
                       isActive
                         ? "bg-[#00C1A7] text-white"
                         : "hover:bg-[#00C1A7]"
-                    } rounded-md px-3`
+                    }`
                   }
                 >
-                  <div className="p-1">{item.icon}</div>
-                  <div>{item.label}</div>
+                  <div className="flex items-center gap-2">
+                    <div className="p-1">{item.icon}</div>
+                    <div>{item.label}</div>
+                  </div>
                 </NavLink>
               </li>
             ))}
