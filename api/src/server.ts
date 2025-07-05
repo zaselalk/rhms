@@ -13,6 +13,7 @@ import UserRouter from "./routes/user.routes";
 import serializeUser from "./middleware/serializeuser.middleware";
 import expressErrorHandler from "./util/expressErrorHandler";
 import "./models/association"; // Import associations to ensure they are registered
+import DivisionRouter from "./routes/division.routes";
 
 dotenv.config();
 
@@ -37,6 +38,7 @@ app.use("/clinic", ClinicRouter);
 app.use("/permission", PermissionRouter);
 app.use("/role", RoleRouter);
 app.use("/user", UserRouter);
+app.use("/division",DivisionRouter);
 
 // error handling middleware
 app.use(expressErrorHandler);

@@ -26,6 +26,11 @@ class DivisionRepository {
   async deleteDivision(id: number) {
     return await Division.destroy({ where: { divisionId: id } });
   }
+
+
+  async getDivisionCount() :Promise<number> {
+    return await Division.count();
+  }
 }
 
 export default new DivisionRepository();
