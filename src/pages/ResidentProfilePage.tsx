@@ -1,11 +1,19 @@
 import { FC } from 'react';
 import { useNavigate } from 'react-router';
 import AdminSlidebar from '../components/layouts/admin/AdminSlidebar';
+import { useAppDispatch } from '../hooks/state/hooks';
+import { logout } from '../store/slices/authSlices';
 
 const ResidentProfilePage: FC = () => {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    
     const handleLogout = () => {
-        // Handle logout logic here
+        // remove user from redux store
+        dispatch(logout());
+        // remove token from local storage
+        localStorage.removeItem("token");
+        // Navigate to login page
         navigate('/resident-login');
     }
     const handleEditProfile = () => {

@@ -1,153 +1,229 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router';
-import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { Modal, Form, Input, Button, message, Spin } from 'antd';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts';
 
-const initialDiseasesData = [
-    { name: "Diabetes", patients: 145 },
-    { name: "Hypertension", patients: 261 },
-    { name: "Low Pressure", patients: 120 },
-    { name: "High Pressure", patients: 180 },
-    { name: "Depression", patients: 90 },
-    { name: "Osteoporosis", patients: 80 },
-    { name: "Acne", patients: 200 },
-    { name: "Asthma", patients: 250 },
-    { name: "Arrhythmia", patients: 110 },
-];
+import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
+import diseaseService from '../../services/disease.service';
+
+interface DiseaseData {
+  name: string;
+  patients: number;
+}
 
 const DiseasesPage: FC = () => {
-    const [diseasesData, setDiseasesData] = useState(initialDiseasesData);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [newDisease, setNewDisease] = useState('');
+  const[diseaseName,setDiseaseNames]=useState<string[]>([]);
+  const [diseaseStats, setDiseaseStats] = useState<DiseaseData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form] = Form.useForm();
 
-    const totalDiseases = diseasesData.length;
-    const totalPatients = diseasesData.reduce((sum, disease) => sum + disease.patients, 0);
+  const fetchDiseaseNames = async () => {
+    try {
+      const data = await diseaseService.getAllDiseases(); 
+      setDiseaseNames(data.map((d:any)=>d.diseaseName));
+    } catch (error) {
+      console.error('Failed to load disease names:', error);
+      message.error('Failed to load disease names');
+      return [];
+    }
+  };
 
-    const handleAddDisease = () => {
-        if (newDisease.trim()) {
-            if (window.confirm(`Are you sure you want to add "${newDisease}"?`)) {
-                setDiseasesData([...diseasesData, { name: newDisease, patients: 0 }]);
-                setNewDisease('');
-                setIsModalOpen(false);
-            }
-        }
-    };
+  // Fetch disease statistics
+  const fetchDiseaseStats = async () => {
+  try {
+    setLoading(true);
+    const data = await diseaseService.getDiseasePatientCounts();
+    const formattedData = Object.entries(data).map(([name, patients]) => ({
+      name: String(name),
+      patients: Number(patients),
+    }));
+    setDiseaseStats(formattedData);
+  } catch (error) {
+    console.error('Failed to load disease stats:', error);
+    message.error('Failed to load disease stats');
+  } finally {
+    setLoading(false);
+  }
+};
 
-    const handleDeleteDisease = (diseaseName: string) => {
-        if (window.confirm(`Are you sure you want to delete "${diseaseName}"?`)) {
-            setDiseasesData(diseasesData.filter(disease => disease.name !== diseaseName));
-        }
-    };
+  useEffect(() => {
+    fetchDiseaseNames();
+    fetchDiseaseStats();
+  }, []);
 
-    return (
-        <DashboardContainer>
-            <div className="flex-1 p-6">
-               
-                
-                <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-semibold text-[#008FFB]">Diseases</h2>
-                    <button
-                        onClick={() => setIsModalOpen(true)}
-                        className="px-4 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
-                    >
-                        + Add Disease
-                    </button>
-                </div>
-                
-                {/* Add Disease Modal */}
-                {isModalOpen && (
-                    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-                        <div className="bg-white p-6 rounded-lg shadow-md w-1/3">
-                            <h3 className="text-lg font-semibold mb-4">Add New Disease</h3>
-                            <input
-                                type="text"
-                                placeholder="Enter disease name"
-                                value={newDisease}
-                                onChange={(e) => setNewDisease(e.target.value)}
-                                className="w-full px-4 py-2 border rounded-lg mb-4"
-                            />
-                            <div className="flex justify-end space-x-4">
-                                <button
-                                    onClick={() => setIsModalOpen(false)}
-                                    className="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    onClick={handleAddDisease}
-                                    className="px-4 py-2 bg-[#008FFB] text-white rounded-lg hover:bg-[#006fbb]"
-                                >
-                                    Confirm
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                )}
+  // Calculate total diseases and patients only for displayed diseases
+  const displayedStats = diseaseStats.filter((d) => diseaseName.includes(d.name));
+  const totalDiseases = diseaseName.length;
+  const totalPatients = displayedStats.reduce((sum, disease) => sum + disease.patients, 0);
 
-                {/* Stats Cards */}
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                    <div className="bg-white p-4 rounded-lg shadow-md flex justify-between items-center">
-                        <div>
-                            <h3 className="text-lg font-semibold text-gray-700">Total Diseases</h3>
-                            <p className="text-2xl font-bold text-[#008FFB]">{totalDiseases}</p>
-                        </div>
-                    </div>
-                    <div className="bg-white p-4 rounded-lg shadow-md flex justify-between items-center">
-                        <div>
-                            <h3 className="text-lg font-semibold text-gray-700">Total Patients</h3>
-                            <p className="text-2xl font-bold text-[#008FFB]">{totalPatients}</p>
-                        </div>
-                    </div>
-                </div>
+  // Handle modal actions
+  const handleModalOk = async () => {
+    try {
+      const values = await form.validateFields();
+      const newDisease = values.disease.trim();
+      if (!newDisease) return;
 
-                {/* Diseases Table */}
-                <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-                    <table className="w-full table-auto">
-                        <thead>
-                            <tr>
-                                <th className="text-left px-4 py-2 text-sm text-gray-600">Disease Name</th>
-                                <th className="text-left px-4 py-2 text-sm text-gray-600">Patients</th>
-                                <th className="text-left px-4 py-2 text-sm text-gray-600">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {diseasesData.map((disease) => (
-                                <tr key={disease.name}>
-                                    <td className="px-4 py-2 text-sm text-gray-700">{disease.name}</td>
-                                    <td className="px-4 py-2 text-sm text-gray-700">{disease.patients}</td>
-                                    <td className="px-4 py-2 text-sm text-gray-700">
-                                        <Link to={`${disease.name}`} className="text-[#008FFB] hover:text-[#00C1A7]">
-                                            View
-                                        </Link>
-                                        <button
-                                            onClick={() => handleDeleteDisease(disease.name)}
-                                            className="text-red-500 hover:text-red-700 ml-4"
-                                        >
-                                            Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+      if (window.confirm(`Are you sure you want to add "${newDisease}"?`)) {
+        const addedDisease = await diseaseService.createDisease({ diseaseName: newDisease });
 
-                {/* Line Chart */}
-                <div className="bg-white p-6 rounded-lg shadow-md">
-                    <h3 className="text-lg font-semibold text-gray-700 mb-4">Disease Statistics</h3>
-                    <ResponsiveContainer width="100%" height={300}>
-                        <LineChart data={diseasesData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip />
-                            <Line type="monotone" dataKey="patients" stroke="#008FFB" strokeWidth={2} />
-                        </LineChart>
-                    </ResponsiveContainer>
-                </div>
+        setDiseaseNames((prev) => 
+          [...prev, addedDisease.diseaseName]
+      );
+        form.resetFields();
+        setIsModalOpen(false);
+        message.success('Disease added successfully');
+      }
+    } catch (error: any) {
+      const errMsg =
+        error?.response?.data?.message || 'Failed to add disease. Please try again.';
+      message.error(errMsg);
+    }
+  };
+
+  const handleModalCancel = () => {
+    setIsModalOpen(false);
+    form.resetFields();
+  };
+
+const handleDeleteDisease = async (diseaseName: string) => {
+  if (window.confirm(`Are you sure you want to delete "${diseaseName}"?`)) {
+    try {
+      // Call the backend API to delete the disease
+      await diseaseService.deleteDisease(diseaseName);
+
+      // Update frontend state after successful deletion
+      setDiseaseNames((prev) => prev.filter((name) => name !== diseaseName));
+      setDiseaseStats((prev) => prev.filter((d) => d.name !== diseaseName));
+
+      message.success(`"${diseaseName}" deleted successfully.`);
+    } catch (error) {
+      console.error(error);
+      message.error('Failed to delete disease.');
+    }
+  }
+};
+
+  return (
+    <DashboardContainer>
+      <div className="flex-1 p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-semibold text-[#008FFB]">Diseases</h2>
+          <Button
+            type="primary"
+            onClick={() => setIsModalOpen(true)}
+            style={{ backgroundColor: '#008FFB' }}
+          >
+            + Add Disease
+          </Button>
+        </div>
+
+        <Modal
+          title="Add New Disease"
+          open={isModalOpen}
+          onOk={handleModalOk}
+          onCancel={handleModalCancel}
+          okText="Confirm"
+          cancelText="Cancel"
+        >
+          <Form form={form} layout="vertical" name="addDiseaseForm">
+            <Form.Item
+              name="disease"
+              label="Disease Name"
+              rules={[{ required: true, message: 'Please enter the disease name' }]}
+            >
+              <Input placeholder="Enter disease name" />
+            </Form.Item>
+          </Form>
+        </Modal>
+
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <Spin size="large" />
+          </div>
+        ) : (
+          <>
+            {/* Statistics Cards */}
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <div className="bg-white p-4 rounded-lg shadow-md">
+                <h3 className="text-lg font-semibold text-gray-700">Total Diseases</h3>
+                <p className="text-2xl font-bold text-[#008FFB]">{totalDiseases}</p>
+              </div>
+              <div className="bg-white p-4 rounded-lg shadow-md">
+                <h3 className="text-lg font-semibold text-gray-700">Total Patients</h3>
+                <p className="text-2xl font-bold text-[#008FFB]">{totalPatients}</p>
+              </div>
             </div>
-        </DashboardContainer>
-    );
+
+            {/* Disease Table */}
+            <div className="bg-white p-6 rounded-lg shadow-md mb-6 overflow-x-auto">
+              <table className="w-full table-auto">
+                <thead>
+                  <tr>
+                    <th className="text-left px-4 py-2 text-sm text-gray-600">Disease Name</th>
+                    <th className="text-left px-4 py-2 text-sm text-gray-600">Patients</th>
+                    <th className="text-left px-4 py-2 text-sm text-gray-600">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {diseaseName.map((name) => {
+                    const stat = diseaseStats.find((d) => d.name === name);
+                    return (
+                      <tr key={name}>
+                        <td className="px-4 py-2 text-sm text-gray-700">{name}</td>
+                        <td className="px-4 py-2 text-sm text-gray-700">{stat?.patients ?? 0}</td>
+                        <td className="px-4 py-2 text-sm text-gray-700">
+                          <Link
+                            to={`${name}`}
+                            className="text-[#008FFB] hover:text-[#00C1A7]"
+                          >
+                            View
+                          </Link>
+                          <button
+                            onClick={() => handleDeleteDisease(name)}
+                            className="text-red-500 hover:text-red-700 ml-4"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Disease Chart */}
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">Disease Statistics</h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={diseaseStats.filter((d)=>diseaseName.includes(d.name))}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Line
+                    type="monotone"
+                    dataKey="patients"
+                    stroke="#008FFB"
+                    strokeWidth={2}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </>
+        )}
+      </div>
+    </DashboardContainer>
+  );
 };
 
 export default DiseasesPage;

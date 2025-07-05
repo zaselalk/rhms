@@ -1,37 +1,45 @@
-import { DataTypes, Model, Sequelize } from "sequelize";
+import { DataTypes, Model, Optional } from "sequelize";
+import sequelize from "."; // Make sure this points to your Sequelize instance
 
-interface diseaseAttributes {
+// Define attributes for the Disease model
+interface DiseaseAttributes {
   diseaseId: number;
   diseaseName: string;
 }
 
-export class Disease
-  extends Model<diseaseAttributes>
-  implements diseaseAttributes
-{
+// Make diseaseId optional for creation (since it's auto-incremented)
+interface DiseaseCreationAttributes extends Optional<DiseaseAttributes, "diseaseId"> {}
+
+// Extend the model
+class Disease extends Model<DiseaseAttributes, DiseaseCreationAttributes>
+  implements DiseaseAttributes {
   public diseaseId!: number;
   public diseaseName!: string;
+
+  // Timestamps
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
 }
 
-export default (sequelize: Sequelize) => {
-  Disease.init(
-    {
-      diseaseId: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-      },
-      diseaseName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
+// Initialize the model
+Disease.init(
+  {
+    diseaseId: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
     },
-    {
-      sequelize,
-      modelName: "Disease",
-      tableName: "diseases",
-    }
-  );
+    diseaseName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  },
+  {
+    sequelize,
+    modelName: "Disease",
+    tableName: "diseases",
+    timestamps: true,
+  }
+);
 
-  return Disease;
-};
+export default Disease;

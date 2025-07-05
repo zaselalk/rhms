@@ -1,6 +1,5 @@
 "use strict";
 
-import { permission } from "process";
 import { QueryInterface } from "sequelize";
 
 /** @type {import('sequelize-cli').Migration} */

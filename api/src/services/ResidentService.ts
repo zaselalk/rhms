@@ -115,6 +115,21 @@ export class ResidentService {
         return deleted;
     }
     
+    async getResidentOverview(): Promise<Resident[] | null> {
+        const resident = this.residentRepository.getResidentOverview();
+        if (!resident) throw new Error("Resident not found");
+        return resident;
+    }
+
+    async getResidentCount(): Promise<number> {
+        const count = await this.residentRepository.getResidentCount();
+        if (count === null) throw new Error("Resident not found");
+        return count;
+    }
+
+    async getDiseasePatientCounts(): Promise<Record<string, number>> {
+    return this.residentRepository.countPatientsByDisease();
+  }
 
 
 
