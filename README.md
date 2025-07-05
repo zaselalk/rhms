@@ -1,11 +1,12 @@
-# Resident Health Monitoring System 
+# Resident Health Monitoring System
+
 ![image](https://github.com/user-attachments/assets/a835b7aa-1899-4636-8f87-a29e480f760c)
 
-
 ## Developer Document
-Devloper Doc : [Developer Doc](/docs) 
+
+Devloper Doc : [Developer Doc](/docs)
 <br>
-UI Designs : [UI Designs](/docs/UIDesigns.md) 
+UI Designs : [UI Designs](/docs/UIDesigns.md)
 
 Overview
 
@@ -21,18 +22,14 @@ Data Analytics & Reports: Provides insights into health trends and resource need
 Technologies Used
 
 Backend: Node.js (Express.js)
-Frontend:  React (typescript) + mantine UI
+Frontend: React (typescript) + mantine UI
 Database: MySQL (sequelize)
 Authentication:passport.js
 Hosting & Deployment: Azure
 
-
-Contributors
+### Contributors
 
 - Asela Priyadarshana - User management, resident login, resident profile
 - Ravindu Harshana - Dashboard, Resident Management, Household
 - Ashfa Nisthar - Clinic Management, Division management
 - Dilukshi Nimasha - Disease Management, Household
-
-
-
