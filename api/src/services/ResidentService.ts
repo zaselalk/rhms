@@ -2,29 +2,6 @@ import { Resident } from "../models/resident";
 import { ResidentRepository } from "../repositories/ResidentRepository";
 import bcrypt from "bcrypt";
 
-interface Newesident {
-  firstName: string;
-  lastName: string;
-  nic: string;
-  email: string;
-  password: string;
-  birthday: Date;
-  bloodGroup: string;
-  gender: string;
-  bloodPressure: string;
-  heartRate: string;
-  address: string;
-  contactNumber: string;
-  divisionId: number;
-  maritalState: string;
-  educationLevel: string;
-  addicted: Array<string>;
-  alergies: Array<string>;
-  chronicalDesease: Array<string>;
-  height: number;
-  weight: number;
-}
-
 export class ResidentService {
   constructor(private residentRepository: ResidentRepository) {}
 
