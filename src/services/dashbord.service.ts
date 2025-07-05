@@ -1,7 +1,7 @@
 import axiosInstance from "./axios/axiosInstance";  
 
 export const DashboardService = {
-  // Fetch all clinics
+  // Fetch the count of residents from the server
     getresidentCount: async () => {
         try {
         const response = await axiosInstance.get("/resident/residentCount");
@@ -11,5 +11,7 @@ export const DashboardService = {
         throw error;
         }
     },
+
+    
 
 };

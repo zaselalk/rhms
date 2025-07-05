@@ -30,4 +30,10 @@ HouseholdRouter.delete(
     catchAsync(householdController.deleteHousehold)
 );
 
+HouseholdRouter.get(
+    "/count",
+    catchAsync(householdController.gethouseholdCount)
+);
+
+
 export default HouseholdRouter;

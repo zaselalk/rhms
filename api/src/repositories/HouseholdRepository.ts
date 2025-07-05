@@ -59,4 +59,10 @@ export class HouseholdRepository {
   async findHouseholdByHouseNo(house_no: string): Promise<Household | null> {
     return Household.findOne({ where: { house_no } });
   }
+
+  // Household Count
+  async householdCount(): Promise<number> {
+    return Household.count();
+  }
+    
 }
