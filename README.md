@@ -33,3 +33,11 @@ Hosting & Deployment: Azure
 - Ravindu Harshana - Dashboard, Resident Management, Household
 - Ashfa Nisthar - Clinic Management, Division management
 - Dilukshi Nimasha - Disease Management, Household
+
+## Github workflow
+
+| Merge Type       | Use for               | Notes                                      |
+| ---------------- | --------------------- | ------------------------------------------ |
+| **Squash**       | `feature/*` → `stage` | Clean up messy dev commits                 |
+| **Rebase**       | `stage` → `beta`      | Curate commits into meaningful units       |
+| **Merge commit** | `beta` → `main`       | Preserves history, makes PR diffs accurate |
