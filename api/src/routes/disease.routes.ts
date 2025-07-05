@@ -8,19 +8,19 @@ const diseaseController = new DiseaseController();
 
 DiseaseRouter.post(
   "/create",
-  protectRoute("disease:create"),
+  // protectRoute("disease:create"),
   catchAsync(diseaseController.createDisease)
 );
 
 DiseaseRouter.get(
   "/all",
-  protectRoute("disease:create"),
+  // protectRoute("disease:create"),
   catchAsync(diseaseController.getAllDiseases)
 );
 
 DiseaseRouter.delete(
   "/delete/:diseaseName",
-  protectRoute("disease:create"),
+  // protectRoute("disease:create"),
   catchAsync(diseaseController.deleteDisease)
 );
 
