@@ -8,9 +8,9 @@ import { UserChangeChangePassword } from "../../components/features/profile-mana
 const ProfilePage: FC = () => {
   const user = useAppSelector((state) => state.auth.user);
 
-  const handleInputChange = (key: string, value: string) => {
-    // setUser((prev) => ({ ...prev, [key]: value }));
-  };
+  // const handleInputChange = (key: string, value: string) => {
+  //   // setUser((prev) => ({ ...prev, [key]: value }));
+  // };
 
   return (
     <DashboardContainer>

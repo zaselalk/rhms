@@ -29,10 +29,10 @@ Hosting & Deployment: Azure
 
 Contributors
 
-- Asela Priyadarshana 
-- Ravindu Harshana
-- Ashfa Nisthar
-- Dilukshi Nimasha
+- Asela Priyadarshana - User management, resident login, resident profile
+- Ravindu Harshana - Dashboard, Resident Management, Household
+- Ashfa Nisthar - Clinic Management, Division management
+- Dilukshi Nimasha - Disease Management, Household
 
 
 

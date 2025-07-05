@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import { Role, User } from "../models";
 
 interface LoginUser extends User {
@@ -85,14 +86,17 @@ export class UserRepository {
     });
   }
 
-  async getAllUsers(page: number, limit: number): Promise<User[]> {
+  async getAllUsers(page: number, limit: number, user: any): Promise<User[]> {
     // maximum limit is 50
     if (limit > 50) limit = 50;
     const offset = (page - 1) * limit;
     return User.findAll({
-      // limit: limit,
-      // offset: offset,
-      // order: [["createdAt", "DESC"]],
+      where: {
+        email: {
+          [Op.not]: user.email, // Exclude the logged-in user
+        },
+      },
+
       attributes: ["id", "name", "email", "createdAt", "updatedAt"],
       include: [
         {
@@ -108,13 +112,15 @@ export class UserRepository {
     name: string,
     roleId: number,
     email: string,
-    password: string
+    password: string,
+    phone_number: string
   ): Promise<User> {
     return User.create({
       name,
       roleId,
       email,
       password,
+      phone_number,
     });
   }
 
@@ -158,5 +164,14 @@ export class UserRepository {
   async deleteUserById(id: number): Promise<boolean> {
     const deletedRows = await User.destroy({ where: { id } });
     return deletedRows > 0;
+  }
+
+  async findUsersByRoleId(roleId: number): Promise<User[]> {
+    return User.findAll({
+      where: {
+        roleId,
+      },
+      attributes: ["id", "name", "email"],
+    });
   }
 }

@@ -1,10 +1,11 @@
+// components/clinic/ClinicOverview.tsx
 import React, { useState, useEffect } from "react";
 import { FaClinicMedical, FaTrash } from "react-icons/fa";
-import { FiPlusCircle, FiEdit } from "react-icons/fi"; // Import the edit icon
-import Modal from "../../components/layouts/overlays/Modal"; // Ensure Modal is correctly imported
-import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer"; // Ensure DashboardContainer is correctly imported
+import { FiPlusCircle, FiEdit } from "react-icons/fi";
+import Modal from "../../components/layouts/overlays/Modal";
+import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import { Link } from "react-router";
-import axiosInstance from "../../services/axios/axiosInstance";
+import { ClinicService } from "../../services/clinic.service";
 
 const ClinicOverview: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -19,8 +20,8 @@ const ClinicOverview: React.FC = () => {
   useEffect(() => {
     const fetchClinics = async () => {
       try {
-        const response = await axiosInstance.get("/clinic/getAllClinics");
-        setClinicCategories(response.data);
+        const data = await ClinicService.getAllClinics();
+        setClinicCategories(data);
       } catch (error) {
         console.error("Error fetching clinics:", error);
       }
@@ -31,12 +32,23 @@ const ClinicOverview: React.FC = () => {
   // Handle creating a new clinic
   const handleCreateClinic = async () => {
     if (clinicTitle.trim()) {
+      // Check for duplicate clinic name
+      const isDuplicate = clinicCategories.some(
+        (clinic) => clinic.name.toLowerCase() === clinicTitle.toLowerCase()
+      );
+
+      if (isDuplicate) {
+        alert(
+          "A clinic with this name already exists. Please choose a different name."
+        );
+        return;
+      }
+
       try {
-        const newClinic = {
+        const newClinic = await ClinicService.createClinic({
           name: clinicTitle,
-        };
-        const response = await axiosInstance.post("/clinic/createClinic", newClinic);
-        setClinicCategories([...clinicCategories, response.data]);
+        });
+        setClinicCategories((prevCategories) => [...prevCategories, newClinic]);
         setShowModal(false);
         setClinicTitle(""); // Reset the input field
       } catch (error) {
@@ -47,15 +59,15 @@ const ClinicOverview: React.FC = () => {
 
   // Handle deleting a clinic (show confirmation modal)
   const handleDeleteClick = (clinicId: string) => {
-    setClinicToDelete(clinicId); // Set the clinic id to be deleted
-    setShowConfirmDeleteModal(true); // Show the confirmation modal
+    setClinicToDelete(clinicId);
+    setShowConfirmDeleteModal(true);
   };
 
   // Confirm deletion of the clinic
   const handleConfirmDelete = async () => {
     if (clinicToDelete) {
       try {
-        await axiosInstance.delete(`/clinic/deleteClinic/${clinicToDelete}`);
+        await ClinicService.deleteClinic(clinicToDelete);
         setClinicCategories((prevCategories) =>
           prevCategories.filter((clinic) => clinic.id !== clinicToDelete)
         );
@@ -63,37 +75,58 @@ const ClinicOverview: React.FC = () => {
         console.error("Error deleting clinic:", error);
       }
     }
-    setShowConfirmDeleteModal(false); // Close the confirmation modal
-    setClinicToDelete(null); // Clear the clinic to delete
+    setShowConfirmDeleteModal(false);
+    setClinicToDelete(null);
   };
 
   // Cancel deletion and close the modal
   const handleCancelDelete = () => {
     setShowConfirmDeleteModal(false);
-    setClinicToDelete(null); // Clear the clinic to delete
+    setClinicToDelete(null);
   };
 
   // Handle editing a clinic's name
   const handleEditClick = (clinicId: string) => {
-    setClinicToEdit(clinicId); // Set the clinic id to be edited
-    setShowEditModal(true); // Show the edit modal
+    const clinic = clinicCategories.find((c) => c.id === clinicId);
+    if (clinic) {
+      setClinicTitle(clinic.name); // Prefill the title
+      setClinicToEdit(clinicId);
+      setShowEditModal(true);
+    }
   };
 
   // Handle updating the clinic name
   const handleUpdateClinicName = async () => {
     if (clinicToEdit && clinicTitle.trim()) {
+      // Check for duplicate clinic name (excluding the clinic being edited)
+      const isDuplicate = clinicCategories.some(
+        (clinic) =>
+          clinic.name.toLowerCase() === clinicTitle.toLowerCase() &&
+          clinic.id !== clinicToEdit
+      );
+
+      if (isDuplicate) {
+        alert(
+          "A clinic with this name already exists. Please choose a different name."
+        );
+        return;
+      }
+
       try {
-        const response = await axiosInstance.put(`/clinic/updateClinic/${clinicToEdit}`, {
-          name: clinicTitle,
-        });
+        const updatedClinic = await ClinicService.updateClinicName(
+          clinicToEdit,
+          { name: clinicTitle }
+        );
         setClinicCategories((prevCategories) =>
           prevCategories.map((clinic) =>
-            clinic.id === clinicToEdit ? { ...clinic, name: response.data.name } : clinic
+            clinic.id === clinicToEdit
+              ? { ...clinic, name: updatedClinic.name }
+              : clinic
           )
         );
-        setShowEditModal(false); // Close the edit modal
-        setClinicTitle(""); // Reset the input field
-        setClinicToEdit(null); // Clear the clinic to edit
+        setShowEditModal(false);
+        setClinicTitle("");
+        setClinicToEdit(null);
       } catch (error) {
         console.error("Error updating clinic:", error);
       }
@@ -103,13 +136,12 @@ const ClinicOverview: React.FC = () => {
   // Cancel editing and close the modal
   const handleCancelEdit = () => {
     setShowEditModal(false);
-    setClinicTitle(""); // Reset the input field
-    setClinicToEdit(null); // Clear the clinic to edit
+    setClinicTitle("");
+    setClinicToEdit(null);
   };
 
   return (
     <DashboardContainer>
-      {/* Main Content */}
       <div className="p-6 w-full min-h-screen">
         {/* Header Section */}
         <div className="flex justify-between items-center mb-6 bg-white p-4 shadow rounded-lg">
@@ -117,7 +149,9 @@ const ClinicOverview: React.FC = () => {
             <FaClinicMedical className="text-blue-600 text-3xl" />
             <div>
               <h2 className="text-lg font-bold">Clinic Overview</h2>
-              <p className="text-gray-500 text-sm">Total Clinics: {clinicCategories.length}</p>
+              <p className="text-gray-500 text-sm">
+                Total Clinics: {clinicCategories.length}
+              </p>
             </div>
           </div>
           <button
@@ -134,35 +168,38 @@ const ClinicOverview: React.FC = () => {
           {clinicCategories.map((clinic) => (
             <Link
               key={clinic.id}
-              to={`/admin/clinic/${clinic.name.toLowerCase().replace(/\s+/g, "-")}`} // Dynamic link based on clinic name
+              to={`/admin/clinic/${clinic.id}`}
               className="bg-white p-4 shadow-md rounded-lg flex justify-between items-center cursor-pointer hover:shadow-lg transition"
             >
               <div>
                 <h4 className="text-lg font-semibold">{clinic.name}</h4>
                 <p className="text-2xl font-bold">{clinic.count}</p>
-                <p className="text-gray-500 text-sm">Last month</p>
+                <p className="text-gray-500 text-sm">Attendance Trend </p>
                 <p
-                  className={`text-sm font-semibold ${clinic.increase ? "text-green-500" : "text-red-500"}`}
+                  className={`text-sm font-semibold ${
+                    clinic.increase ? "text-green-500" : "text-red-500"
+                  }`}
                 >
-                  {clinic.change} {clinic.increase ? "▲" : "▼"}
+                  {clinic.change} {clinic.increase ? "▲" : "▼"}{" "}
+                  {clinic.percentage}%
                 </p>
               </div>
               <div className="flex space-x-2">
                 {/* Edit Icon */}
                 <button
                   onClick={(e) => {
-                    e.preventDefault(); // Prevent Link navigation on edit click
+                    e.preventDefault();
                     handleEditClick(clinic.id);
                   }}
                   className="text-blue-500 hover:text-blue-700 transition cursor-pointer"
                 >
-                  <FiEdit className="text-lg" /> {/* Edit icon */}
+                  <FiEdit className="text-lg" />
                 </button>
                 {/* Delete Icon */}
                 <FaTrash
                   className="text-gray-500 cursor-pointer hover:text-red-600 transition"
                   onClick={(e) => {
-                    e.preventDefault(); // Prevent Link navigation on delete click
+                    e.preventDefault();
                     handleDeleteClick(clinic.id);
                   }}
                 />
@@ -173,7 +210,11 @@ const ClinicOverview: React.FC = () => {
 
         {/* Modal for Creating New Clinic */}
         {showModal && (
-          <Modal isOpen={showModal} handleClose={() => setShowModal(false)} title="Add Clinic">
+          <Modal
+            isOpen={showModal}
+            handleClose={() => setShowModal(false)}
+            title="Add Clinic"
+          >
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h2 className="text-lg font-bold mb-4">Add Clinic</h2>
               <input
@@ -197,9 +238,15 @@ const ClinicOverview: React.FC = () => {
 
         {/* Confirmation Modal for Deleting Clinic */}
         {showConfirmDeleteModal && (
-          <Modal isOpen={showConfirmDeleteModal} handleClose={handleCancelDelete} title="Confirm Deletion">
+          <Modal
+            isOpen={showConfirmDeleteModal}
+            handleClose={handleCancelDelete}
+            title="Confirm Deletion"
+          >
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <h2 className="text-lg font-bold mb-4">Are you sure you want to delete this clinic?</h2>
+              <h2 className="text-lg font-bold mb-4">
+                Are you sure you want to delete this clinic?
+              </h2>
               <div className="flex justify-end space-x-4">
                 <button
                   onClick={handleCancelDelete}
@@ -220,7 +267,11 @@ const ClinicOverview: React.FC = () => {
 
         {/* Modal for Editing Clinic Name */}
         {showEditModal && (
-          <Modal isOpen={showEditModal} handleClose={handleCancelEdit} title="">
+          <Modal
+            isOpen={showEditModal}
+            handleClose={handleCancelEdit}
+            title="Edit Clinic Name"
+          >
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h2 className="text-lg font-bold mb-4">Edit Clinic Name</h2>
               <input

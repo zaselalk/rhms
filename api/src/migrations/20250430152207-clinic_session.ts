@@ -1,8 +1,8 @@
-import { QueryInterface, DataTypes } from 'sequelize';
+import { QueryInterface, DataTypes } from "sequelize";
 
 module.exports = {
   async up(queryInterface: QueryInterface): Promise<void> {
-    await queryInterface.createTable('sessions', {
+    await queryInterface.createTable("clinic_sessions", {
       sessionId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -13,11 +13,11 @@ module.exports = {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'clinics', // refers to the clinics table
-          key: 'id',
+          model: "clinics", // refers to the clinics table
+          key: "id",
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       name: {
         type: DataTypes.STRING,
@@ -31,6 +31,6 @@ module.exports = {
   },
 
   async down(queryInterface: QueryInterface): Promise<void> {
-    await queryInterface.dropTable('sessions');
+    await queryInterface.dropTable("clinic_sessions");
   },
 };

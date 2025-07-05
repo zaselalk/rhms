@@ -8,7 +8,7 @@ export const UserChangeChangePassword = () => {
   const [form] = Form.useForm();
   const profileService = new ProfileService();
   const user = useAppSelector((state) => state.auth.user);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
 
   const onFinish = (values: any) => {
     mutation.mutate(values);
@@ -35,7 +35,7 @@ export const UserChangeChangePassword = () => {
     onSuccess: (data) => {
       console.log(data);
       form.resetFields();
-      setError(null);
+      setError("");
       message.success("Password changed successfully!");
     },
     onError: (error) => {
@@ -52,7 +52,7 @@ export const UserChangeChangePassword = () => {
             description={error}
             type="error"
             closable
-            onClose={() => setError(null)}
+            onClose={() => setError("")}
             className="my-5"
           />
         )}

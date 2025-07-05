@@ -58,13 +58,7 @@ export const UserList: FC = () => {
 
   useEffect(() => {
     if (isLoading) return;
-
     setUserCount(data?.data?.length); // write separate API to get count
-    // update state of setUser
-    // const user = data?.data?.find((user: User) => user.id === user?.id);
-    // if (user) {
-    //   setUser(user);
-    // }
   }, [setUserCount, data]);
 
   const handleUserView = (user: User) => {

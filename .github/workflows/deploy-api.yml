@@ -1,0 +1,50 @@
+name: deploy the backend to Azure VM
+
+on:
+  push:
+    branches:
+      - main
+      - stage
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔍 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🧪 Setup up Nodejs
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: 🚀 Install dependencies
+        run: npm install
+        working-directory: api
+
+      - name: 🧪 Run tests
+        run: npm run test
+        working-directory: api
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔍 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📝 Setup SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: 🔒 Add host key to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
+
+      - name: 🚀 Deploy to Azure VM
+        run: |
+          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "cd /home/azureuser/ciphersquad && git pull origin ${GITHUB_REF#refs/heads/} && cd api && npm install && npm run build && pm2 restart rhms-api"

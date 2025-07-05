@@ -3,25 +3,22 @@ import { useEffect, useState } from "react";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import residentService from "../../services/resident.service";
 
-
-
 const ResidentListPage = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [residents2, setResidents] = useState<{
-     id: string; firstName: string; lastName: string ,contactNumber:String,address:string
-    
-    }[]>([]);
+  const [residents2, setResidents] = useState<
+    {
+      id: string;
+      firstName: string;
+      lastName: string;
+      contactNumber: String;
+      address: string;
+    }[]
+  >([]);
 
-    const residentRegister = residentService;
-    
-
-    
-
-
+  const residentRegister = residentService;
 
   // Fetch residents data from the server
   const fetchResidents = async () => {
-    
     try {
       const data = await residentRegister.getResidentOverview();
       setResidents(data.data);
@@ -36,17 +33,13 @@ const ResidentListPage = () => {
     fetchResidents();
   }, []);
 
-
   return (
     <DashboardContainer>
       <div className="w-full mt-0">
         <div className="sticky top-0 bg-white shadow-lg z-10 p-4 mb-6 mt-0">
-
           <div className="mt-0">
             <h2 className="text-2xl font-bold">Resident Details</h2>
           </div>
-
-
 
           {/* Add Resident Button (Right-Aligned) */}
           <div className="flex justify-end mb-6">
@@ -55,7 +48,6 @@ const ResidentListPage = () => {
                 Add Resident
               </button>
             </Link>
-
           </div>
 
           {/* Search Bar */}
@@ -69,7 +61,6 @@ const ResidentListPage = () => {
               className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#002dc1] focus:border-[#2b2c8a] outline-none"
             />
           </div>
-
         </div>
 
         {/* Resident Details Section */}
@@ -89,14 +80,21 @@ const ResidentListPage = () => {
                 .filter((resident) => {
                   const fullName = `${resident.firstName} ${resident.lastName}`;
                   return (
-                    fullName.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+                    fullName
+                      .toLowerCase()
+                      .includes(searchKeyword.toLowerCase()) ||
                     resident.id.toString().includes(searchKeyword)
                   );
                 })
                 .map((resident) => (
-                  <tr key={resident.id} className=" hover:bg-gray-100 text-center">
+                  <tr
+                    key={resident.id}
+                    className=" hover:bg-gray-100 text-center"
+                  >
                     <td className="p-3">{resident.id}</td>
-                    <td className="p-3">{resident.firstName} {resident.lastName}</td>
+                    <td className="p-3">
+                      {resident.firstName} {resident.lastName}
+                    </td>
                     <td className="p-3">{resident.contactNumber}</td>
                     <td className="p-3">{resident.address}</td>
 

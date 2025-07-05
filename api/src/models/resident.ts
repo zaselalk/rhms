@@ -1,6 +1,9 @@
 "use strict";
 import { DataTypes, Model } from "sequelize";
 import sequelize from ".";
+import Session from "./clinicSession";
+import Household from "./hosehold";
+
 
 interface ResidentAttributes {
   id?: number;
@@ -30,6 +33,12 @@ export class Resident
   extends Model<ResidentAttributes>
   implements ResidentAttributes
 {
+  json(sessions: Session[]) {
+    throw new Error("Method not implemented.");
+  }
+  status(arg0: number) {
+    throw new Error("Method not implemented.");
+  }
   public id?: number;
   public firstName!: string;
   public lastName!: string;
@@ -145,6 +154,8 @@ Resident.init(
     tableName: "residents",
     engine: "InnoDB",
   }
+
 );
+
 
 export default Resident;

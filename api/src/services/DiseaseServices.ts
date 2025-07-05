@@ -1,6 +1,6 @@
-import { D } from "react-router/dist/development/route-data-H2S3hwhf";
+
 import { DiseaseRepository } from "../repositories/DiseaseRepository";
-import { Disease } from "../models/disease";
+import Disease from "../models/disease";
 
 export class DiseaseServices {
   private diseaseRepository: DiseaseRepository;
@@ -18,5 +18,14 @@ export class DiseaseServices {
     return this.diseaseRepository.createDisease(diseaseName);
     
   }
+
+  async getAllDiseases(): Promise<Disease[]> {
+    return this.diseaseRepository.getAllDiseases();
+  }
+
+
+  async deleteDisease(diseaseName: string): Promise<number> {
+  return this.diseaseRepository.deleteDisease(diseaseName);
+}
 
 }

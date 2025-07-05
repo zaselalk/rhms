@@ -252,7 +252,6 @@ class ResidentController {
     }
   };
 
-
   getResidentOverview = async (
     req: Request,
     res: Response
@@ -275,7 +274,37 @@ class ResidentController {
     }
   };
 
-  
+  getResidentCount = async (
+    req: Request,
+    res: Response
+  ): Promise<Response | void> => {
+    try {
+      const count = await this.residentService.getResidentCount();
+      res.status(200).json({
+        message: "Resident count fetched successfully",
+        status: 200,
+        error: null,
+        data: { count },
+      });
+    } catch (error) {
+      console.error("Error fetching resident count:", error);
+      res.status(500).json({
+        message: null,
+        status: 500,
+        error: "Internal server error",
+        data: null,
+      });
+    }
+  };
+
+  getDiseasePatientCounts = async (req: Request, res: Response) => {
+    try {
+      const counts = await this.residentService.getDiseasePatientCounts();
+      res.status(200).json(counts);
+    } catch (error) {
+      res.status(500).json({ message: "Error counting diseases" });
+    }
+  };
 }
 
 export default ResidentController;
