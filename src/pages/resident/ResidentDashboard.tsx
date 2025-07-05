@@ -13,40 +13,34 @@ const resident = {
 
 const ResidentDashboard = () => {
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col px-4 sm:px-6 md:px-8">
-      {/* Main Content */}
-      <div className="w-full">
-        {/* Page Content */}
-        <div className="p-4 sm:p-6">
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-            <h2 className="text-2xl font-semibold text-[#008FFB]">
-              Resident Profile
-            </h2>
-            {/* <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 mt-4 sm:mt-0">
-              <Link
-                to="/household/manage"
-                className="text-[#008FFB] border border-[#008FFB] rounded-md px-4 py-2 hover:bg-[#00C1A7] text-center"
-              >
-                Manage Household
-              </Link>
-              <Link
-                to="edit"
-                className="text-[#008FFB] border border-[#008FFB] rounded-md px-4 py-2 hover:bg-[#00C1A7] text-center"
-              >
-                Edit Details
-              </Link>
-            </div> */}
-          </div>
+    <div className="min-h-screen  bg-gray-100  px-4 sm:px-6 md:px-8">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+        <h2 className="text-2xl font-semibold text-[#008FFB]">
+          Resident Profile
+        </h2>
+      </div>
 
-          {/* Profile Overview */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <section className="lg:col-span-1">
           <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md flex flex-col sm:flex-row">
             <div className="ml-0 sm:ml-6 flex-grow">
+              <div className="flex justify-center sm:justify-start mb-4">
+                <img
+                  src={resident.profilePic}
+                  alt="Profile"
+                  className="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src =
+                      "https://randomuser.me/api/portraits/men/1.jpg";
+                  }}
+                />
+              </div>
               <div className="flex w-full">
                 <h3 className="text-xl font-semibold text-gray-800">
-                  Name: {resident.name}
+                  {resident.name}
                 </h3>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-sm text-gray-600 mt-4">
+              <div className="grid grid-cols-1 gap-4 text-sm text-gray-600 mt-4">
                 <p>
                   <strong>Age:</strong> {resident.age}
                 </p>
@@ -73,105 +67,120 @@ const ResidentDashboard = () => {
                 </p>
               </div>
             </div>
-          </div>
 
-          {/* Health Stats */}
-          <h2 className="text-m mt-5">Last Updates</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-            {[
-              {
-                title: "Blood Pressure",
-                value: "120/89 mm/mg",
-                status: "Normal",
-                lastUpdate: "2025/02/10",
-              },
-              {
-                title: "Heart Rate",
-                value: "120 BPM",
-                status: "Normal",
-                lastUpdate: "2025/02/10",
-              },
-              {
-                title: "Cholesterol",
-                value: "85 mg/dl",
-                status: "Normal",
-                lastUpdate: "2025/02/10",
-              },
-              {
-                title: "Glucose",
-                value: "200 mg/dl",
-                status: "High",
-                lastUpdate: "2025/02/10",
-              },
-            ].map((stat, index) => (
-              <div
-                key={index}
-                className="bg-white sm:p-6 rounded-lg shadow-md "
-              >
-                <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                  {stat.title}
-                </h4>
-                <p className="text-3xl text-gray-600">{stat.value}</p>
-                <p className="text-gray-600">{stat.status}</p>
-                <div className="text-xs mt-4 flex justify-between items-center">
-                  <p>Last Update</p>
-                  <p className=" text-gray-800">{stat.lastUpdate}</p>
+            {/* logout button */}
+          </div>
+          <div className="mt-4">
+            <Link
+              to="/logout"
+              className="inline-block bg-red-500 text-white py-2 px-4 rounded-lg"
+            >
+              Logout
+            </Link>
+          </div>
+        </section>
+
+        <section className="lg:col-span-3">
+          <section>
+            <h2 className="text-m mt-5">Last Updates</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+              {[
+                {
+                  title: "Blood Pressure",
+                  value: "120/89 mm/mg",
+                  status: "Normal",
+                  lastUpdate: "2025/02/10",
+                },
+                {
+                  title: "Heart Rate",
+                  value: "120 BPM",
+                  status: "Normal",
+                  lastUpdate: "2025/02/10",
+                },
+                {
+                  title: "Cholesterol",
+                  value: "85 mg/dl",
+                  status: "Normal",
+                  lastUpdate: "2025/02/10",
+                },
+                {
+                  title: "Glucose",
+                  value: "200 mg/dl",
+                  status: "High",
+                  lastUpdate: "2025/02/10",
+                },
+              ].map((stat, index) => (
+                <div
+                  key={index}
+                  className="bg-white sm:p-6 rounded-lg shadow-md "
+                >
+                  <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                    {stat.title}
+                  </h4>
+                  <p className="text-3xl text-gray-600">{stat.value}</p>
+                  <p className="text-gray-600">{stat.status}</p>
+                  <div className="text-xs mt-4 flex justify-between items-center">
+                    <p>Last Update</p>
+                    <p className=" text-gray-800">{stat.lastUpdate}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </section>
 
-          <h3 className="text-xl font-semibold text-[#008FFB] mt-5">
-            Clinic Details
-          </h3>
-          <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md mt-6 overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr>
-                  <th className="px-4 py-2 text-gray-600 flex-col text-left">
-                    Clinic{" "}
-                  </th>
-                  <th className="px-4 py-2 text-gray-600 flex-col text-left">
-                    Date{" "}
-                  </th>
-                  <th className="px-4 py-2 text-gray-600 flex-col text-left">
-                    {" "}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  {
-                    clinicName: "Eye Clinic",
-                    date: "2024 Oct 02",
-                  },
-                  {
-                    clinicName: "Diabetics",
-                    date: "2024 Oct 23",
-                  },
-                  {
-                    clinicName: "Pressure",
-                    date: "2024 Apr 02",
-                  },
-                ].map((record, index) => (
-                  <tr key={index} className=" hover:bg-gray-100 rounded-lg">
-                    <td className="px-4 py-2 text-gray-700">
-                      {record.clinicName}
-                    </td>
-                    <td className="px-4 py-2 text-gray-700">{record.date}</td>
-                    <td className="px-4 py-2">
-                      <Link to={"clinicDetails"}>
-                        <button className="px-4 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]">
-                          View
-                        </button>
-                      </Link>
-                    </td>
+          <section>
+            <h3 className="text-xl font-semibold text-[#008FFB] mt-5">
+              Clinic Details
+            </h3>
+            <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md mt-6 overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr>
+                    <th className="px-4 py-2 text-gray-600 flex-col text-left">
+                      Clinic{" "}
+                    </th>
+                    <th className="px-4 py-2 text-gray-600 flex-col text-left">
+                      Date{" "}
+                    </th>
+                    <th className="px-4 py-2 text-gray-600 flex-col text-left">
+                      {" "}
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+                </thead>
+                <tbody>
+                  {[
+                    {
+                      clinicName: "Eye Clinic",
+                      date: "2024 Oct 02",
+                    },
+                    {
+                      clinicName: "Diabetics",
+                      date: "2024 Oct 23",
+                    },
+                    {
+                      clinicName: "Pressure",
+                      date: "2024 Apr 02",
+                    },
+                  ].map((record, index) => (
+                    <tr key={index} className=" hover:bg-gray-100 rounded-lg">
+                      <td className="px-4 py-2 text-gray-700">
+                        {record.clinicName}
+                      </td>
+                      <td className="px-4 py-2 text-gray-700">{record.date}</td>
+                      <td className="px-4 py-2">
+                        <Link to={"clinicDetails"}>
+                          <button className="px-4 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]">
+                            View
+                          </button>
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
       </div>
     </div>
   );

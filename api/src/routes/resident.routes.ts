@@ -46,6 +46,12 @@ ResidentRouter.get(
 
 ResidentRouter.get(
   "/disease-patient-counts",
-  catchAsync(residentController.getDiseasePatientCounts));
+  catchAsync(residentController.getDiseasePatientCounts)
+);
+
+ResidentRouter.post(
+  "/login",
+  catchAsync(residentController.loginResidentByEmailandPassword)
+);
 
 export default ResidentRouter;

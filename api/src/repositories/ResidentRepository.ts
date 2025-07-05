@@ -103,7 +103,6 @@ export class ResidentRepository {
       ],
     });
     return residents;
-
   }
 
   async getResidentCount(): Promise<number> {
@@ -111,16 +110,17 @@ export class ResidentRepository {
     return count;
   }
 
-
   async countPatientsByDisease(): Promise<Record<string, number>> {
-    const residents = await Resident.findAll({ attributes: ['chronicalDesease'] });
+    const residents = await Resident.findAll({
+      attributes: ["chronicalDesease"],
+    });
 
     const diseaseCounts: Record<string, number> = {};
 
     for (const res of residents) {
-      const rawValue = res.getDataValue('chronicalDesease');
+      const rawValue = res.getDataValue("chronicalDesease");
 
-      if (!rawValue || typeof rawValue !== 'string') continue;
+      if (!rawValue || typeof rawValue !== "string") continue;
 
       let diseases: string[] = [];
 
@@ -132,7 +132,7 @@ export class ResidentRepository {
       }
 
       for (const disease of diseases) {
-        if (!disease || disease.toLowerCase() === 'none') continue;
+        if (!disease || disease.toLowerCase() === "none") continue;
 
         diseaseCounts[disease] = (diseaseCounts[disease] || 0) + 1;
       }
@@ -140,5 +140,12 @@ export class ResidentRepository {
 
     return diseaseCounts;
   }
-  
+
+  async findByEmail(email: string): Promise<Resident | null> {
+    return Resident.findOne({
+      where: {
+        email,
+      },
+    });
+  }
 }
