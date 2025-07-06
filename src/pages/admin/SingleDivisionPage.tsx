@@ -11,13 +11,13 @@ const SingleDivisionPage: FC = () => {
         { name: 'Malaria', count: 5 },
     ];
 
-    const households = [
-        { houseId: 'H001', owner: 'John Doe', peopleCount: 5 },
-        { houseId: 'H002', owner: 'Jane Smith', peopleCount: 8 },
-        { houseId: 'H003', owner: 'Michael Brown', peopleCount: 3 },
-        { houseId: 'H004', owner: 'Emily Davis', peopleCount: 4 },
-        { houseId: 'H005', owner: 'David Wilson', peopleCount: 6 },
-    ];
+const households = [
+  { houseId: 'H001', owner: 'Nimal Perera', peopleCount: 5 },
+  { houseId: 'H002', owner: 'Kumari Jayawardena', peopleCount: 8 },
+  { houseId: 'H003', owner: 'Sunil Fernando', peopleCount: 3 },
+  { houseId: 'H004', owner: 'Anushka Herath', peopleCount: 4 },
+  { houseId: 'H005', owner: 'Ruwan Abeykoon', peopleCount: 6 },
+];
 
     // Sort diseases by count in ascending order
     const sortedDiseases = diseases.sort((a, b) => a.count - b.count);
