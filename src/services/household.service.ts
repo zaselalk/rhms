@@ -34,4 +34,18 @@ export const deleteHousehold = async (house_no: string) => {
     console.error('Error deleting household:', error);
     throw error;
   }
+
+  
 };
+
+//getHouseholdsByDivision
+export const getHouseholdsByDivision = async (division: string) => {
+  try {
+    const response = await axiosInstance.get(`/household/by-division/${division}`);
+    return response.data; // should return array of { house_no, ownerFirstName, ownerLastName, residentCount }
+  } catch (error) {
+    console.error('Error fetching households by division:', error);
+    throw error;
+  }
+};
+
