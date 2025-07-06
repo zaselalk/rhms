@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import residentService from "../../services/resident.service";
+import { Pagination } from "antd";
 
 const ResidentListPage = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -14,6 +15,10 @@ const ResidentListPage = () => {
       address: string;
     }[]
   >([]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 15;
+
 
   const residentRegister = residentService;
 
@@ -36,13 +41,10 @@ const ResidentListPage = () => {
   return (
     <DashboardContainer>
       <div className="w-full mt-0">
-        <div className="sticky top-0 bg-white shadow-lg z-10 p-4 mb-6 mt-0">
-          <div className="mt-0">
-            <h2 className="text-2xl font-bold">Resident Details</h2>
-          </div>
-
+        <div className="sticky top-0 bg-white p-0  mt-0">
           {/* Add Resident Button (Right-Aligned) */}
-          <div className="flex justify-end mb-6">
+          <div className="flex justify-between mb-2 items-center">
+            <h2 className="text-2xl font-semibold text-[#008FFB] ">Resident Details</h2>
             <Link to="create">
               <button className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
                 Add Resident
@@ -64,15 +66,15 @@ const ResidentListPage = () => {
         </div>
 
         {/* Resident Details Section */}
-        <div className="bg-white shadow-lg rounded-lg p-4">
+        {/* <div className="bg-white shadow-lg rounded-lg p-4 mt-5 sticky ">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="bg-gray-50 text-center">
+              <tr className="bg-gray-50 text-center sticky">
                 <th className="p-3">ID</th>
                 <th className="p-3">Name</th>
                 <th className="p-3">Contact</th>
                 <th className="p-3">Address</th>
-                <th className="p-3"></th>
+                <th className="p-3">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -110,8 +112,56 @@ const ResidentListPage = () => {
                 ))}
             </tbody>
           </table>
+        </div> */}
+
+        <div className="bg-white shadow-lg rounded-lg mt-5">
+          {/* Scrollable Table */}
+          <div className="h-600 overflow-y-auto">
+            <table className="w-full border-collapse">
+              <thead className="sticky top-0 bg-white z-10 shadow">
+                <tr className="text-center">
+                  <th className="p-3">ID</th>
+                  <th className="p-3">Name</th>
+                  <th className="p-3">Contact</th>
+                  <th className="p-3">Address</th>
+                  <th className="p-3">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {residents2
+                  .filter((resident) => {
+                    const fullName = `${resident.firstName} ${resident.lastName}`;
+                    return (
+                      fullName.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+                      resident.id.toString().includes(searchKeyword)
+
+                    );
+                  })
+                  .map((resident) => (
+                    <tr key={resident.id} className="text-center hover:bg-gray-100">
+                      <td className="p-3">{resident.id}</td>
+                      <td className="p-3">{resident.firstName} {resident.lastName}</td>
+                      <td className="p-3">{resident.contactNumber}</td>
+                      <td className="p-3">{resident.address}</td>
+                      <td className="p-3">
+                        <Link to={`profile/${resident.id}`} className="text-blue-600">View</Link>
+                      </td>
+                    </tr>
+                  ))}
+
+
+
+              </tbody>
+            </table>
+          </div>
         </div>
+
+
       </div>
+      <div className="flex justify-center mt-4">
+
+        <Pagination align="center" defaultCurrent={1} total={50} />
+      </ div>
     </DashboardContainer>
   );
 };
