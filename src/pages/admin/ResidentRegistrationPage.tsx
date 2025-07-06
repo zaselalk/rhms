@@ -102,22 +102,6 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     "Other",
   ];
 
-  const Cliniclist = [
-    "Medical Clinic",
-    "HCL",
-    "Dental Clinic",
-    "Specialist Clinic",
-    "Eye Clinic",
-    "ENT Clinic",
-    "Skin Clinic",
-    "Diabetic Clinic",
-    "Child Clinic",
-    "Womens Clinic",
-    "Other Clinic",
-  ];
-
-
-
   const GramaniladariDivision = [
     { id: 1, name: "Kotagedara" },
     { id: 2, name: "Kolahakada" },
