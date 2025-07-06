@@ -72,7 +72,7 @@ const AdminDashboard: React.FC = () => {
 
   const [residentCount, setResidentCount] = React.useState<number>(0);
   const [householdCount, setHouseholdCount] = React.useState<number>(0);
-  const [divisionCount, setDivisionCount] = React.useState<number>(0);
+  // const [divisionCount, setDivisionCount] = React.useState<number>(0);
   const [diseaseCount, setDiseaseCount] = React.useState<number>(0);
   const dashbordService = DashboardService;
 
