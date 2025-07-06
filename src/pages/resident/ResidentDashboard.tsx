@@ -2,7 +2,7 @@ import { Link } from "react-router";
 
 const resident = {
   id: "1",
-  name: "Ravindu Harshana",
+  name: "Kamal Wichramanayake",
   age: 45,
   bloodGroup: "O+",
   contact: "0711287298",
@@ -22,7 +22,7 @@ const ResidentDashboard = () => {
             <h2 className="text-2xl font-semibold text-[#008FFB]">
               Resident Profile
             </h2>
-            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 mt-4 sm:mt-0">
+            {/* <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 mt-4 sm:mt-0">
               <Link
                 to="/household/manage"
                 className="text-[#008FFB] border border-[#008FFB] rounded-md px-4 py-2 hover:bg-[#00C1A7] text-center"
@@ -35,7 +35,7 @@ const ResidentDashboard = () => {
               >
                 Edit Details
               </Link>
-            </div>
+            </div> */}
           </div>
 
           {/* Profile Overview */}
@@ -44,9 +44,6 @@ const ResidentDashboard = () => {
               <div className="flex w-full">
                 <h3 className="text-xl font-semibold text-gray-800">
                   Name: {resident.name}
-                </h3>
-                <h3 className="text-m  font-semibold text-gray-800">
-                  ID: {resident.id}
                 </h3>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-sm text-gray-600 mt-4">

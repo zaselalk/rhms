@@ -1,34 +1,35 @@
 import { Form, Select } from "antd";
-import { RoleData, RolesResponse } from "../../../../../types/role";
+import { userRole } from "../../../../../services/types/user-role.types";
+import { useRoles } from "../../../../../hooks/useRoles";
 const { Option } = Select;
 
-interface RoleSelectProps {
-  /**
-   * Roles data fetched from the API.
-   */
-  roles: RolesResponse;
-}
-
-const RoleSelect = ({ roles }: RoleSelectProps) => (
-  <Form.Item
-    label="Role"
-    name="role"
-    className="w-2/5"
-    rules={[{ required: true, message: "Please select a role" }]}
-  >
-    <Select
-      placeholder="Select role"
-      showSearch
-      optionFilterProp="children"
-      allowClear
-    >
-      {roles.data.map((role: RoleData) => (
-        <Option key={role.id} value={role.id}>
-          {role.role}
-        </Option>
-      ))}
-    </Select>
-  </Form.Item>
-);
+const RoleSelect = () => {
+  const { data: roles = [], isLoading, error } = useRoles();
+  return (
+    <>
+      {isLoading && <p>Loading...</p>}
+      {error && <p>Error: {error.message}</p>}
+      <Form.Item
+        label="Role"
+        name="role"
+        className="w-2/5"
+        rules={[{ required: true, message: "Please select a role" }]}
+      >
+        <Select
+          placeholder="Select role"
+          showSearch
+          optionFilterProp="children"
+          allowClear
+        >
+          {roles.map((role: userRole) => (
+            <Option key={role.id} value={role.id}>
+              {role.role}
+            </Option>
+          ))}
+        </Select>
+      </Form.Item>
+    </>
+  );
+};
 
 export default RoleSelect;

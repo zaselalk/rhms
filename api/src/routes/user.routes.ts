@@ -7,6 +7,7 @@ import {
   userPasswordUpdateValidation,
   userRoleUpdateValidation,
   userDeleteValidation,
+  userRegisterValidation,
 } from "../validation/user";
 
 const UserRouter: Router = Router();
@@ -27,6 +28,7 @@ UserRouter.get(
 UserRouter.post(
   "/",
   protectRoute("user:create"),
+  userRegisterValidation,
   catchAsync(userController.addNewUser)
 );
 
