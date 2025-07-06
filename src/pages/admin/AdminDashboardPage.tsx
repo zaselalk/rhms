@@ -71,6 +71,9 @@ const AdminDashboard: React.FC = () => {
 
 
   const [residentCount, setResidentCount] = React.useState<number>(0);
+  const [householdCount, setHouseholdCount] = React.useState<number>(0);
+  const [divisionCount, setDivisionCount] = React.useState<number>(0);
+  const [diseaseCount, setDiseaseCount] = React.useState<number>(0);
   const dashbordService = DashboardService;
 
   // Fetch resident count from the server
@@ -81,6 +84,18 @@ const AdminDashboard: React.FC = () => {
     } catch (error) {
       console.error("Error fetching residents:", error);
     }
+    try{
+      const data = await dashbordService.getHouseholdCount();
+      setHouseholdCount(data.count);
+    }catch (error) {
+      console.error("Error fetching households:", error);
+    }
+    try{
+      const data = await dashbordService.getDiseaseCount();
+      setDiseaseCount(data.count);
+    }catch(error){
+      console.error("Error fetching diseases:", error);
+    }
   };
 
   // Fetch data when loading the component
@@ -88,10 +103,9 @@ const AdminDashboard: React.FC = () => {
     fetchdata();
   }, []);
 
+  const numberOfDivisions = 5; // Static value for the number of divisions
 
-  const numberOfDiseases = 5; // Example data for the number of diseases
-  const numberOfDivisions = 12;
-  const numberOfHouses = 100;
+
 
 
   return (
@@ -105,7 +119,7 @@ const AdminDashboard: React.FC = () => {
           <div className="bg-white rounded-xl shadow-md p-4 flex flex-col justify-center items-center aspect-square">
             <Home className="text-[#008FFB]" size={40} />
             <h3 className="text-lg font-semibold text-[#008FFB] mt-2 text-center">
-              {numberOfHouses} Houses
+              {householdCount} Houses
             </h3>
           </div>
 
@@ -126,7 +140,7 @@ const AdminDashboard: React.FC = () => {
           <div className="bg-white rounded-xl shadow-md p-4 flex flex-col justify-center items-center aspect-square">
             <Activity className="text-[#008FFB]" size={40} />
             <h3 className="text-lg font-semibold text-[#008FFB] mt-2 text-center">
-              {numberOfDiseases} Diseases
+              {diseaseCount} Diseases
             </h3>
           </div>
         </div>
