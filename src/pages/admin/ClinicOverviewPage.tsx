@@ -146,10 +146,10 @@ const ClinicOverview: React.FC = () => {
         {/* Header Section */}
         <div className="flex justify-between items-center mb-6 bg-white p-4 shadow rounded-lg">
           <div className="flex items-center space-x-3">
-            <FaClinicMedical className="text-blue-600 text-3xl" />
+            <FaClinicMedical className="text-[#008FFB] text-3xl" />
             <div>
-              <h2 className="text-lg font-bold">Clinic Overview</h2>
-              <p className="text-gray-500 text-sm">
+              <h2 className="text-2xl font-semibold text-[#008FFB]">Clinic Overview</h2>
+              <p className="text-gray-500 text-l font-semibold">
                 Total Clinics: {clinicCategories.length}
               </p>
             </div>
