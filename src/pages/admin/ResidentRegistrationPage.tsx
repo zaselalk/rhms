@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -9,6 +9,7 @@ import { useMutation } from "@tanstack/react-query";
 import { residentValidation } from "../../validation/residentValidation";
 import residentService from "../../services/resident.service";
 import { ResidentData } from "../../types/resident";
+import { ClinicService } from "../../services/clinic.service";
 
 type ResidentRegistrationProps = {};
 
@@ -40,7 +41,42 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
   const [addicted, setAddictedd] = useState<string[]>([]);
   const [alergies, setAllergies] = useState<string[]>([]);
   const [chronicalDesease, setChronicDisease] = useState<string[]>([]);
-  const [clinics, setClinic] = useState<string[]>([]);
+
+  // const [clinics, setClinic] = useState<string[]>([]);
+
+
+
+  type Clinic = {
+    id: string;
+    name: string;
+  };
+
+  const [clinics, setClinics] = useState<Clinic[]>([]);
+  const [selectedClinicIds, setSelectedClinicIds] = useState<string[]>([]);
+
+
+  // Fetch all clinics when the component mounts
+  useEffect(() => {
+    const fetchClinics = async () => {
+      try {
+        const data = await ClinicService.getAllClinics();
+        setClinics(data);
+        console.log("Clinics fetched:", data);
+      } catch (error) {
+        console.error("Error fetching clinics:", error);
+      }
+    };
+    fetchClinics();
+  }, []);
+
+  const handleClinicCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = event.target;
+    setSelectedClinicIds((prev) =>
+      checked ? [...prev, value] : prev.filter((id) => id !== value)
+    );
+  };
+
+
 
   const addictedlist = [
     "Smoke",
@@ -80,6 +116,8 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     "Other Clinic",
   ];
 
+
+
   const GramaniladariDivision = [
     { id: 1, name: "Kotagedara" },
     { id: 2, name: "Kolahakada" },
@@ -111,12 +149,12 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
       checked ? [...prev, value] : prev.filter((item) => item !== value)
     );
   };
-  const HandleClinics = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, checked } = event.target;
-    setClinic((prev) =>
-      checked ? [...prev, value] : prev.filter((item) => item !== value)
-    );
-  };
+  // const HandleClinics = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { value, checked } = event.target;
+  //   setClinic((prev) =>
+  //     checked ? [...prev, value] : prev.filter((item) => item !== value)
+  //   );
+  // };
 
   const residentRegister = residentService;
 
@@ -141,7 +179,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
       values.addicted = addicted;
       values.alergies = alergies;
       values.chronicalDesease = chronicalDesease;
-      values.clinic = clinics;
+      values.clinic = selectedClinicIds;
 
       mutation.mutate(values);
       console.log(values);
@@ -583,16 +621,18 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
               Attendant Clinic
             </label>
             <div className="gap-4 mt-3 ml-3 grid items-center grid-cols-4">
-              {Cliniclist.map((option) => (
-                <label key={option} className="flex items-center gap-2">
+              {clinics.map((clinic) => (
+                <label key={clinic.id} className="flex items-center gap-2">
                   <input
                     type="checkbox"
-                    value={option}
-                    onChange={HandleClinics}
+                    value={clinic.id}
+                    checked={selectedClinicIds.includes(clinic.id.toString())}
+                    onChange={handleClinicCheckboxChange}
                   />
-                  {option}
+                  {clinic.name}
                 </label>
               ))}
+
             </div>
           </div>
 
