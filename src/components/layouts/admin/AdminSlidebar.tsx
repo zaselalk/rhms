@@ -17,6 +17,9 @@ const AdminSidebar: FC = () => {
   const user = useAppSelector((state) => state.auth.user);
   const [navbarArray, setNavbarArray] = useState<String[]>([]);
 
+  // common css classes for nav item
+  const navItemClass =
+    "py-2 text-md flex items-center text-gray-700 hover:text-white rounded-md px-3";
 
   useEffect(() => {
     const permissions =
@@ -25,7 +28,6 @@ const AdminSidebar: FC = () => {
     if (permissions.length > 0) {
       setNavbarArray(permissions);
     }
-
   }, [user?.permissions]);
 
   const handleLogout = () => {
@@ -81,15 +83,21 @@ const AdminSidebar: FC = () => {
       <div>
         <ul className="space-y-4">
           <li>
-            <Link
+            <NavLink
               to="/admin/dashboard"
-              className="py-1 text-md flex items-center text-gray-700 hover:bg-[#00C1A7] rounded-md px-3"
+              className={({ isActive }) =>
+                `${navItemClass} ${
+                  isActive ? "bg-[#00C1A7] text-white" : "hover:bg-[#00C1A7]"
+                } `
+              }
             >
-              <div className="p-1">
-                <MdDashboard size={25} />
+              <div className="flex items-center gap-2">
+                <div className="p-1">
+                  <MdDashboard size={25} />
+                </div>
+                <div>Dashboard</div>
               </div>
-              <div>Dashboard</div>
-            </Link>
+            </NavLink>
           </li>
 
           {navItems
@@ -99,15 +107,17 @@ const AdminSidebar: FC = () => {
                 <NavLink
                   to={item.path}
                   className={({ isActive }) =>
-                    `py-1 text-md flex items-center text-gray-700 ${
+                    `${navItemClass} ${
                       isActive
                         ? "bg-[#00C1A7] text-white"
                         : "hover:bg-[#00C1A7]"
-                    } rounded-md px-3`
+                    }`
                   }
                 >
-                  <div className="p-1">{item.icon}</div>
-                  <div>{item.label}</div>
+                  <div className="flex items-center gap-2">
+                    <div className="p-1">{item.icon}</div>
+                    <div>{item.label}</div>
+                  </div>
                 </NavLink>
               </li>
             ))}
@@ -119,16 +129,16 @@ const AdminSidebar: FC = () => {
         </span>
         <Link
           to="/admin/profile"
-          className="py-1 text-md flex items-center text-gray-700 hover:bg-[#00C1A7] rounded-md px-3"
+          className="py-1 text-md flex items-center text-gray-700 hover:bg-[#566c8c] hover:text-white rounded-md px-3"
         >
           <div className="p-1">
             <UserOutlined />
           </div>
-          <div>ViewProfile</div>
+          <div>View Profile</div>
         </Link>
       </div>
       <button
-        className="text-white bg-[#008FFB] hover:bg-[#006fbb] px-4 py-2 rounded-md text-sm transition duration-200"
+        className="text-white bg-[#008FFB] hover:bg-[#3d3d6d] px-4 py-2 rounded-md text-sm transition duration-200 cursor-pointer"
         onClick={handleLogout}
       >
         Logout

@@ -31,6 +31,8 @@ module.exports = {
         "Karampathara",
         "Katugoda",
         "Delgoda",
+        "Pahalawela" ,
+        "Boopitiya",
       ],
     });
   },

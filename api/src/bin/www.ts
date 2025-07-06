@@ -26,9 +26,9 @@ const server = http.createServer(app);
 /**Connect to a database */
 async function connectToDatabase() {
   let alter = false;
-  if (process.env.NODE_ENV === "development") {
-    alter = true;
-  }
+  // if (process.env.NODE_ENV === "development") {
+  //   alter = true;
+  // }
 
   // db.sequelize..then(() => {
   //   console.log("Connection has been established successfully.");
