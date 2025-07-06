@@ -26,7 +26,7 @@ DiseaseRouter.delete(
 
 DiseaseRouter.get(
   "/count",
-  // protectRoute("disease:create"),
+  protectRoute("disease:create"),
   catchAsync(diseaseController.countDisease)
 );
 
