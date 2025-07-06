@@ -12,7 +12,17 @@ interface ReturnUser {
   token: string;
 }
 
+/**
+ * AuthServices class provides methods for user authentication and role management.
+ */
 class AuthServices {
+  /**
+   * Logs in a user
+   * @param email User's email
+   * @param password User's password
+   * @returns User information
+   * @throws Error if authentication fails
+   */
   async login(email: string, password: string): Promise<ReturnUser> {
     try {
       const response = await axiosInstance.post("/auth/login", {
@@ -31,6 +41,13 @@ class AuthServices {
     }
   }
 
+  /**
+   * Creates a new user role
+   * @param roleName Name of the role
+   * @param permissionList List of permissions for the role
+   * @returns Created role information
+   * @throws Error if unable to create the role
+   */
   async crateUserRole(roleName: string, permissionList: string[]) {
     try {
       const response = await axiosInstance.post("/role", {
@@ -44,6 +61,11 @@ class AuthServices {
     }
   }
 
+  /**
+   * Gets all user roles
+   * @returns List of all user roles
+   * @throws Error if unable to fetch roles
+   */
   async getAllRoles() {
     try {
       const response = await axiosInstance.get("/role");
@@ -53,6 +75,14 @@ class AuthServices {
     }
   }
 
+  /**
+   * Updates an existing user role
+   * @param roleId ID of the role to update
+   * @param roleName New name for the role
+   * @param permissionList Updated list of permissions for the role
+   * @returns Updated role information
+   * @throws Error if unable to update the role
+   */
   async updateUserRole(
     roleId: string,
     roleName: string,
@@ -72,6 +102,12 @@ class AuthServices {
     }
   }
 
+  /**
+   * Deletes a user role by its ID
+   * @param roleId ID of the role to delete
+   * @returns  Response data from the deletion request
+   * @throws Error if unable to delete the role
+   */
   async deleteUserRole(roleId: string) {
     try {
       const response = await axiosInstance.delete(`/role/${roleId}`);
@@ -83,6 +119,12 @@ class AuthServices {
     }
   }
 
+  /**
+   * Gets a user role by its ID
+   * @param roleId ID of the role to fetch
+   * @returns Role information
+   * @throws Error if unable to fetch the role
+   */
   async getRoleById(roleId: string) {
     try {
       const response = await axiosInstance.get(`/role/${roleId}`);
@@ -94,6 +136,11 @@ class AuthServices {
     }
   }
 
+  /**
+   * Checks if the user's token is valid
+   * @returns Response data indicating token validity
+   * @throws Error if unable to check the token
+   */
   async checkToken() {
     try {
       const response = await axiosInstance.get("/auth/check");
