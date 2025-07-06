@@ -47,4 +47,5 @@ jobs:
 
       - name: 🚀 Deploy to Azure VM
         run: |
-          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "cd /home/azureuser/ciphersquad && git pull origin ${GITHUB_REF#refs/heads/} && cd api && npm install && npm run build && pm2 restart rhms-api"
+          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "cd /home/azureuser/ciphersquad && git pull --no-rebase origin ${GITHUB_REF#refs/heads/} && cd api && npm install && npm run build && pm2 restart rhms-api"
+
