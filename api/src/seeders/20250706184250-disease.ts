@@ -1,11 +1,10 @@
-import { QueryInterface } from 'sequelize';// Import QueryInterface from sequelize
+import { QueryInterface } from "sequelize"; // Import QueryInterface from sequelize
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface: QueryInterface) {
-   await queryInterface.bulkInsert("diseases", [{
-    
-  
+    await queryInterface.bulkInsert("diseases", [
+      {
         diseaseName: "Diabetes",
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -37,16 +36,15 @@ module.exports = {
     ]);
   },
 
-  async down (queryInterface: QueryInterface) {
-    await queryInterface.bulkDelete("diseases",{
+  async down(queryInterface: QueryInterface) {
+    await queryInterface.bulkDelete("diseases", {
       diseaseName: [
         "Diabetes",
         "Hypertension",
         "Asthma",
         "Cancer",
-        "Tuberculosis", ]
-    }
-  )
-   
-  }
+        "Tuberculosis",
+      ],
+    });
+  },
 };
