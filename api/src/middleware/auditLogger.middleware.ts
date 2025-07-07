@@ -17,8 +17,19 @@ export const auditLogger = async (
   const userId = req.user?.id || null; // Assuming `req.user` is populated by `serializeUser`
   const action = `${req.method} ${req.originalUrl}`;
 
-  // skip auth check for audit logging /auth/check
-  if (req.originalUrl.startsWith("/auth/check")) {
+  // skips urls
+  // some URLs do not require logging, such as authentication endpoints,
+  // this also helps to reduce noise in the logs and avoid logging sensitive information
+  const skipUrls = [
+    "/auth/login",
+    "/auth/register",
+    "/auth/logout",
+    "/auth/forgot-password",
+    "/auth/reset-password",
+    "/auth/check",
+  ];
+
+  if (skipUrls.includes(req.originalUrl)) {
     return next();
   }
 
