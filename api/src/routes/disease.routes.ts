@@ -24,4 +24,10 @@ DiseaseRouter.delete(
   catchAsync(diseaseController.deleteDisease)
 );
 
+DiseaseRouter.get(
+  "/count",
+  protectRoute("disease:create"),
+  catchAsync(diseaseController.countDisease)
+);
+
 export default DiseaseRouter;

@@ -19,9 +19,15 @@ export class DiseaseRepository {
   }
 
   async deleteDisease(diseaseName: string): Promise<number> {
-  return await Disease.destroy({
-    where: { diseaseName }
-  });
-}
+    return await Disease.destroy({
+      where: { diseaseName }
+    });
+
+
+  }
+  
+  async countDisease(): Promise<number> {
+    return await Disease.count();
+  }
 
 }
