@@ -1,4 +1,4 @@
-name: deploy the backend to Azure VM
+name: Run API Tests
 
 on:
   push:
