@@ -59,8 +59,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
       } catch (error) {
         console.error("Error checking token:", error);
-        // If token check fails, mark auth check as complete
-        dispatch(setAuthCheckComplete());
 
         //logout
         dispatch(logout());
