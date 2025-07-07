@@ -1,10 +1,10 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Modal from "../../components/layouts/overlays/Modal";
 import { Link } from "react-router";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
-import { FaTrash} from "react-icons/fa";
-import { FiPlusCircle} from "react-icons/fi";
-import { Bar } from "react-chartjs-2"; // Changed from Line to Bar
+import { FaTrash } from "react-icons/fa";
+import { FiPlusCircle } from "react-icons/fi";
+import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -14,17 +14,12 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { DivisionService } from "../../services/division.service";
 
-// Register Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+// Chart.js setup
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
+// Types
 interface Division {
   id: number;
   name: string;
@@ -33,33 +28,39 @@ interface Division {
 
 const DivisionPage: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [divisions, setDivisions] = useState<Division[]>([
-    { id: 1, name: "Katugahahena", population: 236 },
-    { id: 2, name: "Kotagedara", population: 190 },
-    { id: 3, name: "Diyagala", population: 300 },
-    { id: 4, name: "Nowthuduwa", population: 290 },
-    { id: 6, name: "Pahalawela", population: 150 },
-    { id: 7, name: "Madegedara", population: 250 },
-    { id: 8, name: "Boopitiya", population: 345 },
-    { id: 9, name: "Karampethara", population: 250 },
-  ]);
+  const [divisions, setDivisions] = useState<Division[]>([]);
   const [newDivision, setNewDivision] = useState<Division | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [divisionToDelete, setDivisionToDelete] = useState<Division | null>(
-    null
-  );
+  const [divisionToDelete, setDivisionToDelete] = useState<Division | null>(null);
+
+  // Fetch divisions from backend
+  useEffect(() => {
+    fetchDivisions();
+  }, []);
+
+  const fetchDivisions = async () => {
+    try {
+      const data = await DivisionService.getAllDivisions();
+      setDivisions(data);
+    } catch (error) {
+      console.error("Failed to load divisions");
+    }
+  };
 
   const handleClose = () => setIsOpen(false);
-  const handleOpen = () => setIsOpen(true);
+  const handleOpen = () => {
+    setNewDivision({ id: 0, name: "", population: 0 });
+    setIsOpen(true);
+  };
 
-  const handleAddDivision = (name: string, population: number) => {
-    const newDivision = {
-      id: divisions.length + 1,
-      name,
-      population,
-    };
-    setDivisions([...divisions, newDivision]);
-    setIsOpen(false);
+  const handleAddDivision = async (name: string, population: number) => {
+    try {
+      await DivisionService.createDivision({ name, population });
+      fetchDivisions();
+      setIsOpen(false);
+    } catch (error) {
+      console.error("Failed to create division");
+    }
   };
 
   const handleDelete = (division: Division) => {
@@ -67,31 +68,31 @@ const DivisionPage: FC = () => {
     setIsDeleteModalOpen(true);
   };
 
-  const confirmDelete = () => {
-    if (divisionToDelete) {
-      setDivisions(divisions.filter((d) => d.id !== divisionToDelete.id));
+  const confirmDelete = async () => {
+    try {
+      if (divisionToDelete) {
+        await DivisionService.deleteDivision(divisionToDelete.id);
+        fetchDivisions();
+      }
+    } catch (error) {
+      console.error("Delete failed");
+    } finally {
+      setIsDeleteModalOpen(false);
     }
-    setIsDeleteModalOpen(false);
   };
 
   const cancelDelete = () => {
-    setIsDeleteModalOpen(false);
     setDivisionToDelete(null);
+    setIsDeleteModalOpen(false);
   };
 
-  // Generate chart data for all divisions
   const generateChartData = () => {
-    const divisionNames = divisions.map((division) => division.name);
-    const divisionPopulations = divisions.map(
-      (division) => division.population
-    );
-
     return {
-      labels: divisionNames,
+      labels: divisions.map((d) => d.name),
       datasets: [
         {
           label: "Population by Division",
-          data: divisionPopulations,
+          data: divisions.map((d) => d.population),
           backgroundColor: "#008FFB",
           borderRadius: 5,
         },
@@ -102,6 +103,7 @@ const DivisionPage: FC = () => {
   return (
     <DashboardContainer>
       <div className="min-h-screen flex">
+        {/* Add Division Modal */}
         <Modal isOpen={isOpen} handleClose={handleClose} title="Add Division">
           <div className="p-6">
             <form
@@ -114,34 +116,25 @@ const DivisionPage: FC = () => {
               className="space-y-4"
             >
               <div>
-                <label
-                  htmlFor="division"
-                  className="block text-sm font-semibold text-gray-600"
-                >
+                <label className="block text-sm font-semibold text-gray-600">
                   Division Name
                 </label>
                 <input
                   type="text"
-                  id="division"
-                  placeholder="Enter Division Name"
                   value={newDivision?.name || ""}
                   onChange={(e) =>
                     setNewDivision({ ...newDivision!, name: e.target.value })
                   }
                   className="w-full border border-gray-300 rounded-md p-2"
+                  required
                 />
               </div>
               <div>
-                <label
-                  htmlFor="population"
-                  className="block text-sm font-semibold text-gray-600"
-                >
+                <label className="block text-sm font-semibold text-gray-600">
                   Population
                 </label>
                 <input
                   type="number"
-                  id="population"
-                  placeholder="Enter Population"
                   value={newDivision?.population || ""}
                   onChange={(e) =>
                     setNewDivision({
@@ -150,6 +143,7 @@ const DivisionPage: FC = () => {
                     })
                   }
                   className="w-full border border-gray-300 rounded-md p-2"
+                  required
                 />
               </div>
               <div className="flex justify-end">
@@ -165,47 +159,44 @@ const DivisionPage: FC = () => {
         </Modal>
 
         {/* Delete Confirmation Modal */}
-        {isDeleteModalOpen && (
-          <Modal
-            isOpen={isDeleteModalOpen}
-            handleClose={cancelDelete}
-            title="Confirm Deletion"
-          >
-            <div className="p-6">
-              <p className="text-sm text-gray-600">
-                Are you sure you want to delete the division{" "}
-                {divisionToDelete?.name}?
-              </p>
-              <div className="flex justify-end mt-4">
-                <button
-                  className="px-4 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
-                  onClick={confirmDelete}
-                >
-                  Yes, Delete
-                </button>
-                <button
-                  className="px-4 py-2 ml-2 bg-gray-300 text-black font-semibold rounded-lg hover:bg-gray-400"
-                  onClick={cancelDelete}
-                >
-                  Cancel
-                </button>
-              </div>
+        <Modal
+          isOpen={isDeleteModalOpen}
+          handleClose={cancelDelete}
+          title="Confirm Deletion"
+        >
+          <div className="p-6">
+            <p className="text-sm text-gray-600">
+              Are you sure you want to delete{" "}
+              <strong>{divisionToDelete?.name}</strong>?
+            </p>
+            <div className="flex justify-end mt-4">
+              <button
+                className="px-4 py-2 bg-[#FF4C4C] text-white font-semibold rounded-lg hover:bg-[#d93636]"
+                onClick={confirmDelete}
+              >
+                Yes, Delete
+              </button>
+              <button
+                className="px-4 py-2 ml-2 bg-gray-300 text-black font-semibold rounded-lg hover:bg-gray-400"
+                onClick={cancelDelete}
+              >
+                Cancel
+              </button>
             </div>
-          </Modal>
-        )}
+          </div>
+        </Modal>
 
+        {/* Main Content */}
         <div className="flex-1 p-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-semibold text-[#008FFB]">
               Division Details
             </h2>
             <button
-              
               onClick={handleOpen}
-               className="bg-blue-500 text-white px-4 py-2 flex items-center rounded-lg shadow hover:bg-blue-600 transition"
-                                      >
-                <FiPlusCircle className="mr-2" />
-
+              className="bg-blue-500 text-white px-4 py-2 flex items-center rounded-lg shadow hover:bg-blue-600 transition"
+            >
+              <FiPlusCircle className="mr-2" />
               New Division
             </button>
           </div>
@@ -214,7 +205,7 @@ const DivisionPage: FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {divisions.map((division) => (
               <Link
-                to={"SingleDivisionPage"}
+                to={`/division/${division.id}`}
                 key={division.id}
                 className="bg-white p-4 rounded-lg shadow-md flex justify-between items-center"
               >
@@ -222,7 +213,7 @@ const DivisionPage: FC = () => {
                   <p className="text-lg font-semibold text-gray-800">
                     {division.name}
                   </p>
-                  <p className="text-sm text-gray-600">{division.population}</p>
+                  <p className="text-sm text-gray-600">{division.population} residents</p>
                 </div>
                 <button
                   className="text-red-500 cursor-pointer hover:text-red-700"
@@ -237,9 +228,9 @@ const DivisionPage: FC = () => {
             ))}
           </div>
 
-          {/* Bar Graph for Population of All Divisions */}
+          {/* Population Chart */}
           <div className="mt-6">
-            <h3 className="text-xl font-semibold text-gray-800">
+            <h3 className="text-xl font-semibold text-gray-800 mb-2">
               Population of All Divisions
             </h3>
             <Bar data={generateChartData()} options={{ responsive: true }} />
