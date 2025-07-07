@@ -48,8 +48,8 @@ export const UserRoleset = () => {
 
   const handleRoleDelete = (role: userRole) => {
     Modal.confirm({
-      title: "Are you sure you want to delete this user?",
-      content: `User: ${role.role}`,
+      title: "Are you sure you want to delete this role?",
+      content: `Role: ${role.role}`,
       okText: "Yes",
       okType: "danger",
       cancelText: "No",
