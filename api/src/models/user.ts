@@ -17,6 +17,7 @@ export interface UserAttributes {
   createdAt?: Date;
   updatedAt?: Date;
   phone_number?: string;
+  deletedAt?: Date | null;
 }
 
 /**
@@ -32,6 +33,7 @@ export class User extends Model<UserAttributes> implements UserAttributes {
   public phone_number?: string;
   public createdAt!: Date;
   public updatedAt!: Date;
+  public deletedAt?: Date | null;
 
   //association
   static associate(models: any) {
@@ -85,6 +87,12 @@ User.init(
         key: "id",
       },
       onUpdate: "CASCADE",
+    },
+
+    deletedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null,
     },
   },
 
