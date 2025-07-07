@@ -1,0 +1,93 @@
+import { Model } from "sequelize";
+import Resident from "../models/resident";
+import { ResidentDisease } from "../models/residentdisease";
+import Disease from "../models/disease";
+
+export class ResidentDiseaseRepository {
+    /**
+     * Creates a new ResidentDisease entry in the database.
+     * @param residentId - The ID of the resident.
+     * @param diseaseId - The ID of the disease.
+     * @returns A promise that resolves when the entry is created.
+     */
+
+    // This method creates a new ResidentDisease entry in the database.
+    async cerateResidentDisease(
+        residentId: number,
+        diseaseId: number
+    ): Promise<void> {
+        try {
+            await ResidentDisease.create({
+                id: 0,
+                residentId,
+                diseaseId,
+            });
+        } catch (error) {
+            console.error("Error creating resident disease:", error);
+            throw new Error("Unable to create resident disease");
+        }
+    }
+
+
+    // This method retrieves all ResidentDisease entries from the database.
+    async getAllResidentDiseases(): Promise<ResidentDisease[]> {
+        try {
+            return await ResidentDisease.findAll({
+               attributes: ["id", "residentId", "diseaseId"],
+            });
+        } catch (error) {
+            console.error("Error fetching resident diseases:", error);
+            throw new Error("Unable to fetch resident diseases");
+        }
+    }
+
+    //this is method to get resident disease by resident id
+    async getResidentDiseasesByResidentId(residentId: number): Promise<ResidentDisease[]> {
+        try {
+            return await ResidentDisease.findAll({
+                where: { residentId },
+                include: [
+                    {
+                        model: Disease,
+                        as: "disease", // Assuming the alias for the disease model
+                        attributes: ["diseaseId", "name"], // Include disease details
+                    }
+                ]
+            });
+        } catch (error) {
+            console.error("Error fetching resident diseases by resident ID:", error);
+            throw new Error("Unable to fetch resident diseases by resident ID");
+        }
+    }
+
+
+    
+
+    //
+ 
+
+
+   //this method is retrive resident list get by disease id
+    async getResidentsByDiseaseId(diseaseId: number): Promise<ResidentDisease[]> {
+        try {
+            return await ResidentDisease.findAll({
+                where: { diseaseId },
+                include: [
+                    {
+                        model: Resident,
+                        as: "resident",
+                        attributes: ["id", "firstName", "lastName"], // Include resident details
+                    },
+                ],
+            });
+        } catch (error) {
+            console.error("Error fetching residents by disease ID:", error);
+            throw new Error("Unable to fetch residents by disease ID");
+        }
+    }
+
+
+
+}
+
+export default new ResidentDiseaseRepository();
