@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useAppDispatch } from "../../hooks/state/hooks";
-import {
-  login,
-  logout,
-  setAuthCheckComplete,
-} from "../../store/slices/authSlices";
+import { login, logout } from "../../store/slices/authSlices";
 import AuthServices from "../../services/auth.service";
 
 interface AuthProviderProps {
