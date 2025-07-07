@@ -27,7 +27,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const currentPath = location.pathname + location.search;
 
         const auth = await authServices.checkToken();
-        console.log(auth.data);
         const user = auth.data;
 
         // if user is authenticated, set the user in the store
@@ -69,7 +68,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       setIsInitialLoad(false);
     })();
-  }, [dispatch, location, navigate, isInitialLoad]);
+  }, [dispatch, location, navigate]);
 
   return <>{children}</>;
 };
