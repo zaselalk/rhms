@@ -38,4 +38,9 @@ export class HouseholdServices {
     }
     return this.householdRepository.deleteHouseholdByHouseNo(house_no);
   }
+
+  //Household Count
+  async householdCount(): Promise<number> {
+    return this.householdRepository.householdCount();
+  }
 }
