@@ -10,7 +10,7 @@ export class ResidentDiseaseService {
         this.residentDiseaseRepository = residentDiseaseRepository;
     }
 
-
+    // Register a resident with a disease
     async registerResidentDisease(
         residentId: number,
         diseaseId: number
@@ -24,6 +24,29 @@ export class ResidentDiseaseService {
     // Get all resident-disease links
     async getAllResidentDiseases(): Promise<ResidentDisease[]> {
         return await this.residentDiseaseRepository.getAllResidentDiseases();
+    }
+
+    //update by residentid
+    async updateResidentDiseaseByResidentId(
+        diseaseId: number,
+        residentId: number
+    ): Promise<void> {
+       
+        return await this.residentDiseaseRepository.updateResidentDiseaseByDiseaseId(
+            diseaseId,
+            residentId
+        );
+    }
+
+    //update by diseaseId
+    async updateResidentDiseaseByDiseaseId(
+        residentId: number,
+        diseaseId: number
+    ): Promise<void> {
+        return await this.residentDiseaseRepository.updateResidentDiseaseByResidentId(
+            residentId,
+            diseaseId
+        );
     }
 
     // Delete by diseaseId
@@ -45,6 +68,8 @@ export class ResidentDiseaseService {
     async getResidentsByDiseaseId(diseaseId: number): Promise<{ id: number; firstName: string; lastName: string; contactNumber: string }[]> {
         return await this.getResidentsByDiseaseId(diseaseId);
     }
+
+
 
 }
 
