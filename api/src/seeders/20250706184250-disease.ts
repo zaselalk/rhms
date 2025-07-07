@@ -44,7 +44,7 @@ module.exports = {
         "Hypertension",
         "Asthma",
         "Cancer",
-        "tuberculosis", ]
+        "Tuberculosis", ]
     }
   )
    
