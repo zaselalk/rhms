@@ -1,43 +1,8 @@
-import { FC, use, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
 import residentService from '../../services/resident.service';
 
-// Resident data
-const residentData =
-{
-    rid: "01",
-    name: "Ravindu Harshana",
-    nic: "200000000V",
-    age: 29,
-    bloodGroup: "O+",
-    division: "Katugahahena",
-    contact: "0711287298",
-    healthStats: {
-        bloodPressure: "120/89 mm/mg",
-        heartRate: "120 BPM",
-        cholesterol: "85 mg/dl",
-        glucose: "200 mg/dl",
-    },
-    patientHistory: [
-        {
-
-            clinicName: "ABC Clinic",
-            date: "2024 Oct 2",
-            location: "Colombo 07",
-            doctor: "Dr. Anura",
-            reportLink: "/reports/fever"
-        },
-        {
-
-            clinicName: "XYZ Medical Center",
-            date: "2024 Apr 2",
-            location: "Kandy",
-            doctor: "Dr. Sanjeewa",
-            reportLink: "/reports/fever-apr"
-        }
-    ]
-};
 
 
 const calculateAge = (birthday: string): number => {
@@ -53,21 +18,6 @@ const calculateAge = (birthday: string): number => {
 
     return age;
 };
-
-const defaultHealthStats = {
-  bloodPressure: 'N/A',
-  heartRate: 'N/A',
-  cholesterol: 'N/A',
-  glucose: 'N/A',
-};
-
-const defaultPatientHistory = [
-  {
-    clinicName: 'No history',
-    date: 'N/A',
-    reportLink: '#',
-  },
-];
 
 
 const ResidentProfilePage: FC = () => {
