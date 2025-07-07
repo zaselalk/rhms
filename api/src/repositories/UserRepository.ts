@@ -260,6 +260,7 @@ export class UserRepository {
     return User.findAll({
       where: {
         roleId,
+        deletedAt: null,
       },
       attributes: ["id", "name", "email"],
     });
