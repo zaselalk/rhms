@@ -39,6 +39,6 @@ export const auditLogger = async (
     query: req.query,
   };
 
-  await logAction(userId, action, details);
+  await logAction(userId, action, details); // strong consistency logging function
   next();
 };
