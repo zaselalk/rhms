@@ -1,21 +1,19 @@
 import { FC, useState } from "react";
+import { useEffect } from "react";
+import { useParams } from "react-router";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 
+interface Resident {
+  id: number;
+  name: string;
+  age: number;
+  relation: string;
+  recordId: number; // household_resident record ID for removal
+}
+
 const HouseholdManagePage: FC = () => {
-  const [residents, setResidents] = useState([
-    { id: 1, name: "Asela Priyadarshana", age: 35, relation: "Father" },
-    { id: 2, name: "Ashfa Nisthar", age: 32, relation: "Mother" },
-    { id: 3, name: "Ravindu Harshana", age: 10, relation: "Son" },
-  ]);
-
-  const currentYear = 2025;
-
-  // Function to calculate age based on the year of birth
-  const calculateAge = (birthday: string) => {
-    const birthYear = new Date(birthday).getFullYear(); // Extract year from the birthday
-    return currentYear - birthYear;
-  };
-
+  const { householdId } = useParams<{ householdId: string }>();
+  const [residents, setResidents] = useState<Resident[]>([]);
   const [searchId, setSearchId] = useState("");
   const [relationToOwner, setRelationToOwner] = useState("");
   const [foundResident, setFoundResident] = useState<{
@@ -25,19 +23,50 @@ const HouseholdManagePage: FC = () => {
     birthday: Date;
   } | null>(null);
 
+  const currentYear = new Date().getFullYear();
+
+  const calculateAge = (birthday: string) => {
+    const birthYear = new Date(birthday).getFullYear();
+    return currentYear - birthYear;
+  };
+
+  // 🔁 Fetch residents on load
+  useEffect(() => {
+    const fetchResidents = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3001/household-resident/${householdId}/residents`,
+        );
+        const result = await response.json();
+
+        if (result.data) {
+          const mapped = result.data.map((entry: any) => ({
+            id: entry.resident.id,
+            name: `${entry.resident.firstName} ${entry.resident.lastName}`,
+            age: calculateAge(entry.resident.birthday),
+            relation: entry.relation,
+            recordId: entry.id, // record ID of household_resident
+          }));
+          setResidents(mapped);
+        }
+      } catch (error) {
+        console.error("Error fetching household residents", error);
+      }
+    };
+
+    fetchResidents();
+  }, [householdId]);
+
+  // 🔍 Search for resident
   const handleSearchResident = async () => {
     if (!searchId) return;
 
     try {
       const response = await fetch(
-        `http://localhost:3001/resident/id/${searchId}`
+        `http://localhost:3001/resident/id/${searchId}`,
       );
-      if (!response.ok) {
-        throw new Error("Resident not found");
-      }
-
       const data = await response.json();
-      if (data && data.data) {
+      if (data?.data) {
         setFoundResident({
           id: data.data.id,
           firstName: data.data.firstName,
@@ -45,44 +74,86 @@ const HouseholdManagePage: FC = () => {
           birthday: data.data.birthday,
         });
       } else {
-        throw new Error("Resident data is not available");
+        alert("Resident not found");
       }
     } catch (error) {
       console.error("Search error:", error);
-      setFoundResident(null);
       alert("Resident not found");
     }
   };
 
-  const handleAddResident = () => {
+  // ➕ Add resident to household
+  const handleAddResident = async () => {
     if (!foundResident || !relationToOwner.trim()) {
       alert("Please search and validate the resident before adding.");
       return;
     }
 
     const existingResident = residents.find(
-      (resident) => resident.id === foundResident.id
+      (resident) => resident.id === foundResident.id,
     );
     if (existingResident) {
       alert("Resident already exists in this household!");
       return;
     }
 
-    const newResident = {
-      id: foundResident.id,
-      name: `${foundResident.firstName} ${foundResident.lastName}`,
-      age: calculateAge(foundResident.birthday.toString()),
-      relation: relationToOwner,
-    };
+    try {
+      const response = await fetch(
+        `http://localhost:3001/household-resident/${householdId}/add-resident`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            residentId: foundResident.id,
+            relation: relationToOwner,
+          }),
+        },
+      );
 
-    setResidents([...residents, newResident]);
-    setSearchId("");
-    setRelationToOwner("");
-    setFoundResident(null);
+      const result = await response.json();
+      if (response.ok) {
+        const newResident = result.data;
+        setResidents([
+          ...residents,
+          {
+            id: foundResident.id,
+            name: `${foundResident.firstName} ${foundResident.lastName}`,
+            age: calculateAge(foundResident.birthday.toString()),
+            relation: relationToOwner,
+            recordId: newResident.id,
+          },
+        ]);
+        setSearchId("");
+        setRelationToOwner("");
+        setFoundResident(null);
+      } else {
+        alert(result.message || "Failed to add resident.");
+      }
+    } catch (error) {
+      console.error("Error adding resident:", error);
+    }
   };
 
-  const handleRemoveResident = (id: number) => {
-    setResidents(residents.filter((resident) => resident.id !== id));
+  // ❌ Remove resident from household
+  const handleRemoveResident = async (recordId: number) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3001/household-resident/${recordId}`,
+        {
+          method: "DELETE",
+        },
+      );
+
+      if (response.ok) {
+        setResidents(residents.filter((r) => r.recordId !== recordId));
+      } else {
+        alert("Failed to remove resident.");
+      }
+    } catch (error) {
+      console.error("Error removing resident", error);
+    }
   };
 
   return (

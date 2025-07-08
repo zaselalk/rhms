@@ -2,6 +2,7 @@
 import sequelize from ".";
 import Resident from "./resident";
 import Household from "./household";
+import HouseholdResident from "./householdresident";
 
 // Associations
 Resident.hasMany(Household, {
@@ -14,8 +15,26 @@ Household.belongsTo(Resident, {
   as: "owner",
 });
 
-export {
-  sequelize,
-  Resident,
-  Household,
-};
+// Association: Household has many residents via HouseholdResident
+Household.hasMany(HouseholdResident, {
+  foreignKey: "householdId",
+  as: "members",
+});
+
+HouseholdResident.belongsTo(Household, {
+  foreignKey: "householdId",
+  as: "household",
+});
+
+// Association: Resident can belong to many households via HouseholdResident
+Resident.hasMany(HouseholdResident, {
+  foreignKey: "residentId",
+  as: "householdRelations",
+});
+
+HouseholdResident.belongsTo(Resident, {
+  foreignKey: "residentId",
+  as: "resident",
+});
+
+export { sequelize, Resident, Household, HouseholdResident };
