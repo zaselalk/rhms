@@ -1,5 +1,5 @@
 // Adjust the import path as necessary
-import Household from "../models/hosehold";
+import Household from "../models/household";
 import Resident from "../models/resident";
 
 export class HouseholdRepository {
