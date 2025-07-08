@@ -22,7 +22,7 @@ HouseholdResident.belongsTo(Household, {
 
 Household.hasMany(HouseholdResident, {
   foreignKey: "householdId",
-  as: "members",
+  as: "residents",
 });
 
 // Household ↔ Owner (Resident)
