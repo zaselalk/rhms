@@ -2,6 +2,7 @@ import { Sequelize } from "sequelize";
 import { PermissionRepository } from "../repositories/PermissionRepository";
 import { RoleRepository } from "../repositories/RoleRepository";
 import { RoleService } from "../services/RoleService";
+import { NextFunction } from "express";
 
 /**
  * RoleController class handles the role management operations.
@@ -21,7 +22,7 @@ export class RoleController {
    * @param req - The request object containing role details.
    * @param res - The response object to send the result.
    */
-  createRole = async (req: any, res: any): Promise<any> => {
+  createRole = async (req: any, res: any, next: NextFunction): Promise<any> => {
     const { roleName, permissionList } = req.body;
     const permissionRepo = new PermissionRepository();
 
@@ -68,7 +69,7 @@ export class RoleController {
           message: "Role already exists",
         });
       }
-      throw new Error((error as string) || "Internal server error");
+      next(error);
     }
   };
 
