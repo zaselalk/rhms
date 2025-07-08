@@ -1,3 +1,4 @@
+import { PermissionRepository } from "../repositories/PermissionRepository";
 import { RoleRepository } from "../repositories/RoleRepository";
 import { RoleService } from "../services/RoleService";
 
@@ -21,6 +22,35 @@ export class RoleController {
    */
   createRole = async (req: any, res: any): Promise<any> => {
     const { roleName, permissionList } = req.body;
+    const permissionRepo = new PermissionRepository();
+
+    // get all permissions from the database
+    const allPermissions = await permissionRepo.getAllPermissions({});
+
+    // If no permissions are found, return an error
+    if (!allPermissions || allPermissions.length === 0) {
+      return res.status(400).json({
+        message: "No permissions available to assign to the role",
+      });
+    }
+
+    // format the permissions to a list of strings
+    const validPermissionList = allPermissions?.map((permission) => {
+      return permission.permission;
+    });
+
+    // Check if the provided permissionList is valid
+    const isValid = permissionList.every((permission: string) =>
+      validPermissionList.includes(permission)
+    );
+
+    // If any permission in the permissionList is invalid, return an error
+    if (!isValid) {
+      return res.status(400).json({
+        message: "Invalid permissions",
+      });
+    }
+
     const newRole = await this.roleService.createRole(roleName, permissionList);
     return res.status(201).json({
       message: "Role created successfully",
