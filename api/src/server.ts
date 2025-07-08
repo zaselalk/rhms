@@ -15,6 +15,7 @@ import expressErrorHandler from "./util/expressErrorHandler";
 import "./models/association"; // Import associations to ensure they are registered
 import DivisionRouter from "./routes/division.routes";
 import { auditLogger } from "./middleware/auditLogger.middleware";
+import ResidentDiseaseRouter from "./routes/residentdisease.route";
 
 dotenv.config();
 
@@ -43,6 +44,7 @@ app.use("/permission", PermissionRouter);
 app.use("/role", RoleRouter);
 app.use("/user", UserRouter);
 app.use("/division", DivisionRouter);
+app.use("/residentdisease", ResidentDiseaseRouter); 
 
 // error handling middleware
 app.use(expressErrorHandler);
