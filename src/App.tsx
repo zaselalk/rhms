@@ -147,7 +147,7 @@ function App() {
               />
             </Route>
 
-          {/* division routes */}
+            {/* division routes */}
 
             <Route path="division">
               <Route
