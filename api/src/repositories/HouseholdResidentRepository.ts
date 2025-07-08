@@ -1,9 +1,7 @@
 // repositories/HouseholdResidentRepository.ts
 
-
 import HouseholdResident from "../models/householdresident";
 import Resident from "../models/resident";
-
 
 export class HouseholdResidentRepository {
   async findByHouseholdId(householdId: number): Promise<HouseholdResident[]> {
@@ -22,7 +20,7 @@ export class HouseholdResidentRepository {
   async addResidentToHousehold(
     householdId: number,
     residentId: number,
-    relation: string
+    relation: string,
   ): Promise<HouseholdResident> {
     return HouseholdResident.create({
       id: 0, // Assuming id is auto-incremented by the database

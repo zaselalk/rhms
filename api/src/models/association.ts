@@ -4,7 +4,6 @@ import Resident from "./resident";
 import Household from "./household";
 import HouseholdResident from "./householdresident";
 
-
 // Associations
 Resident.hasMany(Household, {
   foreignKey: "owner_id",
@@ -38,10 +37,4 @@ HouseholdResident.belongsTo(Resident, {
   as: "resident",
 });
 
-
-export {
-  sequelize,
-  Resident,
-  Household,
-  HouseholdResident,
-};
+export { sequelize, Resident, Household, HouseholdResident };

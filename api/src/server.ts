@@ -42,10 +42,8 @@ app.use("/clinic", ClinicRouter);
 app.use("/permission", PermissionRouter);
 app.use("/role", RoleRouter);
 app.use("/user", UserRouter);
-app.use("/division",DivisionRouter);
+app.use("/division", DivisionRouter);
 app.use("/household-resident", HouseholdResidentRouter);
-
-
 
 // error handling middleware
 app.use(expressErrorHandler);

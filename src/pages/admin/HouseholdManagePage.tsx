@@ -34,7 +34,9 @@ const HouseholdManagePage: FC = () => {
   useEffect(() => {
     const fetchResidents = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/household-resident/${householdId}/residents`);
+        const response = await fetch(
+          `http://localhost:3001/household-resident/${householdId}/residents`,
+        );
         const result = await response.json();
 
         if (result.data) {
@@ -60,7 +62,9 @@ const HouseholdManagePage: FC = () => {
     if (!searchId) return;
 
     try {
-      const response = await fetch(`http://localhost:3001/resident/id/${searchId}`);
+      const response = await fetch(
+        `http://localhost:3001/resident/id/${searchId}`,
+      );
       const data = await response.json();
       if (data?.data) {
         setFoundResident({
@@ -86,7 +90,7 @@ const HouseholdManagePage: FC = () => {
     }
 
     const existingResident = residents.find(
-      (resident) => resident.id === foundResident.id
+      (resident) => resident.id === foundResident.id,
     );
     if (existingResident) {
       alert("Resident already exists in this household!");
@@ -94,16 +98,19 @@ const HouseholdManagePage: FC = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:3001/household-resident/${householdId}/add-resident`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `http://localhost:3001/household-resident/${householdId}/add-resident`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            residentId: foundResident.id,
+            relation: relationToOwner,
+          }),
         },
-        body: JSON.stringify({
-          residentId: foundResident.id,
-          relation: relationToOwner,
-        }),
-      });
+      );
 
       const result = await response.json();
       if (response.ok) {
@@ -132,9 +139,12 @@ const HouseholdManagePage: FC = () => {
   // ❌ Remove resident from household
   const handleRemoveResident = async (recordId: number) => {
     try {
-      const response = await fetch(`http://localhost:3001/household-resident/${recordId}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:3001/household-resident/${recordId}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       if (response.ok) {
         setResidents(residents.filter((r) => r.recordId !== recordId));

@@ -16,9 +16,13 @@ export class HouseholdResidentServices {
   async addResidentToHousehold(
     householdId: number,
     residentId: number,
-    relation: string
+    relation: string,
   ) {
-    return this.repository.addResidentToHousehold(householdId, residentId, relation);
+    return this.repository.addResidentToHousehold(
+      householdId,
+      residentId,
+      relation,
+    );
   }
 
   async removeResidentFromHousehold(id: number) {
