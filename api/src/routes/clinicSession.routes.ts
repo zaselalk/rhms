@@ -1,13 +1,16 @@
 import { Router } from "express";
 import clinicSessionController from "../controllers/clinicSessionController";
 
+
+
 const router = Router();
 
 // Create a new session
 router.post("/createSession", clinicSessionController.createSession);
 
 // Get all sessions
-//router.get("/getAllSession", clinicSessionController.getAllSessions);
+//router.get("/clinic/:id/GetsessionForClinic", clinicSessionController.getAllSessions);
+
 
 //Get a specific session by ID
 //router.get("/:id", clinicSessionController.getSessionById);
