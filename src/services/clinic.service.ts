@@ -29,7 +29,7 @@ export const ClinicService = {
     try {
       const response = await axiosInstance.post(
         "/clinic/createClinic",
-        clinicData
+        clinicData,
       );
       return response.data;
     } catch (error) {
@@ -53,7 +53,7 @@ export const ClinicService = {
     try {
       const response = await axiosInstance.put(
         `/clinic/${clinicId}`,
-        clinicData
+        clinicData,
       );
       return response.data;
     } catch (error) {
@@ -65,7 +65,7 @@ export const ClinicService = {
   // Create a new session for a clinic
   createClinicSession: async (
     clinicId: string,
-    sessionData: { name: string; sessionDate: string }
+    sessionData: { name: string; sessionDate: string },
   ) => {
     try {
       const response = await axiosInstance.post(`/clinic/${clinicId}/session`, {
@@ -81,7 +81,9 @@ export const ClinicService = {
   // Get all sessions for a specific clinic
   getClinicSessions: async (clinicId: string) => {
     try {
-      const response = await axiosInstance.get(`/clinic/${clinicId}/GetsessionForClinic`);
+      const response = await axiosInstance.get(
+        `/clinic/${clinicId}/GetsessionForClinic`,
+      );
       return response.data;
     } catch (error) {
       console.error("Error fetching clinic sessions:", error);
@@ -91,12 +93,12 @@ export const ClinicService = {
   //update a session for a clinic
   updateClinicSession: async (
     clinicId: string,
-    sessionData: { id: string; name: string; sessionDate: string }
+    sessionData: { id: string; name: string; sessionDate: string },
   ) => {
     try {
       const response = await axiosInstance.put(
         `/clinic/${clinicId}/session/${sessionData.id}`,
-        sessionData
+        sessionData,
       );
       return response.data;
     } catch (error) {

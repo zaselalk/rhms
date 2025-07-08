@@ -147,6 +147,8 @@ function App() {
               />
             </Route>
 
+            {/* division routes */}
+
             <Route path="division">
               <Route
                 path=""
@@ -157,7 +159,7 @@ function App() {
                 }
               />
               <Route
-                path="SingleDivisionPage"
+                path=":divisionId"
                 element={
                   <ProtectedRoutesGuard>
                     <SingleDivisionPage />
