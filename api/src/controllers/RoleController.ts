@@ -1,3 +1,4 @@
+import { Sequelize } from "sequelize";
 import { PermissionRepository } from "../repositories/PermissionRepository";
 import { RoleRepository } from "../repositories/RoleRepository";
 import { RoleService } from "../services/RoleService";
@@ -51,11 +52,24 @@ export class RoleController {
       });
     }
 
-    const newRole = await this.roleService.createRole(roleName, permissionList);
-    return res.status(201).json({
-      message: "Role created successfully",
-      data: newRole,
-    });
+    try {
+      const newRole = await this.roleService.createRole(
+        roleName,
+        permissionList
+      );
+      return res.status(201).json({
+        message: "Role created successfully",
+        data: newRole,
+      });
+    } catch (error: any) {
+      // Handle Sequelize validation errors
+      if (error.parent && error.parent.code === "ER_DUP_ENTRY") {
+        return res.status(409).json({
+          message: "Role already exists",
+        });
+      }
+      throw new Error((error as string) || "Internal server error");
+    }
   };
 
   /**
