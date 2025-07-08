@@ -25,13 +25,12 @@ ResidentDisease.init(
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
-            allowNull: false,
         },
         residentId: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: 'Residents', // Name of the table
+                model: Resident, // Name of the table
                 key: 'id',
             },
         },
@@ -39,7 +38,7 @@ ResidentDisease.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: 'Diseases', // Name of the table
+                model: Disease, // Name of the table
                 key: 'diseaseId',
             },
         },
