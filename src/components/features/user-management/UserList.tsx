@@ -55,8 +55,10 @@ export const UserList: FC = () => {
   // if data change while user is viewing, update the user state
   useEffect(() => {
     if (user) {
-      console.log(data?.data[0]);
+      // Find the updated user in the new data
       const updatedUser = data?.data.find((u: User) => u.id === user.id);
+
+      // If the user is not found in the updated data, reset the user state
       if (updatedUser) {
         setUser(updatedUser);
       }
