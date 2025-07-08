@@ -1,6 +1,8 @@
+import { UniqueConstraintError } from "sequelize";
 import { PermissionRepository } from "../repositories/PermissionRepository";
 import { RoleRepository } from "../repositories/RoleRepository";
 import { RoleService } from "../services/RoleService";
+import { NextFunction } from "express";
 
 /**
  * RoleController class handles the role management operations.
@@ -20,7 +22,7 @@ export class RoleController {
    * @param req - The request object containing role details.
    * @param res - The response object to send the result.
    */
-  createRole = async (req: any, res: any): Promise<any> => {
+  createRole = async (req: any, res: any, next: NextFunction): Promise<any> => {
     const { roleName, permissionList } = req.body;
     const permissionRepo = new PermissionRepository();
 
@@ -51,11 +53,24 @@ export class RoleController {
       });
     }
 
-    const newRole = await this.roleService.createRole(roleName, permissionList);
-    return res.status(201).json({
-      message: "Role created successfully",
-      data: newRole,
-    });
+    try {
+      const newRole = await this.roleService.createRole(
+        roleName,
+        permissionList
+      );
+      return res.status(201).json({
+        message: "Role created successfully",
+        data: newRole,
+      });
+    } catch (error: any) {
+      // Handle Sequelize validation errors
+      if (error instanceof UniqueConstraintError) {
+        return res.status(409).json({
+          message: "Role already exists",
+        });
+      }
+      next(error);
+    }
   };
 
   /**
