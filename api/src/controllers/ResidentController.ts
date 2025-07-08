@@ -13,7 +13,7 @@ class ResidentController {
 
   residentPing = async (
     req: Request,
-    res: Response
+    res: Response,
   ): Promise<Response | void> => {
     return res.json({
       message: "Resident ping",
@@ -22,7 +22,7 @@ class ResidentController {
 
   residentRegister = async (
     req: Request,
-    res: Response
+    res: Response,
   ): Promise<Response | void> => {
     const {
       firstName,
@@ -78,7 +78,7 @@ class ResidentController {
         alergies,
         chronicalDesease,
         height,
-        weight
+        weight,
       );
 
       return res.json({
@@ -91,7 +91,7 @@ class ResidentController {
   };
   residentfindByNic = async (
     req: Request,
-    res: Response
+    res: Response,
   ): Promise<Response | void> => {
     const { nic } = req.params;
     const resident = await this.residentService.findByNic(nic);
@@ -113,7 +113,7 @@ class ResidentController {
 
   residentfindById = async (
     req: Request,
-    res: Response
+    res: Response,
   ): Promise<Response | void> => {
     const { id } = req.params;
     const resident = await this.residentService.findById(Number(id));
@@ -135,7 +135,7 @@ class ResidentController {
 
   getAllResident = async (
     req: Request,
-    res: Response
+    res: Response,
   ): Promise<Response | void> => {
     const residents = await this.residentService.getAllResident();
     if (!residents) {
@@ -157,7 +157,7 @@ class ResidentController {
 
   updateResident = async (
     req: Request,
-    res: Response
+    res: Response,
   ): Promise<Response | void> => {
     try {
       const id = Number(req.params.id);
@@ -182,7 +182,7 @@ class ResidentController {
 
       const updatedResident = await this.residentService.updateResident(
         id,
-        updateData
+        updateData,
       );
 
       if (!updatedResident) {
@@ -212,7 +212,7 @@ class ResidentController {
 
   deleteResidentById = async (
     req: Request,
-    res: Response
+    res: Response,
   ): Promise<Response> => {
     try {
       const id = Number(req.params.id);
@@ -254,7 +254,7 @@ class ResidentController {
 
   getResidentOverview = async (
     req: Request,
-    res: Response
+    res: Response,
   ): Promise<Response | void> => {
     const residentOverview = await this.residentService.getResidentOverview();
     if (!residentOverview) {
@@ -276,7 +276,7 @@ class ResidentController {
 
   getResidentCount = async (
     req: Request,
-    res: Response
+    res: Response,
   ): Promise<Response | void> => {
     try {
       const count = await this.residentService.getResidentCount();

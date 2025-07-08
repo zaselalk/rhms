@@ -1,6 +1,6 @@
 // repositories/clinicAttendanceRepository.ts
 
-import ClinicAttendance from "../models/clinicAttendnce"; 
+import ClinicAttendance from "../models/clinicAttendnce";
 
 export const upsertAttendance = async (data: {
   clinicId: number;
@@ -20,7 +20,7 @@ export const findAllAttendances = async () => {
 export const findAttendance = async (
   clinicId: number,
   sessionId: number,
-  patientId: number
+  patientId: number,
 ) => {
   return await ClinicAttendance.findOne({
     where: { clinicId, sessionId, patientId },
@@ -32,7 +32,7 @@ export const updateAttendance = async (
   clinicId: number,
   sessionId: number,
   patientId: number,
-  attendance: boolean
+  attendance: boolean,
 ) => {
   const record = await ClinicAttendance.findOne({
     where: { clinicId, sessionId, patientId },
@@ -47,7 +47,7 @@ export const updateAttendance = async (
 export const deleteAttendance = async (
   clinicId: number,
   sessionId: number,
-  patientId: number
+  patientId: number,
 ) => {
   return await ClinicAttendance.destroy({
     where: { clinicId, sessionId, patientId },

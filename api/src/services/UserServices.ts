@@ -60,7 +60,7 @@ export class UserServices {
   async registerUser(
     name: string,
     email: string,
-    password: string
+    password: string,
   ): Promise<User> {
     const excitingUser = await this.userRepository.findByEmail(email);
     if (excitingUser) throw new UserNotFoundException("Email already in use");
@@ -78,7 +78,7 @@ export class UserServices {
    */
   async loginUser(
     email: string,
-    password: string
+    password: string,
   ): Promise<LoginUserWithPermissionObjectWithToken | null> {
     const user = await this.userRepository.findByEmailWithPermission(email);
     if (!user) throw new UserNotFoundException("Invalid username or password");
@@ -142,7 +142,7 @@ export class UserServices {
     role_id: number,
     email: string,
     password: string,
-    phone_number: string
+    phone_number: string,
   ): Promise<User> {
     // Check if the role is super_user
     const roleRepository = new RoleRepository();
@@ -153,7 +153,7 @@ export class UserServices {
         action: "Attempted to assign super_user role via API",
       });
       throw new ValidationException(
-        "Assigning the super_user role is forbidden via API."
+        "Assigning the super_user role is forbidden via API.",
       );
     }
 
@@ -166,7 +166,7 @@ export class UserServices {
       role_id,
       email,
       hashedPassword,
-      phone_number
+      phone_number,
     );
   }
 
@@ -179,7 +179,7 @@ export class UserServices {
    */
   async updateUserFullNameById(
     id: number,
-    full_name: string
+    full_name: string,
   ): Promise<User | null> {
     const user = await this.userRepository.findById(id);
     if (!user) throw new UserNotFoundException("User not found");
@@ -214,7 +214,7 @@ export class UserServices {
         action: "Attempted to update user to super_user role via API",
       });
       throw new ValidationException(
-        "Updating to super_user role is forbidden via API."
+        "Updating to super_user role is forbidden via API.",
       );
     }
 
@@ -237,7 +237,7 @@ export class UserServices {
   async changeUserPassword(
     id: number,
     oldPassword: string,
-    newPassword: string
+    newPassword: string,
   ): Promise<User | null> {
     console.log(`oldPassword, newPassword`, oldPassword, newPassword);
     const user = await this.userRepository.findByIdWithPassword(id);
@@ -282,7 +282,7 @@ export class UserServices {
     try {
       const decoded = jwt.verify(
         token,
-        process.env.JWT_SECRET as string
+        process.env.JWT_SECRET as string,
       ) as DecodedToken;
       console.log(decoded.id);
       // get the user id from the decoded token

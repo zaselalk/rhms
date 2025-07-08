@@ -6,9 +6,14 @@ export const markAttendance = async (
   clinicId: number,
   sessionId: number,
   patientId: number,
-  attendance: boolean
+  attendance: boolean,
 ) => {
-  return await repo.upsertAttendance({ clinicId, sessionId, patientId, attendance });
+  return await repo.upsertAttendance({
+    clinicId,
+    sessionId,
+    patientId,
+    attendance,
+  });
 };
 
 export const getAllAttendances = async () => {
@@ -18,7 +23,7 @@ export const getAllAttendances = async () => {
 export const getAttendance = async (
   clinicId: number,
   sessionId: number,
-  patientId: number
+  patientId: number,
 ) => {
   return await repo.findAttendance(clinicId, sessionId, patientId);
 };
@@ -27,15 +32,20 @@ export const modifyAttendance = async (
   clinicId: number,
   sessionId: number,
   patientId: number,
-  attendance: boolean
+  attendance: boolean,
 ) => {
-  return await repo.updateAttendance(clinicId, sessionId, patientId, attendance);
+  return await repo.updateAttendance(
+    clinicId,
+    sessionId,
+    patientId,
+    attendance,
+  );
 };
 
 export const removeAttendance = async (
   clinicId: number,
   sessionId: number,
-  patientId: number
+  patientId: number,
 ) => {
   return await repo.deleteAttendance(clinicId, sessionId, patientId);
 };

@@ -35,7 +35,7 @@ describe("RoleController", () => {
 
     // Create controller instance
     roleController = new RoleController();
-    
+
     // Replace the service with our mock
     (roleController as any).roleService = mockRoleService;
   });
@@ -53,7 +53,11 @@ describe("RoleController", () => {
 
       await roleController.updateRole(mockReq, mockRes);
 
-      expect(mockRoleService.updateRole).toHaveBeenCalledWith(roleId, roleName, permissionList);
+      expect(mockRoleService.updateRole).toHaveBeenCalledWith(
+        roleId,
+        roleName,
+        permissionList,
+      );
       expect(mockRes.status).toHaveBeenCalledWith(404);
       expect(mockRes.json).toHaveBeenCalledWith({ message: "Role not found" });
     });
@@ -67,15 +71,19 @@ describe("RoleController", () => {
       mockReq.body = { roleName, permissionList };
 
       mockRoleService.updateRole.mockRejectedValue(
-        new Error("Modifying the super_user role is forbidden.")
+        new Error("Modifying the super_user role is forbidden."),
       );
 
       await roleController.updateRole(mockReq, mockRes);
 
-      expect(mockRoleService.updateRole).toHaveBeenCalledWith(roleId, roleName, permissionList);
+      expect(mockRoleService.updateRole).toHaveBeenCalledWith(
+        roleId,
+        roleName,
+        permissionList,
+      );
       expect(mockRes.status).toHaveBeenCalledWith(403);
-      expect(mockRes.json).toHaveBeenCalledWith({ 
-        message: "Modifying the super_user role is forbidden." 
+      expect(mockRes.json).toHaveBeenCalledWith({
+        message: "Modifying the super_user role is forbidden.",
       });
     });
 
@@ -83,7 +91,11 @@ describe("RoleController", () => {
       const roleId = "2";
       const roleName = "Updated Role";
       const permissionList = ["user:create"];
-      const updatedRole = { id: 2, role: roleName, permission: JSON.stringify(permissionList) } as any;
+      const updatedRole = {
+        id: 2,
+        role: roleName,
+        permission: JSON.stringify(permissionList),
+      } as any;
 
       mockReq.params = { id: roleId };
       mockReq.body = { roleName, permissionList };
@@ -92,7 +104,11 @@ describe("RoleController", () => {
 
       await roleController.updateRole(mockReq, mockRes);
 
-      expect(mockRoleService.updateRole).toHaveBeenCalledWith(roleId, roleName, permissionList);
+      expect(mockRoleService.updateRole).toHaveBeenCalledWith(
+        roleId,
+        roleName,
+        permissionList,
+      );
       expect(mockRes.status).toHaveBeenCalledWith(200);
       expect(mockRes.json).toHaveBeenCalledWith({
         message: "Role updated successfully",
@@ -108,14 +124,20 @@ describe("RoleController", () => {
       mockReq.params = { id: roleId };
       mockReq.body = { roleName, permissionList };
 
-      mockRoleService.updateRole.mockRejectedValue(new Error("Database connection failed"));
+      mockRoleService.updateRole.mockRejectedValue(
+        new Error("Database connection failed"),
+      );
 
       await roleController.updateRole(mockReq, mockRes);
 
-      expect(mockRoleService.updateRole).toHaveBeenCalledWith(roleId, roleName, permissionList);
+      expect(mockRoleService.updateRole).toHaveBeenCalledWith(
+        roleId,
+        roleName,
+        permissionList,
+      );
       expect(mockRes.status).toHaveBeenCalledWith(500);
-      expect(mockRes.json).toHaveBeenCalledWith({ 
-        message: "Database connection failed" 
+      expect(mockRes.json).toHaveBeenCalledWith({
+        message: "Database connection failed",
       });
     });
   });

@@ -271,7 +271,7 @@ export default {
             "chamari.raj@example.com",
           ],
         },
-        {}
+        {},
       );
     } catch (error) {
       console.log(error);

@@ -42,7 +42,7 @@ export class UserController {
    */
   addNewUser = async (
     req: Request,
-    res: Response
+    res: Response,
   ): Promise<Response | void> => {
     const { full_name, role_id, email, password, phone_number } = req.body;
     const user = await this.userService.addNewUser(
@@ -50,7 +50,7 @@ export class UserController {
       role_id,
       email,
       password,
-      phone_number
+      phone_number,
     );
     return res.status(201).json({
       message: "User added successfully",
@@ -106,7 +106,7 @@ export class UserController {
    */
   getSingleUser = async (
     req: Request,
-    res: Response
+    res: Response,
   ): Promise<Response | void> => {
     const { id } = req.params;
     const user = await this.userService.getUserById(parseInt(id));
@@ -134,13 +134,13 @@ export class UserController {
    */
   updateUserFullNameById = async (
     req: Request,
-    res: Response
+    res: Response,
   ): Promise<Response | void> => {
     const { id } = req.params;
     const { full_name } = req.body;
     const user = await this.userService.updateUserFullNameById(
       parseInt(id),
-      full_name
+      full_name,
     );
     if (!user) {
       return res.status(404).json({
@@ -166,13 +166,13 @@ export class UserController {
    */
   updateUserRoleById = async (
     req: Request,
-    res: Response
+    res: Response,
   ): Promise<Response | void> => {
     const { id } = req.params;
     const { role_id } = req.body;
     const user = await this.userService.updateUserRoleById(
       parseInt(id),
-      role_id
+      role_id,
     );
     if (!user) {
       return res.status(404).json({
@@ -198,7 +198,7 @@ export class UserController {
    */
   changeUserPassword = async (
     req: Request,
-    res: Response
+    res: Response,
   ): Promise<Response | void> => {
     const { id } = req.params;
     const { password: oldPassword, new_password: newPassword } = req.body;
@@ -216,7 +216,7 @@ export class UserController {
     const user = await this.userService.changeUserPassword(
       parseInt(id),
       oldPassword,
-      newPassword
+      newPassword,
     );
     if (!user) {
       return res.status(404).json({
@@ -242,7 +242,7 @@ export class UserController {
    */
   deleteUser = async (
     req: Request,
-    res: Response
+    res: Response,
   ): Promise<Response | void> => {
     const { id } = req.params;
     const deleted = await this.userService.deleteUserById(parseInt(id));
@@ -272,7 +272,7 @@ export class UserController {
    */
   checkAuthStatus = async (
     req: Request,
-    res: Response
+    res: Response,
   ): Promise<Response | void> => {
     const token = req.headers.authorization?.split(" ")[1];
 

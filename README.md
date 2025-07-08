@@ -41,5 +41,5 @@ Hosting & Deployment: Azure
 | **Squash**       | `feature/*` → `stage` | Clean up messy dev commits                 |
 | **Rebase**       | `stage` → `beta`      | Curate commits into meaningful units       |
 | **Merge commit** | `beta` → `main`       | Preserves history, makes PR diffs accurate |
-=======
 
+=======

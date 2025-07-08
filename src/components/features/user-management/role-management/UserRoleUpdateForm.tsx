@@ -31,7 +31,7 @@ export const UserRoleUpdateForm: FC<UserRoleUpdateFormProps> = ({ roleId }) => {
     if (checked) {
       const allPerms = allPermissions.reduce<string[]>(
         (acc, { perms }) => [...acc, ...perms],
-        []
+        [],
       );
       form.setFieldsValue({ permission: allPerms });
     } else {
@@ -84,7 +84,7 @@ export const UserRoleUpdateForm: FC<UserRoleUpdateFormProps> = ({ roleId }) => {
           // Check if all permissions are selected
           const allPerms = allPermissions.reduce<string[]>(
             (acc, { perms }) => [...acc, ...perms],
-            []
+            [],
           );
           setIsAllSelected(parsed.length === allPerms.length);
         }
@@ -115,8 +115,8 @@ export const UserRoleUpdateForm: FC<UserRoleUpdateFormProps> = ({ roleId }) => {
             values.length ===
               allPermissions.reduce<string[]>(
                 (acc, { perms }) => [...acc, ...perms],
-                []
-              ).length
+                [],
+              ).length,
           );
         }}
       >

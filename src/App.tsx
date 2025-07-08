@@ -47,7 +47,7 @@ function App() {
             email: user.email,
             role: user.role.role,
             permissions: JSON.parse(user.role.permission),
-          })
+          }),
         );
       } catch (error) {
         console.error("Error checking token:", error);

@@ -29,12 +29,12 @@ const ClinicAttendances: React.FC = () => {
     patients.map((patient) => ({
       patientId: patient.id,
       status: false, // Default status is absent
-    }))
+    })),
   );
 
   // Filter patients based on search term
   const filteredPatients = patients.filter((patient) =>
-    patient.name.toLowerCase().includes(searchTerm.toLowerCase())
+    patient.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   // Handle status change (mark as present or absent)
@@ -43,8 +43,8 @@ const ClinicAttendances: React.FC = () => {
       prevAttendances.map((attendance) =>
         attendance.patientId === patientId
           ? { ...attendance, status: !attendance.status }
-          : attendance
-      )
+          : attendance,
+      ),
     );
   };
 

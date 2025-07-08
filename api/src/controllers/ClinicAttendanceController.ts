@@ -1,7 +1,7 @@
 // controllers/clinicAttendanceController.ts
 
 import { Request, Response } from "express";
-import { ClinicAttendance } from "../models/clinicAttendnce"; 
+import { ClinicAttendance } from "../models/clinicAttendnce";
 import Clinic from "../models/clinic";
 import Session from "../models/clinicSession";
 import Resident from "../models/resident";
@@ -20,7 +20,9 @@ export const markAttendance = async (req: Request, res: Response) => {
 
     res.status(200).json({ message: "Attendance marked successfully", record });
   } catch (error) {
-    res.status(500).json({ error: "Failed to mark attendance", details: error });
+    res
+      .status(500)
+      .json({ error: "Failed to mark attendance", details: error });
   }
 };
 

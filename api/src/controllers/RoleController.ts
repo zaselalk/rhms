@@ -72,7 +72,7 @@ export class RoleController {
       const updatedRole = await this.roleService.updateRole(
         id,
         roleName,
-        permissionList
+        permissionList,
       );
       return res.status(200).json({
         message: "Role updated successfully",

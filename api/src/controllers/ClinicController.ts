@@ -4,10 +4,18 @@ import { ClinicService } from "../services/ClinicService";
 import { promises } from "dns";
 
 class ClinicController {
-    getClinicByIdWithSession(getClinicByIdWithSession: any): import("express-serve-static-core").RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>> {
-        throw new Error("Method not implemented.");
-    }
-  private clinicService:ClinicService; // Define the type of clinicRepository
+  getClinicByIdWithSession(
+    getClinicByIdWithSession: any,
+  ): import("express-serve-static-core").RequestHandler<
+    import("express-serve-static-core").ParamsDictionary,
+    any,
+    any,
+    import("qs").ParsedQs,
+    Record<string, any>
+  > {
+    throw new Error("Method not implemented.");
+  }
+  private clinicService: ClinicService; // Define the type of clinicRepository
 
   constructor() {
     this.clinicService = new ClinicService(); // Initialize the clinicService
@@ -21,13 +29,16 @@ class ClinicController {
   }
 
   // Function to create a new clinic
-  createClinic =async(req:Request,res:Response):Promise<Response | void> => {
-    const { name } = req.body; 
+  createClinic = async (
+    req: Request,
+    res: Response,
+  ): Promise<Response | void> => {
+    const { name } = req.body;
     const clinic = await this.clinicService.createClinic(name); // Call the service to create a clinic
     return res.status(201).json(clinic); // Return the created clinic with a 201 status code
   };
   //  // Get all clinics
-   getAllClinics = async (req: Request, res: Response): Promise<Response> => {
+  getAllClinics = async (req: Request, res: Response): Promise<Response> => {
     const clinics = await this.clinicService.getAllClinics();
     return res.json(clinics);
   };
@@ -42,15 +53,17 @@ class ClinicController {
     }
 
     return res.json(clinic);
-};
-
+  };
 
   // // Update a clinic
   updateClinic = async (req: Request, res: Response): Promise<Response> => {
     const id = Number(req.params.id);
     const updatedData = req.body;
 
-    const updatedClinic = await this.clinicService.updateClinic(id, updatedData);
+    const updatedClinic = await this.clinicService.updateClinic(
+      id,
+      updatedData,
+    );
     if (!updatedClinic) {
       return res.status(404).json({ message: "Clinic not found" });
     }
@@ -70,7 +83,5 @@ class ClinicController {
     return res.status(204).send();
   };
 }
-
-
 
 export default ClinicController;

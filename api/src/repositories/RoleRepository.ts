@@ -45,7 +45,7 @@ export class RoleRepository {
 
   async addPermissionToRole(
     role: Role,
-    permission: PermissionRole
+    permission: PermissionRole,
   ): Promise<Role | null> {
     // Find the role by id
     const foundRole = await Role.findByPk(role.id, {
@@ -80,7 +80,7 @@ export class RoleRepository {
    */
   async editRolePermission(
     roleId: number,
-    Permissions: string[]
+    Permissions: string[],
   ): Promise<Role | null> {
     // Find the role by id
     const foundRole = await Role.findByPk(roleId, {
@@ -119,7 +119,7 @@ export class RoleRepository {
   async update(
     id: number,
     roleName: string,
-    permissionList: string
+    permissionList: string,
   ): Promise<Role | null> {
     const role = await Role.findByPk(id);
     if (!role) {

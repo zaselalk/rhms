@@ -69,30 +69,27 @@ const AdminDashboard: React.FC = () => {
     { position: [6.492096667, 80.0840675], popup: "DEYAGALA20" },
   ];
 
-
   const [residentCount, setResidentCount] = React.useState<number>(0);
   const dashbordService = DashboardService;
 
   // Fetch resident count from the server
   const fetchdata = async () => {
-  try {
-    const data = await dashbordService.getresidentCount();
-    setResidentCount(data.count); 
-  } catch (error) {
-    console.error("Error fetching residents:", error);
-  }
-};
+    try {
+      const data = await dashbordService.getresidentCount();
+      setResidentCount(data.count);
+    } catch (error) {
+      console.error("Error fetching residents:", error);
+    }
+  };
 
   // Fetch data when loading the component
   useEffect(() => {
     fetchdata();
   }, []);
 
-
   const numberOfDiseases = 5; // Example data for the number of diseases
   const numberOfDivisions = 12;
   const numberOfHouses = 100;
-
 
   return (
     <DashboardContainer>
@@ -115,13 +112,13 @@ const AdminDashboard: React.FC = () => {
                 <BaseLayer checked name="Satellite View">
                   <TileLayer
                     url="https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
-                  // attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
+                    // attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
                   />
                 </BaseLayer>
                 <BaseLayer name="Street View">
                   <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  // attribution='&copy; <a href="https://www.openstreetmap.org/copyright"></a>'
+                    // attribution='&copy; <a href="https://www.openstreetmap.org/copyright"></a>'
                   />
                 </BaseLayer>
               </LayersControl>

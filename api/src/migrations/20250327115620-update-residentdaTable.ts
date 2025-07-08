@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 import sequelize, { QueryInterface } from "sequelize";
 import { DataType } from "sequelize-typescript";
@@ -7,30 +7,30 @@ import { DataType } from "sequelize-typescript";
 module.exports = {
   async up(queryInterface: QueryInterface, Sequelize: typeof sequelize) {
     try {
-      await queryInterface.removeColumn('residents', 'cholesterol');
-      await queryInterface.addColumn('residents', 'address', {
+      await queryInterface.removeColumn("residents", "cholesterol");
+      await queryInterface.addColumn("residents", "address", {
         type: DataType.STRING,
       });
-      await queryInterface.addColumn('residents', 'contactNumber', {
+      await queryInterface.addColumn("residents", "contactNumber", {
         type: DataType.STRING,
       });
-      await queryInterface.addColumn('residents', 'divisionId', {
+      await queryInterface.addColumn("residents", "divisionId", {
         type: DataType.INTEGER,
       });
-      await queryInterface.addColumn('residents', 'maritalState', {
+      await queryInterface.addColumn("residents", "maritalState", {
         type: DataType.STRING,
       });
-      await queryInterface.addColumn('residents', 'educationLevel', {
+      await queryInterface.addColumn("residents", "educationLevel", {
         type: DataType.STRING,
       });
-      await queryInterface.addColumn('residents', 'addicted', {
+      await queryInterface.addColumn("residents", "addicted", {
         type: DataType.JSON,
         allowNull: true,
       });
-      await queryInterface.addColumn('residents', 'alergies', {
+      await queryInterface.addColumn("residents", "alergies", {
         type: DataType.JSON,
       });
-      await queryInterface.addColumn('residents', 'chronicalDesease', {
+      await queryInterface.addColumn("residents", "chronicalDesease", {
         type: DataType.JSON,
       });
 
@@ -39,9 +39,12 @@ module.exports = {
       //   allowNull: true,
       // });
 
-      await queryInterface.addColumn('residents', 'height', { type: Sequelize.FLOAT });
-      await queryInterface.addColumn('residents', 'weight', { type: Sequelize.FLOAT });
-
+      await queryInterface.addColumn("residents", "height", {
+        type: Sequelize.FLOAT,
+      });
+      await queryInterface.addColumn("residents", "weight", {
+        type: Sequelize.FLOAT,
+      });
     } catch (e) {
       console.log(e);
     }
@@ -49,19 +52,18 @@ module.exports = {
 
   async down(queryInterface: QueryInterface, Sequelize: typeof sequelize) {
     try {
-      await queryInterface.removeColumn('residents', 'address');
-      await queryInterface.removeColumn('residents', 'contactNumber');
-      await queryInterface.removeColumn('residents', 'divisionId');
-      await queryInterface.removeColumn('residents', 'maritalState');
-      await queryInterface.removeColumn('residents', 'educationLevel');
-      await queryInterface.removeColumn('residents', 'addicted');
-      await queryInterface.removeColumn('residents', 'alergies');
-      await queryInterface.removeColumn('residents', 'chronicalDesease');
+      await queryInterface.removeColumn("residents", "address");
+      await queryInterface.removeColumn("residents", "contactNumber");
+      await queryInterface.removeColumn("residents", "divisionId");
+      await queryInterface.removeColumn("residents", "maritalState");
+      await queryInterface.removeColumn("residents", "educationLevel");
+      await queryInterface.removeColumn("residents", "addicted");
+      await queryInterface.removeColumn("residents", "alergies");
+      await queryInterface.removeColumn("residents", "chronicalDesease");
       // await queryInterface.removeColumn('residents', 'height');
       // await queryInterface.removeColumn('residents', 'weight');
     } catch (e) {
       console.log(e);
     }
-
-  }
+  },
 };

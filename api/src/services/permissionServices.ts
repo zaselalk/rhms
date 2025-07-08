@@ -10,9 +10,8 @@ export class PermissionService {
       attributes: ["id", "permission"],
     };
 
-    const permissions = await this.permissionRepository.getAllPermissions(
-      options
-    );
+    const permissions =
+      await this.permissionRepository.getAllPermissions(options);
     return permissions;
   };
 }

@@ -23,7 +23,7 @@ const ClinicDetail: React.FC = () => {
   const [newSession, setNewSession] = useState({ name: "", sessionDate: "" });
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedSession, setSelectedSession] = useState<ClinicSession | null>(
-    null
+    null,
   );
   const [error, setError] = useState<string>("");
 
@@ -81,7 +81,7 @@ const ClinicDetail: React.FC = () => {
     try {
       const created = await ClinicService.createClinicSession(
         clinicId,
-        newSession
+        newSession,
       );
       setClinicSessions([...clinicSessions, created]);
       setNewSession({ name: "", sessionDate: "" });
@@ -94,7 +94,7 @@ const ClinicDetail: React.FC = () => {
 
   const removeClinicSession = (sessionId: string) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this session?"
+      "Are you sure you want to delete this session?",
     );
     if (confirmDelete) {
       setClinicSessions(clinicSessions.filter((s) => s.id !== sessionId));
@@ -122,8 +122,8 @@ const ClinicDetail: React.FC = () => {
                 sessionName: selectedSession.sessionName,
                 date: selectedSession.date,
               }
-            : s
-        )
+            : s,
+        ),
       );
     }
     closeEditModal();

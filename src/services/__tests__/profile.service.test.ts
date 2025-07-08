@@ -17,7 +17,7 @@ describe("ProfileService", () => {
 
       const result = await profileService.updateUserFullNameById(
         userId,
-        fullName
+        fullName,
       );
 
       expect(axiosInstance.put).toHaveBeenCalledWith(`/user/${userId}/name`, {
@@ -36,7 +36,7 @@ describe("ProfileService", () => {
       const fullName = "John Doe";
 
       await expect(
-        profileService.updateUserFullNameById(userId, fullName)
+        profileService.updateUserFullNameById(userId, fullName),
       ).rejects.toThrow(errorMessage);
     });
   });
@@ -53,7 +53,7 @@ describe("ProfileService", () => {
       const result = await profileService.updateUserPassword(
         userId,
         password,
-        newPassword
+        newPassword,
       );
 
       expect(axiosInstance.put).toHaveBeenCalledWith(
@@ -61,7 +61,7 @@ describe("ProfileService", () => {
         {
           password,
           new_password: newPassword,
-        }
+        },
       );
       expect(result).toEqual(mockResponse.data);
     });
@@ -77,7 +77,7 @@ describe("ProfileService", () => {
       const newPassword = "newPassword";
 
       await expect(
-        profileService.updateUserPassword(userId, password, newPassword)
+        profileService.updateUserPassword(userId, password, newPassword),
       ).rejects.toThrow(errorMessage);
     });
   });
