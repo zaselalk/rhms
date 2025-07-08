@@ -25,7 +25,7 @@ export class RoleController {
     const permissionRepo = new PermissionRepository();
 
     // get all permissions from the database
-    let allPermissions = await permissionRepo.getAllPermissions({});
+    const allPermissions = await permissionRepo.getAllPermissions({});
 
     // If no permissions are found, return an error
     if (!allPermissions || allPermissions.length === 0) {
