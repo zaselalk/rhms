@@ -43,15 +43,18 @@ export const UserViewRole = ({
 
   const handleRoleChangeSave = () => {
     const roleId = roles.find((role: any) => role.role === newRole)?.id;
+
+    // Ensure roleId is found before proceeding
     if (!roleId) {
       console.error("Role ID not found for the selected role:", newRole);
       return;
     }
+
     const updatedData = {
       roleId: roleId,
     };
-    mutation.mutate(updatedData);
 
+    mutation.mutate(updatedData);
     setIsEdit(false);
   };
 

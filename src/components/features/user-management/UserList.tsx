@@ -15,21 +15,9 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import UserService from "../../../services/user.service";
 import { UserViewModal } from "./UserViewModal";
 import { useUserContext } from "../../../pages/admin/UsersPage";
+import { User } from "../../../services/types/user-services.types";
 
 const { Title } = Typography;
-
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-  createdAt: Date;
-  updatedAt: Date;
-  role: {
-    id: number;
-    role: string;
-    permission: string;
-  };
-}
 
 export const UserList: FC = () => {
   const { setUserCount } = useUserContext();
@@ -63,6 +51,17 @@ export const UserList: FC = () => {
 
     setUserCount(data.data.length); // write separate API to get count
   }, [setUserCount, data, isLoading]);
+
+  // if data change while user is viewing, update the user state
+  useEffect(() => {
+    if (user) {
+      console.log(data?.data[0]);
+      const updatedUser = data?.data.find((u: User) => u.id === user.id);
+      if (updatedUser) {
+        setUser(updatedUser);
+      }
+    }
+  }, [data, user]);
 
   const handleUserView = (user: User) => {
     setUser(user);
