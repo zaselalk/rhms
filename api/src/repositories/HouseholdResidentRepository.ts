@@ -1,6 +1,6 @@
 // repositories/HouseholdResidentRepository.ts
 
-import HouseholdResident from "../models/householdresident";
+import HouseholdResident from "../models/householdResident";
 import Resident from "../models/resident";
 
 export class HouseholdResidentRepository {
@@ -23,7 +23,6 @@ export class HouseholdResidentRepository {
     relation: string,
   ): Promise<HouseholdResident> {
     return HouseholdResident.create({
-      id: 0, // Assuming id is auto-incremented by the database
       householdId,
       residentId,
       relation,

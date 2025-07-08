@@ -136,7 +136,7 @@ const HouseholdManagePage: FC = () => {
     }
   };
 
-  // ❌ Remove resident from household
+  //  Remove resident from household
   const handleRemoveResident = async (recordId: number) => {
     try {
       const response = await fetch(
