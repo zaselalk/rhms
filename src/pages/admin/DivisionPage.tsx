@@ -28,9 +28,8 @@ ChartJS.register(
 
 // Types
 interface Division {
-  id: number;
-  name: string;
-  population: number;
+  divisionId: number;
+  divisionName: string;
 }
 
 const DivisionPage: FC = () => {
@@ -95,19 +94,19 @@ const DivisionPage: FC = () => {
     setIsDeleteModalOpen(false);
   };
 
-  const generateChartData = () => {
-    return {
-      labels: divisions.map((d) => d.name),
-      datasets: [
-        {
-          label: "Population by Division",
-          data: divisions.map((d) => d.population),
-          backgroundColor: "#008FFB",
-          borderRadius: 5,
-        },
-      ],
-    };
-  };
+  // const generateChartData = () => {
+  //   return {
+  //     labels: divisions.map((d) => d.divisionName),
+  //     datasets: [
+  //       {
+  //         label: "Population by Division",
+  //         data: divisions.map((d) => d.population),
+  //         backgroundColor: "#008FFB",
+  //         borderRadius: 5,
+  //       },
+  //     ],
+  //   };
+  // };
 
   return (
     <DashboardContainer>
@@ -214,17 +213,17 @@ const DivisionPage: FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {divisions.map((division) => (
               <Link
-                to={`/division/${division.id}`}
-                key={division.id}
+                to={`${division.divisionId}`}
+                key={division.divisionId}
                 className="bg-white p-4 rounded-lg shadow-md flex justify-between items-center"
               >
                 <div>
                   <p className="text-lg font-semibold text-gray-800">
-                    {division.name}
+                    {division.divisionName}
                   </p>
-                  <p className="text-sm text-gray-600">
+                  {/* <p className="text-sm text-gray-600">
                     {division.population} residents
-                  </p>
+                  </p> */}
                 </div>
                 <button
                   className="text-red-500 cursor-pointer hover:text-red-700"
@@ -240,12 +239,12 @@ const DivisionPage: FC = () => {
           </div>
 
           {/* Population Chart */}
-          <div className="mt-6">
+          {/* <div className="mt-6">
             <h3 className="text-xl font-semibold text-gray-800 mb-2">
               Population of All Divisions
             </h3>
             <Bar data={generateChartData()} options={{ responsive: true }} />
-          </div>
+          </div> */}
         </div>
       </div>
     </DashboardContainer>
