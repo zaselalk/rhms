@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import { FaTrash } from "react-icons/fa";
 import { FiPlusCircle } from "react-icons/fi";
-import { Bar } from "react-chartjs-2"; // Changed from Line to Bar
+import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -17,31 +17,22 @@ import {
 import { DivisionService } from "../../services/division.service";
 
 // Chart.js setup
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-// Types
+// Updated Types
 interface Division {
   divisionId: number;
   divisionName: string;
+  population: number;
 }
 
 const DivisionPage: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [divisions, setDivisions] = useState<Division[]>([]);
-  const [newDivision, setNewDivision] = useState<Division | null>(null);
+  const [newDivisionName, setNewDivisionName] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [divisionToDelete, setDivisionToDelete] = useState<Division | null>(
-    null
-  );
+  const [divisionToDelete, setDivisionToDelete] = useState<Division | null>(null);
 
-  // Fetch divisions from backend
   useEffect(() => {
     fetchDivisions();
   }, []);
@@ -57,13 +48,13 @@ const DivisionPage: FC = () => {
 
   const handleClose = () => setIsOpen(false);
   const handleOpen = () => {
-    setNewDivision({ id: 0, name: "", population: 0 });
+    setNewDivisionName("");
     setIsOpen(true);
   };
 
-  const handleAddDivision = async (name: string, population: number) => {
+  const handleAddDivision = async (name: string) => {
     try {
-      await DivisionService.createDivision({ name, population });
+      await DivisionService.createDivision({ name });
       fetchDivisions();
       setIsOpen(false);
     } catch (error) {
@@ -79,7 +70,7 @@ const DivisionPage: FC = () => {
   const confirmDelete = async () => {
     try {
       if (divisionToDelete) {
-        await DivisionService.deleteDivision(divisionToDelete.id);
+        await DivisionService.deleteDivision(divisionToDelete.divisionId);
         fetchDivisions();
       }
     } catch (error) {
@@ -94,19 +85,19 @@ const DivisionPage: FC = () => {
     setIsDeleteModalOpen(false);
   };
 
-  // const generateChartData = () => {
-  //   return {
-  //     labels: divisions.map((d) => d.divisionName),
-  //     datasets: [
-  //       {
-  //         label: "Population by Division",
-  //         data: divisions.map((d) => d.population),
-  //         backgroundColor: "#008FFB",
-  //         borderRadius: 5,
-  //       },
-  //     ],
-  //   };
-  // };
+  const generateChartData = () => {
+    return {
+      labels: divisions.map((d) => d.divisionName),
+      datasets: [
+        {
+          label: "Population by Division",
+          data: divisions.map((d) => d.population),
+          backgroundColor: "#008FFB",
+          borderRadius: 5,
+        },
+      ],
+    };
+  };
 
   return (
     <DashboardContainer>
@@ -117,8 +108,8 @@ const DivisionPage: FC = () => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                if (newDivision) {
-                  handleAddDivision(newDivision.name, newDivision.population);
+                if (newDivisionName.trim()) {
+                  handleAddDivision(newDivisionName.trim());
                 }
               }}
               className="space-y-4"
@@ -129,27 +120,8 @@ const DivisionPage: FC = () => {
                 </label>
                 <input
                   type="text"
-                  value={newDivision?.name || ""}
-                  onChange={(e) =>
-                    setNewDivision({ ...newDivision!, name: e.target.value })
-                  }
-                  className="w-full border border-gray-300 rounded-md p-2"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-600">
-                  Population
-                </label>
-                <input
-                  type="number"
-                  value={newDivision?.population || ""}
-                  onChange={(e) =>
-                    setNewDivision({
-                      ...newDivision!,
-                      population: +e.target.value,
-                    })
-                  }
+                  value={newDivisionName}
+                  onChange={(e) => setNewDivisionName(e.target.value)}
                   className="w-full border border-gray-300 rounded-md p-2"
                   required
                 />
@@ -175,7 +147,7 @@ const DivisionPage: FC = () => {
           <div className="p-6">
             <p className="text-sm text-gray-600">
               Are you sure you want to delete{" "}
-              <strong>{divisionToDelete?.name}</strong>?
+              <strong>{divisionToDelete?.divisionName}</strong>?
             </p>
             <div className="flex justify-end mt-4">
               <button
@@ -221,9 +193,9 @@ const DivisionPage: FC = () => {
                   <p className="text-lg font-semibold text-gray-800">
                     {division.divisionName}
                   </p>
-                  {/* <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-600">
                     {division.population} residents
-                  </p> */}
+                  </p>
                 </div>
                 <button
                   className="text-red-500 cursor-pointer hover:text-red-700"
@@ -239,12 +211,12 @@ const DivisionPage: FC = () => {
           </div>
 
           {/* Population Chart */}
-          {/* <div className="mt-6">
+          <div className="mt-6">
             <h3 className="text-xl font-semibold text-gray-800 mb-2">
               Population of All Divisions
             </h3>
             <Bar data={generateChartData()} options={{ responsive: true }} />
-          </div> */}
+          </div>
         </div>
       </div>
     </DashboardContainer>

@@ -13,22 +13,20 @@ export const DivisionService = {
     }
   },
 
-  // Create a new division
-  createDivision: async (divisionData: {
-    name: string;
-    population: number;
-  }) => {
-    try {
-      const response = await axiosInstance.post(
-        "/division/createDivision",
-        divisionData
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error creating division:", error);
-      throw error;
-    }
-  },
+// Create a new division
+createDivision: async (divisionData: { name: string }) => {
+  try {
+    const response = await axiosInstance.post(
+      "/division/createDivision",
+      divisionData
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating division:", error);
+    throw error;
+  }
+},
+
 
   // Delete division
   deleteDivision: async (divisionId: number) => {
