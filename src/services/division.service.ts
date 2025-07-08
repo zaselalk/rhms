@@ -13,19 +13,16 @@ export const DivisionService = {
     }
   },
 
-// Create a new division
-createDivision: async (divisionData: { name: string }) => {
-  try {
-    const response = await axiosInstance.post(
-      "/division/createDivision",
-      divisionData
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error creating division:", error);
-    throw error;
-  }
-},
+  createDivision: async (divisionData: { divisionName: string }) => {
+    try {
+      const response = await axiosInstance.post("/division", divisionData);
+      return response.data;
+    } catch (error) {
+      console.error("Error creating division:", error);
+      throw error;
+    }
+  },
+
 
 
   // Delete division

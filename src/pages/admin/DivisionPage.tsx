@@ -52,15 +52,16 @@ const DivisionPage: FC = () => {
     setIsOpen(true);
   };
 
-  const handleAddDivision = async (name: string) => {
-    try {
-      await DivisionService.createDivision({ name });
-      fetchDivisions();
-      setIsOpen(false);
-    } catch (error) {
-      console.error("Failed to create division");
-    }
-  };
+const handleAddDivision = async (name: string) => {
+  try {
+    await DivisionService.createDivision({ divisionName: name }); // Fix here
+    fetchDivisions();
+    setIsOpen(false);
+  } catch (error) {
+    console.error("Failed to create division");
+  }
+};
+
 
   const handleDelete = (division: Division) => {
     setDivisionToDelete(division);
