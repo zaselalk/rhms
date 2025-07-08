@@ -1,4 +1,4 @@
-import { Sequelize, UniqueConstraintError, ValidationError } from "sequelize";
+import { UniqueConstraintError } from "sequelize";
 import { PermissionRepository } from "../repositories/PermissionRepository";
 import { RoleRepository } from "../repositories/RoleRepository";
 import { RoleService } from "../services/RoleService";
