@@ -1,7 +1,7 @@
 // models/index.ts
 import sequelize from ".";
 import Resident from "./resident";
-import Household from "./hosehold";
+import Household from "./household";
 
 // Associations
 Resident.hasMany(Household, {
