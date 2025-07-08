@@ -33,6 +33,9 @@ const DivisionPage: FC = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [divisionToDelete, setDivisionToDelete] = useState<Division | null>(null);
 
+  // New state for confirmation popup inside Add Division modal
+  const [isConfirmCreateOpen, setIsConfirmCreateOpen] = useState(false);
+
   useEffect(() => {
     fetchDivisions();
   }, []);
@@ -46,22 +49,41 @@ const DivisionPage: FC = () => {
     }
   };
 
-  const handleClose = () => setIsOpen(false);
+  const handleClose = () => {
+    setIsOpen(false);
+    setIsConfirmCreateOpen(false); // also reset confirm popup when modal closes
+  };
   const handleOpen = () => {
     setNewDivisionName("");
+    setIsConfirmCreateOpen(false);
     setIsOpen(true);
   };
 
-const handleAddDivision = async (name: string) => {
-  try {
-    await DivisionService.createDivision({ divisionName: name }); // Fix here
-    fetchDivisions();
-    setIsOpen(false);
-  } catch (error) {
-    console.error("Failed to create division");
-  }
-};
+  const handleAddDivision = async (name: string) => {
+    try {
+      await DivisionService.createDivision({ divisionName: name });
+      fetchDivisions();
+      setIsOpen(false);
+      setIsConfirmCreateOpen(false);
+    } catch (error) {
+      console.error("Failed to create division");
+    }
+  };
 
+  const onFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newDivisionName.trim()) {
+      setIsConfirmCreateOpen(true); // open confirmation popup instead of immediate add
+    }
+  };
+
+  const confirmCreateDivision = () => {
+    handleAddDivision(newDivisionName.trim());
+  };
+
+  const cancelCreateDivision = () => {
+    setIsConfirmCreateOpen(false); // close confirmation popup, back to form
+  };
 
   const handleDelete = (division: Division) => {
     setDivisionToDelete(division);
@@ -106,36 +128,51 @@ const handleAddDivision = async (name: string) => {
         {/* Add Division Modal */}
         <Modal isOpen={isOpen} handleClose={handleClose} title="Add Division">
           <div className="p-6">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (newDivisionName.trim()) {
-                  handleAddDivision(newDivisionName.trim());
-                }
-              }}
-              className="space-y-4"
-            >
+            {isConfirmCreateOpen ? (
               <div>
-                <label className="block text-sm font-semibold text-gray-600">
-                  Division Name
-                </label>
-                <input
-                  type="text"
-                  value={newDivisionName}
-                  onChange={(e) => setNewDivisionName(e.target.value)}
-                  className="w-full border border-gray-300 rounded-md p-2"
-                  required
-                />
+                <p className="mb-4">
+                  Are you sure you want to create the division{" "}
+                  <strong>"{newDivisionName.trim()}"</strong>?
+                </p>
+                <div className="flex justify-end space-x-2">
+                  <button
+                    onClick={confirmCreateDivision}
+                    className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                  >
+                    Yes, Create
+                  </button>
+                  <button
+                    onClick={cancelCreateDivision}
+                    className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
-              <div className="flex justify-end">
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
-                >
-                  Add Division
-                </button>
-              </div>
-            </form>
+            ) : (
+              <form onSubmit={onFormSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-600">
+                    Division Name
+                  </label>
+                  <input
+                    type="text"
+                    value={newDivisionName}
+                    onChange={(e) => setNewDivisionName(e.target.value)}
+                    className="w-full border border-gray-300 rounded-md p-2"
+                    required
+                  />
+                </div>
+                <div className="flex justify-end">
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
+                  >
+                    Add Division
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </Modal>
 
