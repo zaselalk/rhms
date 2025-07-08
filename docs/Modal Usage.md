@@ -12,8 +12,8 @@ This guide explains how to use the newly introduced `ReactPortal` and `Modal` co
 #### Import Required Components
 
 ```tsx
-import React, { FC, useState } from 'react';
-import Modal from '@/components/layouts/overlays/Modal';
+import React, { FC, useState } from "react";
+import Modal from "@/components/layouts/overlays/Modal";
 ```
 
 #### Set up Modal State
@@ -45,7 +45,9 @@ const DivisionPage: FC = () => {
 
       <div className="flex-1 p-6">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-semibold text-[#008FFB]">Division Details</h2>
+          <h2 className="text-2xl font-semibold text-[#008FFB]">
+            Division Details
+          </h2>
           <button
             className="px-4 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
             onClick={handleOpen}
@@ -59,15 +61,40 @@ const DivisionPage: FC = () => {
             <div className="p-6">
               <form action="" className="space-y-4">
                 <div>
-                  <label htmlFor="division" className="block text-sm font-semibold text-gray-600">Division Name</label>
-                  <input type="text" id="division" placeholder="Enter Division Name" className="w-full border border-gray-300 rounded-md p-2" />
+                  <label
+                    htmlFor="division"
+                    className="block text-sm font-semibold text-gray-600"
+                  >
+                    Division Name
+                  </label>
+                  <input
+                    type="text"
+                    id="division"
+                    placeholder="Enter Division Name"
+                    className="w-full border border-gray-300 rounded-md p-2"
+                  />
                 </div>
                 <div>
-                  <label htmlFor="population" className="block text-sm font-semibold text-gray-600">Population</label>
-                  <input type="number" id="population" placeholder="Enter Population" className="w-full border border-gray-300 rounded-md p-2" />
+                  <label
+                    htmlFor="population"
+                    className="block text-sm font-semibold text-gray-600"
+                  >
+                    Population
+                  </label>
+                  <input
+                    type="number"
+                    id="population"
+                    placeholder="Enter Population"
+                    className="w-full border border-gray-300 rounded-md p-2"
+                  />
                 </div>
                 <div className="flex justify-end">
-                  <button type="submit" className="px-4 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]">Add Division</button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
+                  >
+                    Add Division
+                  </button>
                 </div>
               </form>
             </div>
@@ -89,4 +116,3 @@ export default DivisionPage;
 ### Summary
 
 With the `ReactPortal` and `Modal` components, you now have a robust and modular approach to handle modals efficiently throughout your React application.
-

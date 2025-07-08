@@ -30,7 +30,9 @@ class DivisionService {
       throw new Error("Another division with this name already exists");
     }
 
-    const updated = await DivisionRepository.updateDivision(id, { divisionName });
+    const updated = await DivisionRepository.updateDivision(id, {
+      divisionName,
+    });
     if (!updated) {
       throw new Error(`Division with ID ${id} not found`);
     }
@@ -45,7 +47,6 @@ class DivisionService {
     }
     return deleted;
   }
-
 
   async getDivisionCount() {
     return await DivisionRepository.getDivisionCount();

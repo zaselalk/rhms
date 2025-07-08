@@ -13,18 +13,18 @@ const userController = new UserController();
 AuthRouter.post(
   "/login",
   userLoginValidation,
-  catchAsync(userController.login)
+  catchAsync(userController.login),
 );
 AuthRouter.post(
   "/register",
   userRegisterValidation,
-  catchAsync(userController.register)
+  catchAsync(userController.register),
 );
 
 AuthRouter.get(
   "/check",
   checkAuthValidation,
-  catchAsync(userController.checkAuthStatus)
+  catchAsync(userController.checkAuthStatus),
 );
 
 export default AuthRouter;

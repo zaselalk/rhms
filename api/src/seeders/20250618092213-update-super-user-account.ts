@@ -8,7 +8,7 @@ module.exports = {
     // find the roleId of the role with name 'super_user'
     try {
       const [results] = (await queryInterface.sequelize.query(
-        `SELECT id FROM roles WHERE role = 'super_admin'`
+        `SELECT id FROM roles WHERE role = 'super_admin'`,
       )) as any[];
       const superUserRoleId = results && results[0] && results[0].id;
 
@@ -19,7 +19,7 @@ module.exports = {
       await queryInterface.bulkUpdate(
         "users",
         { roleId: superUserRoleId },
-        { email: "chandana@gmail.com" }
+        { email: "chandana@gmail.com" },
       );
 
       // Ensure only one user has the super_user role
@@ -67,7 +67,7 @@ module.exports = {
 
       // Revert the super_user role back to the first user
       const [results] = (await queryInterface.sequelize.query(
-        `SELECT id FROM roles WHERE role = 'Doctor'`
+        `SELECT id FROM roles WHERE role = 'Doctor'`,
       )) as any[];
       const doctorRoleId = results && results[0] && results[0].id;
       if (!doctorRoleId) throw new Error("Doctor role not found");
@@ -75,7 +75,7 @@ module.exports = {
       await queryInterface.bulkUpdate(
         "users",
         { roleId: doctorRoleId },
-        { email: "chandana@gmail.com" }
+        { email: "chandana@gmail.com" },
       );
       console.log("Super user account reverted successfully.");
     } catch (error) {

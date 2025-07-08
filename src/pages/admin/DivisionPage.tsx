@@ -2,8 +2,8 @@ import { FC, useState } from "react";
 import Modal from "../../components/layouts/overlays/Modal";
 import { Link } from "react-router";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
-import { FaTrash} from "react-icons/fa";
-import { FiPlusCircle} from "react-icons/fi";
+import { FaTrash } from "react-icons/fa";
+import { FiPlusCircle } from "react-icons/fi";
 import { Bar } from "react-chartjs-2"; // Changed from Line to Bar
 import {
   Chart as ChartJS,
@@ -22,7 +22,7 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 interface Division {
@@ -46,7 +46,7 @@ const DivisionPage: FC = () => {
   const [newDivision, setNewDivision] = useState<Division | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [divisionToDelete, setDivisionToDelete] = useState<Division | null>(
-    null
+    null,
   );
 
   const handleClose = () => setIsOpen(false);
@@ -83,7 +83,7 @@ const DivisionPage: FC = () => {
   const generateChartData = () => {
     const divisionNames = divisions.map((division) => division.name);
     const divisionPopulations = divisions.map(
-      (division) => division.population
+      (division) => division.population,
     );
 
     return {
@@ -200,12 +200,10 @@ const DivisionPage: FC = () => {
               Division Details
             </h2>
             <button
-              
               onClick={handleOpen}
-               className="bg-blue-500 text-white px-4 py-2 flex items-center rounded-lg shadow hover:bg-blue-600 transition"
-                                      >
-                <FiPlusCircle className="mr-2" />
-
+              className="bg-blue-500 text-white px-4 py-2 flex items-center rounded-lg shadow hover:bg-blue-600 transition"
+            >
+              <FiPlusCircle className="mr-2" />
               New Division
             </button>
           </div>

@@ -15,8 +15,8 @@ passport.use(
       usernameField: "email",
       passwordField: "password",
     },
-    passportLocalStrategy
-  )
+    passportLocalStrategy,
+  ),
 );
 
 //jwt opt
@@ -47,7 +47,7 @@ passport.use(
     } catch (err) {
       return done(err);
     }
-  })
+  }),
 );
 
 passport.serializeUser((user, done) => {

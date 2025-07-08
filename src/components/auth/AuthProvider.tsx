@@ -33,7 +33,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             email: user.email,
             role: user.role.role,
             permissions: JSON.parse(user.role.permission),
-          })
+          }),
         );
 
         // On initial load, stay on the current page if authenticated

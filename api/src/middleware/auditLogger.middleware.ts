@@ -12,7 +12,7 @@ import { logAction } from "../util/logAction";
 export const auditLogger = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const userId = req.user?.id || null; // Assuming `req.user` is populated by `serializeUser`
   const action = `${req.method} ${req.originalUrl}`;

@@ -10,5 +10,3 @@ https://www.figma.com/proto/GKDrgFVfT17LDLa1EUbV35/Resident-Healthcare-Managemet
 
 <h2>HouseHold UI</h2>
 ![HouseHold](https://github.com/user-attachments/assets/c86b761d-6c74-4f68-b4ae-0b8c555d9144)
-
-

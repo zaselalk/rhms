@@ -3,7 +3,7 @@ import { logout } from "../../../store/slices/authSlices";
 
 export const AdminNavbar = () => {
   const dispatch = useAppDispatch();
-  
+
   const handleLogout = () => {
     // remove user from redux store
     dispatch(logout());

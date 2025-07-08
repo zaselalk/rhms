@@ -14,7 +14,7 @@ module.exports = {
       { divisionName: "Katugoda" },
       { divisionName: "Delgoda" },
       { divisionName: "Pahalawela" },
-      {divisionName: "Boopitiya" },
+      { divisionName: "Boopitiya" },
     ]);
   },
 
@@ -31,7 +31,7 @@ module.exports = {
         "Karampathara",
         "Katugoda",
         "Delgoda",
-        "Pahalawela" ,
+        "Pahalawela",
         "Boopitiya",
       ],
     });

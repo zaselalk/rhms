@@ -45,7 +45,7 @@ AuditLog.init(
     modelName: "AuditLog",
     tableName: "audit_logs",
     timestamps: false,
-  }
+  },
 );
 
 export default AuditLog;

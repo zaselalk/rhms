@@ -11,7 +11,7 @@ interface HouseholdPayload {
 }
 
 export const createHousehold = async (payload: HouseholdPayload) => {
-  const response = await axiosInstance.post('/household/create', payload);
+  const response = await axiosInstance.post("/household/create", payload);
   return response.data;
 };
 
@@ -22,9 +22,11 @@ export const getResidentById = async (residentId: number | string) => {
 
 export const updateHouseholdOwner = async (
   house_no: string | number,
-  owner_id: number | string
+  owner_id: number | string,
 ) => {
-  const response = await axiosInstance.put(`/household/update/${house_no}`, { owner_id });
+  const response = await axiosInstance.put(`/household/update/${house_no}`, {
+    owner_id,
+  });
   return response.data;
 };
 

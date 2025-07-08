@@ -60,7 +60,7 @@ Session.init(
     modelName: "Session",
     tableName: "clinic_sessions",
     timestamps: false,
-  }
+  },
 );
 
 // Adding association to Clinic

@@ -5,12 +5,10 @@ import { DiseaseRepository } from "../repositories/DiseaseRepository";
 export class DiseaseController {
   private diseaseService: DiseaseServices;
 
-
   constructor() {
     const diseasedRepository = new DiseaseRepository();
 
     this.diseaseService = new DiseaseServices(diseasedRepository);
-
   }
 
   createDisease = async (req: Request, res: Response): Promise<Response> => {
@@ -53,7 +51,6 @@ export class DiseaseController {
     } catch (error) {
       return res.status(500).json({ message: "Internal server error", error });
     }
-
   };
 
   countDisease = async (req: Request, res: Response): Promise<Response> => {
@@ -63,17 +60,15 @@ export class DiseaseController {
         message: "Disease count fetched successfully",
         status: 200,
         error: null,
-        data: { count }
+        data: { count },
       });
     } catch (error) {
       return res.status(500).json({
-         message: "Error fetching disease count",
-         status: 500,
-         error:"",
-         data: null
-        });
+        message: "Error fetching disease count",
+        status: 500,
+        error: "",
+        data: null,
+      });
     }
   };
-
-
 }

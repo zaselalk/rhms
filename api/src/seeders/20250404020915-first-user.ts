@@ -8,7 +8,7 @@ module.exports = {
     try {
       // find the roleId of the role with name 'Doctor'
       const [results, metadata] = (await queryInterface.sequelize.query(
-        `SELECT id FROM roles WHERE role = 'Doctor'`
+        `SELECT id FROM roles WHERE role = 'Doctor'`,
       )) as [Array<{ id: number }>, any];
       const roleId = results[0].id;
       await queryInterface.bulkInsert("users", [

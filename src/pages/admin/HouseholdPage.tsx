@@ -37,7 +37,9 @@ const HouseholdPage: FC = () => {
   const [registeredHouseholds, setRegisteredHouseholds] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [residentCount, setResidentCount] = useState(0);
-  const [householdChartData, setHouseholdChartData] = useState<{ division: string; count: number }[]>([]);
+  const [householdChartData, setHouseholdChartData] = useState<
+    { division: string; count: number }[]
+  >([]);
 
   const fetchHouseholds = async () => {
     try {
@@ -50,10 +52,12 @@ const HouseholdPage: FC = () => {
         divisionCounts[division] = (divisionCounts[division] || 0) + 1;
       });
 
-      const chartData = Object.entries(divisionCounts).map(([division, count]) => ({
-        division,
-        count,
-      }));
+      const chartData = Object.entries(divisionCounts).map(
+        ([division, count]) => ({
+          division,
+          count,
+        }),
+      );
       setHouseholdChartData(chartData);
     } catch (error) {
       console.error("Error fetching households:", error);
@@ -95,7 +99,9 @@ const HouseholdPage: FC = () => {
     try {
       await deleteHousehold(selectedHousehold.house_no);
       setRegisteredHouseholds((prev) =>
-        prev.filter((household) => household.house_no !== selectedHousehold.house_no)
+        prev.filter(
+          (household) => household.house_no !== selectedHousehold.house_no,
+        ),
       );
       message.success("Household deleted successfully!");
       setDeleteModalVisible(false);
@@ -137,7 +143,7 @@ const HouseholdPage: FC = () => {
     try {
       const updatedHousehold = await updateHouseholdOwner(
         selectedHousehold.house_no,
-        newOwnerId
+        newOwnerId,
       );
 
       if (updatedHousehold.owner) {
@@ -145,8 +151,8 @@ const HouseholdPage: FC = () => {
           prev.map((household) =>
             household.house_no === selectedHousehold.house_no
               ? { ...household, owner: updatedHousehold.owner }
-              : household
-          )
+              : household,
+          ),
         );
 
         message.success("Household owner updated successfully!");

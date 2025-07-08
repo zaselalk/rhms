@@ -18,34 +18,35 @@ ResidentRouter.post(
 
   valiadteResident,
   // protectRoute,
-  catchAsync(residentController.residentRegister)
+  catchAsync(residentController.residentRegister),
 );
 ResidentRouter.get(
   "/nic/:nic",
-  catchAsync(residentController.residentfindByNic)
+  catchAsync(residentController.residentfindByNic),
 );
 ResidentRouter.get("/id/:id", catchAsync(residentController.residentfindById));
 ResidentRouter.put(
   "/update/:id",
-  catchAsync(residentController.updateResident)
+  catchAsync(residentController.updateResident),
 );
 ResidentRouter.delete(
   "/delete/:id",
-  catchAsync(residentController.deleteResidentById)
+  catchAsync(residentController.deleteResidentById),
 );
 
 ResidentRouter.get(
   "/residentOverview",
-  catchAsync(residentController.getResidentOverview)
+  catchAsync(residentController.getResidentOverview),
 );
 
 ResidentRouter.get(
   "/residentCount",
-  catchAsync(residentController.getResidentCount)
+  catchAsync(residentController.getResidentCount),
 );
 
 ResidentRouter.get(
   "/disease-patient-counts",
-  catchAsync(residentController.getDiseasePatientCounts));
+  catchAsync(residentController.getDiseasePatientCounts),
+);
 
 export default ResidentRouter;

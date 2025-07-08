@@ -1,4 +1,4 @@
-import { QueryInterface } from 'sequelize';
+import { QueryInterface } from "sequelize";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -101,7 +101,16 @@ module.exports = {
   async down(queryInterface: QueryInterface) {
     await queryInterface.bulkDelete("households", {
       house_no: [
-        "12A", "14B", "21A", "22A", "24B", "25C", "27A", "28B", "30C", "32A"
+        "12A",
+        "14B",
+        "21A",
+        "22A",
+        "24B",
+        "25C",
+        "27A",
+        "28B",
+        "30C",
+        "32A",
       ],
     });
   },

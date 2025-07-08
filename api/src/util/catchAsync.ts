@@ -3,7 +3,7 @@ import { UserNotFoundException } from "../exceptions/UserNotFound";
 import { ValidationException } from "../exceptions/ValidatationError";
 
 const catchAsync = (
-  func: (req: Request, res: Response, next: NextFunction) => Promise<any>
+  func: (req: Request, res: Response, next: NextFunction) => Promise<any>,
 ) => {
   return (req: Request, res: Response, next: NextFunction) => {
     func(req, res, next).catch((error) => {

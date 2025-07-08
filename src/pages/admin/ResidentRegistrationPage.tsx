@@ -94,27 +94,27 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
   const handleAddicted = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;
     setAddictedd((prev) =>
-      checked ? [...prev, value] : prev.filter((item) => item !== value)
+      checked ? [...prev, value] : prev.filter((item) => item !== value),
     );
   };
 
   const handleAllergy = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;
     setAllergies((prev) =>
-      checked ? [...prev, value] : prev.filter((item) => item !== value)
+      checked ? [...prev, value] : prev.filter((item) => item !== value),
     );
   };
 
   const handleChronicDisease = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;
     setChronicDisease((prev) =>
-      checked ? [...prev, value] : prev.filter((item) => item !== value)
+      checked ? [...prev, value] : prev.filter((item) => item !== value),
     );
   };
   const HandleClinics = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;
     setClinic((prev) =>
-      checked ? [...prev, value] : prev.filter((item) => item !== value)
+      checked ? [...prev, value] : prev.filter((item) => item !== value),
     );
   };
 

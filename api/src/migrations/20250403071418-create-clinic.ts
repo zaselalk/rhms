@@ -24,7 +24,7 @@ export const down = async (queryInterface: QueryInterface) => {
   try {
     // check if the sessions table exists before dropping
     const tableExists = await queryInterface.sequelize.query(
-      `SELECT * FROM information_schema.tables WHERE table_name = 'clinicsessions'`
+      `SELECT * FROM information_schema.tables WHERE table_name = 'clinicsessions'`,
     );
     if (tableExists[0].length > 0) {
       console.log("clinicsessions table has data, dropping the table");

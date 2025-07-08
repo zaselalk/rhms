@@ -10,7 +10,7 @@ import { Request, Response, NextFunction } from "express";
 export const isSuperAdmin = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   // check if user is logged in
   if (!req.user) {

@@ -24,7 +24,7 @@ const getAllSessions = async (req: Request, res: Response) => {
   }
 };
 
-const getSessionById = async (req: Request, res: Response) =>   {
+const getSessionById = async (req: Request, res: Response) => {
   try {
     const session = await sessionService.getSessionById(Number(req.params.id));
     if (!session) {
@@ -38,7 +38,10 @@ const getSessionById = async (req: Request, res: Response) =>   {
 
 const updateSession = async (req: Request, res: Response) => {
   try {
-    const session = await sessionService.updateSession(Number(req.params.id), req.body);
+    const session = await sessionService.updateSession(
+      Number(req.params.id),
+      req.body,
+    );
     if (!session) {
       return res.status(404).json({ error: "Session not found" });
     }

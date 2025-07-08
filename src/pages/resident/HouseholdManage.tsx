@@ -34,7 +34,7 @@ const HouseholdPage: FC = () => {
 
     // Show confirmation alert
     const confirmDelete = window.confirm(
-      `Are you sure you want to remove ${selectedResident.name}?`
+      `Are you sure you want to remove ${selectedResident.name}?`,
     );
 
     if (confirmDelete) {
@@ -46,7 +46,7 @@ const HouseholdPage: FC = () => {
 
         // Update UI by removing resident from state
         setResidents(
-          residents.filter((resident) => resident.id !== selectedResident.id)
+          residents.filter((resident) => resident.id !== selectedResident.id),
         );
 
         // Show success message

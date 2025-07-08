@@ -1,15 +1,13 @@
 import { Router } from "express";
 import ClinicController from "../controllers/ClinicController";
-import catchAsync from "../util/catchAsync"
+import catchAsync from "../util/catchAsync";
 import clinicSessionController from "../controllers/clinicSessionController";
 
-
-const ClinicRouter:Router= Router();
+const ClinicRouter: Router = Router();
 const clinicController = new ClinicController();
 
-
 // Route to ping the clinic service
-// ClinicRouter.get("/ping", catchAsync(clinicController.ping)); 
+// ClinicRouter.get("/ping", catchAsync(clinicController.ping));
 ClinicRouter.post("/createClinic", catchAsync(clinicController.createClinic));
 
 // // Get all clinics
@@ -17,12 +15,17 @@ ClinicRouter.get("/getAllClinics", catchAsync(clinicController.getAllClinics));
 
 // // Get a clinic by ID
 ClinicRouter.get("/:id", catchAsync(clinicController.getClinicById));
-ClinicRouter.post("/:id/session", catchAsync(clinicSessionController.createSession));
-ClinicRouter.get("/:id/GetSessionForClinic", catchAsync(clinicSessionController.getAllSessions));
+ClinicRouter.post(
+  "/:id/session",
+  catchAsync(clinicSessionController.createSession),
+);
+ClinicRouter.get(
+  "/:id/GetSessionForClinic",
+  catchAsync(clinicSessionController.getAllSessions),
+);
 //ClinicRouter.get(":id/session/:sid/getSessionById", clinicSessionController.getSessionById);
 //ClinicRouter.put("/:id/session/:sid/updateSessionById", clinicSessionController.updateSession);
 //ClinicRouter.delete("/:id/session/:sid/DeleteSession", clinicSessionController.deleteSession);
-
 
 // // Update a clinic by ID
 ClinicRouter.put("/:id", catchAsync(clinicController.updateClinic));

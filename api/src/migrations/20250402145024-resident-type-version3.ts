@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 import sequelize, { QueryInterface } from "sequelize";
 import { DataType } from "sequelize-typescript";
 
@@ -27,7 +27,6 @@ module.exports = {
     try {
       // await queryInterface.removeColumn("residents", "height");
       // await queryInterface.removeColumn("residents", "weight");
-
       // await queryInterface.addColumn("residents", "height", {
       //   type: DataType.NUMBER,
       //   allowNull: true,
@@ -41,5 +40,5 @@ module.exports = {
     } catch (e) {
       console.log(e);
     }
-  }
+  },
 };

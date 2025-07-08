@@ -98,7 +98,7 @@ export const userDeleteValidation: RequestHandler[] = [
 export const checkAuthValidation: RequestHandler = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void => {
   const token = req.headers.authorization?.split(" ")[1];
 

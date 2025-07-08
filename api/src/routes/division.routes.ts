@@ -1,8 +1,7 @@
 import { Router } from "express";
 import DivisionController from "../controllers/DivisionController";
 
-const DivisionRouter:Router = Router();
-
+const DivisionRouter: Router = Router();
 
 DivisionRouter.get("/", DivisionController.getAll);
 DivisionRouter.get("/:id", DivisionController.getById);

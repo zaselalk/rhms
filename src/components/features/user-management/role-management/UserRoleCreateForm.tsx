@@ -30,7 +30,7 @@ export const UserRoleCreateForm: FC<UserRoleCreateFormProps> = ({
     if (checked) {
       const allPerms = allPermissions.reduce<string[]>(
         (acc, { perms }) => [...acc, ...perms],
-        []
+        [],
       );
       form.setFieldsValue({ permission: allPerms });
     } else {

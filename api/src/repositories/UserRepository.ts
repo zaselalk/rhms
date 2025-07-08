@@ -29,7 +29,7 @@ export class UserRepository {
   async createUser(
     name: string,
     email: string,
-    hashedPassword: string
+    hashedPassword: string,
   ): Promise<User> {
     return User.create({
       name,
@@ -66,7 +66,7 @@ export class UserRepository {
    * @returns A promise that resolves to the found UserWithPermission instance or null if not found.
    */
   async findByEmailWithPermission(
-    email: string
+    email: string,
   ): Promise<UserWithPermission | null> {
     return User.findOne<UserWithPermission>({
       where: {
@@ -172,7 +172,7 @@ export class UserRepository {
     roleId: number,
     email: string,
     password: string,
-    phone_number: string
+    phone_number: string,
   ): Promise<User> {
     return User.create({
       name,
@@ -191,7 +191,7 @@ export class UserRepository {
    */
   async updateUserFullNameById(
     id: number,
-    full_name: string
+    full_name: string,
   ): Promise<User | null> {
     const user = await this.findById(id);
     if (!user) return null;
@@ -225,7 +225,7 @@ export class UserRepository {
    */
   async changeUserPasswordById(
     id: number,
-    hashedPassword: string
+    hashedPassword: string,
   ): Promise<User | null> {
     const user = await this.findById(id);
     if (!user) return null;
@@ -245,7 +245,7 @@ export class UserRepository {
       { deletedAt: new Date() }, // Soft delete by setting deletedAt
       {
         where: { id: id, deletedAt: null }, // Ensure the user is not already soft-deleted
-      }
+      },
     );
 
     return updatedRows > 0; // Check if any rows were updated

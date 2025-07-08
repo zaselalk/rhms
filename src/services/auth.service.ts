@@ -26,7 +26,7 @@ class AuthServices {
     } catch (error: any) {
       throw new Error(
         error.response?.data?.message ||
-          "Could not authenticate you. Please try again."
+          "Could not authenticate you. Please try again.",
       );
     }
   }
@@ -56,7 +56,7 @@ class AuthServices {
   async updateUserRole(
     roleId: string,
     roleName: string,
-    permissionList: string[]
+    permissionList: string[],
   ) {
     try {
       const response = await axiosInstance.patch(`/role/${roleId}`, {
@@ -67,7 +67,7 @@ class AuthServices {
       return response.data;
     } catch (error: any) {
       throw new Error(
-        error.response?.data?.message || "Unable to update User Role"
+        error.response?.data?.message || "Unable to update User Role",
       );
     }
   }
@@ -78,7 +78,7 @@ class AuthServices {
       return response.data;
     } catch (error: any) {
       throw new Error(
-        error.response?.data?.message || "Unable to delete User Role"
+        error.response?.data?.message || "Unable to delete User Role",
       );
     }
   }
@@ -89,7 +89,7 @@ class AuthServices {
       return response.data;
     } catch (error: any) {
       throw new Error(
-        error.response?.data?.message || "Unable to fetch role by ID"
+        error.response?.data?.message || "Unable to fetch role by ID",
       );
     }
   }

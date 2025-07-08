@@ -45,7 +45,7 @@ const ResidentListPage = () => {
   //  Paginated resident list
   const paginatedResidents = filteredResidents.slice(
     (currentPage - 1) * pageSize,
-    currentPage * pageSize
+    currentPage * pageSize,
   );
 
   return (
@@ -54,7 +54,9 @@ const ResidentListPage = () => {
         {/* Header & Search */}
         <div className="top-0 bg-white z-20 pb-2">
           <div className="flex justify-between mb-2 items-center">
-            <h2 className="text-2xl font-semibold text-[#008FFB]">Resident Details</h2>
+            <h2 className="text-2xl font-semibold text-[#008FFB]">
+              Resident Details
+            </h2>
             <Link to="create">
               <button className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
                 Add Resident
@@ -91,7 +93,10 @@ const ResidentListPage = () => {
               </thead>
               <tbody>
                 {paginatedResidents.map((resident) => (
-                  <tr key={resident.id} className="text-center hover:bg-gray-100">
+                  <tr
+                    key={resident.id}
+                    className="text-center hover:bg-gray-100"
+                  >
                     <td className="p-3">{resident.id}</td>
                     <td className="p-3">
                       {resident.firstName} {resident.lastName}
@@ -99,7 +104,10 @@ const ResidentListPage = () => {
                     <td className="p-3">{resident.contactNumber}</td>
                     <td className="p-3">{resident.address}</td>
                     <td className="p-3">
-                      <Link to={`profile/${resident.id}`} className="text-blue-600">
+                      <Link
+                        to={`profile/${resident.id}`}
+                        className="text-blue-600"
+                      >
                         View
                       </Link>
                     </td>

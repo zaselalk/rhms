@@ -165,7 +165,7 @@ module.exports = {
             updatedAt: new Date(),
           },
         ],
-        {}
+        {},
       );
     } catch (error) {
       console.log("Error in seeding permissions: ", error);

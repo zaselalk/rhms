@@ -29,7 +29,7 @@ export const UserChangeChangePassword = () => {
       return await profileService.updateUserPassword(
         userId,
         currentPassword,
-        newPassword
+        newPassword,
       );
     },
     onSuccess: (data) => {
@@ -118,7 +118,7 @@ export const UserChangeChangePassword = () => {
                         return Promise.resolve();
                       }
                       return Promise.reject(
-                        new Error("The two passwords do not match!")
+                        new Error("The two passwords do not match!"),
                       );
                     },
                   }),

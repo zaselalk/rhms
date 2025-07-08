@@ -21,7 +21,7 @@ const deleteSession = async (id: number) => {
 };
 async function getSessionsByClinicId(clinicId: number) {
   return sessionRepository.findAll({ where: { clinicId } });
-};
+}
 
 export default {
   createSession,
@@ -29,5 +29,5 @@ export default {
   getSessionById,
   updateSession,
   deleteSession,
-  getSessionsByClinicId
+  getSessionsByClinicId,
 };

@@ -11,7 +11,7 @@ import AuditLog from "../models/audit-log";
 export const logAction = async (
   userId: number | null,
   action: string,
-  details: Record<string, any> | null = null
+  details: Record<string, any> | null = null,
 ): Promise<void> => {
   try {
     await AuditLog.create({
