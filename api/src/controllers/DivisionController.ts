@@ -51,6 +51,26 @@ class DivisionController {
       res.status(404).json({ message: error.message });
     }
   }
+
+ 
+  async getDivisionCount(req: Request, res: Response) {
+    try {
+      const count = await DivisionService.getDivisionCount();
+      res.status(200).json({
+        message: "Division count fetched successfully",
+        status: 200,
+        error: null,
+        data: { count }
+      });
+    } catch (error: any) {
+      res.status(500).json({
+        message: "Error fetching division count",
+        status: 500,
+        error: error.message,
+        data: null
+      });
+    }
+  }
 }
 
 export default new DivisionController();

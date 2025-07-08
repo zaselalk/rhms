@@ -11,9 +11,13 @@ const createSession = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const getAllSessions = async (_req: Request, res: Response) => {
+const getAllSessions = async (req: Request, res: Response) => {
   try {
-    const sessions = await sessionService.getAllSessions();
+    const clinicId = Number(req.params.id);
+    if (isNaN(clinicId)) {
+      return res.status(400).json({ error: "Invalid clinic ID" });
+    }
+    const sessions = await sessionService.getSessionsByClinicId(clinicId);
     res.json(sessions);
   } catch (error: any) {
     res.status(500).json({ error: error.message });

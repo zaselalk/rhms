@@ -25,6 +25,9 @@ const deleteSession = async (id: number) => {
   await session.destroy();
   return session;
 };
+const findAll = async (options = {}) => {
+  return Session.findAll(options);
+};
 
 export default {
   createSession,
@@ -32,4 +35,5 @@ export default {
   getSessionById,
   updateSession,
   deleteSession,
+  findAll,
 };

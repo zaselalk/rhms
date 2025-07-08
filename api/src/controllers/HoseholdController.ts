@@ -46,7 +46,7 @@ export class HouseholdController {
         return res.status(404).json({ message: 'Household not found' });
       }
 
-      return res.json({ message: 'Household owner updated successfully',owner:updated });
+      return res.json({ message: 'Household owner updated successfully', owner: updated });
 
     } catch (error) {
       console.error('Update error:', error);
@@ -73,4 +73,23 @@ export class HouseholdController {
       return res.status(500).json({ message: 'Internal server error' });
     }
   };
+
+  gethouseholdCount = async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const count = await this.householdService.householdCount();
+      return res.json({
+        message: 'Household count fetched successfully',
+        status: 200,
+        error: null,
+        data: {count}
+      });
+    } catch (error) {
+      console.error('Error fetching household count:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+
+
+
+
 }

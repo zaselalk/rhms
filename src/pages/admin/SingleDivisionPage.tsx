@@ -36,8 +36,18 @@ const SingleDivisionPage: FC = () => {
         "9": "Karampethara",
       };
 
+
       const selectedName = divisionLookup[id] || "Unknown Division";
       setDivisionName(selectedName);
+
+const households = [
+  { houseId: 'H001', owner: 'Nimal Perera', peopleCount: 5 },
+  { houseId: 'H002', owner: 'Kumari Jayawardena', peopleCount: 8 },
+  { houseId: 'H003', owner: 'Sunil Fernando', peopleCount: 3 },
+  { houseId: 'H004', owner: 'Anushka Herath', peopleCount: 4 },
+  { houseId: 'H005', owner: 'Ruwan Abeykoon', peopleCount: 6 },
+];
+
 
       // Fetch household data from API
       getHouseholdsByDivision(selectedName)

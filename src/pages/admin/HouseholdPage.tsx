@@ -1,7 +1,8 @@
+// src/pages/admin/HouseholdPage.tsx
+
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Modal, message, Button, Input } from "antd";
-import axios from "axios";
 import {
   BarChart,
   Bar,
@@ -13,12 +14,18 @@ import {
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import { EyeOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { HouseholdCreateModal } from "../../components/features/household-management/HouseholdCreateModal";
-import { deleteHousehold } from "../../services/household.service";
+
+import {
+  deleteHousehold,
+  fetchAllHouseholds,
+  fetchResidentCount,
+  searchResidentById,
+  updateHouseholdOwner,
+} from "../../services/household.service";
 
 const HouseholdPage: FC = () => {
   const navigate = useNavigate();
 
-  //   const [newOwner, setNewOwner] = useState("");
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isEditModalVisible, setEditModalVisible] = useState(false);
   const [selectedHousehold, setSelectedHousehold] = useState<any>(null);
@@ -32,69 +39,46 @@ const HouseholdPage: FC = () => {
   const [residentCount, setResidentCount] = useState(0);
   const [householdChartData, setHouseholdChartData] = useState<{ division: string; count: number }[]>([]);
 
+  const fetchHouseholds = async () => {
+    try {
+      const data = await fetchAllHouseholds();
+      setRegisteredHouseholds(data);
 
-  // const householdData = [
-  //   { division: "Kotagedara", count: 10 },
-  //   { division: "Navuththuduwa", count: 15 },
-  //   { division: "Bopitiya", count: 8 },
-  //   { division: "Maddegedara", count: 5 },
-  //   { division: "Pahalawela", count: 12 },
-  //   { division: "Kolahekada", count: 7 },
-  //   { division: "Narawila", count: 9 },
-  //   { division: "Yatadola", count: 11 },
-  //   { division: "Henpita", count: 6 },
-  //   { division: "Pallegoda", count: 13 },
-  // ];
-
-  useEffect(() => {
-    const fetchHouseholds = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3001/household/read"
-        );
-        setRegisteredHouseholds(response.data);
-
-        
-        // Compute counts per division
       const divisionCounts: Record<string, number> = {};
-      response.data.forEach((household: any) => {
+      data.forEach((household: any) => {
         const division = household.grama_division || "Unknown";
         divisionCounts[division] = (divisionCounts[division] || 0) + 1;
       });
 
-      // Transform to array suitable for BarChart
       const chartData = Object.entries(divisionCounts).map(([division, count]) => ({
         division,
         count,
       }));
-
       setHouseholdChartData(chartData);
+    } catch (error) {
+      console.error("Error fetching households:", error);
+      message.error("Failed to load households");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-      } catch (error) {
-        console.error("Error fetching households:", error);
-        message.error("Failed to load households");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchResidentCountHandler = async () => {
+    try {
+      const count = await fetchResidentCount();
+      setResidentCount(count);
+    } catch (error) {
+      console.error("Error fetching resident count:", error);
+      message.error("Failed to load resident count");
+    }
+  };
+
+  useEffect(() => {
     fetchHouseholds();
   }, []);
 
-  
-  //get the total number of registered residents
   useEffect(() => {
-    const fetchResidentCount = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3001/resident/residentCount"
-        );
-        setResidentCount(response.data.data.count);
-      } catch (error) {
-        console.error("Error fetching resident count:", error);
-        message.error("Failed to load resident count");
-      }
-    };
-    fetchResidentCount();
+    fetchResidentCountHandler();
   }, []);
 
   const handleViewHousehold = (householdId: string) => {
@@ -109,12 +93,9 @@ const HouseholdPage: FC = () => {
   const confirmDeleteHousehold = async () => {
     if (!selectedHousehold) return;
     try {
-      // Call the deleteHousehold method to delete the selected household
       await deleteHousehold(selectedHousehold.house_no);
       setRegisteredHouseholds((prev) =>
-        prev.filter(
-          (household) => household.house_no !== selectedHousehold.house_no
-        )
+        prev.filter((household) => household.house_no !== selectedHousehold.house_no)
       );
       message.success("Household deleted successfully!");
       setDeleteModalVisible(false);
@@ -134,17 +115,13 @@ const HouseholdPage: FC = () => {
   const handleSearchResident = async () => {
     if (!newOwnerId) return message.error("Please enter a valid Resident ID!");
     try {
-      const response = await axios.get(
-        `http://localhost:3001/resident/id/${newOwnerId}`
-      );
-      if (response.data?.data) {
-        setNewOwnerName(
-          `${response.data.data.firstName} ${response.data.data.lastName}`
-        );
+      const resident = await searchResidentById(newOwnerId);
+      if (resident) {
+        setNewOwnerName(`${resident.firstName} ${resident.lastName}`);
         message.success("Resident found");
       } else {
         message.error("Resident not found");
-        setNewOwnerName(""); // Clear name if not found
+        setNewOwnerName("");
       }
     } catch (error) {
       console.error("Error searching resident:", error);
@@ -153,32 +130,27 @@ const HouseholdPage: FC = () => {
   };
 
   const handleConfirmEdit = async () => {
-    if (!newOwnerId) {
-      return message.error("Please enter a valid resident ID!");
-    }
-    if (!selectedHousehold || !selectedHousehold.owner) {
+    if (!newOwnerId) return message.error("Please enter a valid resident ID!");
+    if (!selectedHousehold || !selectedHousehold.owner)
       return message.error("Invalid household or owner selected!");
-    }
 
     try {
-      // Make the API request to update the household owner
-      const response = await axios.put(
-        `http://localhost:3001/household/update/${selectedHousehold.house_no}`,
-        { owner_id: newOwnerId }
+      const updatedHousehold = await updateHouseholdOwner(
+        selectedHousehold.house_no,
+        newOwnerId
       );
 
-      if (response.status === 200 && response.data.owner) {
+      if (updatedHousehold.owner) {
         setRegisteredHouseholds((prev) =>
           prev.map((household) =>
             household.house_no === selectedHousehold.house_no
-              ? { ...household, owner: response.data.owner }
+              ? { ...household, owner: updatedHousehold.owner }
               : household
           )
         );
 
         message.success("Household owner updated successfully!");
         setEditModalVisible(false);
-        console.log("Updated household:", response.data);
       } else {
         message.error("Failed to update owner");
       }
@@ -266,7 +238,9 @@ const HouseholdPage: FC = () => {
                   <td className="px-4 py-2 text-sm text-gray-700">
                     {household.house_no}
                   </td>
-                  <td className="px-4 py-2 text-sm text-gray-700">{`${household.owner.firstName} ${household.owner.lastName}`}</td>
+                  <td className="px-4 py-2 text-sm text-gray-700">
+                    {`${household.owner.firstName} ${household.owner.lastName}`}
+                  </td>
                   <td className="px-4 py-2 text-sm text-gray-700">
                     {household.grama_division}
                   </td>

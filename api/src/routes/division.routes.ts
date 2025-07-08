@@ -1,12 +1,14 @@
 import { Router } from "express";
 import DivisionController from "../controllers/DivisionController";
 
-const router = Router();
+const DivisionRouter:Router = Router();
 
-router.get("/", DivisionController.getAll);
-router.get("/:id", DivisionController.getById);
-router.post("/", DivisionController.create);
-router.put("/:id", DivisionController.update);
-router.delete("/:id", DivisionController.delete);
 
-export default router;
+DivisionRouter.get("/", DivisionController.getAll);
+DivisionRouter.get("/:id", DivisionController.getById);
+DivisionRouter.post("/", DivisionController.create);
+DivisionRouter.put("/:id", DivisionController.update);
+DivisionRouter.delete("/:id", DivisionController.delete);
+DivisionRouter.get("/count", DivisionController.getDivisionCount);
+
+export default DivisionRouter;
