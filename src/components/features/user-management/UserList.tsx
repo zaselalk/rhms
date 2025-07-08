@@ -62,7 +62,7 @@ export const UserList: FC = () => {
     if (!data) return;
 
     setUserCount(data.data.length); // write separate API to get count
-  }, [setUserCount, data]);
+  }, [setUserCount, data, isLoading]);
 
   const handleUserView = (user: User) => {
     setUser(user);

@@ -10,19 +10,17 @@ import { userRole } from "./user-role.types";
  * @typedef {Object} GetAllUsersResponse
  */
 export interface GetAllUsersResponse {
-  data: [
-    {
+  data: Array<{
+    id: number;
+    name: string;
+    email: string;
+    created_at: string;
+    role: {
       id: number;
-      name: string;
-      email: string;
-      created_at: string;
-      role: {
-        id: number;
-        role: string;
-        permission: string;
-      };
-    }
-  ];
+      role: string;
+      permission: string;
+    };
+  }>;
   message: string;
   status: string;
   limit: number;
