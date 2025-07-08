@@ -17,7 +17,14 @@ import {
 import { DivisionService } from "../../services/division.service";
 
 // Chart.js setup
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+);
 
 // Updated Types
 interface Division {
@@ -31,7 +38,9 @@ const DivisionPage: FC = () => {
   const [divisions, setDivisions] = useState<Division[]>([]);
   const [newDivisionName, setNewDivisionName] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [divisionToDelete, setDivisionToDelete] = useState<Division | null>(null);
+  const [divisionToDelete, setDivisionToDelete] = useState<Division | null>(
+    null,
+  );
 
   // New state for confirmation popup inside Add Division modal
   const [isConfirmCreateOpen, setIsConfirmCreateOpen] = useState(false);

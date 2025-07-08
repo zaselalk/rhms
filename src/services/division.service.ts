@@ -23,8 +23,6 @@ export const DivisionService = {
     }
   },
 
-
-
   // Delete division
   deleteDivision: async (divisionId: number) => {
     try {

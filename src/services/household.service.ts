@@ -22,7 +22,7 @@ export const getResidentById = async (residentId: number | string) => {
 
 export const updateHouseholdOwner = async (
   house_no: string | number,
-  owner_id: number | string
+  owner_id: number | string,
 ) => {
   const response = await axiosInstance.put(`/household/update/${house_no}`, {
     owner_id,
@@ -54,7 +54,7 @@ export const searchResidentById = async (residentId: number | string) => {
 export const getHouseholdsByDivision = async (division: string) => {
   try {
     const response = await axiosInstance.get(
-      `/household/by-division/${division}`
+      `/household/by-division/${division}`,
     );
     return response.data; // should return array of { house_no, ownerFirstName, ownerLastName, residentCount }
   } catch (error) {

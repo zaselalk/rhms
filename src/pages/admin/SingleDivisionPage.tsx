@@ -62,7 +62,7 @@ const SingleDivisionPage: FC = () => {
   }, [id]);
 
   const sortedHouseholds = [...households].sort(
-    (a, b) => a.residentCount - b.residentCount
+    (a, b) => a.residentCount - b.residentCount,
   );
   const sortedDiseases = [...diseases].sort((a, b) => a.count - b.count);
 

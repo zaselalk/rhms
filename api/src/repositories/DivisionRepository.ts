@@ -19,7 +19,7 @@ class DivisionRepository {
 
   async updateDivision(
     id: number,
-    updatedData: Partial<{ divisionName: string }>
+    updatedData: Partial<{ divisionName: string }>,
   ) {
     const division = await Division.findByPk(id);
     if (!division) return null;
