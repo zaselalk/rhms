@@ -81,7 +81,7 @@ export const ClinicService = {
   // Get all sessions for a specific clinic
   getClinicSessions: async (clinicId: string) => {
     try {
-      const response = await axiosInstance.get(`/clinic/${clinicId}/GetsessionForClinic`);
+      const response = await axiosInstance.get(`/clinic/${clinicId}/GetSessionForClinic`);
       return response.data;
     } catch (error) {
       console.error("Error fetching clinic sessions:", error);
