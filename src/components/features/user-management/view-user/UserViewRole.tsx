@@ -45,7 +45,7 @@ export const UserViewRole = ({
     const roleId = roles.find((role: any) => role.role === newRole)?.id;
 
     // Ensure roleId is found before proceeding
-    if (!roleId) {
+    if (roleId === undefined || roleId === null) {
       console.error("Role ID not found for the selected role:", newRole);
       return;
     }
