@@ -4,6 +4,7 @@ import Resident from "./resident";
 import Household from "./household";
 import HouseholdResident from "./householdresident";
 
+
 // Associations
 Resident.hasMany(Household, {
   foreignKey: "owner_id",

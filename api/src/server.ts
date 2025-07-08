@@ -13,9 +13,9 @@ import UserRouter from "./routes/user.routes";
 import serializeUser from "./middleware/serializeuser.middleware";
 import expressErrorHandler from "./util/expressErrorHandler";
 import "./models/association"; // Import associations to ensure they are registered
-import DivisionRouter from "./routes/division.routes";   
 import HouseholdResidentRouter from "./routes/householdresident.routes";
-
+import DivisionRouter from "./routes/division.routes";
+import { auditLogger } from "./middleware/auditLogger.middleware";
 dotenv.config();
 
 // env variables
@@ -31,6 +31,9 @@ app.use(express.urlencoded({ extended: true }));
 // This middleware will be used to serialize user data before sending it in the response
 app.use(serializeUser);
 
+// Middleware to log actions
+app.use(auditLogger);
+
 app.use("/auth", AuthRouter);
 app.use("/disease", DisaseRouter);
 app.use("/resident", ResidentRouter);
@@ -41,6 +44,7 @@ app.use("/role", RoleRouter);
 app.use("/user", UserRouter);
 app.use("/division",DivisionRouter);
 app.use("/household-resident", HouseholdResidentRouter);
+
 
 
 // error handling middleware
