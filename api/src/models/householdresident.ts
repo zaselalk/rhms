@@ -48,7 +48,7 @@ HouseholdResident.init(
     modelName: "HouseholdResident",
     tableName: "household_residents",
     timestamps: false,
-  }
+  },
 );
 
 export default HouseholdResident;

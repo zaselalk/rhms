@@ -4,7 +4,6 @@ import sequelize from ".";
 import Session from "./clinicSession";
 import Household from "./household";
 
-
 interface ResidentAttributes {
   id?: number;
   firstName: string;
@@ -153,9 +152,7 @@ Resident.init(
     modelName: "Resident",
     tableName: "residents",
     engine: "InnoDB",
-  }
-
+  },
 );
-
 
 export default Resident;

@@ -2,7 +2,6 @@ import { Model, DataTypes } from "sequelize";
 import sequelize from ".";
 import Resident from "./resident";
 
-
 interface HouseholdAttributes {
   id: number;
   house_no: string;
@@ -32,7 +31,7 @@ Household.init(
       primaryKey: true,
       allowNull: false,
     },
-  
+
     house_no: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -86,8 +85,7 @@ Household.init(
     tableName: "households",
     timestamps: true,
     engine: "InnoDB",
-  }
+  },
 );
-
 
 export default Household;
