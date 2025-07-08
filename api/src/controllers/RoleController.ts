@@ -1,4 +1,4 @@
-import { Sequelize } from "sequelize";
+import { Sequelize, UniqueConstraintError, ValidationError } from "sequelize";
 import { PermissionRepository } from "../repositories/PermissionRepository";
 import { RoleRepository } from "../repositories/RoleRepository";
 import { RoleService } from "../services/RoleService";
@@ -64,7 +64,7 @@ export class RoleController {
       });
     } catch (error: any) {
       // Handle Sequelize validation errors
-      if (error.parent && error.parent.code === "ER_DUP_ENTRY") {
+      if (error instanceof UniqueConstraintError) {
         return res.status(409).json({
           message: "Role already exists",
         });
