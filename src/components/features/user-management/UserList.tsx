@@ -63,7 +63,7 @@ export const UserList: FC = () => {
         setUser(updatedUser);
       }
     }
-  }, [data, user]);
+  }, [data, user, setUser]);
 
   const handleUserView = (user: User) => {
     setUser(user);
