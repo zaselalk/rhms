@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import axiosInstance from "./axios/axiosInstance";
 
 interface ReturnUser {
@@ -10,6 +11,11 @@ interface ReturnUser {
     permission: string;
   };
   token: string;
+}
+
+interface LoginResponse {
+  message: string;
+  user: ReturnUser;
 }
 
 /**
@@ -25,7 +31,7 @@ class AuthServices {
    */
   async login(email: string, password: string): Promise<ReturnUser> {
     try {
-      const response = await axiosInstance.post("/auth/login", {
+      const response = await axiosInstance.post<LoginResponse>("/auth/login", {
         email,
         password,
       });
@@ -33,11 +39,14 @@ class AuthServices {
       const data = response.data;
       localStorage.setItem("token", data.user.token);
       return data.user;
-    } catch (error: any) {
-      throw new Error(
-        error.response?.data?.message ||
-          "Could not authenticate you. Please try again."
-      );
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.message ||
+            "Could not authenticate you. Please try again."
+        );
+      }
+      throw new Error("Could not authenticate you. Please try again.");
     }
   }
 
