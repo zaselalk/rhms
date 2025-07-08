@@ -1,4 +1,3 @@
-"../../services/clinic.service"
 import { FC, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
@@ -36,18 +35,8 @@ const SingleDivisionPage: FC = () => {
         "9": "Karampethara",
       };
 
-
       const selectedName = divisionLookup[id] || "Unknown Division";
       setDivisionName(selectedName);
-
-const households = [
-  { houseId: 'H001', owner: 'Nimal Perera', peopleCount: 5 },
-  { houseId: 'H002', owner: 'Kumari Jayawardena', peopleCount: 8 },
-  { houseId: 'H003', owner: 'Sunil Fernando', peopleCount: 3 },
-  { houseId: 'H004', owner: 'Anushka Herath', peopleCount: 4 },
-  { houseId: 'H005', owner: 'Ruwan Abeykoon', peopleCount: 6 },
-];
-
 
       // Fetch household data from API
       getHouseholdsByDivision(selectedName)
@@ -72,7 +61,9 @@ const households = [
     }
   }, [id]);
 
-  const sortedHouseholds = [...households].sort((a, b) => a.residentCount - b.residentCount);
+  const sortedHouseholds = [...households].sort(
+    (a, b) => a.residentCount - b.residentCount
+  );
   const sortedDiseases = [...diseases].sort((a, b) => a.count - b.count);
 
   return (
@@ -114,15 +105,23 @@ const households = [
                 <table className="w-full table-auto">
                   <thead>
                     <tr>
-                      <th className="text-left px-4 py-2 text-sm text-gray-600">Disease</th>
-                      <th className="text-left px-4 py-2 text-sm text-gray-600">Count</th>
+                      <th className="text-left px-4 py-2 text-sm text-gray-600">
+                        Disease
+                      </th>
+                      <th className="text-left px-4 py-2 text-sm text-gray-600">
+                        Count
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {sortedDiseases.map((disease, index) => (
                       <tr key={index}>
-                        <td className="px-4 py-2 text-sm text-gray-700">{disease.name}</td>
-                        <td className="px-4 py-2 text-sm text-gray-700">{disease.count}</td>
+                        <td className="px-4 py-2 text-sm text-gray-700">
+                          {disease.name}
+                        </td>
+                        <td className="px-4 py-2 text-sm text-gray-700">
+                          {disease.count}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -137,19 +136,29 @@ const households = [
                 <table className="w-full table-auto">
                   <thead>
                     <tr>
-                      <th className="text-left px-4 py-2 text-sm text-gray-600">House ID</th>
-                      <th className="text-left px-4 py-2 text-sm text-gray-600">Owner</th>
-                      <th className="text-left px-4 py-2 text-sm text-gray-600">People Count</th>
+                      <th className="text-left px-4 py-2 text-sm text-gray-600">
+                        House ID
+                      </th>
+                      <th className="text-left px-4 py-2 text-sm text-gray-600">
+                        Owner
+                      </th>
+                      <th className="text-left px-4 py-2 text-sm text-gray-600">
+                        People Count
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {sortedHouseholds.map((house, index) => (
                       <tr key={index}>
-                        <td className="px-4 py-2 text-sm text-gray-700">{house.house_no}</td>
+                        <td className="px-4 py-2 text-sm text-gray-700">
+                          {house.house_no}
+                        </td>
                         <td className="px-4 py-2 text-sm text-gray-700">
                           {`${house.ownerFirstName} ${house.ownerLastName}`}
                         </td>
-                        <td className="px-4 py-2 text-sm text-gray-700">{house.residentCount}</td>
+                        <td className="px-4 py-2 text-sm text-gray-700">
+                          {house.residentCount}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
