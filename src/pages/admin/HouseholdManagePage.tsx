@@ -148,6 +148,8 @@ const HouseholdManagePage: FC = () => {
 
       if (response.ok) {
         setResidents(residents.filter((r) => r.recordId !== recordId));
+        alert("Resident removed successfully.");
+        
       } else {
         alert("Failed to remove resident.");
       }
