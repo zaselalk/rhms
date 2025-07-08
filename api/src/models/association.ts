@@ -1,6 +1,8 @@
 // models/index.ts
 import sequelize from ".";
 import Resident from "./resident";
+import Household from "./hosehold";
+import HouseholdResident from "./householdresident";
 import Household from "./household";
 import HouseholdResident from "./householdresident";
 
@@ -15,6 +17,32 @@ Household.belongsTo(Resident, {
   as: "owner",
 });
 
+Resident.hasMany(HouseholdResident, {
+  foreignKey: "residentId",
+  as: "householdRelations",
+});
+
+Household.hasMany(HouseholdResident, {
+  foreignKey: "householdId",
+  as: "residentRelations",
+});
+
+HouseholdResident.belongsTo(Resident, {
+  foreignKey: "residentId",
+  as: "resident",
+});
+
+HouseholdResident.belongsTo(Household, {
+  foreignKey: "householdId",
+  as: "household",
+});
+
+export {
+  sequelize,
+  Resident,
+  Household,
+  HouseholdResident,
+};
 // Association: Household has many residents via HouseholdResident
 Household.hasMany(HouseholdResident, {
   foreignKey: "householdId",
