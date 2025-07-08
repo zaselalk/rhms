@@ -36,7 +36,7 @@ describe("UserServices", () => {
     const user = await userServices.registerUser(
       "Test User",
       "test@tes.com",
-      "password"
+      "password",
     );
 
     expect(userRepository.createUser).toHaveBeenCalled();
@@ -62,7 +62,7 @@ describe("UserServices", () => {
     } as User);
 
     await expect(
-      userServices.registerUser("Test User", "test@gmail.com", "password")
+      userServices.registerUser("Test User", "test@gmail.com", "password"),
     ).rejects.toThrow("Email already in use");
   });
 
@@ -75,7 +75,7 @@ describe("UserServices", () => {
     userRepository.findByEmailWithPermission.mockResolvedValue(null);
 
     await expect(
-      userServices.loginUser("test@gmail.com", "password")
+      userServices.loginUser("test@gmail.com", "password"),
     ).rejects.toThrow(UserNotFoundException);
   });
 
@@ -91,7 +91,7 @@ describe("UserServices", () => {
     } as User);
 
     await expect(
-      userServices.loginUser("test@gmail.com", "ch@123")
+      userServices.loginUser("test@gmail.com", "ch@123"),
     ).rejects.toThrow(ValidationException);
   });
 

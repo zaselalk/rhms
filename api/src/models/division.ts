@@ -6,7 +6,10 @@ interface DivisionAttributes {
   divisionName: string;
 }
 
-export class Division extends Model<DivisionAttributes> implements DivisionAttributes {
+export class Division
+  extends Model<DivisionAttributes>
+  implements DivisionAttributes
+{
   public divisionId!: number;
   public divisionName!: string;
 }
@@ -38,7 +41,7 @@ Division.init(
     modelName: "Division",
     tableName: "divisions",
     timestamps: false,
-  }
+  },
 );
 
 export default Division;

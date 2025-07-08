@@ -43,7 +43,7 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
 
     try {
       const res = await axios.get(
-        `http://localhost:3001/resident/id/${Number(residentSearchId)}`
+        `http://localhost:3001/resident/id/${Number(residentSearchId)}`,
       );
       const data = res.data.data; // Accessing the correct structure
 
@@ -55,7 +55,7 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
       }
       console.log("Fetched resident data:", data);
       setFoundResidentName(
-        `${data.firstName} ${data.lastName}` || "Name not available"
+        `${data.firstName} ${data.lastName}` || "Name not available",
       );
       setOwnerId(res.data.id); // Corrected: use 'id', not '_id'
     } catch (err) {

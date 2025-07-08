@@ -8,11 +8,14 @@ interface DiseaseAttributes {
 }
 
 // Make diseaseId optional for creation (since it's auto-incremented)
-interface DiseaseCreationAttributes extends Optional<DiseaseAttributes, "diseaseId"> {}
+interface DiseaseCreationAttributes
+  extends Optional<DiseaseAttributes, "diseaseId"> {}
 
 // Extend the model
-class Disease extends Model<DiseaseAttributes, DiseaseCreationAttributes>
-  implements DiseaseAttributes {
+class Disease
+  extends Model<DiseaseAttributes, DiseaseCreationAttributes>
+  implements DiseaseAttributes
+{
   public diseaseId!: number;
   public diseaseName!: string;
 
@@ -39,7 +42,7 @@ Disease.init(
     modelName: "Disease",
     tableName: "diseases",
     timestamps: true,
-  }
+  },
 );
 
 export default Disease;

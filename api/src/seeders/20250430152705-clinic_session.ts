@@ -5,7 +5,7 @@ module.exports = {
     try {
       // get the clinic IDs from the clinics table
       const clinics = await queryInterface.sequelize.query(
-        `SELECT id FROM clinics;`
+        `SELECT id FROM clinics;`,
       );
       const clinicIds = clinics[0].map((clinic: any) => clinic.id);
 

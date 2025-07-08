@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 import sequelize, { QueryInterface } from "sequelize";
 import { DataType } from "sequelize-typescript";
 
@@ -6,7 +6,7 @@ import { DataType } from "sequelize-typescript";
 module.exports = {
   async up(queryInterface: QueryInterface, Sequelize: typeof sequelize) {
     try {
-      await queryInterface.addColumn('residents', 'nic', {
+      await queryInterface.addColumn("residents", "nic", {
         type: DataType.STRING,
       });
     } catch (e) {
@@ -16,10 +16,9 @@ module.exports = {
 
   async down(queryInterface: QueryInterface, Sequelize: typeof sequelize) {
     try {
-      await queryInterface.removeColumn('residents', 'nic');
+      await queryInterface.removeColumn("residents", "nic");
     } catch (e) {
       console.log(e);
     }
-
-  }
+  },
 };

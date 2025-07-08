@@ -21,7 +21,7 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 interface Division {
@@ -45,7 +45,7 @@ const DivisionPage: FC = () => {
   const [newDivision, setNewDivision] = useState<Division | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [divisionToDelete, setDivisionToDelete] = useState<Division | null>(
-    null
+    null,
   );
 
   const handleClose = () => setIsOpen(false);
@@ -82,7 +82,7 @@ const DivisionPage: FC = () => {
   const generateChartData = () => {
     const divisionNames = divisions.map((division) => division.name);
     const divisionPopulations = divisions.map(
-      (division) => division.population
+      (division) => division.population,
     );
 
     return {

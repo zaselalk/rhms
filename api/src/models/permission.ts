@@ -43,7 +43,7 @@ Permission.init(
     sequelize,
     modelName: "Permission",
     tableName: "permissions",
-  }
+  },
 );
 
 export default Permission;

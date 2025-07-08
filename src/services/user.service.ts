@@ -28,7 +28,7 @@ export default class UserService {
    */
   async crateUserRole(
     roleName: string,
-    permissionList: string[]
+    permissionList: string[],
   ): Promise<any> {
     try {
       const response = await axiosInstance.post("/role", {
@@ -68,7 +68,7 @@ export default class UserService {
   async updateUserRole(
     roleId: string,
     roleName: string,
-    permissionList: string[]
+    permissionList: string[],
   ): Promise<any> {
     try {
       const response = await axiosInstance.patch(`/role/${roleId}`, {
@@ -79,7 +79,7 @@ export default class UserService {
       return response.data;
     } catch (error: any) {
       throw new Error(
-        error.response?.data?.message || "Unable to update User Role"
+        error.response?.data?.message || "Unable to update User Role",
       );
     }
   }
@@ -97,7 +97,7 @@ export default class UserService {
       return response.data;
     } catch (error: any) {
       throw new Error(
-        error.response?.data?.message || "Unable to delete User Role"
+        error.response?.data?.message || "Unable to delete User Role",
       );
     }
   }
@@ -114,7 +114,7 @@ export default class UserService {
       return response.data;
     } catch (error: any) {
       throw new Error(
-        error.response?.data?.message || "Unable to fetch role by ID"
+        error.response?.data?.message || "Unable to fetch role by ID",
       );
     }
   }
@@ -133,7 +133,7 @@ export default class UserService {
     email: string,
     password: string,
     role_id: number,
-    phone_number: string
+    phone_number: string,
   ): Promise<any> {
     try {
       const response = await axiosInstance.post("/user", {
@@ -164,7 +164,7 @@ export default class UserService {
       return response.data;
     } catch (error: any) {
       throw new Error(
-        error.response?.data?.message || "Unable to change user role"
+        error.response?.data?.message || "Unable to change user role",
       );
     }
   }

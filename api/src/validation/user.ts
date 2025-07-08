@@ -5,7 +5,10 @@ export const userRegisterValidation: RequestHandler[] = [
   body("email").isEmail().withMessage("Email is not valid"),
   body("password").notEmpty().withMessage("Password is required"),
   body("name").notEmpty().withMessage("First name is required"),
-  body("phone_number").optional().isString().withMessage("Phone number must be a string"),
+  body("phone_number")
+    .optional()
+    .isString()
+    .withMessage("Phone number must be a string"),
 
   (req: Request, res: Response, next: NextFunction): void => {
     const errors = validationResult(req);
@@ -90,7 +93,7 @@ export const userDeleteValidation: RequestHandler[] = [
 export const checkAuthValidation: RequestHandler = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void => {
   const token = req.headers.authorization?.split(" ")[1];
 

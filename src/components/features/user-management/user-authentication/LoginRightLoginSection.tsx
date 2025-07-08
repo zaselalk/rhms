@@ -36,7 +36,7 @@ export const LoginRightLoginSection: FC<UserLoginSectionProps> = ({
           email: user.email,
           role: user.role.role,
           permissions: JSON.parse(user.role.permission),
-        })
+        }),
       );
     },
     onSuccess: () => {

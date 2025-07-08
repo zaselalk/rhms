@@ -1,11 +1,10 @@
-'use strict';
+"use strict";
 
-import{ DataTypes, QueryInterface } from "sequelize";
+import { DataTypes, QueryInterface } from "sequelize";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface: QueryInterface) {
-    
+  async up(queryInterface: QueryInterface) {
     //add auto incerementing id field to the table
     try {
       await queryInterface.removeConstraint("households", "PRIMARY");
@@ -20,13 +19,12 @@ module.exports = {
     }
   },
 
-  async down (queryInterface: QueryInterface) {
+  async down(queryInterface: QueryInterface) {
     //remove auto incerementing id field to the table
     try {
       await queryInterface.removeColumn("households", "id");
     } catch (error) {
       console.log(error);
     }
-    
-  }
+  },
 };

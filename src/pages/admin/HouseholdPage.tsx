@@ -30,8 +30,9 @@ const HouseholdPage: FC = () => {
   const [registeredHouseholds, setRegisteredHouseholds] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [residentCount, setResidentCount] = useState(0);
-  const [householdChartData, setHouseholdChartData] = useState<{ division: string; count: number }[]>([]);
-
+  const [householdChartData, setHouseholdChartData] = useState<
+    { division: string; count: number }[]
+  >([]);
 
   // const householdData = [
   //   { division: "Kotagedara", count: 10 },
@@ -50,26 +51,26 @@ const HouseholdPage: FC = () => {
     const fetchHouseholds = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3001/household/read"
+          "http://localhost:3001/household/read",
         );
         setRegisteredHouseholds(response.data);
 
-        
         // Compute counts per division
-      const divisionCounts: Record<string, number> = {};
-      response.data.forEach((household: any) => {
-        const division = household.grama_division || "Unknown";
-        divisionCounts[division] = (divisionCounts[division] || 0) + 1;
-      });
+        const divisionCounts: Record<string, number> = {};
+        response.data.forEach((household: any) => {
+          const division = household.grama_division || "Unknown";
+          divisionCounts[division] = (divisionCounts[division] || 0) + 1;
+        });
 
-      // Transform to array suitable for BarChart
-      const chartData = Object.entries(divisionCounts).map(([division, count]) => ({
-        division,
-        count,
-      }));
+        // Transform to array suitable for BarChart
+        const chartData = Object.entries(divisionCounts).map(
+          ([division, count]) => ({
+            division,
+            count,
+          }),
+        );
 
-      setHouseholdChartData(chartData);
-
+        setHouseholdChartData(chartData);
       } catch (error) {
         console.error("Error fetching households:", error);
         message.error("Failed to load households");
@@ -80,13 +81,12 @@ const HouseholdPage: FC = () => {
     fetchHouseholds();
   }, []);
 
-  
   //get the total number of registered residents
   useEffect(() => {
     const fetchResidentCount = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3001/resident/residentCount"
+          "http://localhost:3001/resident/residentCount",
         );
         setResidentCount(response.data.data.count);
       } catch (error) {
@@ -113,8 +113,8 @@ const HouseholdPage: FC = () => {
       await deleteHousehold(selectedHousehold.house_no);
       setRegisteredHouseholds((prev) =>
         prev.filter(
-          (household) => household.house_no !== selectedHousehold.house_no
-        )
+          (household) => household.house_no !== selectedHousehold.house_no,
+        ),
       );
       message.success("Household deleted successfully!");
       setDeleteModalVisible(false);
@@ -135,11 +135,11 @@ const HouseholdPage: FC = () => {
     if (!newOwnerId) return message.error("Please enter a valid Resident ID!");
     try {
       const response = await axios.get(
-        `http://localhost:3001/resident/id/${newOwnerId}`
+        `http://localhost:3001/resident/id/${newOwnerId}`,
       );
       if (response.data?.data) {
         setNewOwnerName(
-          `${response.data.data.firstName} ${response.data.data.lastName}`
+          `${response.data.data.firstName} ${response.data.data.lastName}`,
         );
         message.success("Resident found");
       } else {
@@ -164,7 +164,7 @@ const HouseholdPage: FC = () => {
       // Make the API request to update the household owner
       const response = await axios.put(
         `http://localhost:3001/household/update/${selectedHousehold.house_no}`,
-        { owner_id: newOwnerId }
+        { owner_id: newOwnerId },
       );
 
       if (response.status === 200 && response.data.owner) {
@@ -172,8 +172,8 @@ const HouseholdPage: FC = () => {
           prev.map((household) =>
             household.house_no === selectedHousehold.house_no
               ? { ...household, owner: response.data.owner }
-              : household
-          )
+              : household,
+          ),
         );
 
         message.success("Household owner updated successfully!");

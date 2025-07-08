@@ -16,7 +16,8 @@ describe("RoleService", () => {
     roleRepository = new RoleRepository() as jest.Mocked<RoleRepository>;
     roleService = new RoleService(roleRepository);
     // Access the private userRepository through the service instance
-    userRepository = (roleService as any).userRepository as jest.Mocked<UserRepository>;
+    userRepository = (roleService as any)
+      .userRepository as jest.Mocked<UserRepository>;
   });
 
   describe("deleteRole", () => {
@@ -44,7 +45,7 @@ describe("RoleService", () => {
       userRepository.findUsersByRoleId.mockResolvedValue(mockUsers);
 
       await expect(roleService.deleteRole(roleId)).rejects.toThrow(
-        "You can't delete this role, because it is associated with a user."
+        "You can't delete this role, because it is associated with a user.",
       );
       expect(userRepository.findUsersByRoleId).toHaveBeenCalledWith(roleId);
       expect(roleRepository.delete).not.toHaveBeenCalled();
@@ -57,7 +58,7 @@ describe("RoleService", () => {
       roleRepository.findById.mockResolvedValue(mockRole);
 
       await expect(roleService.deleteRole(roleId)).rejects.toThrow(
-        "Deleting the super_user role is forbidden."
+        "Deleting the super_user role is forbidden.",
       );
       expect(userRepository.findUsersByRoleId).not.toHaveBeenCalled();
       expect(roleRepository.delete).not.toHaveBeenCalled();
@@ -70,11 +71,13 @@ describe("RoleService", () => {
       roleRepository.findById.mockResolvedValue(mockRole);
       userRepository.findUsersByRoleId.mockResolvedValue([]);
       roleRepository.delete.mockRejectedValue(
-        new Error("Cannot delete or update a parent row: a foreign key constraint fails")
+        new Error(
+          "Cannot delete or update a parent row: a foreign key constraint fails",
+        ),
       );
 
       await expect(roleService.deleteRole(roleId)).rejects.toThrow(
-        "You can't delete this role, because it is associated with a user."
+        "You can't delete this role, because it is associated with a user.",
       );
       expect(roleRepository.delete).toHaveBeenCalledWith(roleId);
     });
@@ -88,9 +91,9 @@ describe("RoleService", () => {
 
       roleRepository.findById.mockResolvedValue(null);
 
-      await expect(roleService.updateRole(roleId, roleName, permission)).rejects.toThrow(
-        "Role not found"
-      );
+      await expect(
+        roleService.updateRole(roleId, roleName, permission),
+      ).rejects.toThrow("Role not found");
       expect(roleRepository.findById).toHaveBeenCalledWith(roleId);
       expect(roleRepository.update).not.toHaveBeenCalled();
     });
@@ -103,9 +106,9 @@ describe("RoleService", () => {
 
       roleRepository.findById.mockResolvedValue(mockRole);
 
-      await expect(roleService.updateRole(roleId, roleName, permission)).rejects.toThrow(
-        "Modifying the super_user role is forbidden."
-      );
+      await expect(
+        roleService.updateRole(roleId, roleName, permission),
+      ).rejects.toThrow("Modifying the super_user role is forbidden.");
       expect(roleRepository.findById).toHaveBeenCalledWith(roleId);
       expect(roleRepository.update).not.toHaveBeenCalled();
     });
@@ -115,7 +118,11 @@ describe("RoleService", () => {
       const roleName = "Updated Role";
       const permission = "user:create";
       const mockRole = { id: roleId, role: "regular_role" } as Role;
-      const updatedRole = { id: roleId, role: roleName, permission: JSON.stringify(permission) } as Partial<Role>;
+      const updatedRole = {
+        id: roleId,
+        role: roleName,
+        permission: JSON.stringify(permission),
+      } as Partial<Role>;
 
       roleRepository.findById.mockResolvedValue(mockRole);
       roleRepository.update.mockResolvedValue(updatedRole as Role);
@@ -124,7 +131,11 @@ describe("RoleService", () => {
 
       expect(result).toEqual(updatedRole);
       expect(roleRepository.findById).toHaveBeenCalledWith(roleId);
-      expect(roleRepository.update).toHaveBeenCalledWith(roleId, roleName, permission);
+      expect(roleRepository.update).toHaveBeenCalledWith(
+        roleId,
+        roleName,
+        permission,
+      );
     });
   });
 });

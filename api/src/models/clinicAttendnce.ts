@@ -60,7 +60,7 @@ ClinicAttendance.init(
     modelName: "ClinicAttendance",
     tableName: "clinic_attendances",
     timestamps: false, // No timestamps by default
-  }
+  },
 );
 
 // Optional: Adding associations for Sequelize to recognize the relations

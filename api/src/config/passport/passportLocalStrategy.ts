@@ -3,7 +3,7 @@ import User from "../../models/user";
 export default async function passportLocalStrategy(
   email: string,
   password: string,
-  done: any
+  done: any,
 ) {
   try {
     const user: User | null = await User.findOne({ where: { email } });

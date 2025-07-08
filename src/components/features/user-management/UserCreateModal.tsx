@@ -29,7 +29,7 @@ export const UserCreateModal = ({
         email,
         password,
         role_id,
-        phone_number
+        phone_number,
       );
     },
     mutationKey: ["createUser"],

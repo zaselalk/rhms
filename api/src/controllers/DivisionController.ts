@@ -35,7 +35,10 @@ class DivisionController {
     try {
       const id = parseInt(req.params.id);
       const { divisionName } = req.body;
-      const updatedDivision = await DivisionService.updateDivision(id, divisionName);
+      const updatedDivision = await DivisionService.updateDivision(
+        id,
+        divisionName,
+      );
       res.status(200).json(updatedDivision);
     } catch (error: any) {
       res.status(400).json({ message: error.message });

@@ -1,12 +1,12 @@
 import { Clinic } from "../models/clinic";
 
-  export class ClinicRepository {
-    async createClinic(name: string): Promise<Clinic> {
-      return Clinic.create({
-          name
-      });
-    }
-    
+export class ClinicRepository {
+  async createClinic(name: string): Promise<Clinic> {
+    return Clinic.create({
+      name,
+    });
+  }
+
   // // Get all clinics
   async getAllClinics(): Promise<Clinic[]> {
     return Clinic.findAll();
@@ -18,7 +18,10 @@ import { Clinic } from "../models/clinic";
   }
 
   // // Update a clinic by ID
-  async updateClinic(id: number, updatedData: Partial<Clinic>): Promise<Clinic | null> {
+  async updateClinic(
+    id: number,
+    updatedData: Partial<Clinic>,
+  ): Promise<Clinic | null> {
     const clinic = await Clinic.findByPk(id);
     if (!clinic) return null;
 
@@ -35,7 +38,3 @@ import { Clinic } from "../models/clinic";
     return deletedCount > 0;
   }
 }
-  
-  
-
-  

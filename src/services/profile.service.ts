@@ -12,7 +12,7 @@ export default class ProfileService {
       return response.data;
     } catch (error: any) {
       throw new Error(
-        error.response?.data?.message || "Unable to update user full name"
+        error.response?.data?.message || "Unable to update user full name",
       );
     }
   }
@@ -24,7 +24,7 @@ export default class ProfileService {
   async updateUserPassword(
     userId: number,
     password: string,
-    new_password: string
+    new_password: string,
   ) {
     try {
       const response = await axiosInstance.put(`/user/${userId}/password`, {
@@ -34,7 +34,7 @@ export default class ProfileService {
       return response.data;
     } catch (error: any) {
       throw new Error(
-        error.response?.data?.message || "Unable to update user password"
+        error.response?.data?.message || "Unable to update user password",
       );
     }
   }

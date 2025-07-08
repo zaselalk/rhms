@@ -29,7 +29,7 @@ export const ClinicService = {
     try {
       const response = await axiosInstance.post(
         "/clinic/createClinic",
-        clinicData
+        clinicData,
       );
       return response.data;
     } catch (error) {
@@ -53,7 +53,7 @@ export const ClinicService = {
     try {
       const response = await axiosInstance.put(
         `/clinic/${clinicId}`,
-        clinicData
+        clinicData,
       );
       return response.data;
     } catch (error) {
@@ -65,7 +65,7 @@ export const ClinicService = {
   // Create a new session for a clinic
   createClinicSession: async (
     clinicId: string,
-    sessionData: { name: string; sessionDate: string }
+    sessionData: { name: string; sessionDate: string },
   ) => {
     try {
       const response = await axiosInstance.post(`/clinic/${clinicId}/session`, {

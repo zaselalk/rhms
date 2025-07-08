@@ -67,7 +67,7 @@ Role.init(
     sequelize,
     modelName: "Role",
     tableName: "roles",
-  }
+  },
 );
 
 export default Role;

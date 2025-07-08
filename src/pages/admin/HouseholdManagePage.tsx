@@ -30,7 +30,7 @@ const HouseholdManagePage: FC = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3001/resident/id/${searchId}`
+        `http://localhost:3001/resident/id/${searchId}`,
       );
       if (!response.ok) {
         throw new Error("Resident not found");
@@ -61,7 +61,7 @@ const HouseholdManagePage: FC = () => {
     }
 
     const existingResident = residents.find(
-      (resident) => resident.id === foundResident.id
+      (resident) => resident.id === foundResident.id,
     );
     if (existingResident) {
       alert("Resident already exists in this household!");

@@ -25,7 +25,7 @@ declare global {
 export default async function serializeUser(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   // get token from header
   let token = req.headers.authorization?.split(" ")[1] || null;

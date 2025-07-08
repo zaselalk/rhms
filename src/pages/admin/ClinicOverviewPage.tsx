@@ -34,12 +34,12 @@ const ClinicOverview: React.FC = () => {
     if (clinicTitle.trim()) {
       // Check for duplicate clinic name
       const isDuplicate = clinicCategories.some(
-        (clinic) => clinic.name.toLowerCase() === clinicTitle.toLowerCase()
+        (clinic) => clinic.name.toLowerCase() === clinicTitle.toLowerCase(),
       );
 
       if (isDuplicate) {
         alert(
-          "A clinic with this name already exists. Please choose a different name."
+          "A clinic with this name already exists. Please choose a different name.",
         );
         return;
       }
@@ -69,7 +69,7 @@ const ClinicOverview: React.FC = () => {
       try {
         await ClinicService.deleteClinic(clinicToDelete);
         setClinicCategories((prevCategories) =>
-          prevCategories.filter((clinic) => clinic.id !== clinicToDelete)
+          prevCategories.filter((clinic) => clinic.id !== clinicToDelete),
         );
       } catch (error) {
         console.error("Error deleting clinic:", error);
@@ -102,12 +102,12 @@ const ClinicOverview: React.FC = () => {
       const isDuplicate = clinicCategories.some(
         (clinic) =>
           clinic.name.toLowerCase() === clinicTitle.toLowerCase() &&
-          clinic.id !== clinicToEdit
+          clinic.id !== clinicToEdit,
       );
 
       if (isDuplicate) {
         alert(
-          "A clinic with this name already exists. Please choose a different name."
+          "A clinic with this name already exists. Please choose a different name.",
         );
         return;
       }
@@ -115,14 +115,14 @@ const ClinicOverview: React.FC = () => {
       try {
         const updatedClinic = await ClinicService.updateClinicName(
           clinicToEdit,
-          { name: clinicTitle }
+          { name: clinicTitle },
         );
         setClinicCategories((prevCategories) =>
           prevCategories.map((clinic) =>
             clinic.id === clinicToEdit
               ? { ...clinic, name: updatedClinic.name }
-              : clinic
-          )
+              : clinic,
+          ),
         );
         setShowEditModal(false);
         setClinicTitle("");
