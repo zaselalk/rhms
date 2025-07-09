@@ -5,8 +5,11 @@ class DivisionController {
   async getAll(req: Request, res: Response) {
     try {
       const divisions = await DivisionService.getAllDivisions();
+
+      console.log(divisions);
       res.status(200).json(divisions);
     } catch (error: any) {
+      console.log(error);
       res.status(500).json({ message: error.message });
     }
   }
@@ -35,7 +38,10 @@ class DivisionController {
     try {
       const id = parseInt(req.params.id);
       const { divisionName } = req.body;
-      const updatedDivision = await DivisionService.updateDivision(id, divisionName);
+      const updatedDivision = await DivisionService.updateDivision(
+        id,
+        divisionName,
+      );
       res.status(200).json(updatedDivision);
     } catch (error: any) {
       res.status(400).json({ message: error.message });
@@ -49,6 +55,25 @@ class DivisionController {
       res.status(204).send();
     } catch (error: any) {
       res.status(404).json({ message: error.message });
+    }
+  }
+
+  async getDivisionCount(req: Request, res: Response) {
+    try {
+      const count = await DivisionService.getDivisionCount();
+      res.status(200).json({
+        message: "Division count fetched successfully",
+        status: 200,
+        error: null,
+        data: { count },
+      });
+    } catch (error: any) {
+      res.status(500).json({
+        message: "Error fetching division count",
+        status: 500,
+        error: error.message,
+        data: null,
+      });
     }
   }
 }
