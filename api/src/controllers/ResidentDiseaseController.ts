@@ -133,7 +133,7 @@ export class ResidentDiseaseController {
         }
     }
 
-    //update by reidentid
+    //update by residentId
     updateResidentDiseaseByDiseaseId = async (req: Request, res: Response): Promise<Response> => {
         const { residentId, diseaseId } = req.body;
         console.log("Updating resident disease by disease ID:", { residentId, diseaseId });
