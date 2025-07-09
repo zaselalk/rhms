@@ -1,6 +1,4 @@
 import { Router } from "express";
-import ResidentController from "../controllers/ResidentController";
-import ResidentClinic from "../models/residentClinic";
 import ResidentClinicController from "../controllers/ResidentClinicController";
 import catchAsync from "../util/catchAsync";
 
