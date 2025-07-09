@@ -15,10 +15,10 @@ export const createHousehold = async (payload: HouseholdPayload) => {
   return response.data;
 };
 
-export const getResidentById = async (residentId: number | string) => {
-  const response = await axiosInstance.get(`/resident/${residentId}`);
-  return response.data;
-};
+// export const getResidentById = async (residentId: number | string) => {
+//   const response = await axiosInstance.get(`/resident/${residentId}`);
+//   return response.data;
+// };
 
 export const updateHouseholdOwner = async (
   house_no: string | number,
@@ -45,7 +45,7 @@ export const fetchResidentCount = async () => {
   return response.data.data.count;
 };
 
-export const searchResidentById = async (residentId: number | string) => {
+export const searchResidentById = async (residentId: number) => {
   const response = await axiosInstance.get(`/resident/id/${residentId}`);
   return response.data.data;
 };

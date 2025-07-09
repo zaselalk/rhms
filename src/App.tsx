@@ -111,7 +111,7 @@ function App() {
                 }
               />
               <Route
-                path="manage/:id"
+                path="manage/:householdId"
                 element={
                   <ProtectedRoutesGuard>
                     <HouseholdManagePage />

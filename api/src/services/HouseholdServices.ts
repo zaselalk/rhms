@@ -1,5 +1,5 @@
 import { HouseholdNotFoundException } from "../exceptions/HouseholdNotFound";
-import Household from "../models/hosehold";
+import Household from "../models/household";
 
 import { HouseholdRepository } from "../repositories/HouseholdRepository";
 

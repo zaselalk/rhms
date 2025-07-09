@@ -1,5 +1,5 @@
 // Adjust the import path as necessary
-import Household from "../models/hosehold";
+import Household from "../models/household";
 import Resident from "../models/resident";
 
 export class HouseholdRepository {
@@ -23,7 +23,7 @@ export class HouseholdRepository {
   // Read data
   async getAllHouseholdsWithOwnerName(): Promise<any[]> {
     return await Household.findAll({
-      attributes: ["house_no", "owner_id", "grama_division"],
+      attributes: ["house_no", "owner_id", "grama_division", "id"],
       include: [
         {
           model: Resident,
