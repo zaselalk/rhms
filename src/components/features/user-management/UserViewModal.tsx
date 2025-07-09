@@ -1,10 +1,11 @@
 import { Modal, Avatar } from "antd";
-import { User } from "./UserList";
+
 import { UserOutlined } from "@ant-design/icons";
 import { UserViewFullName } from "./view-user/UserViewFullName";
 import { UserEmailViewComponent } from "./view-user/UserEmailBlock";
 import { UserViewRole } from "./view-user/UserViewRole";
 import { useEffect, useState } from "react";
+import { User } from "../../../services/types/user-services.types";
 
 interface Props {
   isOpen: boolean;
