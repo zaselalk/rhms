@@ -2,10 +2,11 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from ".";
 import Resident from "./resident";
-import Household from "./hosehold";
+import Household from "./household";
+
 
 interface HouseholdResidentAttributes {
-  id: number;
+  
   residentId: number;
   householdId: number;
   relation: string;
@@ -23,11 +24,7 @@ class HouseholdResident
 
 HouseholdResident.init(
   {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
+    
     residentId: {
       type: DataTypes.INTEGER,
       allowNull: false,
