@@ -8,15 +8,15 @@ export class HouseholdRepository {
     grama_division: string,
     longitude: string,
     latitude: string,
-    owner_id?: number
+    owner_id?: number,
   ): Promise<Household> {
     return await Household.create({
-      id: 0,  // Assuming id is auto-incremented by the database
+      id: 0, // Assuming id is auto-incremented by the database
       house_no,
       grama_division,
       longitude,
       latitude,
-      owner_id
+      owner_id,
     });
   }
 
@@ -34,13 +34,57 @@ export class HouseholdRepository {
     });
   }
 
+  // Read households in a division with owner name and number of residents
+  async getHouseholdsInDivisionWithResidentCount(
+    division: string,
+  ): Promise<any[]> {
+    return await Household.findAll({
+      where: { grama_division: division },
+      include: [
+        {
+          model: Resident,
+          as: "owner", // assuming association alias for owner
+          attributes: ["firstName", "lastName"],
+        },
+        {
+          model: Resident,
+          as: "residents", // assuming this alias is used in association
+          attributes: [],
+        },
+      ],
+      group: [
+        "Household.house_no",
+        "owner.id",
+        "owner.firstName",
+        "owner.lastName",
+      ],
+      raw: true,
+      nest: true,
+      attributes: [
+        "house_no",
+        [Household.sequelize!.col("owner.firstName"), "ownerFirstName"],
+        [Household.sequelize!.col("owner.lastName"), "ownerLastName"],
+        [
+          Household.sequelize!.fn(
+            "COUNT",
+            Household.sequelize!.col("residents.id"),
+          ),
+          "residentCount",
+        ],
+      ],
+    });
+  }
+
   // Update Household Owner
-  async updateOwnerByHouseNo(house_no: string, owner_id: number): Promise<boolean> {
+  async updateOwnerByHouseNo(
+    house_no: string,
+    owner_id: number,
+  ): Promise<boolean> {
     const household = await Household.findOne({ where: { house_no } });
     if (!household) return false; // If no household found with house_no
 
-    household.owner_id = owner_id;  // Update the owner_id
-    await household.save();  // Save the changes
+    household.owner_id = owner_id; // Update the owner_id
+    await household.save(); // Save the changes
     return true;
   }
 
@@ -64,5 +108,4 @@ export class HouseholdRepository {
   async householdCount(): Promise<number> {
     return Household.count();
   }
-    
 }

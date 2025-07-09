@@ -17,7 +17,10 @@ class DivisionRepository {
     return await Division.create({ divisionName });
   }
 
-  async updateDivision(id: number, updatedData: Partial<{ divisionName: string }>) {
+  async updateDivision(
+    id: number,
+    updatedData: Partial<{ divisionName: string }>,
+  ) {
     const division = await Division.findByPk(id);
     if (!division) return null;
     return await division.update(updatedData);
@@ -27,8 +30,7 @@ class DivisionRepository {
     return await Division.destroy({ where: { divisionId: id } });
   }
 
-
-  async getDivisionCount() :Promise<number> {
+  async getDivisionCount(): Promise<number> {
     return await Division.count();
   }
 }
