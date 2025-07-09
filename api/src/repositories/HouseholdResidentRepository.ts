@@ -1,6 +1,6 @@
 // repositories/HouseholdResidentRepository.ts
 
-import HouseholdResident from "../models/householdResident";
+import HouseholdResident from "../models/householdresident";
 import Resident from "../models/resident";
 
 export class HouseholdResidentRepository {
@@ -20,7 +20,7 @@ export class HouseholdResidentRepository {
   async addResidentToHousehold(
     householdId: number,
     residentId: number,
-    relation: string,
+    relation: string
   ): Promise<HouseholdResident> {
     return HouseholdResident.create({
       householdId,
