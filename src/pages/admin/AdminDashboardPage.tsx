@@ -71,40 +71,84 @@ const AdminDashboard: React.FC = () => {
 
 
   const [residentCount, setResidentCount] = React.useState<number>(0);
+  const [householdCount, setHouseholdCount] = React.useState<number>(0);
+  // const [divisionCount, setDivisionCount] = React.useState<number>(0);
+  const [diseaseCount, setDiseaseCount] = React.useState<number>(0);
   const dashbordService = DashboardService;
 
   // Fetch resident count from the server
   const fetchdata = async () => {
-  try {
-    const data = await dashbordService.getresidentCount();
-    setResidentCount(data.count); 
-  } catch (error) {
-    console.error("Error fetching residents:", error);
-  }
-};
+    try {
+      const data = await dashbordService.getresidentCount();
+      setResidentCount(data.count);
+    } catch (error) {
+      console.error("Error fetching residents:", error);
+    }
+    try{
+      const data = await dashbordService.getHouseholdCount();
+      setHouseholdCount(data.count);
+    }catch (error) {
+      console.error("Error fetching households:", error);
+    }
+    try{
+      const data = await dashbordService.getDiseaseCount();
+      setDiseaseCount(data.count);
+    }catch(error){
+      console.error("Error fetching diseases:", error);
+    }
+  };
 
   // Fetch data when loading the component
   useEffect(() => {
     fetchdata();
   }, []);
 
+  const numberOfDivisions = 5; // Static value for the number of divisions
 
-  const numberOfDiseases = 5; // Example data for the number of diseases
-  const numberOfDivisions = 12;
-  const numberOfHouses = 100;
+
 
 
   return (
     <DashboardContainer>
-      <div>
+      <div >
         <h2 className="text-2xl font-semibold text-[#008FFB] mb-6">
           Katugahahena Divisional Hospital
         </h2>
-        <div>
+        {/* Other Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-5">
+          <div className="bg-white rounded-xl shadow-md p-4 flex flex-col justify-center items-center aspect-square">
+            <Home className="text-[#008FFB]" size={40} />
+            <h3 className="text-lg font-semibold text-[#008FFB] mt-2 text-center">
+              {householdCount} Houses
+            </h3>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-md p-4 flex flex-col justify-center items-center aspect-square">
+            <Users className="text-[#008FFB]" size={40} />
+            <h3 className="text-lg font-semibold text-[#008FFB] mt-2 text-center">
+              {residentCount} Residents
+            </h3>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-md p-4 flex flex-col justify-center items-center aspect-square">
+            <LayoutGrid className="text-[#008FFB]" size={40} />
+            <h3 className="text-lg font-semibold text-[#008FFB] mt-2 text-center">
+              {numberOfDivisions} Divisions
+            </h3>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-md p-4 flex flex-col justify-center items-center aspect-square">
+            <Activity className="text-[#008FFB]" size={40} />
+            <h3 className="text-lg font-semibold text-[#008FFB] mt-2 text-center">
+              {diseaseCount} Diseases
+            </h3>
+          </div>
+        </div>
+        <div >
           {/* Map Section */}
           <div className="bg-white p-6 rounded-lg shadow-md mb-6 w-full ">
             <h3 className="text-xl font-semibold text-[#008FFB] mb-4">
-              Hospital Location
+              Locations
             </h3>
             <MapContainer
               center={[6.4893, 80.0847]}
@@ -151,36 +195,7 @@ const AdminDashboard: React.FC = () => {
               <Pie data={nonCommunicableDiseasesData} />
             </div>
           </div>
-          {/* Other Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="bg-white rounded-xl shadow-md p-4 flex flex-col justify-center items-center aspect-square">
-              <Home className="text-[#008FFB]" size={40} />
-              <h3 className="text-lg font-semibold text-[#008FFB] mt-2 text-center">
-                {numberOfHouses} Houses
-              </h3>
-            </div>
 
-            <div className="bg-white rounded-xl shadow-md p-4 flex flex-col justify-center items-center aspect-square">
-              <Users className="text-[#008FFB]" size={40} />
-              <h3 className="text-lg font-semibold text-[#008FFB] mt-2 text-center">
-                {residentCount} Residents
-              </h3>
-            </div>
-
-            <div className="bg-white rounded-xl shadow-md p-4 flex flex-col justify-center items-center aspect-square">
-              <LayoutGrid className="text-[#008FFB]" size={40} />
-              <h3 className="text-lg font-semibold text-[#008FFB] mt-2 text-center">
-                {numberOfDivisions} Divisions
-              </h3>
-            </div>
-
-            <div className="bg-white rounded-xl shadow-md p-4 flex flex-col justify-center items-center aspect-square">
-              <Activity className="text-[#008FFB]" size={40} />
-              <h3 className="text-lg font-semibold text-[#008FFB] mt-2 text-center">
-                {numberOfDiseases} Diseases
-              </h3>
-            </div>
-          </div>
         </div>
       </div>
     </DashboardContainer>

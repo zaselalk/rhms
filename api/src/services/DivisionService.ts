@@ -45,6 +45,11 @@ class DivisionService {
     }
     return deleted;
   }
+
+
+  async getDivisionCount() {
+    return await DivisionRepository.getDivisionCount();
+  }
 }
 
 export default new DivisionService();

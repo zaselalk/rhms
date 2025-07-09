@@ -7,7 +7,7 @@ const router = Router();
 router.post("/createSession", clinicSessionController.createSession);
 
 // Get all sessions
-router.get("/getAllSession", clinicSessionController.getAllSessions);
+//router.get("/clinic/:id/GetsessionForClinic", clinicSessionController.getAllSessions);
 
 //Get a specific session by ID
 //router.get("/:id", clinicSessionController.getSessionById);
