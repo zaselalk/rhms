@@ -1,5 +1,3 @@
-// repositories/HouseholdResidentRepository.ts
-
 import HouseholdResident from "../models/householdresident";
 import Resident from "../models/resident";
 

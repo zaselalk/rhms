@@ -2,6 +2,7 @@ import sequelize from ".";
 import Resident from "./resident";
 import Household from "./household";
 import HouseholdResident from "./householdresident";
+// import HouseholdResident from "./householdresident";
 
 // HouseholdResident ↔ Resident
 HouseholdResident.belongsTo(Resident, {
@@ -36,4 +37,4 @@ Household.belongsTo(Resident, {
   as: "owner",
 });
 
-export { sequelize, Resident, Household, HouseholdResident };
+// export { sequelize, Resident, Household, HouseholdResident };
