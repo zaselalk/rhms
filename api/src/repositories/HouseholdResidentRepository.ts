@@ -1,6 +1,4 @@
-// repositories/HouseholdResidentRepository.ts
-
-import HouseholdResident from "../models/householdresident";
+import HouseholdResident from "../models/householdResident";
 import Resident from "../models/resident";
 
 export class HouseholdResidentRepository {
