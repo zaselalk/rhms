@@ -1,7 +1,7 @@
 ---
 name: Feature Request / Scenario
 about: Suggest an idea for this project or request a new feature scenario
-title: "[FEATURE] "
+title: "✨ "
 labels: ["enhancement", "feature request"]
 assignees: ''
 

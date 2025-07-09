@@ -260,14 +260,15 @@ export class UserServices {
     const user = await this.userRepository.findById(id);
     if (!user) throw new UserNotFoundException("User not found");
 
-    // Prevent deleting the super_user
-    // if (user.role && user.role.role === "super_user") {
-    //   logSuperUserAction({
-    //     userId: id,
-    //     action: "Attempted to delete super_user user via API",
-    //   });
-    //   throw new ValidationException("Deleting the super_user is forbidden.");
-    // }
+    if (user.role?.role === "super_admin") {
+      logSuperUserAction({
+        userId: id,
+        action: "Attempted to delete super_admin via API",
+      });
+      throw new ValidationException(
+        "Deleting the super_admin is forbidden via API."
+      );
+    }
 
     return this.userRepository.deleteUserById(id);
   }

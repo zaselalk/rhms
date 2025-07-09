@@ -1,5 +1,5 @@
 import { HouseholdNotFoundException } from "../exceptions/HouseholdNotFound";
-import Household from "../models/hosehold";
+import Household from "../models/household";
 
 import { HouseholdRepository } from "../repositories/HouseholdRepository";
 
@@ -37,5 +37,10 @@ export class HouseholdServices {
       throw new HouseholdNotFoundException("Household not found");
     }
     return this.householdRepository.deleteHouseholdByHouseNo(house_no);
+  }
+
+  //Household Count
+  async householdCount(): Promise<number> {
+    return this.householdRepository.householdCount();
   }
 }
