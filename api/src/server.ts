@@ -11,6 +11,7 @@ import PermissionRouter from "./routes/permission.routes";
 import RoleRouter from "./routes/role.routes";
 import UserRouter from "./routes/user.routes";
 import serializeUser from "./middleware/serializeuser.middleware";
+import clinicSessionRoutes from "./routes/clinicSession.routes";
 import expressErrorHandler from "./util/expressErrorHandler";
 import "./models/association"; // Import associations to ensure they are registered
 import HouseholdResidentRouter from "./routes/householdresident.routes";
@@ -43,6 +44,7 @@ app.use("/permission", PermissionRouter);
 app.use("/role", RoleRouter);
 app.use("/user", UserRouter);
 app.use("/division", DivisionRouter);
+app.use("/sessions", clinicSessionRoutes);
 app.use("/household-resident", HouseholdResidentRouter);
 
 // error handling middleware
