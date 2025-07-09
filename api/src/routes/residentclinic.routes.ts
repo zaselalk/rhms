@@ -17,7 +17,7 @@ residentClinicRouter.get(
 
 residentClinicRouter.get(
     "/getResident/:residentId",
-    catchAsync(residentClinicController.getResidentByClinicId)
+    catchAsync(residentClinicController.getClinicsByResidentId)
 );
 
 

@@ -84,7 +84,7 @@ class ResidentClinicController {
         });
     };
 
-    getResidentByClinicId = async (req: Request, res: Response): Promise<Response | void> => {
+    getClinicsByResidentId = async (req: Request, res: Response): Promise<Response | void> => {
         const { id } = req.params;
         const residentClinic: ResidentClinic | null = await this.residentClinicService.findByClinicId(Number(id));
         if (!residentClinic) {
