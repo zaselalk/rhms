@@ -115,7 +115,7 @@ const HouseholdPage: FC = () => {
   const handleSearchResident = async () => {
     if (!newOwnerId) return message.error("Please enter a valid Resident ID!");
     try {
-      const resident = await searchResidentById(newOwnerId);
+      const resident = await searchResidentById(Number(newOwnerId));
       if (resident) {
         setNewOwnerName(`${resident.firstName} ${resident.lastName}`);
         message.success("Resident found");
@@ -247,21 +247,21 @@ const HouseholdPage: FC = () => {
                   <td className="px-4 py-2 text-sm text-gray-700">
                     <div className="flex space-x-2">
                       <button
-                        className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-full shadow-md hover:bg-blue-600"
+                        className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-full shadow-md hover:bg-blue-600 cursor-pointer"
                         onClick={() => handleViewHousehold(household.id)}
                       >
                         <span className="mr-2">View</span>
                         <EyeOutlined />
                       </button>
                       <button
-                        className="flex items-center px-4 py-2 bg-green-500 text-white rounded-full shadow-md hover:bg-green-600"
+                        className="flex items-center px-4 py-2 bg-green-500 text-white rounded-full shadow-md hover:bg-green-600 cursor-pointer"
                         onClick={() => handleEditHousehold(household)}
                       >
                         <span className="mr-2">Edit</span>
                         <EditOutlined />
                       </button>
                       <button
-                        className="flex items-center px-4 py-2 bg-red-500 text-white rounded-full shadow-md hover:bg-red-600"
+                        className="flex items-center px-4 py-2 bg-red-500 text-white rounded-full shadow-md hover:bg-red-600 cursor-pointer"
                         onClick={() => handleDeleteHousehold(household)}
                       >
                         <span className="mr-2">Delete</span>
@@ -310,7 +310,14 @@ const HouseholdPage: FC = () => {
           </label>
           <Input
             value={newOwnerId}
-            onChange={(e) => setNewOwnerId(e.target.value)}
+            onChange={(e) => {
+              const input = e.target.value.toUpperCase();
+              if (/^[0-9vV]*$/.test(input)) {
+                setNewOwnerId(input);
+              } else {
+                message.error("Please enter a valid Resident ID!");
+              }
+            }}
             onBlur={handleSearchResident}
             placeholder="Enter new owner's Resident ID"
           />
