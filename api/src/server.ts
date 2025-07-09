@@ -13,9 +13,9 @@ import UserRouter from "./routes/user.routes";
 import serializeUser from "./middleware/serializeuser.middleware";
 import expressErrorHandler from "./util/expressErrorHandler";
 import "./models/association"; // Import associations to ensure they are registered
+import HouseholdResidentRouter from "./routes/householdresident.routes";
 import DivisionRouter from "./routes/division.routes";
 import { auditLogger } from "./middleware/auditLogger.middleware";
-
 dotenv.config();
 
 // env variables
@@ -43,6 +43,7 @@ app.use("/permission", PermissionRouter);
 app.use("/role", RoleRouter);
 app.use("/user", UserRouter);
 app.use("/division", DivisionRouter);
+app.use("/household-resident", HouseholdResidentRouter);
 
 // error handling middleware
 app.use(expressErrorHandler);
