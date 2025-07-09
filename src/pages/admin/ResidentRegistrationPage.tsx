@@ -42,8 +42,6 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
   const [alergies, setAllergies] = useState<string[]>([]);
   const [chronicalDesease, setChronicDisease] = useState<string[]>([]);
 
-  // const [clinics, setClinic] = useState<string[]>([]);
-
 
 
   type Clinic = {
@@ -133,12 +131,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
       checked ? [...prev, value] : prev.filter((item) => item !== value)
     );
   };
-  // const HandleClinics = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { value, checked } = event.target;
-  //   setClinic((prev) =>
-  //     checked ? [...prev, value] : prev.filter((item) => item !== value)
-  //   );
-  // };
+
 
   const residentRegister = residentService;
 
@@ -159,7 +152,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     initialValues,
     validationSchema: residentValidation,
     onSubmit: (values) => {
-      // formik.setStatus(null);
+      
       values.addicted = addicted;
       values.alergies = alergies;
       values.chronicalDesease = chronicalDesease;
