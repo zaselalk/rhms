@@ -13,7 +13,6 @@ import UserRouter from "./routes/user.routes";
 import serializeUser from "./middleware/serializeuser.middleware";
 import expressErrorHandler from "./util/expressErrorHandler";
 import "./models/association"; // Import associations to ensure they are registered
-import ResidentClinic from "./models/residentClinic";
 import residentClinicRouter from "./routes/residentclinic.routes";
 
 dotenv.config();
