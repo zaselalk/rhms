@@ -11,14 +11,11 @@ export class ResidentDiseaseService {
     }
 
     // Register a resident with a disease
-    async registerResidentDisease(
+    async createResidentDisease(
         residentId: number,
         diseaseId: number
-    ): Promise<void> {
-        return this.residentDiseaseRepository.cerateResidentDisease(
-            residentId,
-            diseaseId
-        );
+    ): Promise<ResidentDisease> {
+        return await this.residentDiseaseRepository.createResidentDisease(residentId, diseaseId);
     }
 
     // Get all resident-disease links
@@ -31,7 +28,7 @@ export class ResidentDiseaseService {
         diseaseId: number,
         residentId: number
     ): Promise<void> {
-       
+
         return await this.residentDiseaseRepository.updateResidentDiseaseByDiseaseId(
             diseaseId,
             residentId
@@ -66,7 +63,7 @@ export class ResidentDiseaseService {
 
     // Get residents by diseaseId (used for outbreak view or filter)
     async getResidentsByDiseaseId(diseaseId: number): Promise<{ id: number; firstName: string; lastName: string; contactNumber: string }[]> {
-        return await this.getResidentsByDiseaseId(diseaseId);
+        return await this.residentDiseaseRepository.getResidentsByDiseaseId(diseaseId);
     }
 
 
