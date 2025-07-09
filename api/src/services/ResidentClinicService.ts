@@ -1,8 +1,6 @@
 import { ResidentClinic } from '../models/residentClinic';
 import { ResidentClinicRepository } from '../repositories/ResidentClinicRepository';    
 
-interface NewResidentClinic {
-}
 
 export class ResidentClinicService {
     constructor(private residentClinicRepository: ResidentClinicRepository) { }
