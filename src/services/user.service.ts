@@ -1,5 +1,13 @@
 import axiosInstance from "./axios/axiosInstance";
 import { userRole } from "./types/user-role.types";
+import {
+  CreateUserRoleResponse,
+  DeleteUserResponse,
+  DeleteUserRoleResponse,
+  GetAllUsersResponse,
+  UpdateUserRoleResponse,
+  UserRoleResponse,
+} from "./types/user-services.types";
 
 /**
  * Service for managing users and roles.
@@ -10,7 +18,7 @@ export default class UserService {
    * @returns {Promise<any>} A promise that resolves to the list of users.
    * @throws {Error} If unable to fetch users.
    */
-  async getAllUsers(): Promise<any> {
+  async getAllUsers(): Promise<GetAllUsersResponse> {
     try {
       const response = await axiosInstance.get("/user");
       return response.data;
@@ -29,7 +37,7 @@ export default class UserService {
   async crateUserRole(
     roleName: string,
     permissionList: string[]
-  ): Promise<any> {
+  ): Promise<UserRoleResponse> {
     try {
       const response = await axiosInstance.post("/role", {
         roleName,
@@ -69,7 +77,7 @@ export default class UserService {
     roleId: string,
     roleName: string,
     permissionList: string[]
-  ): Promise<any> {
+  ): Promise<UserRoleResponse> {
     try {
       const response = await axiosInstance.patch(`/role/${roleId}`, {
         roleName,
@@ -90,7 +98,7 @@ export default class UserService {
    * @returns {Promise<any>} A promise that resolves to the deletion result.
    * @throws {Error} If unable to delete the user role.
    */
-  async deleteUserRole(roleId: number): Promise<any> {
+  async deleteUserRole(roleId: number): Promise<DeleteUserRoleResponse> {
     if (!roleId) throw new Error("Role ID is required");
     try {
       const response = await axiosInstance.delete(`/role/${roleId}`);
@@ -108,7 +116,7 @@ export default class UserService {
    * @returns {Promise<any>} A promise that resolves to the role data.
    * @throws {Error} If unable to fetch the role by ID.
    */
-  async getRoleById(roleId: string): Promise<any> {
+  async getRoleById(roleId: string): Promise<UserRoleResponse> {
     try {
       const response = await axiosInstance.get(`/role/${roleId}`);
       return response.data;
@@ -134,7 +142,7 @@ export default class UserService {
     password: string,
     role_id: number,
     phone_number: string
-  ): Promise<any> {
+  ): Promise<CreateUserRoleResponse> {
     try {
       const response = await axiosInstance.post("/user", {
         full_name,
@@ -156,7 +164,10 @@ export default class UserService {
    * @returns {Promise<any>} A promise that resolves to the updated user data.
    * @throws {Error} If unable to change the user role.
    */
-  async changeUserRole(userId: number, roleId: number): Promise<any> {
+  async changeUserRole(
+    userId: number,
+    roleId: number
+  ): Promise<UpdateUserRoleResponse> {
     try {
       const response = await axiosInstance.put(`/user/${userId}/role`, {
         role_id: roleId,
@@ -175,7 +186,7 @@ export default class UserService {
    * @returns {Promise<any>} A promise that resolves to the deletion result.
    * @throws {Error} If unable to delete the user.
    */
-  async deleteUser(userId: number): Promise<any> {
+  async deleteUser(userId: number): Promise<DeleteUserResponse> {
     try {
       const response = await axiosInstance.delete(`/user/${userId}`);
       return response.data;

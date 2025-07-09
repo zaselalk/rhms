@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { UserServices } from "../services/UserServices";
 import { UserRepository } from "../repositories/UserRepository";
+import { ForeignKeyConstraintError } from "sequelize";
 
 /**
  * Controller for handling user-related operations.
@@ -39,29 +40,47 @@ export class UserController {
    * @param req - The HTTP request object containing user details.
    * @param res - The HTTP response object.
    * @returns A response with a success message and user data.
+   * Handles foreign key constraint errors for role_id.
    */
   addNewUser = async (
     req: Request,
     res: Response
   ): Promise<Response | void> => {
     const { full_name, role_id, email, password, phone_number } = req.body;
-    const user = await this.userService.addNewUser(
-      full_name,
-      role_id,
-      email,
-      password,
-      phone_number
-    );
-    return res.status(201).json({
-      message: "User added successfully",
-      status: 201,
-      error: null,
-      data: {
-        full_name: user.name,
-        role_id: user.roleId,
-        email: user.email,
-      },
-    });
+    try {
+      const user = await this.userService.addNewUser(
+        full_name,
+        role_id,
+        email,
+        password,
+        phone_number
+      );
+      return res.status(201).json({
+        message: "User added successfully",
+        status: 201,
+        error: null,
+        data: {
+          full_name: user.name,
+          role_id: user.roleId,
+          email: user.email,
+        },
+      });
+    } catch (error) {
+      // Handle specific foreign key constraint error for role_id
+      if (
+        error instanceof ForeignKeyConstraintError &&
+        (error.original as { code?: string })?.code === "ER_NO_REFERENCED_ROW_2"
+      ) {
+        return res.status(400).json({
+          message: "Invalid role ID provided",
+          status: 400,
+          error: "Please provide a valid role ID",
+          data: null,
+        });
+      }
+
+      throw error; // rethrow the error for global error handler
+    }
   };
 
   /**

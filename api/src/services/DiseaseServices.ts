@@ -11,12 +11,12 @@ export class DiseaseServices {
 
   async registerDisease(
     diseaseName: string,
-    
+
 
   ): Promise<Disease> {
 
     return this.diseaseRepository.createDisease(diseaseName);
-    
+
   }
 
   async getAllDiseases(): Promise<Disease[]> {
@@ -25,7 +25,11 @@ export class DiseaseServices {
 
 
   async deleteDisease(diseaseName: string): Promise<number> {
-  return this.diseaseRepository.deleteDisease(diseaseName);
-}
+    return this.diseaseRepository.deleteDisease(diseaseName);
+  }
+
+  async countDisease(): Promise<number> {
+    return this.diseaseRepository.countDisease();
+  }
 
 }

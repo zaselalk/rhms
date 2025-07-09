@@ -14,14 +14,20 @@ DiseaseRouter.post(
 
 DiseaseRouter.get(
   "/all",
-  protectRoute("disease:create"),
+  protectRoute("disease:view"),
   catchAsync(diseaseController.getAllDiseases)
 );
 
 DiseaseRouter.delete(
   "/delete/:diseaseName",
-  protectRoute("disease:create"),
+  protectRoute("disease:delete"),
   catchAsync(diseaseController.deleteDisease)
+);
+
+DiseaseRouter.get(
+  "/count",
+  protectRoute("disease:create"),
+  catchAsync(diseaseController.countDisease)
 );
 
 export default DiseaseRouter;
