@@ -4,7 +4,7 @@ import { QueryInterface, DataTypes } from 'sequelize';
 module.exports = {
   async up(queryInterface: QueryInterface): Promise<void> {
     try {
-      await queryInterface.createTable('ResidentClinic', {
+      await queryInterface.createTable('resident_clinic', {
         id: {
           type: DataTypes.INTEGER,
           autoIncrement: true,
@@ -39,7 +39,7 @@ module.exports = {
 
   async down(queryInterface: QueryInterface): Promise<void> {
     try {
-      await queryInterface.dropTable('ResidentClinic');
+      await queryInterface.dropTable('resident_clinic');
     } catch (error) {
       console.error('Error dropping ResidentClinic table:', error);
       throw error;
