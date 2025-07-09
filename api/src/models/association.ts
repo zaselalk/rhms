@@ -37,4 +37,4 @@ Household.belongsTo(Resident, {
   as: "owner",
 });
 
-// export { sequelize, Resident, Household, HouseholdResident };
+export { sequelize, Resident, Household, HouseholdResident };
