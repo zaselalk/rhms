@@ -4,28 +4,15 @@ import { ResidentDisease } from "../models/residentdisease";
 import Disease from "../models/disease";
 
 export class ResidentDiseaseRepository {
-    /**
-     * Creates a new ResidentDisease entry in the database.
-     * @param residentId - The ID of the resident.
-     * @param diseaseId - The ID of the disease.
-     * @returns A promise that resolves when the entry is created.
-     */
-
-    // This method creates a new ResidentDisease entry in the database.
-    async cerateResidentDisease(
+    async createResidentDisease(
         residentId: number,
         diseaseId: number
-    ): Promise<void> {
-        try {
-            await ResidentDisease.create({
-                id: 0,
-                residentId,
-                diseaseId,
-            });
-        } catch (error) {
-            console.error("Error creating resident disease:", error);
-            throw new Error("Unable to create resident disease");
-        }
+    ): Promise<ResidentDisease> {
+        return ResidentDisease.create({
+            id: 0,
+            residentId,
+            diseaseId,
+        });
     }
 
     // This method retrieves all ResidentDisease entries from the database.
@@ -33,6 +20,13 @@ export class ResidentDiseaseRepository {
         try {
             return await ResidentDisease.findAll({
                 attributes: ["id", "residentId", "diseaseId"],
+                include: [
+                    {
+                        model: Resident,
+                        as: "resident",
+                        attributes: ["firstName", "lastName"],
+                    }
+                ]
             });
         } catch (error) {
             console.error("Error fetching resident diseases:", error);
@@ -100,7 +94,7 @@ export class ResidentDiseaseRepository {
         try {
             const result = await ResidentDisease.update(
                 { residentId },
-                { where: { diseaseId } }
+                { where: { diseaseId,residentId } }
             );
 
             if (result[0] === 0) {
@@ -112,8 +106,10 @@ export class ResidentDiseaseRepository {
         }
     }
 
-    //this is method to get resident disease by resident id
-    async getDiseasesByResidentId(residentId: number): Promise<{ diseaseId: number; name: string }[]> {
+    //this is method to get resident disease by resident i
+    async getDiseasesByResidentId(
+        residentId: number
+    ): Promise<{ diseaseId: number; name: string }[]> {
         try {
             const residentDiseases = await ResidentDisease.findAll({
                 where: { residentId },
@@ -121,53 +117,57 @@ export class ResidentDiseaseRepository {
                     {
                         model: Disease,
                         as: "disease",
-                        attributes: ["diseaseId", "name"],
+                        attributes: ["diseaseId", "diseaseName"],
                     },
                 ],
             });
 
+            // Extract only the disease data
             return residentDiseases
-                .map(rd => (rd as any).disease ?? null)
-                .filter((disease): disease is { diseaseId: number; name: string } => disease !== null);
+                .map((rd: any) => rd.disease ?? null)
+                .filter(
+                    (disease): disease is { diseaseId: number; name: string } => disease !== null
+                );
 
         } catch (error) {
-            console.error("Error fetching resident diseases by resident ID:", error);
+            console.error(
+                "Error fetching resident diseases by resident ID:",
+                error instanceof Error ? error.message : error
+            );
             throw new Error("Unable to fetch resident diseases by resident ID");
         }
     }
 
 
+
     // This method retrieves all residents associated with a specific disease ID.
-  async getResidentsByDiseaseId(diseaseId: number): Promise<{ id: number; firstName: string; lastName: string; contactNumber: string }[]> {
-  try {
-    const records = await ResidentDisease.findAll({
-      where: { diseaseId },
-      include: [
-        {
-          model: Resident,
-          as: "resident",
-          attributes: ["id", "firstName", "lastName", "contactNumber"], // 👈 added contactNumber
-        },
-      ],
-    });
+    async getResidentsByDiseaseId(diseaseId: number): Promise<{ id: number; firstName: string; lastName: string; contactNumber: string }[]> {
+        try {
+            const records = await ResidentDisease.findAll({
+                where: { diseaseId },
+                include: [
+                    {
+                        model: Resident,
+                        as: "resident",
+                        attributes: ["id", "firstName", "lastName", "contactNumber"],
+                    },
+                ],
+            });
+            // Extract only resident objects
+            return records
+                .map(rd => (rd as any).resident ?? null)
+                .filter((res): res is { id: number; firstName: string; lastName: string; contactNumber: string } => res !== null);
 
-    // Extract only resident objects
-    return records
-      .map(rd => (rd as any).resident ?? null)
-      .filter((res): res is { id: number; firstName: string; lastName: string; contactNumber: string } => res !== null);
+        } catch (error) {
+            console.error("Error fetching residents by disease ID:", error);
+            throw new Error("Unable to fetch residents by disease ID");
+        }
 
-  } catch (error) {
-    console.error("Error fetching residents by disease ID:", error);
-    throw new Error("Unable to fetch residents by disease ID");
-  }
+
+
+
+    }
 
 
 
 }
-
-
-
-
-}
-
-export default new ResidentDiseaseRepository();
