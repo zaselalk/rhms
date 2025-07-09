@@ -4,7 +4,6 @@ import sequelize from ".";
 import Resident from "./resident";
 import Household from "./household";
 
-
 interface HouseholdResidentAttributes {
   
   residentId: number;
