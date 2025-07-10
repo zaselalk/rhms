@@ -25,8 +25,8 @@ export class ResidentDiseaseService {
 
     //update by residentid
     async updateResidentDiseaseByResidentId(
-        diseaseId: number,
-        residentId: number
+        residentId: number,
+        diseaseId: number
     ): Promise<void> {
 
         return await this.residentDiseaseRepository.updateResidentDiseaseByDiseaseId(
@@ -37,8 +37,8 @@ export class ResidentDiseaseService {
 
     //update by diseaseId
     async updateResidentDiseaseByDiseaseId(
-        residentId: number,
-        diseaseId: number
+        diseaseId: number,
+        residentId: number
     ): Promise<void> {
         return await this.residentDiseaseRepository.updateResidentDiseaseByResidentId(
             residentId,
