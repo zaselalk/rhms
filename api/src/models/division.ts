@@ -1,14 +1,24 @@
-import { DataTypes, Model } from "sequelize";
+import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from ".";
 
 interface DivisionAttributes {
-  divisionId?: number;
+  divisionId: number;
   divisionName: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date | null;
 }
 
-export class Division extends Model<DivisionAttributes> implements DivisionAttributes {
+// Optional attributes for creation
+interface DivisionCreationAttributes extends Optional<DivisionAttributes, "divisionId" | "createdAt" | "updatedAt" | "deletedAt"> {}
+
+export class Division extends Model<DivisionAttributes, DivisionCreationAttributes> implements DivisionAttributes {
   public divisionId!: number;
   public divisionName!: string;
+
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+  public readonly deletedAt!: Date | null;
 }
 
 Division.init(
@@ -32,12 +42,28 @@ Division.init(
         },
       },
     },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    deletedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null,
+    },
   },
   {
     sequelize,
     modelName: "Division",
     tableName: "divisions",
-    timestamps: false,
+    timestamps: true,
+    paranoid: true, // Enables soft delete
   }
 );
 
