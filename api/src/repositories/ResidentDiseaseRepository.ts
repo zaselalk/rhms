@@ -1,7 +1,9 @@
-import { Model } from "sequelize";
+
 import Resident from "../models/resident";
 import { ResidentDisease } from "../models/residentdisease";
 import Disease from "../models/disease";
+import sequelize from "../models"; // Adjust the path if your sequelize instance is elsewhere
+import Division from "../models/division";
 
 export class ResidentDiseaseRepository {
     async createResidentDisease(
@@ -167,6 +169,46 @@ export class ResidentDiseaseRepository {
 
 
     }
+
+
+    async getDivisionCountsByDiseaseName(diseaseName: string): Promise<{ division: string, count: number }[]> {
+    try {
+        const result = await ResidentDisease.findAll({
+            include: [
+                {
+                    model: Disease,
+                    as: "disease",
+                    where: { diseaseName },
+                    attributes: []
+                },
+                {
+                    model: Resident,
+                    as: "resident",
+                    attributes: [],
+                    include:[
+                         {
+                            model: Division,
+                            as: "division",
+                            attributes: []
+                        }
+                    ]
+                }
+            ],
+            attributes: [
+                [sequelize.col("resident.division.divisionName"), "division"],
+                [sequelize.fn("COUNT", sequelize.col("resident.id")), "count"]
+            ],
+            group: ["resident.division.divisionName"],
+            order: [[sequelize.fn("COUNT", sequelize.col("resident.id")), "DESC"]],
+            raw: true
+        });
+
+        return result as unknown as { division: string, count: number }[];
+    } catch (error) {
+        console.error("Error getting division counts by disease name:", error);
+        throw new Error("Failed to get division counts by disease name");
+    }
+}
 
 
 

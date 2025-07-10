@@ -66,6 +66,12 @@ export class ResidentDiseaseService {
         return await this.residentDiseaseRepository.getResidentsByDiseaseId(diseaseId);
     }
 
+    // Get all diseases by diseasename 
+    async getDivisionCountsByDiseaseName(diseaseName: string): Promise<{ division: string, count: number }[]> {
+    return await this.residentDiseaseRepository.getDivisionCountsByDiseaseName(diseaseName);
+}
+
+
 
 
 }
