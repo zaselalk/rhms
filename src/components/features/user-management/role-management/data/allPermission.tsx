@@ -3,10 +3,7 @@ const allPermissions = [
     group: "User",
     perms: ["user:create", "user:edit", "user:delete", "user:view"],
   },
-  {
-    group: "Role",
-    perms: ["role:create", "role:edit", "role:delete", "role:view"],
-  },
+
   {
     group: "Clinic",
     perms: ["clinic:create", "clinic:edit", "clinic:delete", "clinic:view"],
