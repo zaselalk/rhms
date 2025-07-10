@@ -1,5 +1,6 @@
 import { ResidentClinic } from '../models/residentClinic';
 import { ResidentClinicRepository } from '../repositories/ResidentClinicRepository';
+import { Resident } from "../models/resident";
 
 
 export class ResidentClinicService {
@@ -28,6 +29,18 @@ export class ResidentClinicService {
     async findByResidentIdAndClinicId(residentId: number, clinicId: number): Promise<ResidentClinic | null> {
         return this.residentClinicRepository.findByResidentIdAndClinicId(residentId, clinicId);
     }
+
+    async getResidentsByClinicId(clinicId: number): Promise<Resident[]> {
+  return Resident.findAll({
+    include: [
+      {
+        model: ResidentClinic,
+        where: { clinicId },
+      },
+    ],
+  });
+}
+
 
 }
 

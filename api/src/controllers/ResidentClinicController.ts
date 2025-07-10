@@ -107,6 +107,11 @@ class ResidentClinicController {
     };
 
     
+async getResidentsByClinicId(req: Request, res: Response) {
+  const clinicId = Number(req.params.clinicId);
+  const residents = await this.residentClinicService.getResidentsByClinicId(clinicId);
+  res.status(200).json(residents);
+}
 
     
 

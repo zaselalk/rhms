@@ -20,6 +20,12 @@ residentClinicRouter.get(
     catchAsync(residentClinicController.getClinicsByResidentId)
 );
 
+residentClinicRouter.get(
+  "/getResidentsByClinic/:clinicId",
+  catchAsync(residentClinicController.getResidentsByClinicId)
+);
+
+
 
 export default residentClinicRouter;
 
