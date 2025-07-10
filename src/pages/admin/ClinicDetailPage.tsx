@@ -298,8 +298,118 @@ const ClinicDetail: React.FC = () => {
           </div>
         </div>
 
-        {/* Rest of your session and modal UI remains unchanged below... */}
-        {/* ... */}
+{/* Add Clinic Session */}
+<div className="bg-white p-6 shadow-md rounded-lg mt-6">
+  <h3 className="text-xl font-semibold mb-4">Add Session</h3>
+  {error && <p className="text-red-500 mb-2">{error}</p>}
+  <div className="flex items-center space-x-4 mb-4">
+    <input
+      type="text"
+      placeholder="Session Name"
+      className="border p-2 rounded w-1/2"
+      value={newSession.name}
+      onChange={(e) =>
+        setNewSession({ ...newSession, name: e.target.value })
+      }
+    />
+    <input
+      type="date"
+      className="border p-2 rounded"
+      value={newSession.sessionDate}
+      onChange={(e) =>
+        setNewSession({ ...newSession, sessionDate: e.target.value })
+      }
+    />
+    <button
+      onClick={addClinicSession}
+      className="bg-blue-500 text-white px-4 py-2 flex items-center rounded-lg shadow hover:bg-blue-600 transition"
+    >
+      <FiPlusCircle className="mr-2" /> New Session
+    </button>
+  </div>
+
+  {/* Sessions List */}
+  <h3 className="text-xl font-semibold mb-4">Sessions</h3>
+  {loadingSessions ? (
+    <p>Loading sessions...</p>
+  ) : (
+    <table className="w-full border-collapse mb-4">
+      <thead>
+        <tr className="border-b">
+          <th className="p-2 text-left">Name</th>
+          <th className="p-2 text-left">Date</th>
+          <th className="p-2 text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {clinicSessions.map((session) => (
+          <tr key={session.id} className="border-b">
+            <td className="p-2">{session.name}</td>
+            <td className="p-2">{session.sessionDate}</td>
+            <td className="p-2 text-center space-x-2">
+              <button
+                onClick={() => openEditModal(session)}
+                className="text-[#008FFB] hover:text-blue-800"
+              >
+                <FaEdit />
+              </button>
+              <button
+                onClick={() => removeClinicSession(session.id)}
+                className="text-red-600 hover:text-red-800"
+              >
+                <FaTrash />
+              </button>
+              <button onClick={() => handleClick(session.id)}>
+                <FaClipboardList className="text-green-500 hover:text-green-700" />
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )}
+</div>
+
+{/* Edit Modal */}
+{editModalOpen && selectedSession && (
+  <Modal title="Edit Session" isOpen={editModalOpen} handleClose={closeEditModal}>
+    <div className="flex flex-col space-y-4">
+      {error && <p className="text-red-500">{error}</p>}
+      <input
+        type="text"
+        className="border p-2 rounded"
+        value={selectedSession.name}
+        onChange={(e) =>
+          setSelectedSession({ ...selectedSession, name: e.target.value })
+        }
+        placeholder="Session Name"
+      />
+      <input
+        type="date"
+        className="border p-2 rounded"
+        value={selectedSession.sessionDate}
+        onChange={(e) =>
+          setSelectedSession({
+            ...selectedSession,
+            sessionDate: e.target.value,
+          })
+        }
+      />
+      <div className="flex justify-end space-x-2">
+        <button onClick={closeEditModal} className="px-4 py-2 bg-gray-300 rounded">
+          Cancel
+        </button>
+        <button
+          onClick={handleSaveEditedSession}
+          className="px-4 py-2 bg-blue-600 text-white rounded"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  </Modal>
+)}
+
       </div>
     </DashboardContainer>
   );
