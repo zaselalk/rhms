@@ -38,8 +38,11 @@ class ResidentClinicController {
         }
 
 
-        const existingResidentClinic: ResidentClinic | null =
-            await this.residentClinicService.findByResidentId(Number(residentId));
+        // Check if the resident-clinic pair already exists
+        const existingResidentClinic = await this.residentClinicService.findByResidentIdAndClinicId(
+            Number(residentId),
+            Number(clinicId)
+        );
 
         if (existingResidentClinic) {
             return res.status(400).json({
@@ -102,6 +105,10 @@ class ResidentClinicController {
             data: residentClinic,
         });
     };
+
+    
+
+    
 
 }
 

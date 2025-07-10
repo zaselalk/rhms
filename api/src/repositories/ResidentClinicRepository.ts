@@ -37,5 +37,13 @@ export class ResidentClinicRepository {
         },
         });
     }
+    async findByResidentIdAndClinicId(residentId: number, clinicId: number): Promise<ResidentClinic | null> {
+    return await ResidentClinic.findOne({
+      where: {
+        residentId,
+        clinicId,
+      },
+    });
+  }
     
 }

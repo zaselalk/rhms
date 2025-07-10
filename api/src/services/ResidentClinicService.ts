@@ -1,5 +1,5 @@
 import { ResidentClinic } from '../models/residentClinic';
-import { ResidentClinicRepository } from '../repositories/ResidentClinicRepository';    
+import { ResidentClinicRepository } from '../repositories/ResidentClinicRepository';
 
 
 export class ResidentClinicService {
@@ -7,7 +7,7 @@ export class ResidentClinicService {
 
     async createResidentClinic(residentId: number, clinicId: number): Promise<ResidentClinic> {
         return this.residentClinicRepository.createResidentClinic(residentId, clinicId);
-    }   
+    }
 
     async findByResidentId(residentId: number): Promise<ResidentClinic | null> {
         return this.residentClinicRepository.findByResidentId(residentId);
@@ -25,6 +25,9 @@ export class ResidentClinicService {
         await this.residentClinicRepository.deleteResidentClinic(id);
     }
 
+    async findByResidentIdAndClinicId(residentId: number, clinicId: number): Promise<ResidentClinic | null> {
+        return this.residentClinicRepository.findByResidentIdAndClinicId(residentId, clinicId);
+    }
 
 }
 
