@@ -42,10 +42,24 @@ const SingleDiseasePage: FC = () => {
     // Calculate the total patient count including division-wise counts
     const totalPatientCount = divisionData.reduce((sum, div) => sum + div.count, 0);
     
-    if (diseaseName) {
+    if (loading) {
         return (
             <DashboardContainer>
-                <div className="flex-1 p-6">
+                <div className=" p-6"> Loading Data...</div>
+                </DashboardContainer>
+        );}
+
+        if(error){
+            return (
+                <DashboardContainer>
+                        <div className="p-6 text-red-600">{error}</div>
+            </DashboardContainer>
+        );
+    }
+
+    return (
+        <DashboardContainer>
+                    <div className="flex-1 p-6">
                     <div className="flex justify-between items-center mb-6">
                         <h2 className="text-2xl font-semibold text-[#008FFB]">{diseaseName}</h2>
                         <div className="px-4 py-2 bg-[#008FFB] text-white rounded-lg">{totalPatientCount} Total Patients</div>
@@ -72,10 +86,11 @@ const SingleDiseasePage: FC = () => {
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </DashboardContainer>
+                    </div>
+                    </DashboardContainer>
+                
         );
-    }
+    
 };
 
 export default SingleDiseasePage;
