@@ -7,6 +7,21 @@ interface PermissionCardProps {
   permissions: string[];
 }
 
+// styles
+
+const permissionCardStyle: React.CSSProperties = {
+  marginBottom: "2rem",
+  padding: "1rem",
+  border: "1px solid #d9d9d9",
+  borderRadius: "8px",
+};
+
+const permissionGridStyle: React.CSSProperties = {
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+  gap: "1rem",
+};
+
 /**
  * PermissionCard component displays a card with a title and a list of permissions as checkboxes.
  * @param title - The title of the permission card.
@@ -28,19 +43,4 @@ export const PermissionCard: FC<PermissionCardProps> = ({
       </div>
     </div>
   );
-};
-
-// styles
-
-const permissionCardStyle: React.CSSProperties = {
-  marginBottom: "2rem",
-  padding: "1rem",
-  border: "1px solid #d9d9d9",
-  borderRadius: "8px",
-};
-
-const permissionGridStyle: React.CSSProperties = {
-  display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
-  gap: "1rem",
 };
