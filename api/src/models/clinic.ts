@@ -11,10 +11,17 @@ export interface ClinicAttributes {
 }
 
 // Define creation attributes (id, timestamps optional on creation)
-export interface ClinicCreationAttributes extends Optional<ClinicAttributes, "id" | "createdAt" | "updatedAt" | "deletedAt"> {}
+export interface ClinicCreationAttributes
+  extends Optional<
+    ClinicAttributes,
+    "id" | "createdAt" | "updatedAt" | "deletedAt"
+  > {}
 
 // Define the Clinic model class
-export class Clinic extends Model<ClinicAttributes, ClinicCreationAttributes> implements ClinicAttributes {
+export class Clinic
+  extends Model<ClinicAttributes, ClinicCreationAttributes>
+  implements ClinicAttributes
+{
   public id!: number;
   public name!: string;
 
@@ -40,6 +47,21 @@ Clinic.init(
           msg: "Clinic name cannot be empty",
         },
       },
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    deletedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null,
     },
   },
   {
