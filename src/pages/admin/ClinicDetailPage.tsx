@@ -109,7 +109,7 @@ const ClinicDetail: React.FC = () => {
     }
   };
 
-  // ✅ New: Fetch patients for this clinic
+  // Fetch patients for this clinic
   const fetchClinicPatients = async () => {
     try {
       const data = await ResidentClinicService.getResidentsByClinicId(clinicId);
@@ -193,7 +193,7 @@ const ClinicDetail: React.FC = () => {
     if (clinicId) {
       fetchClinicName();
       fetchSessions();
-      fetchClinicPatients(); // ✅ fetch patients here
+      fetchClinicPatients(); // fetch patients here
     }
   }, [clinicId]);
 
