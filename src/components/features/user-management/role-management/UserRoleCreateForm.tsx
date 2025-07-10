@@ -4,6 +4,7 @@ import allPermissions from "./data/allPermission";
 import { NewUserRole } from "../../../../services/types/user-role.types";
 import { useMutation } from "@tanstack/react-query";
 import UserService from "../../../../services/user.service";
+import { PermissionCard } from "./PermissionCard";
 
 interface UserRoleCreateFormProps {
   refetch: () => void;
@@ -86,38 +87,39 @@ export const UserRoleCreateForm: FC<UserRoleCreateFormProps> = ({
       >
         <Checkbox.Group style={{ width: "100%" }}>
           {allPermissions.map(({ group, perms }) => (
-            <div
-              key={group}
-              style={{
-                marginBottom: "2rem",
-                padding: "1rem",
-                border: "1px solid #d9d9d9",
-                borderRadius: "8px",
-              }}
-            >
-              <strong
-                style={{
-                  display: "block",
-                  marginBottom: "0.5rem",
-                  fontSize: "1.1rem",
-                }}
-              >
-                {group}
-              </strong>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
-                  gap: "1rem",
-                }}
-              >
-                {perms.map((perm) => (
-                  <Checkbox key={perm} value={perm}>
-                    {perm.split(":")[1]}
-                  </Checkbox>
-                ))}
-              </div>
-            </div>
+            // <div
+            //   key={group}
+            //   style={{
+            //     marginBottom: "2rem",
+            //     padding: "1rem",
+            //     border: "1px solid #d9d9d9",
+            //     borderRadius: "8px",
+            //   }}
+            // >
+            //   <strong
+            //     style={{
+            //       display: "block",
+            //       marginBottom: "0.5rem",
+            //       fontSize: "1.1rem",
+            //     }}
+            //   >
+            //     {group}
+            //   </strong>
+            //   <div
+            //     style={{
+            //       display: "grid",
+            //       gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+            //       gap: "1rem",
+            //     }}
+            //   >
+            //     {perms.map((perm) => (
+            //       <Checkbox key={perm} value={perm}>
+            //         {perm.split(":")[1]}
+            //       </Checkbox>
+            //     ))}
+            //   </div>
+            // </div>
+            <PermissionCard key={group} title={group} permissions={perms} />
           ))}
         </Checkbox.Group>
       </Form.Item>
