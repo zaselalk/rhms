@@ -241,6 +241,8 @@ export class ResidentDiseaseController {
 
     try {
         const results = await this.residentDiseaseService.getDivisionCountsByDiseaseName(diseaseName);
+        console.log("Sending result to frontend:", results); // Confirm response payload
+
         return res.json({
             message: "Division counts fetched successfully",
             status: 200,

@@ -68,7 +68,10 @@ export class ResidentDiseaseService {
 
     // Get all diseases by diseasename 
     async getDivisionCountsByDiseaseName(diseaseName: string): Promise<{ division: string, count: number }[]> {
-    return await this.residentDiseaseRepository.getDivisionCountsByDiseaseName(diseaseName);
+        console.log(" Service received diseaseName:", diseaseName);
+        const data = await this.residentDiseaseRepository.getDivisionCountsByDiseaseName(diseaseName);
+        console.log("Service got division data:", data);
+        return data;
 }
 
 

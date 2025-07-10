@@ -50,8 +50,10 @@ class ResidentDiseaseService {
     console.log('calling backend with disease name: ', diseaseName);
     try {
       const response = await axiosInstance.get(`/residentDisease/divisionCountsByDisease/${diseaseName}`);
+      console.log("Received response:", response.data);
       return response.data;
     } catch (error: any) {
+      console.error("Error fetching division counts:", error);
       throw new Error(error.response?.data?.message || 'Unable to fetch division counts');
     }
   }
