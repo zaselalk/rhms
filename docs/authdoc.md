@@ -2,6 +2,7 @@
  - Mainly there are two types of users in our system
     - Staff users
     - Resident User
+    - Super admin
 
 **Staff Users**: Users that having higher permission to manage the system, they got the permission according to the permission assign to them when the account is created, 
 which can be altered later on.
