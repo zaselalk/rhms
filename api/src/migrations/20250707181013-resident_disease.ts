@@ -12,7 +12,7 @@ export default {
      */
     try {
       await queryInterface.createTable('resident_diseases', {
-        residentDiseaseId: {
+        id: {
           allowNull: false,
           autoIncrement: true,
           primaryKey: true,
