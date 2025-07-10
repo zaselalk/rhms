@@ -22,10 +22,10 @@ const SingleDiseasePage: FC = () => {
             try {
                 setLoading(true);
                 const response = await residentDiseaseService.getDivisionCountsByDiseaseName(diseaseName || '');
-                console.log("📦 Final division data set to state:", response);
+                console.log("Final division data set to state:", response);
                 setDivisionData(response.data || []);
             } catch (err:any) {
-                console.error('🚨 Failed to load division data:', err);
+                console.error('Failed to load division data:', err);
                 setError('Failed to load division data.');
                 console.error(err);
             } finally {
