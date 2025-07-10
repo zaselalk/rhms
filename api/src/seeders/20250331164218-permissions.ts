@@ -151,6 +151,30 @@ module.exports = {
           },
 
           /**
+           * Clinic session related permission
+           */
+          {
+            permission: "clinicSession:view",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+          {
+            permission: "clinicSession:create",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+          {
+            permission: "clinicSession:edit",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+          {
+            permission: "clinicSession:delete",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+
+          /**
            * Division related permission
            */
 
