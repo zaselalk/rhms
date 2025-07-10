@@ -42,6 +42,15 @@ const allPermissions = [
       "resident:view",
     ],
   },
+  {
+    group: "Clinic Session",
+    perms: [
+      "clinicSession:create",
+      "clinicSession:edit",
+      "clinicSession:delete",
+      "clinicSession:view",
+    ],
+  },
 ];
 
 export default allPermissions;
