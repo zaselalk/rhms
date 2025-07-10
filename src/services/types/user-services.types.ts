@@ -1,6 +1,31 @@
 import { userRole } from "./user-role.types";
 
 /**
+ * User interface representing a user object.
+ * @property {number} id - Unique identifier for the user.
+ * @property {string} name - Full name of the user.
+ * @property {string} email - Email address of the user.
+ * @property {string} createdAt - Timestamp when the user was created.
+ * @property {string} updatedAt - Timestamp when the user was last updated.
+ * @property {Object} role - Role information of the user.
+ * @property {number} role.id - Unique identifier for the role.
+ * @property {string} role.role - Name of the role.
+ * @property {string} role.permission - Permissions associated with the role in JSON format.
+ */
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  createdAt: string;
+  updatedAt: string;
+  role: {
+    id: number;
+    role: string;
+    permission: string;
+  };
+}
+
+/**
  * Response structure for fetching all users.
  * @property {Array} data - Array of user objects.
  * @property {string} message - Response message.
@@ -10,17 +35,7 @@ import { userRole } from "./user-role.types";
  * @typedef {Object} GetAllUsersResponse
  */
 export interface GetAllUsersResponse {
-  data: Array<{
-    id: number;
-    name: string;
-    email: string;
-    created_at: string;
-    role: {
-      id: number;
-      role: string;
-      permission: string;
-    };
-  }>;
+  data: Array<User>;
   message: string;
   status: string;
   limit: number;

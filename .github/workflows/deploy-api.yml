@@ -1,4 +1,4 @@
-name: deploy the backend to Azure VM
+name: Deploy Backend to Azure VM (Production Build)
 
 on:
   push:
@@ -8,43 +8,177 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
       - name: 🔍 Checkout code
         uses: actions/checkout@v4
-
-      - name: 🧪 Setup up Nodejs
+        
+      - name: 🧪 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
-
+          # cache: 'npm'
+          # cache-dependency-path: api/package-lock.json
+          
       - name: 🚀 Install dependencies
-        run: npm install
+        run: npm ci
         working-directory: api
-
+        
       - name: 🧪 Run tests
         run: npm run test
         working-directory: api
 
-  deploy:
+  build:
     needs: test
     runs-on: ubuntu-latest
-
     steps:
       - name: 🔍 Checkout code
         uses: actions/checkout@v4
+        
+      - name: 🧪 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          # cache: 'npm'
+          # cache-dependency-path: api/package-lock.json
+          
+      - name: 🚀 Install dependencies
+        run: npm ci
+        working-directory: api
+        
+      - name: 🏗️ Build TypeScript project
+        run: npm run build
+        working-directory: api
+        env:
+          NODE_ENV: production
+          
+      - name: 📦 Install production dependencies only
+        run: |
+          rm -rf node_modules
+          npm ci --production --ignore-scripts
+        working-directory: api
+        
+      - name: 📁 Create deployment package
+        run: |
+          mkdir -p deploy-package
+          cp -r api/dist deploy-package/
+          cp -r api/node_modules deploy-package/
+          cp api/package.json deploy-package/
+          cp api/package-lock.json deploy-package/
+          # Copy any other necessary files (config, etc.)
+          if [ -f api/.env.production ]; then
+            cp api/.env.production deploy-package/.env
+          fi
+          
+      - name: 📤 Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-build
+          path: deploy-package/
+          retention-days: 7
 
+  deploy:
+    needs: [test, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: production-build
+          path: ./deploy-package
+          
       - name: 📝 Setup SSH key
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
+          
       - name: 🔒 Add host key to known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
-
-      - name: 🚀 Deploy to Azure VM
+          ssh-keyscan -t rsa,dsa,ecdsa,ed25519 ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
+          
+      - name: 🗂️ Create deployment directory on VM
         run: |
-          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "cd /home/azureuser/ciphersquad && git pull --no-rebase origin ${GITHUB_REF#refs/heads/} && cd api && npm install && npm run build && pm2 restart rhms-api"
-
+          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
+            mkdir -p /home/azureuser/deployments/$(date +%Y%m%d_%H%M%S)
+            ln -sfn /home/azureuser/deployments/$(date +%Y%m%d_%H%M%S) /home/azureuser/current-deployment
+          "
+          
+      - name: 📤 Upload build to VM
+        run: |
+          scp -r deploy-package/* ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }}:/home/azureuser/current-deployment/
+          
+      - name: 🚀 Deploy application
+        run: |
+          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} << 'EOF'
+            set -e
+            
+            # Navigate to deployment directory
+            cd /home/azureuser/current-deployment
+            
+            # Set proper permissions
+            chmod +x dist/index.js 2>/dev/null || true
+            
+            # Create or update PM2 ecosystem file
+            cat > ecosystem.config.js << 'EOL'
+            module.exports = {
+              apps: [{
+                name: 'rhms-api',
+                script: './dist/index.js',
+                instances: 1,
+                exec_mode: 'cluster',
+                env: {
+                  NODE_ENV: 'production',
+                  PORT: process.env.PORT || 3000
+                },
+                error_file: './logs/err.log',
+                out_file: './logs/out.log',
+                log_file: './logs/combined.log',
+                time: true,
+                max_memory_restart: '1G'
+              }]
+            }
+            EOL
+            
+            # Create logs directory
+            mkdir -p logs
+            
+            # Stop existing application (if running)
+            pm2 stop rhms-api 2>/dev/null || true
+            pm2 delete rhms-api 2>/dev/null || true
+            
+            # Start the application
+            pm2 start ecosystem.config.js
+            
+            # Save PM2 configuration
+            pm2 save
+            
+            # Verify deployment
+            sleep 5
+            pm2 status rhms-api
+            
+            # Health check (adjust URL as needed)
+            if curl -f http://localhost:3000/health > /dev/null 2>&1; then
+              echo "✅ Application is responding to health check"
+            else
+              echo "⚠️  Health check failed, but application is running"
+            fi
+          EOF
+          
+      - name: 🧹 Cleanup old deployments
+        run: |
+          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
+            cd /home/azureuser/deployments
+            ls -t | tail -n +6 | xargs rm -rf 2>/dev/null || true
+            echo 'Kept last 5 deployments'
+          "
+          
+      - name: 📢 Deployment Status
+        if: always()
+        run: |
+          if [ ${{ job.status }} == 'success' ]; then
+            echo "✅ Deployment completed successfully"
+            echo "🔗 Application deployed to: ${{ secrets.VM_HOST }}"
+          else
+            echo "❌ Deployment failed"
+            exit 1
+          fi
