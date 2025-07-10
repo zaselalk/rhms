@@ -32,16 +32,6 @@ ResidentDiseaseRouter.get(
     catchAsync(residentDiseaseController.getResidentsByDiseaseId)
 )
 
-ResidentDiseaseRouter.put(
-    "/updateByResidentId",
-    catchAsync(residentDiseaseController.updateResidentDiseaseByResidentId)
-);
-
-ResidentDiseaseRouter.put(
-    "/updateByDiseaseId",
-    catchAsync(residentDiseaseController.updateResidentDiseaseByDiseaseId)
-);
-
 ResidentDiseaseRouter.delete(
     "/deleteByResidentId",
     catchAsync(residentDiseaseController.deleteResidentDiseaseByResidentId)

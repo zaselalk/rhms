@@ -23,29 +23,6 @@ export class ResidentDiseaseService {
         return await this.residentDiseaseRepository.getAllResidentDiseases();
     }
 
-    //update by residentid
-    async updateResidentDiseaseByResidentId(
-        residentId: number,
-        diseaseId: number
-    ): Promise<void> {
-
-        return await this.residentDiseaseRepository.updateResidentDiseaseByDiseaseId(
-            diseaseId,
-            residentId
-        );
-    }
-
-    //update by diseaseId
-    async updateResidentDiseaseByDiseaseId(
-        diseaseId: number,
-        residentId: number
-    ): Promise<void> {
-        return await this.residentDiseaseRepository.updateResidentDiseaseByResidentId(
-            residentId,
-            diseaseId
-        );
-    }
-
     // Delete by diseaseId
     async deleteByDiseaseId(diseaseId: number): Promise<void> {
         return await this.residentDiseaseRepository.deleteResidentDiseaseByDiseaseId(diseaseId);
