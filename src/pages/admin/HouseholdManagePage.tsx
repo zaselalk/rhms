@@ -30,7 +30,7 @@ const HouseholdManagePage: FC = () => {
     return currentYear - birthYear;
   };
 
-  // 🔁 Fetch residents on load
+  //  Fetch residents on load
   useEffect(() => {
     const fetchResidents = async () => {
       try {
@@ -82,7 +82,7 @@ const HouseholdManagePage: FC = () => {
     }
   };
 
-  // ➕ Add resident to household
+  //  Add resident to household
   const handleAddResident = async () => {
     if (!foundResident || !relationToOwner.trim()) {
       alert("Please search and validate the resident before adding.");
@@ -136,7 +136,7 @@ const HouseholdManagePage: FC = () => {
     }
   };
 
-  // ❌ Remove resident from household
+  //  Remove resident from household
   const handleRemoveResident = async (recordId: number) => {
     try {
       const response = await fetch(
@@ -148,6 +148,8 @@ const HouseholdManagePage: FC = () => {
 
       if (response.ok) {
         setResidents(residents.filter((r) => r.recordId !== recordId));
+        alert("Resident removed successfully.");
+        
       } else {
         alert("Failed to remove resident.");
       }

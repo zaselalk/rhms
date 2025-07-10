@@ -34,6 +34,47 @@ export class HouseholdRepository {
     });
   }
 
+  // Read households in a division with owner name and number of residents
+  async getHouseholdsInDivisionWithResidentCount(
+    division: string,
+  ): Promise<any[]> {
+    return await Household.findAll({
+      where: { grama_division: division },
+      include: [
+        {
+          model: Resident,
+          as: "owner", // assuming association alias for owner
+          attributes: ["firstName", "lastName"],
+        },
+        {
+          model: Resident,
+          as: "residents", // assuming this alias is used in association
+          attributes: [],
+        },
+      ],
+      group: [
+        "Household.house_no",
+        "owner.id",
+        "owner.firstName",
+        "owner.lastName",
+      ],
+      raw: true,
+      nest: true,
+      attributes: [
+        "house_no",
+        [Household.sequelize!.col("owner.firstName"), "ownerFirstName"],
+        [Household.sequelize!.col("owner.lastName"), "ownerLastName"],
+        [
+          Household.sequelize!.fn(
+            "COUNT",
+            Household.sequelize!.col("residents.id"),
+          ),
+          "residentCount",
+        ],
+      ],
+    });
+  }
+
   // Update Household Owner
   async updateOwnerByHouseNo(
     house_no: string,

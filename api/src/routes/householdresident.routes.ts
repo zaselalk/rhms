@@ -19,7 +19,7 @@ HouseholdResidentRouter.get(
 );
 
 HouseholdResidentRouter.delete(
-  "/household-resident/:id",
+  "/:id",
   // protectRoute("householdresident:delete"),
   catchAsync(householdResidentController.removeResident),
 );

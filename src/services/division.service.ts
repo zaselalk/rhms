@@ -5,7 +5,7 @@ export const DivisionService = {
   // Fetch all divisions
   getAllDivisions: async () => {
     try {
-      const response = await axiosInstance.get("/division/getAllDivisions");
+      const response = await axiosInstance.get("/division");
       return response.data;
     } catch (error) {
       console.error("Error fetching divisions:", error);
@@ -13,10 +13,9 @@ export const DivisionService = {
     }
   },
 
-  // Create a new division
-  createDivision: async (divisionData: { name: string; population: number }) => {
+  createDivision: async (divisionData: { divisionName: string }) => {
     try {
-      const response = await axiosInstance.post("/division/createDivision", divisionData);
+      const response = await axiosInstance.post("/division", divisionData);
       return response.data;
     } catch (error) {
       console.error("Error creating division:", error);
