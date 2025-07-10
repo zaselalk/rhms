@@ -25,68 +25,39 @@ interface ClinicSession {
 
 const ClinicDetail: React.FC = () => {
   const { clinicId } = useParams<{ clinicId: string }>();
-  const [clinicName, setClinicName] = useState("");
-  const [clinicSessions, setClinicSessions] = useState<ClinicSession[]>([]);
-  const [newSession, setNewSession] = useState({ name: "", sessionDate: "" });
-  const [editModalOpen, setEditModalOpen] = useState(false);
-  const [selectedSession, setSelectedSession] = useState<ClinicSession | null>(
-    null
-  );
-  const [error, setError] = useState<string>("");
-  const [loadingSessions, setLoadingSessions] = useState(false);
-  const [loadingClinicName, setLoadingClinicName] = useState(false);
-
-  // Updated: Dynamic clinic patients
-  const [clinicPatients, setClinicPatients] = useState<Patient[]>([]);
-
-  const patientDivisions = [
-    { division: "Katugahahena", count: 2 },
-    { division: "Diyagala", count: 1 },
-    { division: "Kotagedara", count: 3 },
-    { division: "Maddegadara", count: 1 },
-    { division: "Nawutthuduwa", count: 0 },
-    { division: "Kolahekada", count: 2 },
-    { division: "Hempita", count: 1 },
-    { division: "Karampathara", count: 0 },
-    { division: "Katugoda", count: 0 },
-    { division: "Delgoda", count: 0 },
-    { division: "Pahalawela", count: 1 },
-  ];
-
-  if (!clinicId) {
-    console.error("Clinic ID is not available");
-    return <div>Error: Clinic ID is not available.</div>;
-  }
-
-  const [patientPage, setPatientPage] = useState(1);
-  const patientsPerPage = 10;
-  const patientStartIndex = (patientPage - 1) * patientsPerPage;
-  const patientEndIndex = patientStartIndex + patientsPerPage;
-  const currentPatients = clinicPatients.slice(
-    patientStartIndex,
-    patientEndIndex
-  );
-  const patientTotalPages = Math.ceil(clinicPatients.length / patientsPerPage);
-
-  const [divisionPage, setDivisionPage] = useState(1);
-  const divisionsPerPage = 10;
-  const divisionStartIndex = (divisionPage - 1) * divisionsPerPage;
-  const divisionEndIndex = divisionStartIndex + divisionsPerPage;
-  const currentDivisions = patientDivisions.slice(
-    divisionStartIndex,
-    divisionEndIndex
-  );
-  const divisionTotalPages = Math.ceil(patientDivisions.length / divisionsPerPage);
   const navigate = useNavigate();
 
-  const handleClick = (sessionId: string) => {
-    navigate(`/admin/clinic/${clinicId}/${sessionId}/attendance`);
-  };
+  const [clinicName, setClinicName] = useState("");
+  const [clinicSessions, setClinicSessions] = useState<ClinicSession[]>([]);
+  const [clinicPatients, setClinicPatients] = useState<Patient[]>([]);
+  const [patientDivisions, setPatientDivisions] = useState<{ division: string; count: number }[]>([]);
 
-  const fetchClinicName = async () => {
+  const [newSession, setNewSession] = useState({ name: "", sessionDate: "" });
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [selectedSession, setSelectedSession] = useState<ClinicSession | null>(null);
+  const [error, setError] = useState<string>("");
+
+  const [loadingClinicName, setLoadingClinicName] = useState(false);
+  const [loadingSessions, setLoadingSessions] = useState(false);
+  const [loadingPatients, setLoadingPatients] = useState(false);
+  const [loadingDivisions, setLoadingDivisions] = useState(false);
+
+  const [patientPage, setPatientPage] = useState(1);
+  const [divisionPage, setDivisionPage] = useState(1);
+
+  const patientsPerPage = 10;
+  const divisionsPerPage = 10;
+
+  const currentPatients = clinicPatients.slice((patientPage - 1) * patientsPerPage, patientPage * patientsPerPage);
+  const currentDivisions = patientDivisions.slice((divisionPage - 1) * divisionsPerPage, divisionPage * divisionsPerPage);
+
+  const patientTotalPages = Math.ceil(clinicPatients.length / patientsPerPage);
+  const divisionTotalPages = Math.ceil(patientDivisions.length / divisionsPerPage);
+
+ const fetchClinicName = async () => {
     setLoadingClinicName(true);
     try {
-      const data = await ClinicService.getClinicById(clinicId);
+      const data = await ClinicService.getClinicById(clinicId!);
       setClinicName(data.name);
     } catch (err) {
       console.error("Failed to fetch clinic name:", err);
@@ -99,7 +70,7 @@ const ClinicDetail: React.FC = () => {
   const fetchSessions = async () => {
     setLoadingSessions(true);
     try {
-      const sessions = await ClinicService.getClinicSessions(clinicId);
+      const sessions = await ClinicService.getClinicSessions(clinicId!);
       setClinicSessions(sessions);
     } catch (err) {
       console.error("Failed to fetch sessions:", err);
@@ -109,16 +80,40 @@ const ClinicDetail: React.FC = () => {
     }
   };
 
-  // Fetch patients for this clinic
   const fetchClinicPatients = async () => {
+    setLoadingPatients(true);
     try {
-      const data = await ResidentClinicService.getResidentsByClinicId(clinicId);
+      const data = await ResidentClinicService.getResidentsByClinicId(clinicId!);
       setClinicPatients(data);
     } catch (err) {
-      console.error("Failed to fetch clinic patients:", err);
-      setError("Failed to load clinic patients.");
+      console.error("Failed to fetch patients:", err);
+      setClinicPatients([]);
+    } finally {
+      setLoadingPatients(false);
     }
   };
+
+  const fetchDivisionCounts = async () => {
+    setLoadingDivisions(true);
+    try {
+      const data = await ResidentClinicService.getDivisionWiseResidentCountsForClinic(clinicId!);
+      setPatientDivisions(data);
+    } catch (err) {
+      console.error("Failed to fetch division counts:", err);
+      setPatientDivisions([]);
+    } finally {
+      setLoadingDivisions(false);
+    }
+  };
+
+  useEffect(() => {
+    if (clinicId) {
+      fetchClinicName();
+      fetchSessions();
+      fetchClinicPatients();
+      fetchDivisionCounts();
+    }
+  }, [clinicId]);
 
   const addClinicSession = async () => {
     if (!newSession.name || !newSession.sessionDate) {
@@ -127,10 +122,7 @@ const ClinicDetail: React.FC = () => {
     }
     setError("");
     try {
-      const created = await ClinicService.createClinicSession(
-        clinicId,
-        newSession
-      );
+      const created = await ClinicService.createClinicSession(clinicId!, newSession);
       setClinicSessions([...clinicSessions, created]);
       setNewSession({ name: "", sessionDate: "" });
     } catch (err) {
@@ -140,16 +132,12 @@ const ClinicDetail: React.FC = () => {
   };
 
   const removeClinicSession = async (sessionId: string) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this session?"
-    );
+    const confirmDelete = window.confirm("Are you sure you want to delete this session?");
     if (!confirmDelete) return;
 
     try {
-      await ClinicService.deleteClinicSession(clinicId, sessionId);
-      setClinicSessions(
-        clinicSessions.filter((s) => s.id !== sessionId)
-      );
+      await ClinicService.deleteClinicSession(clinicId!, sessionId);
+      setClinicSessions(clinicSessions.filter((s) => s.id !== sessionId));
     } catch (err) {
       console.error("Failed to delete session:", err);
       setError("Failed to delete session.");
@@ -176,11 +164,9 @@ const ClinicDetail: React.FC = () => {
     }
 
     try {
-      await ClinicService.updateClinicSession(clinicId, selectedSession);
+      await ClinicService.updateClinicSession(clinicId!, selectedSession);
       setClinicSessions(
-        clinicSessions.map((s) =>
-          s.id === selectedSession.id ? selectedSession : s
-        )
+        clinicSessions.map((s) => (s.id === selectedSession.id ? selectedSession : s))
       );
       closeEditModal();
     } catch (err) {
@@ -189,45 +175,9 @@ const ClinicDetail: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    if (clinicId) {
-      fetchClinicName();
-      fetchSessions();
-      fetchClinicPatients(); // fetch patients here
-    }
-  }, [clinicId]);
-
-  const renderPatientPagination = () => (
-    <div className="mt-4 flex justify-center space-x-2">
-      {[...Array(patientTotalPages)].map((_, idx) => (
-        <button
-          key={idx}
-          onClick={() => setPatientPage(idx + 1)}
-          className={`px-3 py-1 border rounded ${
-            patientPage === idx + 1 ? "bg-blue-600 text-white" : "bg-white"
-          }`}
-        >
-          {idx + 1}
-        </button>
-      ))}
-    </div>
-  );
-
-  const renderDivisionPagination = () => (
-    <div className="mt-4 flex justify-center space-x-2">
-      {[...Array(divisionTotalPages)].map((_, idx) => (
-        <button
-          key={idx}
-          onClick={() => setDivisionPage(idx + 1)}
-          className={`px-3 py-1 border rounded ${
-            divisionPage === idx + 1 ? "bg-blue-600 text-white" : "bg-white"
-          }`}
-        >
-          {idx + 1}
-        </button>
-      ))}
-    </div>
-  );
+  const handleClick = (sessionId: string) => {
+    navigate(`/admin/clinic/${clinicId}/${sessionId}/attendance`);
+  };
 
   return (
     <DashboardContainer>
@@ -272,144 +222,143 @@ const ClinicDetail: React.FC = () => {
                 ))}
               </tbody>
             </table>
-            {renderPatientPagination()}
+            <div className="mt-4 flex justify-center space-x-2">
+              {[...Array(patientTotalPages)].map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setPatientPage(idx + 1)}
+                  className={`px-3 py-1 border rounded ${patientPage === idx + 1 ? "bg-blue-600 text-white" : "bg-white"}`}
+                >
+                  {idx + 1}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* Division Table (Static) */}
+          {/* Patient Divisions Table */}
           <div className="bg-white p-6 shadow-md rounded-lg">
             <h3 className="text-xl font-semibold mb-4">Patient Distribution Across Divisions</h3>
-            <table className="w-full border-collapse">
+            {loadingDivisions ? (
+              <p>Loading divisions...</p>
+            ) : (
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left p-2">Division</th>
+                    <th className="text-left p-2">Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentDivisions.map((division, index) => (
+                    <tr key={index} className="border-b">
+                      <td className="p-2">{division.division}</td>
+                      <td className="p-2">{division.count}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+            <div className="mt-4 flex justify-center space-x-2">
+              {[...Array(divisionTotalPages)].map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setDivisionPage(idx + 1)}
+                  className={`px-3 py-1 border rounded ${divisionPage === idx + 1 ? "bg-blue-600 text-white" : "bg-white"}`}
+                >
+                  {idx + 1}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Add Clinic Session */}
+        <div className="bg-white p-6 shadow-md rounded-lg mt-6">
+          <h3 className="text-xl font-semibold mb-4">Add Session</h3>
+          {error && <p className="text-red-500 mb-2">{error}</p>}
+          <div className="flex items-center space-x-4 mb-4">
+            <input
+              type="text"
+              placeholder="Session Name"
+              className="border p-2 rounded w-1/2"
+              value={newSession.name}
+              onChange={(e) => setNewSession({ ...newSession, name: e.target.value })}
+            />
+            <input
+              type="date"
+              className="border p-2 rounded"
+              value={newSession.sessionDate}
+              onChange={(e) => setNewSession({ ...newSession, sessionDate: e.target.value })}
+            />
+            <button
+              onClick={addClinicSession}
+              className="bg-blue-500 text-white px-4 py-2 flex items-center rounded-lg shadow hover:bg-blue-600 transition"
+            >
+              <FiPlusCircle className="mr-2" /> New Session
+            </button>
+          </div>
+
+          {/* Sessions List */}
+          <h3 className="text-xl font-semibold mb-4">Sessions</h3>
+          {loadingSessions ? (
+            <p>Loading sessions...</p>
+          ) : (
+            <table className="w-full border-collapse mb-4">
               <thead>
                 <tr className="border-b">
-                  <th className="text-left p-2">Division</th>
-                  <th className="text-left p-2">Count</th>
+                  <th className="p-2 text-left">Name</th>
+                  <th className="p-2 text-left">Date</th>
+                  <th className="p-2 text-center">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {currentDivisions.map((division, index) => (
-                  <tr key={index} className="border-b">
-                    <td className="p-2">{division.division}</td>
-                    <td className="p-2">{division.count}</td>
+                {clinicSessions.map((session) => (
+                  <tr key={session.id} className="border-b">
+                    <td className="p-2">{session.name}</td>
+                    <td className="p-2">{session.sessionDate}</td>
+                    <td className="p-2 text-center space-x-2">
+                      <button onClick={() => openEditModal(session)} className="text-[#008FFB] hover:text-blue-800">
+                        <FaEdit />
+                      </button>
+                      <button onClick={() => removeClinicSession(session.id)} className="text-red-600 hover:text-red-800">
+                        <FaTrash />
+                      </button>
+                      <button onClick={() => handleClick(session.id)}>
+                        <FaClipboardList className="text-green-500 hover:text-green-700" />
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            {renderDivisionPagination()}
-          </div>
+          )}
         </div>
 
-{/* Add Clinic Session */}
-<div className="bg-white p-6 shadow-md rounded-lg mt-6">
-  <h3 className="text-xl font-semibold mb-4">Add Session</h3>
-  {error && <p className="text-red-500 mb-2">{error}</p>}
-  <div className="flex items-center space-x-4 mb-4">
-    <input
-      type="text"
-      placeholder="Session Name"
-      className="border p-2 rounded w-1/2"
-      value={newSession.name}
-      onChange={(e) =>
-        setNewSession({ ...newSession, name: e.target.value })
-      }
-    />
-    <input
-      type="date"
-      className="border p-2 rounded"
-      value={newSession.sessionDate}
-      onChange={(e) =>
-        setNewSession({ ...newSession, sessionDate: e.target.value })
-      }
-    />
-    <button
-      onClick={addClinicSession}
-      className="bg-blue-500 text-white px-4 py-2 flex items-center rounded-lg shadow hover:bg-blue-600 transition"
-    >
-      <FiPlusCircle className="mr-2" /> New Session
-    </button>
-  </div>
-
-  {/* Sessions List */}
-  <h3 className="text-xl font-semibold mb-4">Sessions</h3>
-  {loadingSessions ? (
-    <p>Loading sessions...</p>
-  ) : (
-    <table className="w-full border-collapse mb-4">
-      <thead>
-        <tr className="border-b">
-          <th className="p-2 text-left">Name</th>
-          <th className="p-2 text-left">Date</th>
-          <th className="p-2 text-center">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {clinicSessions.map((session) => (
-          <tr key={session.id} className="border-b">
-            <td className="p-2">{session.name}</td>
-            <td className="p-2">{session.sessionDate}</td>
-            <td className="p-2 text-center space-x-2">
-              <button
-                onClick={() => openEditModal(session)}
-                className="text-[#008FFB] hover:text-blue-800"
-              >
-                <FaEdit />
-              </button>
-              <button
-                onClick={() => removeClinicSession(session.id)}
-                className="text-red-600 hover:text-red-800"
-              >
-                <FaTrash />
-              </button>
-              <button onClick={() => handleClick(session.id)}>
-                <FaClipboardList className="text-green-500 hover:text-green-700" />
-              </button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  )}
-</div>
-
-{/* Edit Modal */}
-{editModalOpen && selectedSession && (
-  <Modal title="Edit Session" isOpen={editModalOpen} handleClose={closeEditModal}>
-    <div className="flex flex-col space-y-4">
-      {error && <p className="text-red-500">{error}</p>}
-      <input
-        type="text"
-        className="border p-2 rounded"
-        value={selectedSession.name}
-        onChange={(e) =>
-          setSelectedSession({ ...selectedSession, name: e.target.value })
-        }
-        placeholder="Session Name"
-      />
-      <input
-        type="date"
-        className="border p-2 rounded"
-        value={selectedSession.sessionDate}
-        onChange={(e) =>
-          setSelectedSession({
-            ...selectedSession,
-            sessionDate: e.target.value,
-          })
-        }
-      />
-      <div className="flex justify-end space-x-2">
-        <button onClick={closeEditModal} className="px-4 py-2 bg-gray-300 rounded">
-          Cancel
-        </button>
-        <button
-          onClick={handleSaveEditedSession}
-          className="px-4 py-2 bg-blue-600 text-white rounded"
-        >
-          Save
-        </button>
-      </div>
-    </div>
-  </Modal>
-)}
-
+        {/* Edit Modal */}
+        {editModalOpen && selectedSession && (
+          <Modal title="Edit Session" isOpen={editModalOpen} handleClose={closeEditModal}>
+            <div className="flex flex-col space-y-4">
+              {error && <p className="text-red-500">{error}</p>}
+              <input
+                type="text"
+                className="border p-2 rounded"
+                value={selectedSession.name}
+                onChange={(e) => setSelectedSession({ ...selectedSession, name: e.target.value })}
+                placeholder="Session Name"
+              />
+              <input
+                type="date"
+                className="border p-2 rounded"
+                value={selectedSession.sessionDate}
+                onChange={(e) => setSelectedSession({ ...selectedSession, sessionDate: e.target.value })}
+              />
+              <div className="flex justify-end space-x-2">
+                <button onClick={closeEditModal} className="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+                <button onClick={handleSaveEditedSession} className="px-4 py-2 bg-blue-600 text-white rounded">Save</button>
+              </div>
+            </div>
+          </Modal>
+        )}
       </div>
     </DashboardContainer>
   );

@@ -113,7 +113,12 @@ async getResidentsByClinicId(req: Request, res: Response) {
   res.status(200).json(residents);
 }
 
-    
+async getDivisionPatientCountByClinic(req: Request, res: Response) {
+  const clinicId = parseInt(req.params.clinicId);
+  const result = await this.residentClinicService.getDivisionPatientCountByClinic(clinicId);
+  res.status(200).json(result);
+}
+ 
 
 }
 

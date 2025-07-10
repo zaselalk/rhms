@@ -52,6 +52,18 @@ class ResidentClinicService {
     }
   }
 
+  // Get division-wise patient count for a specific clinic
+  async getDivisionWiseResidentCountsForClinic(clinicId: number | string) {
+    try {
+      const response = await axiosInstance.get(`/resident-clinic/division-patient-count/${clinicId}`);
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || "Unable to fetch division-wise counts"
+      );
+    }
+  }
+
   // Delete a resident-clinic relationship by ID
   async deleteResidentClinicRecord(residentClinicId: number) {
     try {

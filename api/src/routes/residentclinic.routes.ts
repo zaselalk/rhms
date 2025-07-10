@@ -25,6 +25,12 @@ residentClinicRouter.get(
   catchAsync(residentClinicController.getResidentsByClinicId)
 );
 
+residentClinicRouter.get(
+  "/division-count/:clinicId",
+  catchAsync(residentClinicController.getDivisionPatientCountByClinic)
+);
+
+
 
 
 export default residentClinicRouter;
