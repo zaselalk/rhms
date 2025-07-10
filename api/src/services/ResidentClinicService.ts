@@ -30,6 +30,7 @@ export class ResidentClinicService {
         return this.residentClinicRepository.findByResidentIdAndClinicId(residentId, clinicId);
     }
 
+    // get residents by clinic ID
     async getResidentsByClinicId(clinicId: number): Promise<Resident[]> {
   return Resident.findAll({
     include: [
