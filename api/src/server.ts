@@ -20,7 +20,6 @@ import DivisionRouter from "./routes/division.routes";
 import { auditLogger } from "./middleware/auditLogger.middleware";
 import ResidentDiseaseRouter from "./routes/residentdisease.route";
 
-import ResidentDiseaseRouter from "./routes/residentdisease.route";
 dotenv.config();
 
 // env variables
@@ -51,7 +50,6 @@ app.use("/user", UserRouter);
 app.use("/residentClinic", residentClinicRouter);
 
 app.use("/division", DivisionRouter);
-app.use("/residentdisease", ResidentDiseaseRouter); 
 app.use("/residentdisease", ResidentDiseaseRouter); 
 app.use("/sessions", clinicSessionRoutes);
 app.use("/household-resident", HouseholdResidentRouter);
