@@ -72,7 +72,7 @@ const AdminDashboard: React.FC = () => {
 
   const [residentCount, setResidentCount] = React.useState<number>(0);
   const [householdCount, setHouseholdCount] = React.useState<number>(0);
-  // const [divisionCount, setDivisionCount] = React.useState<number>(0);
+  const [divisionCount, setDivisionCount] = React.useState<number>(0);
   const [diseaseCount, setDiseaseCount] = React.useState<number>(0);
   const dashbordService = DashboardService;
 
@@ -96,15 +96,18 @@ const AdminDashboard: React.FC = () => {
     }catch(error){
       console.error("Error fetching diseases:", error);
     }
+    try { 
+      const data = await dashbordService.getDivisionCount();
+      setDivisionCount(data.count);
+    }catch(error){
+      console.error("Error fetching diseases:", error);
+    } 
   };
 
   // Fetch data when loading the component
   useEffect(() => {
     fetchdata();
   }, []);
-
-  const numberOfDivisions = 5; // Static value for the number of divisions
-
 
 
 
@@ -133,7 +136,7 @@ const AdminDashboard: React.FC = () => {
           <div className="bg-white rounded-xl shadow-md p-4 flex flex-col justify-center items-center aspect-square">
             <LayoutGrid className="text-[#008FFB]" size={40} />
             <h3 className="text-lg font-semibold text-[#008FFB] mt-2 text-center">
-              {numberOfDivisions} Divisions
+              {divisionCount} Divisions
             </h3>
           </div>
 
