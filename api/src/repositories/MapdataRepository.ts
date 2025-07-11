@@ -12,7 +12,7 @@ export class MapdataRepository {
                 {
                     model: Resident,
                     as: "owner", 
-                    attributes: ["firstName", "lastName"], 
+                    attributes: ["firstName", "lastName","contactNumber"], 
                 },
             ],
         })
