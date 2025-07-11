@@ -130,15 +130,6 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
 
 
 
-  // const GramaniladariDivision = [
-  //   { id: 1, name: "Kotagedara" },
-  //   { id: 2, name: "Kolahakada" },
-  //   { id: 3, name: "Pahalawela" },
-  //   { id: 4, name: "alpitiya" },
-  //   { id: 5, name: "Diyagala" },
-  //   { id: 6, name: "Kolahakada" },
-  // ];
-
   const caldate2 = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
 
   const handleAddicted = (event: React.ChangeEvent<HTMLInputElement>) => {
