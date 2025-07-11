@@ -142,6 +142,13 @@ jobs:
             npm ci --omit=dev
           "
 
+           # Run migrations on the server
+          echo "=== Run migrations on the server ==="
+          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
+            cd $DEPLOY_DIR
+            npx sequelize-cli db:migrate --config dist/config/config.js
+          "
+
           # Verify extraction and installation
           echo "=== Verifying extraction and installation ==="
           ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
