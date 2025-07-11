@@ -14,7 +14,7 @@ module.exports = {
           type: DataTypes.INTEGER,
         },
         role: {
-          type: DataTypes.TEXT,
+          type: DataTypes.STRING,
           allowNull: false,
           unique: true,
         },
