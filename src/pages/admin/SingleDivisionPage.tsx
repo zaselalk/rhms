@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import {
   getHouseholdsByDivision,
-  getHouseholdCountByDivision, 
+  getHouseholdCountByDivision,
 } from "../../services/household.service";
 import { DivisionService } from "../../services/division.service";
 
@@ -19,36 +19,38 @@ interface Disease {
   count: number;
 }
 
+const ITEMS_PER_PAGE = 3;
+
 const SingleDivisionPage: FC = () => {
   const { divisionId } = useParams();
   const [divisionName, setDivisionName] = useState<string>("");
   const [households, setHouseholds] = useState<Household[]>([]);
   const [diseases, setDiseases] = useState<Disease[]>([]);
   const [residentCount, setResidentCount] = useState<number>(0);
-  const [householdCount, setHouseholdCount] = useState<number>(0); // ✅ New state
+  const [householdCount, setHouseholdCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
+
+  const [householdSearch, setHouseholdSearch] = useState("");
+  const [diseaseSearch, setDiseaseSearch] = useState("");
+  const [householdPage, setHouseholdPage] = useState(1);
+  const [diseasePage, setDiseasePage] = useState(1);
 
   useEffect(() => {
     const fetchData = async () => {
       if (divisionId) {
         try {
-          // Get division info
           const divisionData = await DivisionService.getDivisionById(divisionId);
           setDivisionName(divisionData.divisionName);
 
-          // Get households for division
           const householdData = await getHouseholdsByDivision(divisionData.divisionName);
           setHouseholds(householdData);
 
-          // Get resident count
           const countData = await DivisionService.getResidentCountByDivision(divisionId);
           setResidentCount(countData.residentCount);
 
-          // ✅ Get household count from backend
-          const count = await getHouseholdCountByDivision(divisionId);
-          setHouseholdCount(count);
+          const householdCount = await getHouseholdCountByDivision(divisionId);
+          setHouseholdCount(householdCount);
 
-          // Dummy disease data (replace with real API later)
           const dummyDiseases: Disease[] = [
             { name: "Flu", count: 15 },
             { name: "Diabetic", count: 30 },
@@ -57,8 +59,8 @@ const SingleDivisionPage: FC = () => {
             { name: "Malaria", count: 5 },
           ];
           setDiseases(dummyDiseases);
-        } catch (err) {
-          console.error("Error fetching data:", err);
+        } catch (error) {
+          console.error("Error loading division data:", error);
         } finally {
           setLoading(false);
         }
@@ -68,10 +70,26 @@ const SingleDivisionPage: FC = () => {
     fetchData();
   }, [divisionId]);
 
-  const sortedHouseholds = [...households].sort(
-    (a, b) => b.residentCount - a.residentCount
+  const filteredHouseholds = households.filter(h =>
+    `${h.ownerFirstName} ${h.ownerLastName}`.toLowerCase().includes(householdSearch.toLowerCase())
   );
-  const sortedDiseases = [...diseases].sort((a, b) => b.count - a.count);
+
+  const filteredDiseases = diseases.filter(d =>
+    d.name.toLowerCase().includes(diseaseSearch.toLowerCase())
+  );
+
+  const paginatedHouseholds = filteredHouseholds.slice(
+    (householdPage - 1) * ITEMS_PER_PAGE,
+    householdPage * ITEMS_PER_PAGE
+  );
+
+  const paginatedDiseases = filteredDiseases.slice(
+    (diseasePage - 1) * ITEMS_PER_PAGE,
+    diseasePage * ITEMS_PER_PAGE
+  );
+
+  const totalHouseholdPages = Math.ceil(filteredHouseholds.length / ITEMS_PER_PAGE);
+  const totalDiseasePages = Math.ceil(filteredDiseases.length / ITEMS_PER_PAGE);
 
   return (
     <DashboardContainer>
@@ -89,26 +107,32 @@ const SingleDivisionPage: FC = () => {
             {/* Summary Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
               <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center">
-                <p className="text-lg font-semibold text-gray-800">
-                  {householdCount}
-                </p>
+                <p className="text-lg font-semibold text-gray-800">{householdCount}</p>
                 <p className="text-sm text-gray-600">Households</p>
               </div>
               <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center">
-                <p className="text-lg font-semibold text-gray-800">
-                  {residentCount}
-                </p>
+                <p className="text-lg font-semibold text-gray-800">{residentCount}</p>
                 <p className="text-sm text-gray-600">Residents</p>
               </div>
             </div>
 
-            {/* Side-by-Side Tables */}
+            {/* Side-by-side tables */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* Diseases Table */}
               <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-xl font-semibold text-[#008FFB] mb-4">
-                  Top Diseases (Sorted by Count)
-                </h3>
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-xl font-semibold text-[#008FFB]">Top Diseases</h3>
+                  <input
+                    type="text"
+                    placeholder="Search diseases..."
+                    className="border px-3 py-1 rounded w-1/2"
+                    value={diseaseSearch}
+                    onChange={e => {
+                      setDiseaseSearch(e.target.value);
+                      setDiseasePage(1);
+                    }}
+                  />
+                </div>
                 <table className="w-full table-auto">
                   <thead>
                     <tr>
@@ -117,7 +141,7 @@ const SingleDivisionPage: FC = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {sortedDiseases.map((disease, index) => (
+                    {paginatedDiseases.map((disease, index) => (
                       <tr key={index}>
                         <td className="px-4 py-2 text-sm text-gray-700">{disease.name}</td>
                         <td className="px-4 py-2 text-sm text-gray-700">{disease.count}</td>
@@ -125,13 +149,34 @@ const SingleDivisionPage: FC = () => {
                     ))}
                   </tbody>
                 </table>
+                <div className="mt-4 flex justify-end space-x-2">
+                  {Array.from({ length: totalDiseasePages }, (_, i) => (
+                    <button
+                      key={i}
+                      className={`px-3 py-1 rounded ${diseasePage === i + 1 ? "bg-blue-500 text-white" : "border"}`}
+                      onClick={() => setDiseasePage(i + 1)}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {/* Households Table */}
               <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-xl font-semibold text-[#008FFB] mb-4">
-                  Households (Sorted by People Count)
-                </h3>
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-xl font-semibold text-[#008FFB]">Households</h3>
+                  <input
+                    type="text"
+                    placeholder="Search owner..."
+                    className="border px-3 py-1 rounded w-1/2"
+                    value={householdSearch}
+                    onChange={e => {
+                      setHouseholdSearch(e.target.value);
+                      setHouseholdPage(1);
+                    }}
+                  />
+                </div>
                 <table className="w-full table-auto">
                   <thead>
                     <tr>
@@ -141,7 +186,7 @@ const SingleDivisionPage: FC = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {sortedHouseholds.map((house, index) => (
+                    {paginatedHouseholds.map((house, index) => (
                       <tr key={index}>
                         <td className="px-4 py-2 text-sm text-gray-700">{house.house_no}</td>
                         <td className="px-4 py-2 text-sm text-gray-700">
@@ -152,6 +197,17 @@ const SingleDivisionPage: FC = () => {
                     ))}
                   </tbody>
                 </table>
+                <div className="mt-4 flex justify-end space-x-2">
+                  {Array.from({ length: totalHouseholdPages }, (_, i) => (
+                    <button
+                      key={i}
+                      className={`px-3 py-1 rounded ${householdPage === i + 1 ? "bg-blue-500 text-white" : "border"}`}
+                      onClick={() => setHouseholdPage(i + 1)}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </>
