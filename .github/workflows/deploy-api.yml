@@ -150,7 +150,7 @@ jobs:
           
       - name: 🚀 Deploy application
         run: |
-          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} << 'EOF'
+          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} << EOF
             set -e
             
             # Navigate to deployment directory
