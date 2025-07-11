@@ -37,7 +37,7 @@ app.use(serializeUser);
 // Middleware to log actions
 app.use(auditLogger);
 
-app.use("/auth", AuthRouter);
+// app.use("/auth", AuthRouter);
 app.use("/disease", DisaseRouter);
 app.use("/resident", ResidentRouter);
 app.use("/household", HouseholdRouter);
