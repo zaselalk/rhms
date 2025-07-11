@@ -8,6 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      DEPLOY_TIMESTAMP: ${{ github.run_id }}_${{ github.run_number }}
+      DEPLOY_DIR: "/home/azureuser/deployments/${{ env.DEPLOY_TIMESTAMP }}"
     steps:
       - name: 🔍 Checkout code
         uses: actions/checkout@v4
@@ -59,8 +62,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    env:
-      DEPLOY_DIR: "/home/azureuser/deployments/$(date +%Y%m%d_%H%M%S)"
+    
     steps:
       - name: 📥 Download build artifacts
         uses: actions/download-artifact@v4
