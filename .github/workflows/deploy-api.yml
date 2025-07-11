@@ -36,24 +36,69 @@ jobs:
           npm ci --production --ignore-scripts
         working-directory: api
         
-      - name: 📁 Create deployment package
+      - name: 🗂️ Create deployment directory on VM
         run: |
-          mkdir -p deploy-package
-          cp -r api/dist deploy-package/
-          cp -r api/node_modules deploy-package/
-          cp api/package.json deploy-package/
-          cp api/package-lock.json deploy-package/
-          # Copy any other necessary files (config, etc.)
-          if [ -f api/.env.production ]; then
-            cp api/.env.production deploy-package/.env
-          fi
+          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} << 'EOF'
+            set -e
+            
+            # Create timestamped deployment directory
+            DEPLOY_DIR="/home/azureuser/deployments/$(date +%Y%m%d_%H%M%S)"
+            echo "Creating deployment directory: $DEPLOY_DIR"
+            mkdir -p "$DEPLOY_DIR"
+            
+            # Verify directory was created
+            if [ ! -d "$DEPLOY_DIR" ]; then
+              echo "❌ Failed to create deployment directory"
+              exit 1
+            fi
+            
+            # Create symlink for current deployment
+            ln -sfn "$DEPLOY_DIR" /home/azureuser/current-deployment
+            
+            # Verify symlink was created
+            if [ ! -L "/home/azureuser/current-deployment" ]; then
+              echo "❌ Failed to create symlink"
+              exit 1
+            fi
+            
+            # Show final state
+            echo "✅ Deployment directory created successfully"
+            ls -la /home/azureuser/current-deployment
+            echo "Target directory: $(readlink -f /home/azureuser/current-deployment)"
+          EOF
+
           
-      - name: 📤 Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: production-build
-          path: deploy-package/
-          retention-days: 7
+      - name: 📤 Upload build to VM
+        run: |
+          # Debug: Show what we're about to upload
+          echo "=== Local files to upload ==="
+          ls -la deploy-package/
+          echo "Total files: $(find deploy-package -type f | wc -l)"
+          
+          # Verify target directory exists on remote
+          echo "=== Verifying remote directory ==="
+          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
+            if [ -L /home/azureuser/current-deployment ]; then
+              echo '✅ Symlink exists'
+              echo 'Target: '$(readlink -f /home/azureuser/current-deployment)
+              ls -la /home/azureuser/current-deployment
+            else
+              echo '❌ Symlink does not exist'
+              exit 1
+            fi
+          "
+          
+          # Upload files
+          echo "=== Uploading files ==="
+          scp -v -r deploy-package/* ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }}:/home/azureuser/current-deployment/
+          
+          # Verify upload
+          echo "=== Verifying upload ==="
+          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
+            echo 'Files in deployment directory:'
+            ls -la /home/azureuser/current-deployment/
+            echo 'Total files uploaded: '$(find /home/azureuser/current-deployment -type f | wc -l)
+          "
 
   deploy:
     needs: build
