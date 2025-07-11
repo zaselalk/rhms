@@ -160,7 +160,7 @@ jobs:
             chmod +x dist/index.js 2>/dev/null || true
             
             # Create or update PM2 ecosystem file
-            cat > ecosystem.config.js << 'EOL'
+            cat > ecosystem.config.js << EOL
             module.exports = {
               apps: [{
                 name: 'rhms-api',
