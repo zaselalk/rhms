@@ -10,6 +10,7 @@ import { residentValidation } from "../../validation/residentValidation";
 import residentService from "../../services/resident.service";
 import { ResidentData } from "../../types/resident";
 import { ClinicService } from "../../services/clinic.service";
+import { DivisionService } from "../../services/division.service";
 
 type ResidentRegistrationProps = {};
 
@@ -85,12 +86,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
   useEffect(() => {
     const fetchGramaniladariDivision = async () => {
       try {
-        const response = await fetch("http://localhost:3001/division");
-        if (!response.ok) {
-          throw new Error("Failed to fetch Gramaniladari Division data");
-        }
-        const data = await response.json();
-        console.log("Gramaniladari Division data:", data);
+        const data = await DivisionService.getAllDivisions();
         // Assuming the data is an array of objects with id and name properties
         setGramaniladariDivision(data);
       } catch (error) {
