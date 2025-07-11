@@ -84,14 +84,14 @@ jobs:
       
       - name: 🗂️ Create deployment directory on VM
         run: |
-          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} << 'EOF'
+          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} << EOF
             set -e
             
             # Create timestamped deployment directory
             DEPLOY_DIR="/home/azureuser/deployments/${{ steps.set_timestamp.outputs.timestamp }}"
 
             echo "Creating deployment directory: $DEPLOY_DIR"
-            mkdir -p \$DEPLOY_DIR
+            mkdir -p "\$DEPLOY_DIR"
             
             # Verify directory was created
             if [ ! -d "\$DEPLOY_DIR" ]; then
