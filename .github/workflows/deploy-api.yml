@@ -84,7 +84,7 @@ jobs:
             set -e
             
             # Create timestamped deployment directory
-            DEPLOY_DIR="{{ env.DEPLOY_DIR }}"
+            DEPLOY_DIR="/home/azureuser/deployement/${{ env.DEPLOY_DIR }}"
             echo "Creating deployment directory: $DEPLOY_DIR"
             mkdir -p "$DEPLOY_DIR"
             
