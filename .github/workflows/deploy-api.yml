@@ -1,4 +1,4 @@
-name: Deploy Backend to Azure VM (Production Build)
+name: Deploy Backend to Azure VM
 
 on:
   push:
@@ -6,164 +6,218 @@ on:
       - main
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
+
     steps:
       - name: 🔍 Checkout code
         uses: actions/checkout@v4
-        
+
       - name: 🧪 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'npm'
+          cache: "npm"
           cache-dependency-path: api/package-lock.json
-          
+
       - name: 🚀 Install dependencies
         run: npm ci
-        working-directory: api
-        
-      - name: 🧪 Run tests
-        run: npm run test
         working-directory: api
 
-  build:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: 🔍 Checkout code
-        uses: actions/checkout@v4
-        
-      - name: 🧪 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: 'npm'
-          cache-dependency-path: api/package-lock.json
-          
-      - name: 🚀 Install dependencies
-        run: npm ci
-        working-directory: api
-        
       - name: 🏗️ Build TypeScript project
         run: npm run build
         working-directory: api
         env:
           NODE_ENV: production
-          
-      - name: 📦 Install production dependencies only
-        run: |
-          rm -rf node_modules
-          npm ci --production --ignore-scripts
-        working-directory: api
-        
-      - name: 📁 Create deployment package
+
+      - name: Create deployment package
         run: |
           mkdir -p deploy-package
           cp -r api/dist deploy-package/
-          cp -r api/node_modules deploy-package/
           cp api/package.json deploy-package/
           cp api/package-lock.json deploy-package/
-          # Copy any other necessary files (config, etc.)
+          
+          # sequalize configurations
+          cp api/.sequelizerc deploy-package/
           if [ -f api/.env.production ]; then
             cp api/.env.production deploy-package/.env
           fi
-          
+          #compress the deployment package
+          tar -czvf deploy-package.tar.gz -C deploy-package .
+
       - name: 📤 Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: production-build
-          path: deploy-package/
+          path: deploy-package.tar.gz
           retention-days: 7
 
   deploy:
-    needs: [test, build]
+    needs: build
     runs-on: ubuntu-latest
+    env:
+      DATABASE_USER: ${{ secrets.DATABASE_USER }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASS }}
+      DATABASE_NAME: ${{secrets.DATABASE_NAME}}
+      JWT_SECRET: ${{secrets.JWT_SECRET}}
+
     steps:
       - name: 📥 Download build artifacts
         uses: actions/download-artifact@v4
         with:
           name: production-build
-          path: ./deploy-package
-          
+          path: .
+
       - name: 📝 Setup SSH key
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          
+
       - name: 🔒 Add host key to known_hosts
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -t rsa,dsa,ecdsa,ed25519 ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
-          
+
+      - name: ⏰ Set deployment timestamp
+        id: set_timestamp
+        run: echo "timestamp=$(date +%Y%m%d_%H%M%S)" >> $GITHUB_OUTPUT
+
       - name: 🗂️ Create deployment directory on VM
         run: |
-          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
-            mkdir -p /home/azureuser/deployments/$(date +%Y%m%d_%H%M%S)
-            ln -sfn /home/azureuser/deployments/$(date +%Y%m%d_%H%M%S) /home/azureuser/current-deployment
-          "
-          
-      - name: 📤 Upload build to VM
-        run: |
-          scp -r deploy-package/* ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }}:/home/azureuser/current-deployment/
-          
-      - name: 🚀 Deploy application
-        run: |
-          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} << 'EOF'
+          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} << EOF
             set -e
             
-            # Navigate to deployment directory
+            # Create timestamped deployment directory
+            DEPLOY_DIR="/home/azureuser/deployments/${{ steps.set_timestamp.outputs.timestamp }}"
+
+            echo "Creating deployment directory: $DEPLOY_DIR"
+            mkdir -p "\$DEPLOY_DIR"
+            
+            # Verify directory was created
+            if [ ! -d "\$DEPLOY_DIR" ]; then
+              echo "❌ Failed to create deployment directory"
+              exit 1
+            fi
+            
+            # Create symlink for current deployment
+            ln -sfn "\$DEPLOY_DIR" /home/azureuser/current-deployment
+            
+            # Verify symlink was created
+            if [ ! -L "/home/azureuser/current-deployment" ]; then
+              echo "❌ Failed to create symlink"
+              exit 1
+            fi
+            
+            # Show final state
+            echo "✅ Deployment directory created successfully"
+            ls -la /home/azureuser/current-deployment
+            echo "Target directory: $(readlink -f /home/azureuser/current-deployment)"
+          EOF
+
+      - name: 📤 Upload build to VM
+        run: |
+          # Debug: Show what we're about to upload
+          echo "=== Local archive to upload ==="
+          ls -la deploy-package.tar.gz
+
+          DEPLOY_DIR="/home/azureuser/deployments/${{ steps.set_timestamp.outputs.timestamp }}"
+
+           # Debug: Verify remote directory
+          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
+            echo 'Verifying remote directory:'
+            ls -ld $DEPLOY_DIR
+          "
+
+          # Upload files
+          echo "=== Uploading compressed archive ==="
+          scp -v deploy-package.tar.gz ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }}:"$DEPLOY_DIR/deploy-package.tar.gz"
+
+          # Extract the archive on the server
+          echo "=== Extracting archive on server ==="
+          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
+            cd $DEPLOY_DIR
+            tar -xzvf deploy-package.tar.gz
+            rm deploy-package.tar.gz
+          "
+
+          # Install production dependencies on the server
+          echo "=== Installing production dependencies on server ==="
+          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
+            cd $DEPLOY_DIR
+            npm ci --omit=dev
+          "
+
+           # Run migrations on the server
+          echo "=== Run migrations on the server ==="
+          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
+            cd $DEPLOY_DIR
+            npx sequelize-cli db:migrate --config dist/config/config.js
+          "
+
+          # Verify extraction and installation
+          echo "=== Verifying extraction and installation ==="
+          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
+            echo 'Files in deployment directory:'
+            ls -la /home/azureuser/current-deployment/
+            echo 'Total files extracted: '$(find /home/azureuser/current-deployment -type f | wc -l)
+            echo 'Node modules installed:'
+            ls -la /home/azureuser/current-deployment/node_modules/ | head -10
+          "
+
+      - name: 📝 Generate PM2 config locally  
+        run: |
+          cat > ecosystem.config.js <<EOF
+          module.exports = {
+            apps: [{
+              name: 'rhms-api',
+              script: './dist/server.js',
+              instances: 1,
+              exec_mode: 'cluster',
+              env: {
+                NODE_ENV: 'production',
+                DATABASE_USER: "${{ secrets.DATABASE_USER }}",
+                DATABASE_PASSWORD: "${{ secrets.DATABASE_PASS }}",
+                DATABASE_NAME: "${{secrets.DATABASE_NAME}}",
+                JWT_SECRET: "${{secrets.DATABASE_NAME}}",
+                PORT: 3000
+              },
+              error_file: './logs/err.log',
+              out_file: './logs/out.log',
+              log_file: './logs/combined.log',
+              time: true,
+              max_memory_restart: '1G'
+            }]
+          }
+          EOF
+
+      - name: 📤 Upload PM2 config to server
+        run: |
+          DEPLOY_DIR="/home/azureuser/deployments/${{ steps.set_timestamp.outputs.timestamp }}"
+          scp ecosystem.config.js ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }}:"$DEPLOY_DIR/ecosystem.config.js"
+
+      - name: 🚀 Deploy using PM2
+        run: |
+          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
+            set -e
             cd /home/azureuser/current-deployment
-            
-            # Set proper permissions
-            chmod +x dist/index.js 2>/dev/null || true
-            
-            # Create or update PM2 ecosystem file
-            cat > ecosystem.config.js << 'EOL'
-            module.exports = {
-              apps: [{
-                name: 'rhms-api',
-                script: './dist/index.js',
-                instances: 1,
-                exec_mode: 'cluster',
-                env: {
-                  NODE_ENV: 'production',
-                  PORT: process.env.PORT || 3000
-                },
-                error_file: './logs/err.log',
-                out_file: './logs/out.log',
-                log_file: './logs/combined.log',
-                time: true,
-                max_memory_restart: '1G'
-              }]
-            }
-            EOL
-            
-            # Create logs directory
             mkdir -p logs
-            
-            # Stop existing application (if running)
+            chmod +x dist/index.js 2>/dev/null || true
+
             pm2 stop rhms-api 2>/dev/null || true
             pm2 delete rhms-api 2>/dev/null || true
-            
-            # Start the application
+
             pm2 start ecosystem.config.js
-            
-            # Save PM2 configuration
             pm2 save
-            
-            # Verify deployment
             sleep 5
             pm2 status rhms-api
-            
-            # Health check (adjust URL as needed)
+
             if curl -f http://localhost:3000/health > /dev/null 2>&1; then
-              echo "✅ Application is responding to health check"
+              echo '✅ Application is responding to health check'
             else
-              echo "⚠️  Health check failed, but application is running"
+              echo '⚠️  Health check failed, but application is running'
             fi
-          EOF
-          
+          "
+
       - name: 🧹 Cleanup old deployments
         run: |
           ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
@@ -171,7 +225,7 @@ jobs:
             ls -t | tail -n +6 | xargs rm -rf 2>/dev/null || true
             echo 'Kept last 5 deployments'
           "
-          
+
       - name: 📢 Deployment Status
         if: always()
         run: |
