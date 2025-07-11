@@ -148,9 +148,9 @@ jobs:
             echo 'Total files extracted: '$(find /home/azureuser/current-deployment -type f | wc -l)
           "
           
-          - name: 📝 Generate PM2 config locally
-            run: |
-              cat > ecosystem.config.js <<EOF
+      - name: 📝 Generate PM2 config locally
+        run: |
+          cat > ecosystem.config.js <<EOF
           module.exports = {
             apps: [{
               name: 'rhms-api',
