@@ -109,7 +109,19 @@ export class HouseholdRepository {
     return Household.count();
   }
 
+  // Fetch households by division (grama_division)
+  async findHouseholdsByDivision(divisionId: string): Promise<Household[]> {
+    return Household.findAll({
+      where: { grama_division: divisionId },
+    });
+  }
 
+  // Count households by division (grama_division)
+  async countHouseholdsByDivision(divisionId: string): Promise<number> {
+    return Household.count({
+      where: { grama_division: divisionId },
+    });
+  }
   //
 
 }

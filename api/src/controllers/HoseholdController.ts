@@ -89,6 +89,41 @@ export class HouseholdController {
     }
   }
 
+// Inside HouseholdController class
+
+// Get households by division
+getHouseholdsByDivision = async (req: Request, res: Response): Promise<Response> => {
+  const { divisionId } = req.params;
+  try {
+    if (!divisionId) {
+      return res.status(400).json({ message: "Missing divisionId" });
+    }
+
+    const households = await this.householdService.findHouseholdsByDivision(divisionId);
+    return res.json(households);
+  } catch (error) {
+    console.error("Error fetching households by division:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// Get count of households by division
+// In HouseholdController
+getHouseholdCountByDivision = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { divisionId } = req.params;
+    const count = await this.householdService.getHouseholdCountByDivision(divisionId);
+    return res.json({
+      message: 'Household count by division fetched successfully',
+      status: 200,
+      error: null,
+      data: { count },
+    });
+  } catch (error) {
+    console.error('Error fetching household count by division:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
 
 
 

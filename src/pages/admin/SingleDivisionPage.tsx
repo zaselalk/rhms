@@ -1,7 +1,10 @@
 import { FC, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
-import { getHouseholdsByDivision } from "../../services/household.service";
+import {
+  getHouseholdsByDivision,
+  getHouseholdCountByDivision, 
+} from "../../services/household.service";
 import { DivisionService } from "../../services/division.service";
 
 interface Household {
@@ -22,6 +25,7 @@ const SingleDivisionPage: FC = () => {
   const [households, setHouseholds] = useState<Household[]>([]);
   const [diseases, setDiseases] = useState<Disease[]>([]);
   const [residentCount, setResidentCount] = useState<number>(0);
+  const [householdCount, setHouseholdCount] = useState<number>(0); // ✅ New state
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,9 +40,13 @@ const SingleDivisionPage: FC = () => {
           const householdData = await getHouseholdsByDivision(divisionData.divisionName);
           setHouseholds(householdData);
 
-          // Get resident count for division
+          // Get resident count
           const countData = await DivisionService.getResidentCountByDivision(divisionId);
-          setResidentCount(countData.residentCount); 
+          setResidentCount(countData.residentCount);
+
+          // ✅ Get household count from backend
+          const count = await getHouseholdCountByDivision(divisionId);
+          setHouseholdCount(count);
 
           // Dummy disease data (replace with real API later)
           const dummyDiseases: Disease[] = [
@@ -82,7 +90,7 @@ const SingleDivisionPage: FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
               <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center">
                 <p className="text-lg font-semibold text-gray-800">
-                  {households.length}
+                  {householdCount}
                 </p>
                 <p className="text-sm text-gray-600">Households</p>
               </div>

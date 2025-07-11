@@ -38,5 +38,19 @@ HouseholdRouter.get(
     catchAsync(householdController.gethouseholdCount)
 );
 
+// Get all households by division
+HouseholdRouter.get(
+  "/division/:divisionId",
+  protectRoute("household:view"),
+  catchAsync(householdController.getHouseholdsByDivision)
+);
+
+// Get count of households in a division
+HouseholdRouter.get(
+  "/division/:divisionId/count",
+  protectRoute("household:view"),
+  catchAsync(householdController.getHouseholdCountByDivision)
+);
+
 
 export default HouseholdRouter;

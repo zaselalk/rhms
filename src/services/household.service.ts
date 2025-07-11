@@ -50,15 +50,29 @@ export const searchResidentById = async (residentId: number) => {
   return response.data.data;
 };
 
-//getHouseholdsByDivision
+// Get households by division
 export const getHouseholdsByDivision = async (division: string) => {
   try {
     const response = await axiosInstance.get(
-      `/household/by-division/${division}`,
+      `/household/by-division/${division}`
     );
-    return response.data; // should return array of { house_no, ownerFirstName, ownerLastName, residentCount }
+    return response.data; // array of { house_no, ownerFirstName, ownerLastName, residentCount }
   } catch (error) {
     console.error("Error fetching households by division:", error);
     throw error;
   }
 };
+
+// Get household count by division
+export const getHouseholdCountByDivision = async (division: string) => {
+  try {
+    const response = await axiosInstance.get(
+      `/household/division/${division}/count`
+    );
+    return response.data.data.count;
+  } catch (error) {
+    console.error("Error fetching household count by division:", error);
+    throw error;
+  }
+};
+
