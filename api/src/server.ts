@@ -1,6 +1,6 @@
 import express, { Application } from "express";
 import dotenv from "dotenv";
-// import AuthRouter from "./routes/auth.routes";
+import AuthRouter from "./routes/auth.routes";
 import sequelize from "./models";
 import DisaseRouter from "./routes/disease.routes";
 import cors from "cors";
@@ -37,7 +37,7 @@ app.use(serializeUser);
 // Middleware to log actions
 app.use(auditLogger);
 
-// app.use("/auth", AuthRouter);
+app.use("/auth", AuthRouter);
 app.use("/disease", DisaseRouter);
 app.use("/resident", ResidentRouter);
 app.use("/household", HouseholdRouter);
