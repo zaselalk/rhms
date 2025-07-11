@@ -1,7 +1,9 @@
 import { SequelizeOptions } from "sequelize-typescript";
-import dotenv from "dotenv";
 
-dotenv.config();
+// required to load environment variables from .env file if development
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 
 const config: { [key: string]: SequelizeOptions } = {
   development: {
@@ -27,4 +29,4 @@ const config: { [key: string]: SequelizeOptions } = {
   },
 };
 
-export default config;
+module.exports = config;
