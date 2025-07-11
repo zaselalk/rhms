@@ -60,9 +60,6 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    env:
-      DEPLOY_TIMESTAMP: ${{ github.run_id }}_${{ github.run_number }}
-      DEPLOY_DIR: "/home/azureuser/deployments/${{ env.DEPLOY_TIMESTAMP }}"
     
     steps:
       - name: 📥 Download build artifacts
@@ -80,25 +77,30 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -t rsa,dsa,ecdsa,ed25519 ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
-          
+
+      - name: ⏰ Set deployment timestamp
+        id: set_timestamp
+        run: echo "timestamp=$(date +%Y%m%d_%H%M%S)" >> $GITHUB_OUTPUT
+      
       - name: 🗂️ Create deployment directory on VM
         run: |
           ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} << 'EOF'
             set -e
             
             # Create timestamped deployment directory
-            DEPLOY_DIR="${{ env.DEPLOY_DIR }}"
+            DEPLOY_DIR="/home/azureuser/deployments/${{ steps.set_timestamp.outputs.timestamp }}"
+
             echo "Creating deployment directory: $DEPLOY_DIR"
-            mkdir -p "$DEPLOY_DIR"
+            mkdir -p "\$DEPLOY_DIR"
             
             # Verify directory was created
-            if [ ! -d "$DEPLOY_DIR" ]; then
+            if [ ! -d "\$DEPLOY_DIR" ]; then
               echo "❌ Failed to create deployment directory"
               exit 1
             fi
             
             # Create symlink for current deployment
-            ln -sfn "$DEPLOY_DIR" /home/azureuser/current-deployment
+            ln -sfn "\$DEPLOY_DIR" /home/azureuser/current-deployment
             
             # Verify symlink was created
             if [ ! -L "/home/azureuser/current-deployment" ]; then
@@ -118,20 +120,22 @@ jobs:
           echo "=== Local archive to upload ==="
           ls -la deploy-package.tar.gz
 
+          DEPLOY_DIR="/home/azureuser/deployments/${{ steps.set_timestamp.outputs.timestamp }}"
+
            # Debug: Verify remote directory
           ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
             echo 'Verifying remote directory:'
-            ls -ld ${{ env.DEPLOY_DIR }}
+            ls -ld \$DEPLOY_DIR
           "
           
           # Upload files
           echo "=== Uploading compressed archive ==="
-          scp -v deploy-package.tar.gz ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }}:"${{ env.DEPLOY_DIR }}/deploy-package.tar.gz"
+          scp -v deploy-package.tar.gz ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }}:"\$DEPLOY_DIR/deploy-package.tar.gz"
           
           # Extract the archive on the server
           echo "=== Extracting archive on server ==="
           ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
-            cd {{ env.DEPLOY_DIR }}
+            cd \$DEPLOY_DIR
             tar -xzvf deploy-package.tar.gz
             rm deploy-package.tar.gz
           "
