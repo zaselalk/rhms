@@ -114,6 +114,12 @@ jobs:
           # Debug: Show what we're about to upload
           echo "=== Local archive to upload ==="
           ls -la deploy-package.tar.gz
+
+           # Debug: Verify remote directory
+          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
+            echo 'Verifying remote directory:'
+            ls -ld {{ env.DEPLOY_DIR }}
+          "
           
           # Upload files
           echo "=== Uploading compressed archive ==="
