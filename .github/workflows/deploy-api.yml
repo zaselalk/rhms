@@ -115,7 +115,7 @@ jobs:
           
           # Upload files
           echo "=== Uploading compressed archive ==="
-          scp -v deploy-package.tar.gz ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }}:/home/azureuser/current-deployment/
+          scp -v deploy-package.tar.gz ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }}:/home/azureuser/current-deployment/deploy-package.tar.gz
           
           # Extract the archive on the server
           echo "=== Extracting archive on server ==="
