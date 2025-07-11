@@ -151,6 +151,11 @@ jobs:
           echo "=== Run migrations on the server ==="
           ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
             cd $DEPLOY_DIR
+            NODE_ENV=production \
+            DATABASE_USER='${{ secrets.DATABASE_USER }}' \
+            DATABASE_PASSWORD='${{ secrets.DATABASE_PASS }}' \
+            DATABASE_NAME='${{ secrets.DATABASE_NAME }}' \
+            JWT_SECRET='${{ secrets.JWT_SECRET }}' \
             npx sequelize-cli db:migrate --config dist/config/config.js
           "
 
