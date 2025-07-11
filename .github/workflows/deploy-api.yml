@@ -6,7 +6,6 @@ on:
       - main
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
@@ -36,6 +35,45 @@ jobs:
           npm ci --production --ignore-scripts
         working-directory: api
         
+      - name: 📁 Create deployment package
+        run: |
+          mkdir -p deploy-package
+          cp -r api/dist deploy-package/
+          cp -r api/node_modules deploy-package/
+          cp api/package.json deploy-package/
+          cp api/package-lock.json deploy-package/
+          # Copy any other necessary files (config, etc.)
+          if [ -f api/.env.production ]; then
+            cp api/.env.production deploy-package/.env
+          fi
+          
+      - name: 📤 Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-build
+          path: deploy-package/
+          retention-days: 7
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: production-build
+          path: ./deploy-package
+          
+      - name: 📝 Setup SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          
+      - name: 🔒 Add host key to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -t rsa,dsa,ecdsa,ed25519 ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
+          
       - name: 🗂️ Create deployment directory on VM
         run: |
           ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} << 'EOF'
@@ -66,7 +104,6 @@ jobs:
             ls -la /home/azureuser/current-deployment
             echo "Target directory: $(readlink -f /home/azureuser/current-deployment)"
           EOF
-
           
       - name: 📤 Upload build to VM
         run: |
@@ -74,19 +111,6 @@ jobs:
           echo "=== Local files to upload ==="
           ls -la deploy-package/
           echo "Total files: $(find deploy-package -type f | wc -l)"
-          
-          # Verify target directory exists on remote
-          echo "=== Verifying remote directory ==="
-          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
-            if [ -L /home/azureuser/current-deployment ]; then
-              echo '✅ Symlink exists'
-              echo 'Target: '$(readlink -f /home/azureuser/current-deployment)
-              ls -la /home/azureuser/current-deployment
-            else
-              echo '❌ Symlink does not exist'
-              exit 1
-            fi
-          "
           
           # Upload files
           echo "=== Uploading files ==="
@@ -99,37 +123,6 @@ jobs:
             ls -la /home/azureuser/current-deployment/
             echo 'Total files uploaded: '$(find /home/azureuser/current-deployment -type f | wc -l)
           "
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: 📥 Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: production-build
-          path: ./deploy-package
-          
-      - name: 📝 Setup SSH key
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          
-      - name: 🔒 Add host key to known_hosts
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -t rsa,dsa,ecdsa,ed25519 ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
-          
-      - name: 🗂️ Create deployment directory on VM
-        run: |
-          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
-            mkdir -p /home/azureuser/deployments/$(date +%Y%m%d_%H%M%S)
-            ln -sfn /home/azureuser/deployments/$(date +%Y%m%d_%H%M%S) /home/azureuser/current-deployment
-          "
-          
-      - name: 📤 Upload build to VM
-        run: |
-          scp -r deploy-package/* ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }}:/home/azureuser/current-deployment/
           
       - name: 🚀 Deploy application
         run: |
@@ -152,10 +145,10 @@ jobs:
                 exec_mode: 'cluster',
                 env: {
                   NODE_ENV: 'production',
-                  DATABASE_USER= ${{ secrets.DATABASE_USER }}
-                  DATABASE_PASSWORD= ${{ secrets.DATABASE_PASS }}
-                  DATABASE_NAME= ${{ secrets.DATABASE_NAME }}
-                  JWT_SECRET= ${{ secrets.JWT_SECRET }}
+                  DATABASE_USER: process.env.DATABASE_USER,
+                  DATABASE_PASSWORD: process.env.DATABASE_PASSWORD,
+                  DATABASE_NAME: process.env.DATABASE_NAME,
+                  JWT_SECRET: process.env.JWT_SECRET,
                   PORT: process.env.PORT || 3000
                 },
                 error_file: './logs/err.log',
