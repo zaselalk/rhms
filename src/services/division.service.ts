@@ -44,4 +44,9 @@ export const DivisionService = {
       throw error;
     }
   },
+  // Fetch resident count by division ID
+  getResidentCountByDivision: async (divisionId: string | number) => {
+    const res = await axiosInstance.get(`/resident/division/${divisionId}/count`);
+    return res.data; // Expected to return { divisionId, residentCount }
+  },
 };

@@ -48,4 +48,10 @@ ResidentRouter.get(
   "/disease-patient-counts",
   catchAsync(residentController.getDiseasePatientCounts));
 
+ResidentRouter.get(
+  "/division/:divisionId/count",
+  catchAsync(residentController.getResidentCountByDivision)
+);
+
+
 export default ResidentRouter;

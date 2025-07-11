@@ -329,6 +329,20 @@ class ResidentController {
       res.status(500).json({ message: "Error counting diseases" });
     }
   };
+
+ getResidentCountByDivision = async (req: Request, res: Response) => {
+  try {
+    const { divisionId } = req.params;
+    const count = await Resident.count({
+      where: { divisionId: divisionId },
+    });
+    res.status(200).json({ divisionId, residentCount: count });
+  } catch (error) {
+    console.error("Error fetching resident count by division:", error);
+    res.status(500).json({ error: "Failed to fetch resident count" });
+  }
+};
+
 }
 
 export default ResidentController;

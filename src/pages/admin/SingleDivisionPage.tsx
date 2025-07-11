@@ -21,18 +21,24 @@ const SingleDivisionPage: FC = () => {
   const [divisionName, setDivisionName] = useState<string>("");
   const [households, setHouseholds] = useState<Household[]>([]);
   const [diseases, setDiseases] = useState<Disease[]>([]);
+  const [residentCount, setResidentCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       if (divisionId) {
         try {
+          // Get division info
           const divisionData = await DivisionService.getDivisionById(divisionId);
           setDivisionName(divisionData.divisionName);
 
-
-          const householdData = await getHouseholdsByDivision(divisionData.name);
+          // Get households for division
+          const householdData = await getHouseholdsByDivision(divisionData.divisionName);
           setHouseholds(householdData);
+
+          // Get resident count for division
+          const countData = await DivisionService.getResidentCountByDivision(divisionId);
+          setResidentCount(countData.residentCount); 
 
           // Dummy disease data (replace with real API later)
           const dummyDiseases: Disease[] = [
@@ -82,7 +88,7 @@ const SingleDivisionPage: FC = () => {
               </div>
               <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center">
                 <p className="text-lg font-semibold text-gray-800">
-                  {households.reduce((sum, h) => sum + h.residentCount, 0)}
+                  {residentCount}
                 </p>
                 <p className="text-sm text-gray-600">Residents</p>
               </div>
