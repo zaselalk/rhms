@@ -62,7 +62,25 @@ export class ResidentRepository {
       where: {
         id,
       },
-      attributes: ['id', 'firstName', 'lastName'], // only fields necessary.
+      attributes: ['id', 'firstName', 'lastName',
+      'nic',
+      'email',
+      'password',
+      'birthday',
+      'bloodGroup',
+      // 'gender',
+      'bloodPressure',
+      'heartRate',
+      'address',
+      'contactNumber',
+      'divisionId',
+      'maritalState',
+      'educationLevel',
+      'addicted',
+      'alergies',
+      'chronicalDesease',
+      'height',
+      'weight',], // only fields necessary.
     });
   }
 
