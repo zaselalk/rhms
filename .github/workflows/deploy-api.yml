@@ -110,9 +110,8 @@ jobs:
       - name: 📤 Upload build to VM
         run: |
           # Debug: Show what we're about to upload
-          echo "=== Local files to upload ==="
-          ls -la deploy-package/
-          echo "Total files: $(find deploy-package -type f | wc -l)"
+          echo "=== Local archive to upload ==="
+          ls -la deploy-package.tar.gz
           
           # Upload files
           echo "=== Uploading compressed archive ==="
