@@ -39,6 +39,17 @@ export const DashboardService = {
   },
 
 
+  getlocations:async()=>{
+    try{
+      const response=await axiosInstance.get("/mapdata/getlocation");
+      return response.data; 
+    }catch(error){
+      console.error("Error fetching locations:", error);
+      throw error;
+    }
+  }
+
+
 
 
 };
