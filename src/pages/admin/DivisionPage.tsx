@@ -232,7 +232,7 @@ const DivisionPage: FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {divisions.map((division) => (
               <Link
-                to={`${division.divisionId}`}
+                to={`/admin/division/${division.divisionId}`}
                 key={division.divisionId}
                 className="bg-white p-4 rounded-lg shadow-md flex justify-between items-center"
               >

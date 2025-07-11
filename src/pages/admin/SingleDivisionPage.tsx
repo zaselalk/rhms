@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import { getHouseholdsByDivision } from "../../services/household.service";
+import { DivisionService } from "../../services/division.service";
 
 interface Household {
   house_no: string;
@@ -16,62 +17,54 @@ interface Disease {
 }
 
 const SingleDivisionPage: FC = () => {
-  const { id } = useParams();
+  const { divisionId } = useParams();
   const [divisionName, setDivisionName] = useState<string>("");
   const [households, setHouseholds] = useState<Household[]>([]);
   const [diseases, setDiseases] = useState<Disease[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (id) {
-      const divisionLookup: { [key: string]: string } = {
-        "1": "Katugahahena",
-        "2": "Kotagedara",
-        "3": "Diyagala",
-        "4": "Nowthuduwa",
-        "6": "Pahalawela",
-        "7": "Madegedara",
-        "8": "Boopitiya",
-        "9": "Karampethara",
-      };
+    const fetchData = async () => {
+      if (divisionId) {
+        try {
+          const divisionData = await DivisionService.getDivisionById(divisionId);
+          setDivisionName(divisionData.divisionName);
 
-      const selectedName = divisionLookup[id] || "Unknown Division";
-      setDivisionName(selectedName);
 
-      // Fetch household data from API
-      getHouseholdsByDivision(selectedName)
-        .then((data) => {
-          setHouseholds(data);
+          const householdData = await getHouseholdsByDivision(divisionData.name);
+          setHouseholds(householdData);
+
+          // Dummy disease data (replace with real API later)
+          const dummyDiseases: Disease[] = [
+            { name: "Flu", count: 15 },
+            { name: "Diabetic", count: 30 },
+            { name: "Hypertension", count: 20 },
+            { name: "Asthma", count: 10 },
+            { name: "Malaria", count: 5 },
+          ];
+          setDiseases(dummyDiseases);
+        } catch (err) {
+          console.error("Error fetching data:", err);
+        } finally {
           setLoading(false);
-        })
-        .catch((err) => {
-          console.error("Error fetching households:", err);
-          setLoading(false);
-        });
+        }
+      }
+    };
 
-      // Dummy data for diseases (replace with API if needed)
-      const dummyDiseases: Disease[] = [
-        { name: "Flu", count: 15 },
-        { name: "Diabetic", count: 30 },
-        { name: "Hypertension", count: 20 },
-        { name: "Asthma", count: 10 },
-        { name: "Malaria", count: 5 },
-      ];
-      setDiseases(dummyDiseases);
-    }
-  }, [id]);
+    fetchData();
+  }, [divisionId]);
 
   const sortedHouseholds = [...households].sort(
-    (a, b) => a.residentCount - b.residentCount,
+    (a, b) => b.residentCount - a.residentCount
   );
-  const sortedDiseases = [...diseases].sort((a, b) => a.count - b.count);
+  const sortedDiseases = [...diseases].sort((a, b) => b.count - a.count);
 
   return (
     <DashboardContainer>
       <div className="flex-1 p-6">
-        <div className="flex justify-between items-center mb-6">
+        <div className="mb-6">
           <h2 className="text-2xl font-semibold text-[#008FFB]">
-            {divisionName}
+            {divisionName || "Loading..."}
           </h2>
         </div>
 
@@ -79,7 +72,7 @@ const SingleDivisionPage: FC = () => {
           <p className="text-gray-600">Loading data...</p>
         ) : (
           <>
-            {/* Stats Summary Cards */}
+            {/* Summary Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
               <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center">
                 <p className="text-lg font-semibold text-gray-800">
@@ -97,7 +90,7 @@ const SingleDivisionPage: FC = () => {
 
             {/* Side-by-Side Tables */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {/* Top Diseases Table */}
+              {/* Diseases Table */}
               <div className="bg-white p-6 rounded-lg shadow-md">
                 <h3 className="text-xl font-semibold text-[#008FFB] mb-4">
                   Top Diseases (Sorted by Count)
@@ -105,23 +98,15 @@ const SingleDivisionPage: FC = () => {
                 <table className="w-full table-auto">
                   <thead>
                     <tr>
-                      <th className="text-left px-4 py-2 text-sm text-gray-600">
-                        Disease
-                      </th>
-                      <th className="text-left px-4 py-2 text-sm text-gray-600">
-                        Count
-                      </th>
+                      <th className="text-left px-4 py-2 text-sm text-gray-600">Disease</th>
+                      <th className="text-left px-4 py-2 text-sm text-gray-600">Count</th>
                     </tr>
                   </thead>
                   <tbody>
                     {sortedDiseases.map((disease, index) => (
                       <tr key={index}>
-                        <td className="px-4 py-2 text-sm text-gray-700">
-                          {disease.name}
-                        </td>
-                        <td className="px-4 py-2 text-sm text-gray-700">
-                          {disease.count}
-                        </td>
+                        <td className="px-4 py-2 text-sm text-gray-700">{disease.name}</td>
+                        <td className="px-4 py-2 text-sm text-gray-700">{disease.count}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -136,29 +121,19 @@ const SingleDivisionPage: FC = () => {
                 <table className="w-full table-auto">
                   <thead>
                     <tr>
-                      <th className="text-left px-4 py-2 text-sm text-gray-600">
-                        House ID
-                      </th>
-                      <th className="text-left px-4 py-2 text-sm text-gray-600">
-                        Owner
-                      </th>
-                      <th className="text-left px-4 py-2 text-sm text-gray-600">
-                        People Count
-                      </th>
+                      <th className="text-left px-4 py-2 text-sm text-gray-600">House ID</th>
+                      <th className="text-left px-4 py-2 text-sm text-gray-600">Owner</th>
+                      <th className="text-left px-4 py-2 text-sm text-gray-600">People Count</th>
                     </tr>
                   </thead>
                   <tbody>
                     {sortedHouseholds.map((house, index) => (
                       <tr key={index}>
-                        <td className="px-4 py-2 text-sm text-gray-700">
-                          {house.house_no}
-                        </td>
+                        <td className="px-4 py-2 text-sm text-gray-700">{house.house_no}</td>
                         <td className="px-4 py-2 text-sm text-gray-700">
                           {`${house.ownerFirstName} ${house.ownerLastName}`}
                         </td>
-                        <td className="px-4 py-2 text-sm text-gray-700">
-                          {house.residentCount}
-                        </td>
+                        <td className="px-4 py-2 text-sm text-gray-700">{house.residentCount}</td>
                       </tr>
                     ))}
                   </tbody>
