@@ -30,3 +30,4 @@ const config: { [key: string]: SequelizeOptions } = {
 };
 
 module.exports = config;
+export default config;
