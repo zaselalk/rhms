@@ -139,7 +139,7 @@ jobs:
           echo "=== Installing production dependencies on server ==="
           ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
             cd $DEPLOY_DIR
-            npm ci --omit=dev --ignore-scripts
+            npm ci --omit=dev
           "
 
           # Verify extraction and installation
