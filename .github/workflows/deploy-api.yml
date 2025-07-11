@@ -1,4 +1,4 @@
-name: Deploy Backend to Azure VM (Production Build)
+name: Deploy Backend to Azure VM
 
 on:
   push:
@@ -46,6 +46,8 @@ jobs:
           if [ -f api/.env.production ]; then
             cp api/.env.production deploy-package/.env
           fi
+          #compress the deployment package
+          tar -czvf deploy-package.tar.gz -C deploy-package .
           
       - name: 📤 Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -62,7 +64,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: production-build
-          path: ./deploy-package
+          path: ./deploy-package.tar.gz
           
       - name: 📝 Setup SSH key
         uses: webfactory/ssh-agent@v0.9.0
@@ -113,15 +115,23 @@ jobs:
           echo "Total files: $(find deploy-package -type f | wc -l)"
           
           # Upload files
-          echo "=== Uploading files ==="
-          scp -v -r deploy-package/* ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }}:/home/azureuser/current-deployment/
+          echo "=== Uploading compressed archive ==="
+          scp -v deploy-package.tar.gz ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }}:/home/azureuser/current-deployment/
           
-          # Verify upload
-          echo "=== Verifying upload ==="
+          # Extract the archive on the server
+          echo "=== Extracting archive on server ==="
+          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
+            cd /home/azureuser/current-deployment
+            tar -xzvf deploy-package.tar.gz
+            rm deploy-package.tar.gz
+          "
+
+          # Verify extraction
+          echo "=== Verifying extraction ==="
           ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
             echo 'Files in deployment directory:'
             ls -la /home/azureuser/current-deployment/
-            echo 'Total files uploaded: '$(find /home/azureuser/current-deployment -type f | wc -l)
+            echo 'Total files extracted: '$(find /home/azureuser/current-deployment -type f | wc -l)
           "
           
       - name: 🚀 Deploy application
