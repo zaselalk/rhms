@@ -153,6 +153,12 @@ jobs:
           "
 
       - name: 📝 Generate PM2 config locally
+      - env:
+          DATABASE_USER: ${{ secrets.DATABASE_USER }}
+          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASS }}
+          DATABASE_NAME: ${{DATABASE_NAME}}
+          JWT_SECRET: ${{JWT_SECRET}}
+      
         run: |
           cat > ecosystem.config.js <<EOF
           module.exports = {
