@@ -1,6 +1,6 @@
 import express, { Application } from "express";
 import dotenv from "dotenv";
-import AuthRouter from "./routes/auth.routes";
+// import AuthRouter from "./routes/auth.routes";
 import sequelize from "./models";
 import DisaseRouter from "./routes/disease.routes";
 import cors from "cors";
@@ -49,7 +49,7 @@ app.use("/user", UserRouter);
 app.use("/residentClinic", residentClinicRouter);
 
 app.use("/division", DivisionRouter);
-app.use("/residentdisease", ResidentDiseaseRouter); 
+app.use("/residentdisease", ResidentDiseaseRouter);
 app.use("/sessions", clinicSessionRoutes);
 app.use("/household-resident", HouseholdResidentRouter);
 
