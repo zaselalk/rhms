@@ -12,35 +12,28 @@ jobs:
     steps:
       - name: 🔍 Checkout code
         uses: actions/checkout@v4
-        
+
       - name: 🧪 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'npm'
+          cache: "npm"
           cache-dependency-path: api/package-lock.json
-          
+
       - name: 🚀 Install dependencies
         run: npm ci
         working-directory: api
-        
+
       - name: 🏗️ Build TypeScript project
         run: npm run build
         working-directory: api
         env:
           NODE_ENV: production
-          
-      - name: 📦 Install production dependencies only
-        run: |
-          rm -rf node_modules
-          npm ci --production --ignore-scripts
-        working-directory: api
-        
-      - name: 📁 Create deployment package
+
+      - name: Create deployment package
         run: |
           mkdir -p deploy-package
           cp -r api/dist deploy-package/
-          cp -r api/node_modules deploy-package/
           cp api/package.json deploy-package/
           cp api/package-lock.json deploy-package/
           # Copy any other necessary files (config, etc.)
@@ -49,7 +42,7 @@ jobs:
           fi
           #compress the deployment package
           tar -czvf deploy-package.tar.gz -C deploy-package .
-          
+
       - name: 📤 Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -60,19 +53,19 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: 📥 Download build artifacts
         uses: actions/download-artifact@v4
         with:
           name: production-build
           path: .
-          
+
       - name: 📝 Setup SSH key
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          
+
       - name: 🔒 Add host key to known_hosts
         run: |
           mkdir -p ~/.ssh
@@ -81,7 +74,7 @@ jobs:
       - name: ⏰ Set deployment timestamp
         id: set_timestamp
         run: echo "timestamp=$(date +%Y%m%d_%H%M%S)" >> $GITHUB_OUTPUT
-      
+
       - name: 🗂️ Create deployment directory on VM
         run: |
           ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} << EOF
@@ -113,7 +106,7 @@ jobs:
             ls -la /home/azureuser/current-deployment
             echo "Target directory: $(readlink -f /home/azureuser/current-deployment)"
           EOF
-          
+
       - name: 📤 Upload build to VM
         run: |
           # Debug: Show what we're about to upload
@@ -127,11 +120,11 @@ jobs:
             echo 'Verifying remote directory:'
             ls -ld $DEPLOY_DIR
           "
-          
+
           # Upload files
           echo "=== Uploading compressed archive ==="
           scp -v deploy-package.tar.gz ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }}:"$DEPLOY_DIR/deploy-package.tar.gz"
-          
+
           # Extract the archive on the server
           echo "=== Extracting archive on server ==="
           ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
@@ -140,14 +133,23 @@ jobs:
             rm deploy-package.tar.gz
           "
 
-          # Verify extraction
-          echo "=== Verifying extraction ==="
+          # Install production dependencies on the server
+          echo "=== Installing production dependencies on server ==="
+          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
+            cd $DEPLOY_DIR
+            npm ci --production --ignore-scripts
+          "
+
+          # Verify extraction and installation
+          echo "=== Verifying extraction and installation ==="
           ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
             echo 'Files in deployment directory:'
             ls -la /home/azureuser/current-deployment/
             echo 'Total files extracted: '$(find /home/azureuser/current-deployment -type f | wc -l)
+            echo 'Node modules installed:'
+            ls -la /home/azureuser/current-deployment/node_modules/ | head -10
           "
-          
+
       - name: 📝 Generate PM2 config locally
         run: |
           cat > ecosystem.config.js <<EOF
@@ -186,15 +188,15 @@ jobs:
             cd /home/azureuser/current-deployment
             mkdir -p logs
             chmod +x dist/index.js 2>/dev/null || true
-      
+
             pm2 stop rhms-api 2>/dev/null || true
             pm2 delete rhms-api 2>/dev/null || true
-      
+
             pm2 start ecosystem.config.js
             pm2 save
             sleep 5
             pm2 status rhms-api
-      
+
             if curl -f http://localhost:3000/health > /dev/null 2>&1; then
               echo '✅ Application is responding to health check'
             else
@@ -209,7 +211,7 @@ jobs:
             ls -t | tail -n +6 | xargs rm -rf 2>/dev/null || true
             echo 'Kept last 5 deployments'
           "
-          
+
       - name: 📢 Deployment Status
         if: always()
         run: |
