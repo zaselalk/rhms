@@ -55,6 +55,11 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    env:
+      DATABASE_USER: ${{ secrets.DATABASE_USER }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASS }}
+      DATABASE_NAME: ${{secrets.DATABASE_NAME}}
+      JWT_SECRET: ${{secrets.JWT_SECRET}}
 
     steps:
       - name: 📥 Download build artifacts
