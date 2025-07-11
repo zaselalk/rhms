@@ -9,6 +9,6 @@ DivisionRouter.get("/:id", DivisionController.getById);
 DivisionRouter.post("/", DivisionController.create);
 DivisionRouter.put("/:id", DivisionController.update);
 DivisionRouter.delete("/:id", DivisionController.delete);
-DivisionRouter.get("/count", DivisionController.getDivisionCount);
+DivisionRouter.get("/count/:id", DivisionController.DivisionCount);
 
 export default DivisionRouter;
