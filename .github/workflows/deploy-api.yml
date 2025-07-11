@@ -36,7 +36,9 @@ jobs:
           cp -r api/dist deploy-package/
           cp api/package.json deploy-package/
           cp api/package-lock.json deploy-package/
-          # Copy any other necessary files (config, etc.)
+          
+          # sequalize configurations
+          cp api/.sequelizerc deploy-package/
           if [ -f api/.env.production ]; then
             cp api/.env.production deploy-package/.env
           fi
