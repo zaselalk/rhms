@@ -118,7 +118,7 @@ jobs:
            # Debug: Verify remote directory
           ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
             echo 'Verifying remote directory:'
-            ls -ld {{ env.DEPLOY_DIR }}
+            ls -ld ${{ env.DEPLOY_DIR }}
           "
           
           # Upload files
