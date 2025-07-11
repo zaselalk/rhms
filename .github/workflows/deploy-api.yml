@@ -55,6 +55,11 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    env:
+        DATABASE_USER: ${{ secrets.DATABASE_USER }}
+        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASS }}
+        DATABASE_NAME: ${{secrets.DATABASE_NAME}}
+        JWT_SECRET: ${{secrets.JWT_SECRET}}
 
     steps:
       - name: 📥 Download build artifacts
@@ -152,13 +157,7 @@ jobs:
             ls -la /home/azureuser/current-deployment/node_modules/ | head -10
           "
 
-      - name: 📝 Generate PM2 config locally
-      - env:
-          DATABASE_USER: ${{ secrets.DATABASE_USER }}
-          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASS }}
-          DATABASE_NAME: ${{DATABASE_NAME}}
-          JWT_SECRET: ${{JWT_SECRET}}
-      
+      - name: 📝 Generate PM2 config locally  
         run: |
           cat > ecosystem.config.js <<EOF
           module.exports = {
