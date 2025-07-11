@@ -31,7 +31,7 @@ jobs:
         env:
           NODE_ENV: production
           # Add your production environment variables here
-          # VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_BACKEND_URL: ${{ secrets.VITE_BACKEND_URL }}
           # VITE_APP_VERSION: ${{ github.sha }}
           
       - name: 📦 Create deployment package
