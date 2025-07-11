@@ -30,7 +30,7 @@ class DivisionRepository {
     return await Division.destroy({ where: { divisionId: id } });
   }
 
-  async getDivisionCount(): Promise<number> {
+  async getDivisionCount() {
     return await Division.count();
   }
 }
