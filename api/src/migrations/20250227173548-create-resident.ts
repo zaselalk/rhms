@@ -34,7 +34,7 @@ module.exports = {
 
           type: DataTypes.STRING
         },
-        sex: {
+        gender: {
           allowNull: false,
           type: DataTypes.STRING
         },
