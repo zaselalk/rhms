@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router";
 import { message, Modal } from "antd";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
+import householdresidentService from "../../services/householdresident.service";
 
 interface Resident {
   id: number;
@@ -35,12 +36,7 @@ const HouseholdManagePage: FC = () => {
   useEffect(() => {
     const fetchResidents = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3001/household-resident/${householdId}/residents`,
-        );
-        const result = await response.json();
-
-        if (result.data) {
+        const result = await householdresidentService.getResidentsByHouseholdId(householdId!);
           const mapped = result.data.map((entry: any) => ({
             id: entry.resident.id,
             name: `${entry.resident.firstName} ${entry.resident.lastName}`,
@@ -49,10 +45,10 @@ const HouseholdManagePage: FC = () => {
             recordId: entry.id, // record ID of household_resident
           }));
           setResidents(mapped);
-        }
+        
       } catch (error) {
         message.error("Error fetching household residents");
-        console.error("Error fetching household residents", error);
+       
       }
     };
 
@@ -103,23 +99,17 @@ const HouseholdManagePage: FC = () => {
     }
 
     try {
-      const response = await fetch(
-        `http://localhost:3001/household-resident/${householdId}/add-resident`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
+      const newResident = await householdresidentService.addResidentToHousehold(
+      householdId!,{
             residentId: foundResident.id,
             relation: relationToOwner,
-          }),
-        },
+          }
+        
       );
 
-      const result = await response.json();
-      if (response.ok) {
-        const newResident = result.data;
+      // const result = await response.json();
+      // if (response.ok) {
+      //   const newResident = result.data;
         setResidents([
           ...residents,
           {
@@ -127,7 +117,7 @@ const HouseholdManagePage: FC = () => {
             name: `${foundResident.firstName} ${foundResident.lastName}`,
             age: calculateAge(foundResident.birthday.toString()),
             relation: relationToOwner,
-            recordId: newResident.id,
+            recordId: newResident.data.id,
           },
         ]);
         setSearchId("");
@@ -135,12 +125,10 @@ const HouseholdManagePage: FC = () => {
         setFoundResident(null);
         message.success("Resident added successfully");
 
-      } else {
-        message.error(result.message || "Failed to add resident.");
-      }
+     
     } catch (error) {
       message.error("Error adding resident");
-      console.error("Error adding resident:", error);
+      
     }
   };
 
@@ -153,27 +141,19 @@ const HouseholdManagePage: FC = () => {
       onOk: async () => {
 
     try {
-      const response = await fetch(
-        `http://localhost:3001/household-resident/${recordId}`,
-        {
-          method: "DELETE",
-        },
-      );
-
-      if (response.ok) {
+      
+        await householdresidentService.removeResidentFromHousehold(recordId);
         setResidents(residents.filter((r) => r.recordId !== recordId));
         message.success("Resident removed successfully.");
         
-      } else {
-        message.error("Failed to remove resident.");
-      }
+      
     } catch (error) {
       message.error("Error removing resident.");
-      console.error("Error removing resident", error);
-    }
-  },
-    });
+      
   }
+      },
+    });
+  };
 
   return (
     <DashboardContainer>
