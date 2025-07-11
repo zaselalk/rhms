@@ -148,68 +148,60 @@ jobs:
             echo 'Total files extracted: '$(find /home/azureuser/current-deployment -type f | wc -l)
           "
           
-      - name: 🚀 Deploy application
-        run: |
-          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} << EOF
-            set -e
-            
-            # Navigate to deployment directory
-            cd /home/azureuser/current-deployment
-            
-            # Set proper permissions
-            chmod +x dist/index.js 2>/dev/null || true
-            
-            # Create or update PM2 ecosystem file
-            cat > ecosystem.config.js <<EOL
-            module.exports = {
-              apps: [{
-                name: 'rhms-api',
-                script: './dist/index.js',
-                instances: 1,
-                exec_mode: 'cluster',
-                env: {
-                  NODE_ENV: 'production',
-                  DATABASE_USER: process.env.DATABASE_USER,
-                  DATABASE_PASSWORD: process.env.DATABASE_PASSWORD,
-                  DATABASE_NAME: process.env.DATABASE_NAME,
-                  JWT_SECRET: process.env.JWT_SECRET,
-                  PORT: process.env.PORT || 3000
-                },
-                error_file: './logs/err.log',
-                out_file: './logs/out.log',
-                log_file: './logs/combined.log',
-                time: true,
-                max_memory_restart: '1G'
-              }]
-            }
-            EOL
+          - name: 📝 Generate PM2 config locally
+            run: |
+              cat > ecosystem.config.js <<EOF
+          module.exports = {
+            apps: [{
+              name: 'rhms-api',
+              script: './dist/index.js',
+              instances: 1,
+              exec_mode: 'cluster',
+              env: {
+                NODE_ENV: 'production',
+                DATABASE_USER: process.env.DATABASE_USER,
+                DATABASE_PASSWORD: process.env.DATABASE_PASSWORD,
+                DATABASE_NAME: process.env.DATABASE_NAME,
+                JWT_SECRET: process.env.JWT_SECRET,
+                PORT: process.env.PORT || 3000
+              },
+              error_file: './logs/err.log',
+              out_file: './logs/out.log',
+              log_file: './logs/combined.log',
+              time: true,
+              max_memory_restart: '1G'
+            }]
+          }
+          EOF
 
-            
-            # Create logs directory
+      - name: 📤 Upload PM2 config to server
+        run: |
+          DEPLOY_DIR="/home/azureuser/deployments/${{ steps.set_timestamp.outputs.timestamp }}"
+          scp ecosystem.config.js ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }}:"$DEPLOY_DIR/ecosystem.config.js"
+
+      - name: 🚀 Deploy using PM2
+        run: |
+          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
+            set -e
+            cd /home/azureuser/current-deployment
             mkdir -p logs
-            
-            # Stop existing application (if running)
+            chmod +x dist/index.js 2>/dev/null || true
+      
             pm2 stop rhms-api 2>/dev/null || true
             pm2 delete rhms-api 2>/dev/null || true
-            
-            # Start the application
+      
             pm2 start ecosystem.config.js
-            
-            # Save PM2 configuration
             pm2 save
-            
-            # Verify deployment
             sleep 5
             pm2 status rhms-api
-            
-            # Health check (adjust URL as needed)
+      
             if curl -f http://localhost:3000/health > /dev/null 2>&1; then
-              echo "✅ Application is responding to health check"
+              echo '✅ Application is responding to health check'
             else
-              echo "⚠️  Health check failed, but application is running"
+              echo '⚠️  Health check failed, but application is running'
             fi
-          EOF
-          
+          "
+
       - name: 🧹 Cleanup old deployments
         run: |
           ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
