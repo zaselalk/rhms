@@ -58,8 +58,10 @@ class DivisionController {
     }
   }
 
-  async getDivisionCount(req: Request, res: Response) {
+  async DivisionCount(req: Request, res: Response) {
+    console.log("Fetching division count");
     try {
+      const id = parseInt(req.params.id)
       const count = await DivisionService.getDivisionCount();
       res.status(200).json({
         message: "Division count fetched successfully",
