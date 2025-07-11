@@ -125,17 +125,17 @@ jobs:
            # Debug: Verify remote directory
           ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
             echo 'Verifying remote directory:'
-            ls -ld \$DEPLOY_DIR
+            ls -ld $DEPLOY_DIR
           "
           
           # Upload files
           echo "=== Uploading compressed archive ==="
-          scp -v deploy-package.tar.gz ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }}:"\$DEPLOY_DIR/deploy-package.tar.gz"
+          scp -v deploy-package.tar.gz ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }}:"$DEPLOY_DIR/deploy-package.tar.gz"
           
           # Extract the archive on the server
           echo "=== Extracting archive on server ==="
           ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
-            cd \$DEPLOY_DIR
+            cd $DEPLOY_DIR
             tar -xzvf deploy-package.tar.gz
             rm deploy-package.tar.gz
           "
