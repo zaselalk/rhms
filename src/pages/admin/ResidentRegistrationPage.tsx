@@ -42,6 +42,13 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
   const [alergies, setAllergies] = useState<string[]>([]);
   const [chronicalDesease, setChronicDisease] = useState<string[]>([]);
 
+  type Division = {
+    divisionId: number;
+    divisionName: string
+  }
+
+  const [GramaniladariDivision, setGramaniladariDivision] = useState<Division[]>([]);
+
 
 
   type Clinic = {
@@ -59,7 +66,6 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
       try {
         const data = await ClinicService.getAllClinics();
         setClinics(data);
-        console.log("Clinics fetched:", data);
       } catch (error) {
         console.error("Error fetching clinics:", error);
       }
@@ -75,6 +81,27 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
   };
 
 
+  //GramaniladariDivision data fetch
+  useEffect(() => {
+    const fetchGramaniladariDivision = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/division");
+        if (!response.ok) {
+          throw new Error("Failed to fetch Gramaniladari Division data");
+        }
+        const data = await response.json();
+        console.log("Gramaniladari Division data:", data);
+        // Assuming the data is an array of objects with id and name properties
+        setGramaniladariDivision(data);
+      } catch (error) {
+        console.error("Error fetching Gramaniladari Division:", error);
+      }
+    }
+    fetchGramaniladariDivision();
+  }, []);
+
+
+
 
   const addictedlist = [
     "Smoke",
@@ -83,6 +110,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     "Other Substance Use",
   ];
   const alergydlist = ["Food Allergy", "Drug Allergy", "Other Allergy"];
+
   const chronicDeseaselist = [
     "Cancer",
     "Arthritis",
@@ -100,14 +128,16 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     "Other",
   ];
 
-  const GramaniladariDivision = [
-    { id: 1, name: "Kotagedara" },
-    { id: 2, name: "Kolahakada" },
-    { id: 3, name: "Pahalawela" },
-    { id: 4, name: "alpitiya" },
-    { id: 5, name: "Diyagala" },
-    { id: 6, name: "Kolahakada" },
-  ];
+
+
+  // const GramaniladariDivision = [
+  //   { id: 1, name: "Kotagedara" },
+  //   { id: 2, name: "Kolahakada" },
+  //   { id: 3, name: "Pahalawela" },
+  //   { id: 4, name: "alpitiya" },
+  //   { id: 5, name: "Diyagala" },
+  //   { id: 6, name: "Kolahakada" },
+  // ];
 
   const caldate2 = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
 
@@ -152,7 +182,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     initialValues,
     validationSchema: residentValidation,
     onSubmit: (values) => {
-      
+
       values.addicted = addicted;
       values.alergies = alergies;
       values.chronicalDesease = chronicalDesease;
@@ -359,8 +389,8 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
               >
                 <option value="">Select Grama Division</option>
                 {GramaniladariDivision.map((division) => (
-                  <option key={division.id} value={division.id}>
-                    {division.name}
+                  <option key={division.divisionId} value={division.divisionId}>
+                    {division.divisionName}
                   </option>
                 ))}
               </select>
