@@ -27,7 +27,7 @@ class DivisionRepository {
     return await division.update(updatedData);
   }
 
-  // ✅ Soft delete
+  // Soft delete
   async deleteDivision(id: number) {
     const division = await Division.findByPk(id);
     if (!division) return null;
@@ -35,7 +35,7 @@ class DivisionRepository {
     return division;
   }
 
-  // ✅ Restore a soft-deleted division
+  //Restore a soft-deleted division
   async restoreDivision(id: number) {
     const division = await Division.findByPk(id, { paranoid: false });
     if (!division || !division.deletedAt) return null;
@@ -43,7 +43,7 @@ class DivisionRepository {
     return division;
   }
 
-  // ✅ Get all soft-deleted divisions
+  // Get all soft-deleted divisions
   async getDeletedDivisions() {
     return await Division.findAll({
       where: {
@@ -53,20 +53,11 @@ class DivisionRepository {
     });
   }
 
-  // ✅ Optional: Get all divisions including soft-deleted ones
-  async getAllWithDeleted() {
-    return await Division.findAll({ paranoid: false });
-  }
-
-  // ✅ Count only non-deleted divisions
+  // Count only non-deleted divisions
   async getDivisionCount(): Promise<number> {
     return await Division.count();
   }
 
-  // ✅ Optional: Count including soft-deleted
-  async getTotalDivisionCount(): Promise<number> {
-    return await Division.count({ paranoid: false });
-  }
 }
 
 export default new DivisionRepository();

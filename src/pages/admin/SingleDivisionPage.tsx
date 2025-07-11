@@ -16,7 +16,7 @@ interface Disease {
 const ITEMS_PER_PAGE = 3;
 
 const SingleDivisionPage: FC = () => {
-  const [divisionName, setDivisionName] = useState<string>("Demo Division");
+  //const [divisionName, setDivisionName] = useState<string>("Division");
   const [households, setHouseholds] = useState<Household[]>([]);
   const [diseases, setDiseases] = useState<Disease[]>([]);
   const [loading, setLoading] = useState(true);
@@ -73,7 +73,7 @@ const SingleDivisionPage: FC = () => {
     <DashboardContainer>
       <div className="flex-1 p-6">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-semibold text-[#008FFB]">{divisionName}</h2>
+          <h2 className="text-2xl font-semibold text-[#008FFB]">Division Name</h2>
         </div>
 
         {loading ? (
