@@ -8,7 +8,7 @@
     "start": "node dist/server.js",
     "test": "jest",
     "migrate": "sequelize db:migrate",
-    "migrate:run": "sequelize db:migrate --file",
+    "migrate:run": "sequelize db:migrate --name",
     "migrate:create": "sequelize migration:create --name ",
     "migrate:undo": "sequelize db:migrate:undo",
     "migrate:undo:all": "sequelize db:migrate:undo:all",
