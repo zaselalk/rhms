@@ -4,7 +4,7 @@ import { createHousehold } from "../../../services/household.service";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router";
 import householdresidentService from "../../../services/householdresident.service";
-import { Modal as AntdModal, message as antMessage } from "antd";
+import { message as antMessage } from "antd";
 
 interface HouseholdCreateModalProps {
   isOpen: boolean;
@@ -79,12 +79,7 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
       return;
     }
 
-    // AntdModal.confirm({
-    // title: "Confirm Household Creation",
-    // content: "Are you sure you want to create this household?",
-    // okText: "Yes",
-    // cancelText: "No",
-    // onOk: async () => {
+   
     if (window.confirm("Are you sure you want to create this household?")) {
       try {
         const response = await createHousehold({
