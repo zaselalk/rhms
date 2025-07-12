@@ -26,7 +26,7 @@ export const DashboardService = {
   // Fetch the count of Division from the server
   getDivisionCount: async () => {
     try {
-      const response = await axiosInstance.get("/division/count/1");
+      const response = await axiosInstance.get("/division/count");
       return response.data.data;
     } catch (error) {
       console.error("Error fetching division count:", error);
