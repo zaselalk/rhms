@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router";
 import { loginState } from "../../types/login";
 import ResidentService from "../../services/resident.service";
 import { Alert, Button, Form, Input } from "antd";
-import { MailOutlined, LockOutlined, UserOutlined } from "@ant-design/icons";
+import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import { ArrowBigLeft } from "lucide-react";
 
 const ResidentLoginPage: FC = () => {
