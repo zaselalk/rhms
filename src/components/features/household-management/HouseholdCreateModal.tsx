@@ -6,14 +6,17 @@ import { useLocation, useNavigate } from "react-router";
 import householdresidentService from "../../../services/householdresident.service";
 import { message as antMessage } from "antd";
 
+
 interface HouseholdCreateModalProps {
   isOpen: boolean;
   handleClose: () => void;
+  refreshHouseholds: () => void; 
 }
 
 export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
   isOpen,
   handleClose,
+  refreshHouseholds,
 }) => {
   const [house_no, setHouseNo] = useState("");
   const [grama_division, setGramaDivision] = useState("");
@@ -107,6 +110,8 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
 
         antMessage.success("Household created successfully!");
 
+        refreshHouseholds(); // Call the passed function to refresh households
+      
         handleClose(); // Close modal on success
 
         setTimeout(() => {
@@ -257,3 +262,7 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
   );
 
 };
+function refreshHouseholds() {
+  throw new Error("Function not implemented.");
+}
+
