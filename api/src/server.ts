@@ -1,4 +1,4 @@
-import express, { Application } from "express";
+import express, { Application, Request, Response } from "express";
 import dotenv from "dotenv";
 import AuthRouter from "./routes/auth.routes";
 import sequelize from "./models";
@@ -38,6 +38,12 @@ app.use(serializeUser);
 // Middleware to log actions
 app.use(auditLogger);
 
+// health check route
+app.get("/health", (req: Request, res: Response) => {
+  res.status(200).json({ message: "Server is healthy.. 😊" });
+});
+
+// Registering routes
 app.use("/auth", AuthRouter);
 app.use("/disease", DisaseRouter);
 app.use("/resident", ResidentRouter);
@@ -46,9 +52,7 @@ app.use("/clinic", ClinicRouter);
 app.use("/permission", PermissionRouter);
 app.use("/role", RoleRouter);
 app.use("/user", UserRouter);
-
 app.use("/residentClinic", residentClinicRouter);
-
 app.use("/division", DivisionRouter);
 app.use("/residentdisease", ResidentDiseaseRouter);
 app.use("/sessions", clinicSessionRoutes);
