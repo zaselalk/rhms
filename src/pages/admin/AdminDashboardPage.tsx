@@ -110,7 +110,7 @@ const AdminDashboard: React.FC = () => {
       const data = await dashbordService.getDivisionCount();
       setDivisionCount(data.count);
     }catch(error){
-      console.error("Error fetching diseases:", error);
+      console.error("Error fetching division count:", error);
     } 
   };
 
