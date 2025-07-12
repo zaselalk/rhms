@@ -8,6 +8,10 @@ describe("ProfileService", () => {
   const profileService = new ProfileService();
 
   describe("updateUserFullNameById", () => {
+    /**
+     * Test case to check if the user's full name is updated successfully
+     * by calling the API with the correct parameters.
+     */
     it("should update the user's full name successfully", async () => {
       const mockResponse = { data: { success: true } };
       (axiosInstance.put as any).mockResolvedValue(mockResponse);
@@ -26,8 +30,15 @@ describe("ProfileService", () => {
       expect(result).toEqual(mockResponse.data);
     });
 
+    /**
+     * Test case to check if an error is thrown when the API call fails
+     * while trying to update the user's full name.
+     */
     it("should throw an error if the API call fails", async () => {
+      // Define the error message to be used in the mock
       const errorMessage = "Unable to update user full name";
+
+      // Mock the rejected value of the axiosInstance.put method
       (axiosInstance.put as any).mockRejectedValue({
         response: { data: { message: errorMessage } },
       });
@@ -42,6 +53,10 @@ describe("ProfileService", () => {
   });
 
   describe("updateUserPassword", () => {
+    /**
+     * Test case to check if the user's password is updated successfully
+     * by calling the API with the correct parameters.
+     */
     it("should update the user's password successfully", async () => {
       const mockResponse = { data: { success: true } };
       (axiosInstance.put as any).mockResolvedValue(mockResponse);
@@ -66,6 +81,10 @@ describe("ProfileService", () => {
       expect(result).toEqual(mockResponse.data);
     });
 
+    /**
+     * Test case to check if an error is thrown when the API call fails
+     * while trying to update the user's password.
+     */
     it("should throw an error if the API call fails", async () => {
       const errorMessage = "Unable to update user password";
       (axiosInstance.put as any).mockRejectedValue({

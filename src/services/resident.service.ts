@@ -63,6 +63,17 @@ class ResidentService {
       throw new Error(error.response?.data.error || "Unable to login resident");
     }
   }
+
+  async getSingleResident(id: string) {
+    try {
+      const response = await axiosInstance.get(`/resident/id/${id}`);
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || "Unable to fetch resident details"
+      );
+    }
+  }
 }
 
 export default new ResidentService();

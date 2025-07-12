@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { UserController } from "../controllers/UserController";
 import catchAsync from "../util/catchAsync";
-import { protectRoute } from "../middleware/authjwt.middleware";
 import {
   userFullNameUpdateValidation,
   userPasswordUpdateValidation,
@@ -9,53 +8,45 @@ import {
   userDeleteValidation,
   userRegisterValidation,
 } from "../validation/user";
+import { isSuperAdmin } from "../middleware/isSuperAdmin.middleware";
 
 const UserRouter: Router = Router();
 const userController = new UserController();
 
-UserRouter.get(
-  "/",
-  protectRoute("user:view"),
-  catchAsync(userController.getAllUsers)
-);
-
-UserRouter.get(
-  "/:id",
-  protectRoute("user:view"),
-  catchAsync(userController.getSingleUser)
-);
+UserRouter.get("/", isSuperAdmin, catchAsync(userController.getAllUsers));
+UserRouter.get("/:id", isSuperAdmin, catchAsync(userController.getSingleUser));
 
 UserRouter.post(
   "/",
-  protectRoute("user:create"),
+  isSuperAdmin,
   userRegisterValidation,
   catchAsync(userController.addNewUser)
 );
 
 UserRouter.put(
   "/:id/name",
-  protectRoute("user:edit"),
+  isSuperAdmin,
   userFullNameUpdateValidation,
   catchAsync(userController.updateUserFullNameById)
 );
 
 UserRouter.put(
   "/:id/role",
-  protectRoute("user:edit"),
+  isSuperAdmin,
   userRoleUpdateValidation,
   catchAsync(userController.updateUserRoleById)
 );
 
 UserRouter.put(
   "/:id/password",
-  protectRoute("user:edit"),
+  isSuperAdmin,
   userPasswordUpdateValidation,
   catchAsync(userController.changeUserPassword)
 );
 
 UserRouter.delete(
   "/:id",
-  protectRoute("user:delete"),
+  isSuperAdmin,
   userDeleteValidation,
   catchAsync(userController.deleteUser)
 );

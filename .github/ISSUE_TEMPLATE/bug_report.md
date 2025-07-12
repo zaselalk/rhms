@@ -1,7 +1,7 @@
 ---
 name: Bug Report
 about: Create a report to help us improve
-title: "[BUG] "
+title: "🐛 "
 labels: ["bug"]
 assignees: ''
 
@@ -25,13 +25,3 @@ A clear and concise description of what actually happened.
 
 ## Screenshots
 If applicable, add screenshots to help explain your problem.
-
-## Environment
-Please complete the following information:
-- OS: [e.g. iOS, Windows, Ubuntu]
-- Browser: [e.g. chrome, safari, firefox]
-- Browser Version: [e.g. 22]
-- Application Version: [e.g. 1.0.0]
-
-## Additional context
-Add any other context about the problem here.

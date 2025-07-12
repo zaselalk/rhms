@@ -3,13 +3,20 @@ import { Resident } from "../models/resident";
 import { ResidentService } from "../services/ResidentService";
 import { ResidentRepository } from "../repositories/ResidentRepository";
 import jwt from "jsonwebtoken";
+import { ResidentClinicService } from "../services/ResidentClinicService";
+import { ResidentClinicRepository } from "../repositories/ResidentClinicRepository";
 
 class ResidentController {
   private residentService: ResidentService;
+  private residentClinicService: ResidentClinicService;
 
   constructor() {
     const residentRepository = new ResidentRepository();
     this.residentService = new ResidentService(residentRepository);
+    const residentClinicRepository = new ResidentClinicRepository();
+    this.residentClinicService = new ResidentClinicService(
+      residentClinicRepository
+    );
   }
 
   residentPing = async (
@@ -46,6 +53,7 @@ class ResidentController {
       chronicalDesease,
       height,
       weight,
+      clinic,
     } = req.body;
 
     const residentfindByNic: Resident | null =
@@ -80,6 +88,18 @@ class ResidentController {
         chronicalDesease,
         height,
         weight
+      );
+
+      const residentId = resident.id;
+
+      // Register resident with multiple clinics
+      const residentClinics = await Promise.all(
+        clinic.map(async (clinicId: number) => {
+          return await this.residentClinicService.createResidentClinic(
+            Number(residentId),
+            Number(clinicId)
+          );
+        })
       );
 
       return res.json({

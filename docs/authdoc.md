@@ -2,6 +2,7 @@
  - Mainly there are two types of users in our system
     - Staff users
     - Resident User
+    - Super admin
 
 **Staff Users**: Users that having higher permission to manage the system, they got the permission according to the permission assign to them when the account is created, 
 which can be altered later on.
@@ -11,20 +12,10 @@ which can be altered later on.
 ### Permission Table 
 
 #### User
-Permission String | Description
-------------------|-------------
-`user:view` | Able to view all users including indivitual users
-`user:edit` | Able to edit user information including password
-`user:delete`| Able to delete users
-`user:create` | Able to add new staff user to the system. <br> **Note: Only When the user adding he able to assign any role for any other user.**
----
+- User management only available for `super_admin`
 
 #### Role
-Permission String | Description
-------------------|-------------
-`role:create` | Able to create new role
-`role:delete` | Able to delete excting role
----
+- Role management only available for `super_admin`
 
 #### Dashboard
 Permission String | Description
@@ -67,6 +58,15 @@ Permission String | Description
 `clinic:view` | Able to view indivitual Clinic
 `clinic:edit` | Able to edit Clinic information
 `clinic:delete` | delete the Clinic data
+---
+
+#### Clinic Session
+Permission String | Description
+------------------|-------------
+`clinic-session:create` | Able to create new Clinic
+`clinic-session:view` | Able to view indivitual Clinic
+`clinic-session:edit` | Able to edit Clinic information
+`clinic-session:delete` | delete the Clinic data
 ---
 
 #### Division 

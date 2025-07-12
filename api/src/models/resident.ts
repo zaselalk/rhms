@@ -2,7 +2,7 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from ".";
 import Session from "./clinicSession";
-import Household from "./hosehold";
+import Household from "./household";
 
 
 interface ResidentAttributes {

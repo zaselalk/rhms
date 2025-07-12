@@ -23,122 +23,192 @@ import DiseasesPage from "./pages/admin/DiseasesPage";
 import SingleDiseasePage from "./pages/admin/SingleDiseasePage";
 import ProfilePage from "./pages/admin/ProfilePage";
 import ProtectedRoutesGuard from "./components/auth/ProtectedRoute";
-import { useEffect } from "react";
-import AuthServices from "./services/auth.service";
-import { useAppDispatch } from "./hooks/state/hooks";
-import { login } from "./store/slices/authSlices";
+import AuthProvider from "./components/auth/AuthProvider";
 
 function App() {
-  const dispatch = useAppDispatch();
-  // check token when the app loads
-  useEffect(() => {
-    const authServices = new AuthServices();
-    (async () => {
-      try {
-        const auth = await authServices.checkToken();
-        console.log(auth.data);
-        const user = auth.data;
-
-        // if user is authenticated, set the user in the store
-        dispatch(
-          login({
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role.role,
-            permissions: JSON.parse(user.role.permission),
-          })
-        );
-      } catch (error) {
-        console.error("Error checking token:", error);
-      }
-    })();
-  }, []);
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
 
-        {/* Admin Users */}
-        <Route path="/admin">
-          <Route
-            path="dashboard"
-            element={
-              <ProtectedRoutesGuard>
-                <AdminDashboardPage />
-              </ProtectedRoutesGuard>
-            }
-          />
-          <Route path="login" element={<LoginPage />} />
-
-          {/*Profile  */}
-          <Route
-            path="profile"
-            element={
-              <ProtectedRoutesGuard>
-                <ProfilePage />
-              </ProtectedRoutesGuard>
-            }
-          />
-
-          {/* /admin/resident */}
-          <Route path="residents">
-            <Route path="" element={<Resident />} />
+          {/* Admin Users */}
+          <Route path="/admin">
             <Route
-              path="profile/:id"
+              path="dashboard"
               element={
                 <ProtectedRoutesGuard>
-                  <ResidentProfilePage />
+                  <AdminDashboardPage />
                 </ProtectedRoutesGuard>
               }
             />
+            <Route path="login" element={<LoginPage />} />
+
+            {/*Profile  */}
+            <Route
+              path="profile"
+              element={
+                <ProtectedRoutesGuard>
+                  <ProfilePage />
+                </ProtectedRoutesGuard>
+              }
+            />
+
+            {/* /admin/resident */}
+            <Route path="residents">
+              <Route path="" element={<Resident />} />
+              <Route
+                path="profile/:id"
+                element={
+                  <ProtectedRoutesGuard>
+                    <ResidentProfilePage />
+                  </ProtectedRoutesGuard>
+                }
+              />
+            </Route>
+
+            {/* /admin/diseases  */}
+            <Route path="diseases">
+              <Route
+                path=""
+                element={
+                  <ProtectedRoutesGuard>
+                    <DiseasesPage />
+                  </ProtectedRoutesGuard>
+                }
+              />
+              <Route
+                path=":diseaseName"
+                element={
+                  <ProtectedRoutesGuard>
+                    <SingleDiseasePage />
+                  </ProtectedRoutesGuard>
+                }
+              />
+            </Route>
+
+            {/* /admin/users routs */}
+            <Route path="users">
+              <Route
+                path=""
+                element={
+                  <ProtectedRoutesGuard>
+                    <UsersPage />
+                  </ProtectedRoutesGuard>
+                }
+              />
+              {/* <Route path="add" element={<AddUserPage />} /> */}
+            </Route>
+
+            {/* /admin/households routes */}
+            <Route path="households">
+              <Route
+                path=""
+                element={
+                  <ProtectedRoutesGuard>
+                    <HouseholdPage />
+                  </ProtectedRoutesGuard>
+                }
+              />
+              <Route
+                path="manage/:householdId"
+                element={
+                  <ProtectedRoutesGuard>
+                    <HouseholdManagePage />
+                  </ProtectedRoutesGuard>
+                }
+              />
+            </Route>
+
+            <Route path="residents">
+              <Route
+                path=""
+                element={
+                  <ProtectedRoutesGuard>
+                    <Resident />
+                  </ProtectedRoutesGuard>
+                }
+              />
+              <Route
+                path="create"
+                element={
+                  <ProtectedRoutesGuard>
+                    <RegistrationPage />
+                  </ProtectedRoutesGuard>
+                }
+              />
+              <Route
+                path="profile/:id"
+                element={
+                  <ProtectedRoutesGuard>
+                    <ResidentProfilePage />
+                  </ProtectedRoutesGuard>
+                }
+              />
+            </Route>
+
+            {/* division routes */}
+
+            <Route path="division">
+              <Route
+                path=""
+                element={
+                  <ProtectedRoutesGuard>
+                    <DivisionPage />
+                  </ProtectedRoutesGuard>
+                }
+              />
+              <Route
+                path=":divisionId"
+                element={
+                  <ProtectedRoutesGuard>
+                    <SingleDivisionPage />
+                  </ProtectedRoutesGuard>
+                }
+              />
+            </Route>
+
+            {/* Clinic Paths*/}
+            <Route path="clinic">
+              <Route
+                path=""
+                element={
+                  <ProtectedRoutesGuard>
+                    <ClinicOverviewPage />
+                  </ProtectedRoutesGuard>
+                }
+              />
+              <Route
+                path=":clinicID/:sessionID/attendance"
+                element={
+                  <ProtectedRoutesGuard>
+                    <ClinicAttendancePage />
+                  </ProtectedRoutesGuard>
+                }
+              />
+              <Route
+                path=":clinicId"
+                element={
+                  <ProtectedRoutesGuard>
+                    <ClinicDetailPage />
+                  </ProtectedRoutesGuard>
+                }
+              />
+            </Route>
           </Route>
 
-          {/* /admin/diseases  */}
-          <Route path="diseases">
+          {/* household paths*/}
+          <Route path="/household">
+            <Route
+              path="login"
+              element={
+                <ProtectedRoutesGuard>
+                  <HouseholdLoginPage />
+                </ProtectedRoutesGuard>
+              }
+            />
             <Route
               path=""
-              element={
-                <ProtectedRoutesGuard>
-                  <DiseasesPage />
-                </ProtectedRoutesGuard>
-              }
-            />
-            <Route
-              path=":diseaseName"
-              element={
-                <ProtectedRoutesGuard>
-                  <SingleDiseasePage />
-                </ProtectedRoutesGuard>
-              }
-            />
-          </Route>
-
-          {/* /admin/users routs */}
-          <Route path="users">
-            <Route
-              path=""
-              element={
-                <ProtectedRoutesGuard>
-                  <UsersPage />
-                </ProtectedRoutesGuard>
-              }
-            />
-            {/* <Route path="add" element={<AddUserPage />} /> */}
-          </Route>
-
-          {/* /admin/households routes */}
-          <Route path="households">
-            <Route
-              path=""
-              element={
-                <ProtectedRoutesGuard>
-                  <HouseholdPage />
-                </ProtectedRoutesGuard>
-              }
-            />
-            <Route
-              path="manage/:id"
               element={
                 <ProtectedRoutesGuard>
                   <HouseholdManagePage />
@@ -147,115 +217,21 @@ function App() {
             />
           </Route>
 
-          <Route path="residents">
+          {/* Resident Paths*/}
+          <Route path="/resident">
+            <Route path="" element={<ResidentDashboard />} />
+            {/* <Route path="" element={<ResidentLandingPage />} /> */}
+            <Route path="registration" element={<RegistrationPage />} />
+            <Route path="edit" element={<EditResidentProfilePage />} />
             <Route
-              path=""
-              element={
-                <ProtectedRoutesGuard>
-                  <Resident />
-                </ProtectedRoutesGuard>
-              }
+              path="forgotten-password"
+              element={<ForgottenPasswordPage />}
             />
-            <Route
-              path="create"
-              element={
-                <ProtectedRoutesGuard>
-                  <RegistrationPage />
-                </ProtectedRoutesGuard>
-              }
-            />
-            <Route
-              path="profile/:id"
-              element={
-                <ProtectedRoutesGuard>
-                  <ResidentProfilePage />
-                </ProtectedRoutesGuard>
-              }
-            />
+            <Route path="login" element={<ResidentLoginPage />} />
+            <Route path="clinicDetails" element={<ResidentClinicDetail />} />
           </Route>
-
-          <Route path="division">
-            <Route
-              path=""
-              element={
-                <ProtectedRoutesGuard>
-                  <DivisionPage />
-                </ProtectedRoutesGuard>
-              }
-            />
-            <Route
-              path="SingleDivisionPage"
-              element={
-                <ProtectedRoutesGuard>
-                  <SingleDivisionPage />
-                </ProtectedRoutesGuard>
-              }
-            />
-          </Route>
-
-          {/* Clinic Paths*/}
-          <Route path="clinic">
-            <Route
-              path=""
-              element={
-                <ProtectedRoutesGuard>
-                  <ClinicOverviewPage />
-                </ProtectedRoutesGuard>
-              }
-            />
-            <Route
-              path=":clinic/attendance"
-              element={
-                <ProtectedRoutesGuard>
-                  <ClinicAttendancePage />
-                </ProtectedRoutesGuard>
-              }
-            />
-            <Route
-              path=":clinicId"
-              element={
-                <ProtectedRoutesGuard>
-                  <ClinicDetailPage />
-                </ProtectedRoutesGuard>
-              }
-            />
-          </Route>
-        </Route>
-
-        {/* household paths*/}
-        <Route path="/household">
-          <Route
-            path="login"
-            element={
-              <ProtectedRoutesGuard>
-                <HouseholdLoginPage />
-              </ProtectedRoutesGuard>
-            }
-          />
-          <Route
-            path=""
-            element={
-              <ProtectedRoutesGuard>
-                <HouseholdManagePage />
-              </ProtectedRoutesGuard>
-            }
-          />
-        </Route>
-
-        {/* Resident Paths*/}
-        <Route path="/resident">
-          <Route path="" element={<ResidentDashboard />} />
-          {/* <Route path="" element={<ResidentLandingPage />} /> */}
-          <Route path="registration" element={<RegistrationPage />} />
-          <Route path="edit" element={<EditResidentProfilePage />} />
-          <Route
-            path="forgotten-password"
-            element={<ForgottenPasswordPage />}
-          />
-          <Route path="login" element={<ResidentLoginPage />} />
-          <Route path="clinicDetails" element={<ResidentClinicDetail />} />
-        </Route>
-      </Routes>
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
