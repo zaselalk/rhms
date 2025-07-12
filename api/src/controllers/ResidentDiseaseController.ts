@@ -133,53 +133,6 @@ export class ResidentDiseaseController {
         }
     }
 
-    //update by residentId
-    updateResidentDiseaseByDiseaseId = async (req: Request, res: Response): Promise<Response> => {
-        const { residentId, diseaseId } = req.body;
-        console.log("Updating resident disease by disease ID:", { residentId, diseaseId });
-        try {
-            const updated = await this.residentDiseaseService.updateResidentDiseaseByDiseaseId(residentId, diseaseId);
-            return res.json({
-                message: "Resident disease updated successfully by disease ID",
-                status: 200,
-                error: null,
-                data: updated,
-            });
-        } catch (error) {
-            return res.status(500).json({
-                message: "Error updating resident disease by disease ID",
-                status: 500,
-                error: "Internal server error",
-                data: null,
-            });
-        }
-    }
-
-
-    //update by diseaseid
-    updateResidentDiseaseByResidentId = async (req: Request, res: Response): Promise<Response> => {
-        const { diseaseId, residentId } = req.body;
-        console.log("Updating resident disease by resident ID:", { diseaseId, residentId });
-        try {
-            const updated = await this.residentDiseaseService.updateResidentDiseaseByResidentId(diseaseId, residentId);
-
-            return res.json({
-                message: "Resident disease updated successfully by resident ID",
-                status: 200,
-                error: null,
-                data: updated,
-            });
-
-        } catch (error) {
-            return res.status(500).json({
-                message: "Error updating resident disease by resident ID",
-                status: 500,
-                error: "Internal server error",
-                data: null,
-            });
-        }
-    }
-
 
     //get by resident id
     getDiseasesByResidentId = async (req: Request, res: Response): Promise<Response> => {

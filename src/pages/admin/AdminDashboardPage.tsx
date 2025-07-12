@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Home, Users, LayoutGrid, Activity } from "lucide-react";
 import { Pie } from "react-chartjs-2";
 import {
@@ -23,7 +23,15 @@ const { BaseLayer } = LayersControl;
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 
+type MarkerType = {
+  position: [number, number];
+  popup: string;
+};
+
 const AdminDashboard: React.FC = () => {
+  const [markers, setMarkers] = useState<MarkerType[]>([]);
+
+
   // Data for the charts
   const residentsData = {
     labels: ["Yes", "No"],
@@ -45,29 +53,31 @@ const AdminDashboard: React.FC = () => {
     ],
   };
 
-  //Markers
-  const markers = [
-    { position: [6.489720802, 80.084187593], popup: "DEYAGALA1" },
-    { position: [6.4903325, 80.083685417], popup: "DEYAGALA2" },
-    { position: [6.490475333, 80.083943417], popup: "DEYAGALA3" },
-    { position: [6.490525152, 80.083716364], popup: "DEYAGALA4" },
-    { position: [6.490402667, 80.084311667], popup: "DEYAGALA5" },
-    { position: [6.4901975, 80.0845725], popup: "DEYAGALA6" },
-    { position: [6.490591786, 80.084634245], popup: "DEYAGALA7" },
-    { position: [6.490843, 80.083716], popup: "DEYAGALA8" },
-    { position: [6.490886078, 80.083787108], popup: "DEYAGALA9" },
-    { position: [6.490988333, 80.083746667], popup: "DEYAGALA10" },
-    { position: [6.491178409, 80.083586288], popup: "DEYAGALA11" },
-    { position: [6.491275, 80.083555], popup: "DEYAGALA12" },
-    { position: [6.49152, 80.083192], popup: "DEYAGALA13" },
-    { position: [6.491578333, 80.083619792], popup: "DEYAGALA14" },
-    { position: [6.491763333, 80.083505], popup: "DEYAGALA15" },
-    { position: [6.49181, 80.083600833], popup: "DEYAGALA16" },
-    { position: [6.491963889, 80.083514444], popup: "DEYAGALA17" },
-    { position: [6.492, 80.083713333], popup: "DEYAGALA18" },
-    { position: [6.492091667, 80.083858333], popup: "DEYAGALA19" },
-    { position: [6.492096667, 80.0840675], popup: "DEYAGALA20" },
-  ];
+  const fetchMarkers = async () => {
+    try {
+      const result = await dashbordService.getlocations();
+      // console.log("Markers data:", result); // Log the fetched data
+      const transformedMarkers = result.data.map((item: any) => {
+        const { house_no, grama_division, latitude, longitude, owner } = item;
+
+        const popup = `
+        🏠 House No: ${house_no}
+        👤 Owner: ${owner.firstName} ${owner.lastName}
+        🗺️ Division: ${grama_division}
+        📞 Contact: ${owner.contactNumber}
+      `;
+
+        return {
+          position: [(longitude), (latitude)],
+          popup,
+        };
+      });
+
+      setMarkers(transformedMarkers); // ✅ Save to state
+    } catch (error) {
+      console.error("Error fetching markers:", error);
+    }
+  };
 
 
   const [residentCount, setResidentCount] = React.useState<number>(0);
@@ -84,16 +94,16 @@ const AdminDashboard: React.FC = () => {
     } catch (error) {
       console.error("Error fetching residents:", error);
     }
-    try{
+    try {
       const data = await dashbordService.getHouseholdCount();
       setHouseholdCount(data.count);
-    }catch (error) {
+    } catch (error) {
       console.error("Error fetching households:", error);
     }
-    try{
+    try {
       const data = await dashbordService.getDiseaseCount();
       setDiseaseCount(data.count);
-    }catch(error){
+    } catch (error) {
       console.error("Error fetching diseases:", error);
     }
   };
@@ -101,6 +111,7 @@ const AdminDashboard: React.FC = () => {
   // Fetch data when loading the component
   useEffect(() => {
     fetchdata();
+    fetchMarkers(); // Fetch markers data
   }, []);
 
   const numberOfDivisions = 5; // Static value for the number of divisions
