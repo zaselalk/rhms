@@ -31,5 +31,8 @@ export class DiseaseServices {
   async countDisease(): Promise<number> {
     return this.diseaseRepository.countDisease();
   }
+  async getDiseasewithID(): Promise<Disease[]> {  
+    return this.diseaseRepository.getDiseasewithID();
+  }
 
 }
