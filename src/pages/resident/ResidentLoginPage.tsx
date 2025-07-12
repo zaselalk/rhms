@@ -11,17 +11,22 @@ const ResidentLoginPage: FC = () => {
   const [error, setError] = useState<null | string>(null);
   const navigate = useNavigate();
   const [form] = Form.useForm();
+  const [isLoading, setIsLoading] = useState(false);
 
   const mutation = useMutation({
     mutationFn: async ({ email, password }: loginState) => {
-      const user = await ResidentService.loginResidentByEmailandPassword(
-        email,
-        password
-      );
-      console.log(user);
+      setIsLoading(true);
+      setError(null);
+      await ResidentService.loginResidentByEmailandPassword(email, password);
     },
-    onSuccess: () => handleLogin(),
-    onError: (error: any) => setError(error.message),
+    onSuccess: () => {
+      setIsLoading(false);
+      handleLogin();
+    },
+    onError: (error: any) => {
+      setIsLoading(false);
+      setError(error.message);
+    },
   });
 
   const onSubmit = (values: loginState) => {
@@ -108,7 +113,7 @@ const ResidentLoginPage: FC = () => {
 
             <Form.Item>
               <Button type="primary" htmlType="submit" className="w-full">
-                Login
+                {isLoading ? "Logging in..." : "Login"}
               </Button>
             </Form.Item>
           </Form>
