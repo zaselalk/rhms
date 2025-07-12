@@ -1,6 +1,6 @@
 {
-  "name": "role-base-authentcation-with-ts",
-  "version": "1.0.0",
+  "name": "rhms-api",
+  "version": "0.2.9",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --ext ts --exec ts-node src/server.ts",
