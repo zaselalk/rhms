@@ -2,10 +2,13 @@ import axiosInstance from "./axios/axiosInstance";
 
 class ResidentClinicService {
   // Register a resident to a clinic
-  async registerResidentToClinic(data: { residentId: number; clinicId: number }) {
+  async registerResidentToClinic(data: {
+    residentId: number;
+    clinicId: number;
+  }) {
     try {
       const response = await axiosInstance.post(
-        "/resident-clinic/registerClinic",
+        "/residentClinic/registerClinic",
         data
       );
       return response.data;
@@ -16,14 +19,17 @@ class ResidentClinicService {
     }
   }
 
-  // Get all resident-clinic associations
+  // Get all residentClinic associations
   async getAllResidentClinics() {
     try {
-      const response = await axiosInstance.get("/resident-clinic/getAllResidentClinics");
+      const response = await axiosInstance.get(
+        "/residentClinic/getAllResidentClinics"
+      );
       return response.data;
     } catch (error: any) {
       throw new Error(
-        error.response?.data?.message || "Unable to fetch resident-clinic records"
+        error.response?.data?.message ||
+          "Unable to fetch resident-clinic records"
       );
     }
   }
@@ -31,7 +37,9 @@ class ResidentClinicService {
   // Get all clinics registered by a specific resident
   async getClinicsByResidentId(residentId: number | string) {
     try {
-      const response = await axiosInstance.get(`/resident-clinic/getResident/${residentId}`);
+      const response = await axiosInstance.get(
+        `/residentClinic/getResident/${residentId}`
+      );
       return response.data;
     } catch (error: any) {
       throw new Error(
@@ -43,7 +51,9 @@ class ResidentClinicService {
   // Get all residents registered under a specific clinic
   async getResidentsByClinicId(clinicId: number | string) {
     try {
-      const response = await axiosInstance.get(`/resident-clinic/getResidentsByClinic/${clinicId}`);
+      const response = await axiosInstance.get(
+        `/residentClinic/getResidentsByClinic/${clinicId}`
+      );
       return response.data;
     } catch (error: any) {
       throw new Error(
@@ -55,7 +65,9 @@ class ResidentClinicService {
   // Get division-wise patient count for a specific clinic
   async getDivisionWiseResidentCountsForClinic(clinicId: number | string) {
     try {
-      const response = await axiosInstance.get(`/resident-clinic/division-patient-count/${clinicId}`);
+      const response = await axiosInstance.get(
+        `/residentClinic/patientCountAcrossDivisions/${clinicId}`
+      );
       return response.data;
     } catch (error: any) {
       throw new Error(
@@ -67,11 +79,14 @@ class ResidentClinicService {
   // Delete a resident-clinic relationship by ID
   async deleteResidentClinicRecord(residentClinicId: number) {
     try {
-      const response = await axiosInstance.delete(`/resident-clinic/${residentClinicId}`);
+      const response = await axiosInstance.delete(
+        `/residentClinic/${residentClinicId}`
+      );
       return response.data;
     } catch (error: any) {
       throw new Error(
-        error.response?.data?.message || "Unable to delete resident-clinic record"
+        error.response?.data?.message ||
+          "Unable to delete resident-clinic record"
       );
     }
   }

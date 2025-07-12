@@ -13,8 +13,15 @@ import { ClinicService } from "../../services/clinic.service";
 import ResidentClinicService from "../../services/residentclinic.service";
 
 interface Patient {
-  id: string;
-  name: string;
+  resident: {
+    contactNumber: string;
+    firstName: string;
+  };
+}
+
+interface DivisionCount {
+  divisionName: string;
+  residentCount: number;
 }
 
 interface ClinicSession {
@@ -30,11 +37,12 @@ const ClinicDetail: React.FC = () => {
   const [clinicName, setClinicName] = useState("");
   const [clinicSessions, setClinicSessions] = useState<ClinicSession[]>([]);
   const [clinicPatients, setClinicPatients] = useState<Patient[]>([]);
-  const [patientDivisions, setPatientDivisions] = useState<{ division: string; count: number }[]>([]);
-
+  const [patientDivisions, setPatientDivisions] = useState<DivisionCount[]>([]);
   const [newSession, setNewSession] = useState({ name: "", sessionDate: "" });
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [selectedSession, setSelectedSession] = useState<ClinicSession | null>(null);
+  const [selectedSession, setSelectedSession] = useState<ClinicSession | null>(
+    null
+  );
   const [error, setError] = useState<string>("");
 
   const [loadingClinicName, setLoadingClinicName] = useState(false);
@@ -48,11 +56,19 @@ const ClinicDetail: React.FC = () => {
   const patientsPerPage = 10;
   const divisionsPerPage = 10;
 
-  const currentPatients = clinicPatients.slice((patientPage - 1) * patientsPerPage, patientPage * patientsPerPage);
-  const currentDivisions = patientDivisions.slice((divisionPage - 1) * divisionsPerPage, divisionPage * divisionsPerPage);
+  const currentPatients = clinicPatients.slice(
+    (patientPage - 1) * patientsPerPage,
+    patientPage * patientsPerPage
+  );
+  const currentDivisions = patientDivisions.slice(
+    (divisionPage - 1) * divisionsPerPage,
+    divisionPage * divisionsPerPage
+  );
 
   const patientTotalPages = Math.ceil(clinicPatients.length / patientsPerPage);
-  const divisionTotalPages = Math.ceil(patientDivisions.length / divisionsPerPage);
+  const divisionTotalPages = Math.ceil(
+    patientDivisions.length / divisionsPerPage
+  );
 
   // *** Your existing functions below - no changes ***
 
@@ -85,7 +101,10 @@ const ClinicDetail: React.FC = () => {
   const fetchClinicPatients = async () => {
     setLoadingPatients(true);
     try {
-      const data = await ResidentClinicService.getResidentsByClinicId(clinicId!);
+      const data = await ResidentClinicService.getResidentsByClinicId(
+        clinicId!
+      );
+      console.log(data);
       setClinicPatients(data);
     } catch (err) {
       console.error("Failed to fetch patients:", err);
@@ -98,7 +117,10 @@ const ClinicDetail: React.FC = () => {
   const fetchDivisionCounts = async () => {
     setLoadingDivisions(true);
     try {
-      const data = await ResidentClinicService.getDivisionWiseResidentCountsForClinic(clinicId!);
+      const data =
+        await ResidentClinicService.getDivisionWiseResidentCountsForClinic(
+          clinicId!
+        );
       setPatientDivisions(data);
     } catch (err) {
       console.error("Failed to fetch division counts:", err);
@@ -124,7 +146,10 @@ const ClinicDetail: React.FC = () => {
     }
     setError("");
     try {
-      const created = await ClinicService.createClinicSession(clinicId!, newSession);
+      const created = await ClinicService.createClinicSession(
+        clinicId!,
+        newSession
+      );
       setClinicSessions([...clinicSessions, created]);
       setNewSession({ name: "", sessionDate: "" });
     } catch (err) {
@@ -134,7 +159,9 @@ const ClinicDetail: React.FC = () => {
   };
 
   const removeClinicSession = async (sessionId: string) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this session?");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this session?"
+    );
     if (!confirmDelete) return;
 
     try {
@@ -168,7 +195,9 @@ const ClinicDetail: React.FC = () => {
     try {
       await ClinicService.updateClinicSession(clinicId!, selectedSession);
       setClinicSessions(
-        clinicSessions.map((s) => (s.id === selectedSession.id ? selectedSession : s))
+        clinicSessions.map((s) =>
+          s.id === selectedSession.id ? selectedSession : s
+        )
       );
       closeEditModal();
     } catch (err) {
@@ -194,9 +223,13 @@ const ClinicDetail: React.FC = () => {
               Clinic Details
             </h2>
             {loadingClinicName ? (
-              <p className="text-lg font-semibold text-gray-500 italic ml-2">Loading...</p>
+              <p className="text-lg font-semibold text-gray-500 italic ml-2">
+                Loading...
+              </p>
             ) : (
-              <p className="text-lg font-semibold text-[#008FFB] ml-2">({clinicName})</p>
+              <p className="text-lg font-semibold text-[#008FFB] ml-2">
+                ({clinicName})
+              </p>
             )}
           </div>
         </div>
@@ -206,7 +239,9 @@ const ClinicDetail: React.FC = () => {
           <FaClinicMedical className="text-[#008FFB] text-6xl mr-6" />
           <div>
             <p className="text-xl font-semibold text-gray-700 mb-1">Patients</p>
-            <p className="text-5xl font-bold text-[#008FFB]">{clinicPatients.length}</p>
+            <p className="text-5xl font-bold text-[#008FFB]">
+              {clinicPatients.length}
+            </p>
           </div>
         </div>
 
@@ -214,27 +249,40 @@ const ClinicDetail: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Patients Table */}
           <section className="bg-white rounded-lg shadow-md p-6 flex flex-col">
-            <h3 className="text-2xl font-semibold mb-6 border-b pb-2">Clinic Patients</h3>
+            <h3 className="text-2xl font-semibold mb-6 border-b pb-2">
+              Clinic Patients
+            </h3>
 
             {loadingPatients ? (
-              <p className="text-center py-10 text-gray-500 italic">Loading patients...</p>
+              <p className="text-center py-10 text-gray-500 italic">
+                Loading patients...
+              </p>
             ) : clinicPatients.length === 0 ? (
-              <p className="text-center py-10 text-gray-500 italic">No patients found.</p>
+              <p className="text-center py-10 text-gray-500 italic">
+                No patients found.
+              </p>
             ) : (
               <>
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse">
                     <thead>
                       <tr className="bg-[#008FFB] text-white">
-                        <th className="p-3">ID</th>
                         <th className="p-3">Name</th>
+                        <th className="p-3">Contact Number</th>
                       </tr>
                     </thead>
                     <tbody>
                       {currentPatients.map((patient) => (
-                        <tr key={patient.id} className="border-b hover:bg-gray-100 transition">
-                          <td className="p-3 font-mono">{patient.id}</td>
-                          <td className="p-3 font-medium">{patient.name}</td>
+                        <tr
+                          key={patient.resident.contactNumber}
+                          className="border-b hover:bg-gray-100 transition"
+                        >
+                          <td className="p-3 font-mono">
+                            {patient.resident.firstName}
+                          </td>
+                          <td className="p-3 font-medium">
+                            {patient.resident.contactNumber}
+                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -270,9 +318,13 @@ const ClinicDetail: React.FC = () => {
             </h3>
 
             {loadingDivisions ? (
-              <p className="text-center py-10 text-gray-500 italic">Loading divisions...</p>
+              <p className="text-center py-10 text-gray-500 italic">
+                Loading divisions...
+              </p>
             ) : patientDivisions.length === 0 ? (
-              <p className="text-center py-10 text-gray-500 italic">No division data available.</p>
+              <p className="text-center py-10 text-gray-500 italic">
+                No division data available.
+              </p>
             ) : (
               <>
                 <div className="overflow-x-auto">
@@ -285,9 +337,16 @@ const ClinicDetail: React.FC = () => {
                     </thead>
                     <tbody>
                       {currentDivisions.map((division) => (
-                        <tr key={division.division} className="border-b hover:bg-gray-100 transition">
-                          <td className="p-3 font-medium">{division.division}</td>
-                          <td className="p-3 font-semibold text-center">{division.count}</td>
+                        <tr
+                          key={division.divisionName}
+                          className="border-b hover:bg-gray-100 transition"
+                        >
+                          <td className="p-3 font-medium">
+                            {division.divisionName}
+                          </td>
+                          <td className="p-3 font-semibold text-center">
+                            {division.residentCount}
+                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -319,7 +378,9 @@ const ClinicDetail: React.FC = () => {
 
         {/* Add Clinic Session */}
         <section className="bg-white rounded-lg shadow-md p-6 mt-10 max-w-4xl mx-auto">
-          <h3 className="text-2xl font-semibold mb-6 border-b pb-2">Add Session</h3>
+          <h3 className="text-2xl font-semibold mb-6 border-b pb-2">
+            Add Session
+          </h3>
 
           {error && <p className="text-red-600 font-semibold mb-4">{error}</p>}
 
@@ -335,14 +396,18 @@ const ClinicDetail: React.FC = () => {
               placeholder="Session Name"
               className="flex-1 border border-gray-300 rounded-lg p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#008FFB]"
               value={newSession.name}
-              onChange={(e) => setNewSession({ ...newSession, name: e.target.value })}
+              onChange={(e) =>
+                setNewSession({ ...newSession, name: e.target.value })
+              }
               aria-label="Session Name"
             />
             <input
               type="date"
               className="border border-gray-300 rounded-lg p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#008FFB]"
               value={newSession.sessionDate}
-              onChange={(e) => setNewSession({ ...newSession, sessionDate: e.target.value })}
+              onChange={(e) =>
+                setNewSession({ ...newSession, sessionDate: e.target.value })
+              }
               aria-label="Session Date"
             />
             <button
@@ -356,12 +421,18 @@ const ClinicDetail: React.FC = () => {
           </form>
 
           {/* Sessions List */}
-          <h3 className="text-2xl font-semibold mt-10 mb-6 border-b pb-2">Sessions</h3>
+          <h3 className="text-2xl font-semibold mt-10 mb-6 border-b pb-2">
+            Sessions
+          </h3>
 
           {loadingSessions ? (
-            <p className="text-center py-10 text-gray-500 italic">Loading sessions...</p>
+            <p className="text-center py-10 text-gray-500 italic">
+              Loading sessions...
+            </p>
           ) : clinicSessions.length === 0 ? (
-            <p className="text-center py-10 text-gray-500 italic">No sessions available.</p>
+            <p className="text-center py-10 text-gray-500 italic">
+              No sessions available.
+            </p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full border-collapse text-left">
@@ -374,7 +445,10 @@ const ClinicDetail: React.FC = () => {
                 </thead>
                 <tbody>
                   {clinicSessions.map((session) => (
-                    <tr key={session.id} className="border-b hover:bg-gray-100 transition">
+                    <tr
+                      key={session.id}
+                      className="border-b hover:bg-gray-100 transition"
+                    >
                       <td className="p-3 font-medium">{session.name}</td>
                       <td className="p-3">{session.sessionDate}</td>
                       <td className="p-3 text-center space-x-4">
@@ -410,14 +484,23 @@ const ClinicDetail: React.FC = () => {
 
         {/* Edit Modal */}
         {editModalOpen && selectedSession && (
-          <Modal title="Edit Session" isOpen={editModalOpen} handleClose={closeEditModal}>
+          <Modal
+            title="Edit Session"
+            isOpen={editModalOpen}
+            handleClose={closeEditModal}
+          >
             <div className="flex flex-col space-y-4">
               {error && <p className="text-red-600 font-semibold">{error}</p>}
               <input
                 type="text"
                 className="border border-gray-300 rounded-lg p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#008FFB]"
                 value={selectedSession.name}
-                onChange={(e) => setSelectedSession({ ...selectedSession, name: e.target.value })}
+                onChange={(e) =>
+                  setSelectedSession({
+                    ...selectedSession,
+                    name: e.target.value,
+                  })
+                }
                 placeholder="Session Name"
                 aria-label="Edit Session Name"
               />
@@ -425,7 +508,12 @@ const ClinicDetail: React.FC = () => {
                 type="date"
                 className="border border-gray-300 rounded-lg p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#008FFB]"
                 value={selectedSession.sessionDate}
-                onChange={(e) => setSelectedSession({ ...selectedSession, sessionDate: e.target.value })}
+                onChange={(e) =>
+                  setSelectedSession({
+                    ...selectedSession,
+                    sessionDate: e.target.value,
+                  })
+                }
                 aria-label="Edit Session Date"
               />
               <div className="flex justify-end space-x-3 mt-2">
