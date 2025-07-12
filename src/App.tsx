@@ -24,6 +24,7 @@ import SingleDiseasePage from "./pages/admin/SingleDiseasePage";
 import ProfilePage from "./pages/admin/ProfilePage";
 import ProtectedRoutesGuard from "./components/auth/ProtectedRoute";
 import AuthProvider from "./components/auth/AuthProvider";
+import ResidentEditProfilePage from "./pages/admin/ResidentEditProfilePage";
 
 function App() {
   return (
@@ -62,6 +63,14 @@ function App() {
                 element={
                   <ProtectedRoutesGuard>
                     <ResidentProfilePage />
+                  </ProtectedRoutesGuard>
+                }
+              />
+              <Route
+                path="profile/:id/edit"
+                element={
+                  <ProtectedRoutesGuard>
+                    <ResidentEditProfilePage />
                   </ProtectedRoutesGuard>
                 }
               />
