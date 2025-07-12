@@ -30,4 +30,10 @@ DiseaseRouter.get(
   catchAsync(diseaseController.countDisease)
 );
 
+DiseaseRouter.get(
+  "/getDiseasewithID",
+  protectRoute("disease:view"),
+  catchAsync(diseaseController.getDiseasewithID)
+);
+
 export default DiseaseRouter;
