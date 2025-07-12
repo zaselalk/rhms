@@ -20,6 +20,7 @@ import { auditLogger } from "./middleware/auditLogger.middleware";
 import ResidentDiseaseRouter from "./routes/residentdisease.route";
 import MapdataRouter from "./routes/mapdata.routes";
 import "./models/association"; // Import associations to ensure they are registered
+
 dotenv.config();
 
 // env variables
