@@ -80,9 +80,6 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
       }
     };
 
-
-    fetchDiseases();
-
     //Fetch Clinic Function
     const fetchClinics = async () => {
       try {
@@ -103,8 +100,8 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
         console.error("Error fetching Gramaniladari Division:", error);
       }
     }
+    
     fetchGramaniladariDivision();
-
     fetchDiseases();
     fetchClinics();
   }, []);
