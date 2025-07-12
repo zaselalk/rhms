@@ -40,6 +40,32 @@ export const UserRoleCreateForm: FC<UserRoleCreateFormProps> = ({
   };
 
   /**
+   * Handles permission selection logic to ensure 'view' is checked if 'edit' or 'delete' is selected.
+   */
+  const handlePermissionChange = (checkedValues: string[]) => {
+    // Ensure if edit or delete is selected, view is also selected for that module
+    let updated = [...checkedValues];
+    checkedValues.forEach((perm) => {
+      const [module, action] = perm.split(":");
+      if (
+        (action === "edit" || action === "delete") &&
+        !checkedValues.includes(`${module}:view`)
+      ) {
+        updated.push(`${module}:view`);
+
+        // display a message to the user
+        message.info(
+          `Selecting "${perm}" automatically includes "${module}:view" permission.`
+        );
+      }
+    });
+
+    // Remove duplicates
+    updated = Array.from(new Set(updated));
+    form.setFieldsValue({ permission: updated });
+  };
+
+  /**
    * user role create mutation
    */
   const mutation = useMutation({
@@ -85,40 +111,11 @@ export const UserRoleCreateForm: FC<UserRoleCreateFormProps> = ({
         name="permission"
         rules={[{ required: true, message: "Select at least one permission" }]}
       >
-        <Checkbox.Group style={{ width: "100%" }}>
+        <Checkbox.Group
+          style={{ width: "100%" }}
+          onChange={handlePermissionChange}
+        >
           {allPermissions.map(({ group, perms }) => (
-            // <div
-            //   key={group}
-            //   style={{
-            //     marginBottom: "2rem",
-            //     padding: "1rem",
-            //     border: "1px solid #d9d9d9",
-            //     borderRadius: "8px",
-            //   }}
-            // >
-            //   <strong
-            //     style={{
-            //       display: "block",
-            //       marginBottom: "0.5rem",
-            //       fontSize: "1.1rem",
-            //     }}
-            //   >
-            //     {group}
-            //   </strong>
-            //   <div
-            //     style={{
-            //       display: "grid",
-            //       gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
-            //       gap: "1rem",
-            //     }}
-            //   >
-            //     {perms.map((perm) => (
-            //       <Checkbox key={perm} value={perm}>
-            //         {perm.split(":")[1]}
-            //       </Checkbox>
-            //     ))}
-            //   </div>
-            // </div>
             <PermissionCard key={group} title={group} permissions={perms} />
           ))}
         </Checkbox.Group>

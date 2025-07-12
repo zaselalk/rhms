@@ -78,6 +78,7 @@ export const ClinicService = {
       throw error;
     }
   },
+
   // Get all sessions for a specific clinic
   getClinicSessions: async (clinicId: string) => {
     try {
@@ -90,7 +91,8 @@ export const ClinicService = {
       throw error;
     }
   },
-  //update a session for a clinic
+
+  // Update a session for a clinic
   updateClinicSession: async (
     clinicId: string,
     sessionData: { id: string; name: string; sessionDate: string },
@@ -108,12 +110,22 @@ export const ClinicService = {
   },
 
   // Delete a session for a clinic
-
   deleteClinicSession: async (clinicId: string, sessionId: string) => {
     try {
       await axiosInstance.delete(`/clinic/${clinicId}/session/${sessionId}`);
     } catch (error) {
       console.error("Error deleting clinic session:", error);
+      throw error;
+    }
+  },
+
+  //  Get all resident clinics
+  getAllResidentClinics: async () => {
+    try {
+      const response = await axiosInstance.get("/residentClinic/getAllResidentClinics");
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching resident clinics:", error);
       throw error;
     }
   },
