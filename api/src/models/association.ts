@@ -5,6 +5,7 @@ import HouseholdResident from "./householdResident";
 
 import Disease from "./disease";
 import ResidentDisease from "./residentdisease";
+import Division from "./division";
 
 // Associations
 // HouseholdResident ↔ Resident
@@ -50,6 +51,19 @@ ResidentDisease.belongsTo(Resident, { foreignKey: 'residentId', as: 'resident' }
 ResidentDisease.belongsTo(Disease, { foreignKey: 'diseaseId', as: 'disease' });
 
 
+// In Resident model
+Resident.belongsTo(Division, {
+  foreignKey: 'divisionId',
+  as: 'division',
+});
+
+// In Division model
+Division.hasMany(Resident, {
+  foreignKey: 'divisionId',
+  as: 'residents',
+});
+
+
 // Exporting models
 export {
   sequelize,
@@ -57,6 +71,7 @@ export {
   Household,
   Disease,
   ResidentDisease,
-  HouseholdResident
+  HouseholdResident,
+  Division
 
 };

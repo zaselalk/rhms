@@ -1,12 +1,13 @@
 import { Division } from "../models/division";
+import { Op } from "sequelize";
 
 class DivisionRepository {
   async getAllDivisions() {
-    return await Division.findAll();
+    return await Division.findAll(); // Only active ones by default (paranoid)
   }
 
   async getDivisionById(id: number) {
-    return await Division.findByPk(id);
+    return await Division.findByPk(id); // Ignores soft-deleted by default
   }
 
   async getDivisionByName(name: string) {
@@ -19,20 +20,34 @@ class DivisionRepository {
 
   async updateDivision(
     id: number,
-    updatedData: Partial<{ divisionName: string }>,
+    updatedData: Partial<{ divisionName: string }>
   ) {
     const division = await Division.findByPk(id);
     if (!division) return null;
     return await division.update(updatedData);
   }
 
+  // Soft delete
   async deleteDivision(id: number) {
-    return await Division.destroy({ where: { divisionId: id } });
+    const division = await Division.findByPk(id);
+    if (!division) return null;
+    await division.destroy(); // soft delete
+    return division;
   }
+
+  //Restore a soft-deleted division
+  async restoreDivision(id: number) {
+    const division = await Division.findByPk(id, { paranoid: false });
+    if (!division || !division.deletedAt) return null;
+    await division.restore();
+    return division;
+  }
+
 
   async getDivisionCount() {
     return await Division.count();
   }
+
 }
 
 export default new DivisionRepository();
