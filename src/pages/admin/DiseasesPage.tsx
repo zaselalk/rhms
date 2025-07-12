@@ -13,57 +13,81 @@ import {
 
 import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
 import diseaseService from '../../services/disease.service';
+import residentDiseaseService from '../../services/residentDisease.service';
 
 interface DiseaseData {
   name: string;
   patients: number;
 }
 
+interface Disease {
+  diseaseId: number;
+  diseaseName: string;
+}
+
+interface ResidentDisease {
+  diseaseId: number;
+  residentId: number;
+}
+
 const DiseasesPage: FC = () => {
-  const[diseaseName,setDiseaseNames]=useState<string[]>([]);
+  const [diseases, setDiseases] = useState<Disease[]>([]);
+  const [residentDiseases, setResidentDiseases] = useState<ResidentDisease[]>([]);
   const [diseaseStats, setDiseaseStats] = useState<DiseaseData[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
 
-  const fetchDiseaseNames = async () => {
+  const fetchAllData = async () => {
     try {
-      const data = await diseaseService.getAllDiseases(); 
-      setDiseaseNames(data.map((d:any)=>d.diseaseName));
+      setLoading(true);
+
+      const diseaseListRaw = await diseaseService.getAllDiseases();
+      
+
+      const diseaseList: Disease[] = Array.isArray(diseaseListRaw)
+        ? diseaseListRaw
+        : diseaseListRaw?.data || [];
+
+      const relationListRaw = await residentDiseaseService.getAllResidentDiseases();
+     
+
+      //  Correct parsing of the .data array
+      const relationList: ResidentDisease[] = Array.isArray(relationListRaw?.data)
+        ? relationListRaw.data
+        : [];
+
+      setDiseases(diseaseList);
+      setResidentDiseases(relationList);
+
+      const stats: DiseaseData[] = diseaseList.map((disease) => {
+        const count = relationList.filter((rel) => Number(rel.diseaseId) === Number(disease.diseaseId)).length;
+
+        return { name: disease.diseaseName, patients: count };
+      });
+
+      setDiseaseStats(stats);
+      
     } catch (error) {
-      console.error('Failed to load disease names:', error);
-      message.error('Failed to load disease names');
-      return [];
+      console.error('Error fetching disease data:', error);
+      message.error('Failed to fetch data');
+      
+    }
+     finally {
+      setLoading(false);
     }
   };
 
-  // Fetch disease statistics
-  const fetchDiseaseStats = async () => {
-  try {
-    setLoading(true);
-    const data = await diseaseService.getDiseasePatientCounts();
-    const formattedData = Object.entries(data).map(([name, patients]) => ({
-      name: String(name),
-      patients: Number(patients),
-    }));
-    setDiseaseStats(formattedData);
-  } catch (error) {
-    console.error('Failed to load disease stats:', error);
-    message.error('Failed to load disease stats');
-  } finally {
-    setLoading(false);
-  }
-};
-
   useEffect(() => {
-    fetchDiseaseNames();
-    fetchDiseaseStats();
+    fetchAllData();
+    
   }, []);
 
+  
+
   // Calculate total diseases and patients only for displayed diseases
-  const displayedStats = diseaseStats.filter((d) => diseaseName.includes(d.name));
-  const totalDiseases = diseaseName.length;
-  const totalPatients = displayedStats.reduce((sum, disease) => sum + disease.patients, 0);
+  const totalDiseases = diseaseStats.length;
+  const totalPatients = diseaseStats.reduce((sum, d) => sum + d.patients, 0);
 
   // Handle modal actions
   const handleModalOk = async () => {
@@ -72,15 +96,23 @@ const DiseasesPage: FC = () => {
       const newDisease = values.disease.trim();
       if (!newDisease) return;
 
+      const alreadyExists = diseases.some(
+        (d) => d.diseaseName.toLowerCase() === newDisease.toLowerCase()
+      );
+      if (alreadyExists) {
+        return message.warning(`"${newDisease}" already exists.`);
+      }
+
       if (window.confirm(`Are you sure you want to add "${newDisease}"?`)) {
         const addedDisease = await diseaseService.createDisease({ diseaseName: newDisease });
 
-        setDiseaseNames((prev) => 
-          [...prev, addedDisease.diseaseName]
+        setDiseases((prev) => 
+          [...prev, addedDisease]
       );
         form.resetFields();
         setIsModalOpen(false);
         message.success('Disease added successfully');
+        fetchAllData();
       }
     } catch (error: any) {
       const errMsg =
@@ -100,11 +132,9 @@ const handleDeleteDisease = async (diseaseName: string) => {
       // Call the backend API to delete the disease
       await diseaseService.deleteDisease(diseaseName);
 
-      // Update frontend state after successful deletion
-      setDiseaseNames((prev) => prev.filter((name) => name !== diseaseName));
-      setDiseaseStats((prev) => prev.filter((d) => d.name !== diseaseName));
-
       message.success(`"${diseaseName}" deleted successfully.`);
+      fetchAllData(); // Refresh the data after deletion
+
     } catch (error) {
       console.error(error);
       message.error('Failed to delete disease.');
@@ -122,7 +152,7 @@ const handleDeleteDisease = async (diseaseName: string) => {
             onClick={() => setIsModalOpen(true)}
             style={{ backgroundColor: '#008FFB' }}
           >
-            + Add Disease
+            Add Disease
           </Button>
         </div>
 
@@ -174,12 +204,10 @@ const handleDeleteDisease = async (diseaseName: string) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {diseaseName.map((name) => {
-                    const stat = diseaseStats.find((d) => d.name === name);
-                    return (
+                  {diseaseStats.map(({ name, patients }) => (
                       <tr key={name}>
                         <td className="px-4 py-2 text-sm text-gray-700">{name}</td>
-                        <td className="px-4 py-2 text-sm text-gray-700">{stat?.patients ?? 0}</td>
+                        <td className="px-4 py-2 text-sm text-gray-700">{patients}</td>
                         <td className="px-4 py-2 text-sm text-gray-700">
                           <Link
                             to={`${name}`}
@@ -195,8 +223,8 @@ const handleDeleteDisease = async (diseaseName: string) => {
                           </button>
                         </td>
                       </tr>
-                    );
-                  })}
+                  ))
+                  }
                 </tbody>
               </table>
             </div>
@@ -205,7 +233,7 @@ const handleDeleteDisease = async (diseaseName: string) => {
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-lg font-semibold text-gray-700 mb-4">Disease Statistics</h3>
               <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={diseaseStats.filter((d)=>diseaseName.includes(d.name))}>
+                <LineChart data={diseaseStats}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
                   <YAxis />
