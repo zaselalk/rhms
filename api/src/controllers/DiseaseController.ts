@@ -67,11 +67,32 @@ export class DiseaseController {
       });
     } catch (error) {
       return res.status(500).json({
-         message: "Error fetching disease count",
-         status: 500,
-         error:"",
-         data: null
-        });
+        message: "Error fetching disease count",
+        status: 500,
+        error: "",
+        data: null
+      });
+    }
+  };
+
+  getDiseasewithID = async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const diseases = await this.diseaseService.getDiseasewithID();
+      return res.status(200).json(
+        {
+          message: "Diseases fetched successfully",
+          status: 200,
+          error: null,
+          data: diseases
+        }
+      );
+    } catch (error) {
+      return res.status(500).json({
+        message: "Error fetching diseases",
+        status: 500,
+        error: "",
+        data: null
+      });
     }
   };
 
