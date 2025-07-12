@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 
 const resident = {
   id: "1",
@@ -74,16 +75,18 @@ const ResidentDashboard = () => {
                     </div>
                   ))}
                 </div>
-
+                <p className=" mt-3 text-sm text-gray-600 mb-4">
+                  Anything need to be updated? Please meet our staff at the
+                  hospital
+                </p>
                 <div className="w-full border-t border-gray-200 pt-6">
-                  <p className="text-sm text-gray-600 mb-4">
-                    Need help? Contact our support team anytime.
-                  </p>
                   <Link
                     to="/resident/login"
                     className="w-full inline-flex items-center justify-center bg-gradient-to-r from-red-500 to-red-600 text-white py-3 px-6 rounded-xl font-semibold shadow-lg hover:from-red-600 hover:to-red-700 transform hover:scale-105 transition-all duration-200"
                   >
-                    <span className="mr-2">🚪</span>
+                    <span className="mr-2">
+                      <ArrowLeftOutlined />
+                    </span>
                     Logout
                   </Link>
                 </div>
