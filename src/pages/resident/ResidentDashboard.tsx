@@ -179,32 +179,21 @@ const ResidentDashboard = () => {
             {/* Registered Clinics */}
             <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6">
               <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                <span className="text-2xl">🏥</span>
+                <span className="text-2xl">🩺</span>
                 Registered Clinics
               </h3>
 
               <div className="space-y-3">
                 {[
-                  { clinicName: "Eye Clinic", icon: "👁️", color: "blue" },
-                  { clinicName: "Diabetics", icon: "🩺", color: "purple" },
-                  { clinicName: "Pressure", icon: "🫀", color: "red" },
+                  { clinicName: "Eye Clinic", color: "blue" },
+                  { clinicName: "Diabetics", color: "purple" },
+                  { clinicName: "Pressure", color: "red" },
                 ].map((clinic, index) => (
                   <div
                     key={index}
                     className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border border-gray-200 hover:shadow-md transition-all duration-300 hover:from-blue-50 hover:to-indigo-50"
                   >
                     <div className="flex items-center gap-4">
-                      <div
-                        className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl ${
-                          clinic.color === "blue"
-                            ? "bg-blue-100"
-                            : clinic.color === "purple"
-                            ? "bg-purple-100"
-                            : "bg-red-100"
-                        }`}
-                      >
-                        {clinic.icon}
-                      </div>
                       <span className="font-semibold text-gray-900 text-lg">
                         {clinic.clinicName}
                       </span>
