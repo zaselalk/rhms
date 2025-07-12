@@ -13,13 +13,13 @@ import UserRouter from "./routes/user.routes";
 import serializeUser from "./middleware/serializeuser.middleware";
 import clinicSessionRoutes from "./routes/clinicSession.routes";
 import expressErrorHandler from "./util/expressErrorHandler";
-import "./models/association"; // Import associations to ensure they are registered
 import residentClinicRouter from "./routes/residentclinic.routes";
 import HouseholdResidentRouter from "./routes/householdresident.routes";
 import DivisionRouter from "./routes/division.routes";
 import { auditLogger } from "./middleware/auditLogger.middleware";
 import ResidentDiseaseRouter from "./routes/residentdisease.route";
 import MapdataRouter from "./routes/mapdata.routes";
+import "./models/association"; // Import associations to ensure they are registered
 dotenv.config();
 
 // env variables
@@ -53,7 +53,7 @@ app.use("/division", DivisionRouter);
 app.use("/residentdisease", ResidentDiseaseRouter);
 app.use("/sessions", clinicSessionRoutes);
 app.use("/household-resident", HouseholdResidentRouter);
-app.use("/mapdata",MapdataRouter)
+app.use("/mapdata", MapdataRouter);
 
 // error handling middleware
 app.use(expressErrorHandler);
