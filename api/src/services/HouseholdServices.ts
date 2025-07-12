@@ -31,12 +31,12 @@ export class HouseholdServices {
   }
 
   // Delete Household by house_no
-  async deleteHouseholdByHouseNo(house_no: string): Promise<boolean> {
-    const household = await this.householdRepository.findHouseholdByHouseNo(house_no);
+  async deleteHouseholdById(id: number): Promise<boolean> {
+    const household = await this.householdRepository.findHouseholdById(id);
     if (!household) {
       throw new HouseholdNotFoundException("Household not found");
     }
-    return this.householdRepository.deleteHouseholdByHouseNo(house_no);
+    return this.householdRepository.deleteHouseholdById(id);
   }
 
   //Household Count

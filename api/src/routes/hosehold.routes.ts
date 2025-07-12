@@ -28,7 +28,7 @@ HouseholdRouter.put(
 );
 
 HouseholdRouter.delete(
-    "/delete/:house_no",
+    "/delete/:id",
     protectRoute("household:delete"),
     catchAsync(householdController.deleteHousehold)
 );

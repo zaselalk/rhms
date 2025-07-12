@@ -30,8 +30,8 @@ export const updateHouseholdOwner = async (
   return response.data;
 };
 
-export const deleteHousehold = async (house_no: string) => {
-  const response = await axiosInstance.delete(`/household/delete/${house_no}`);
+export const deleteHousehold = async (id: number ) => {
+  const response = await axiosInstance.delete(`/household/delete/${id}`);
   return response.data;
 };
 

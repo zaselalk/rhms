@@ -93,9 +93,9 @@ const HouseholdPage: FC = () => {
   const confirmDeleteHousehold = async () => {
     if (!selectedHousehold) return;
     try {
-      await deleteHousehold(selectedHousehold.house_no);
+      await deleteHousehold(selectedHousehold.id);
       setRegisteredHouseholds((prev) =>
-        prev.filter((household) => household.house_no !== selectedHousehold.house_no)
+        prev.filter((household) => household.id !== selectedHousehold.id)
       );
       message.success("Household deleted successfully!");
       setDeleteModalVisible(false);
