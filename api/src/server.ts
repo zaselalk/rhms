@@ -38,6 +38,11 @@ app.use(serializeUser);
 // Middleware to log actions
 app.use(auditLogger);
 
+// home route
+app.get("/", (req: Request, res: Response) => {
+  res.status(200).json({ message: "API server is running..." });
+});
+
 // health check route
 app.get("/health", (req: Request, res: Response) => {
   res.status(200).json({ message: "Server is healthy.. 😊" });
