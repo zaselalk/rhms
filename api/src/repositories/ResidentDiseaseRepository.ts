@@ -66,45 +66,6 @@ export class ResidentDiseaseRepository {
         }
     }
 
-    //updateResidentDiseaseBy residentId
-    async updateResidentDiseaseByResidentId(
-        residentId: number,
-        diseaseId: number
-    ): Promise<void> {
-        try {
-            const result = await ResidentDisease.update(
-                { diseaseId },
-                { where: { residentId } }
-            );
-
-            if (result[0] === 0) {
-                throw new Error("No resident disease found with the given resident ID");
-            }
-        } catch (error) {
-            console.error("Error updating resident disease by resident ID:", error);
-            throw new Error("Unable to update resident disease by resident ID");
-        }
-    }
-
-    //upateResidentDiseaseByDiseaseId
-    async updateResidentDiseaseByDiseaseId(
-        diseaseId: number,
-        residentId: number
-    ): Promise<void> {
-        try {
-            const result = await ResidentDisease.update(
-                { residentId },
-                { where: { diseaseId,residentId } }
-            );
-
-            if (result[0] === 0) {
-                throw new Error("No resident disease found with the given disease ID");
-            }
-        } catch (error) {
-            console.error("Error updating resident disease by disease ID:", error);
-            throw new Error("Unable to update resident disease by disease ID");
-        }
-    }
 
     //this is method to get resident disease by resident i
     async getDiseasesByResidentId(
