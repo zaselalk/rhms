@@ -62,6 +62,15 @@ export class ResidentRepository {
       where: {
         id,
       },
+      attributes: [
+        "id",
+        "firstName",
+        "lastName",
+        "nic",
+        "email",
+        "birthday",
+        "bloodGroup",
+      ]
     });
   }
 
