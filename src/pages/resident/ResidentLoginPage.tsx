@@ -4,20 +4,20 @@ import { Link, useNavigate } from "react-router";
 import { loginState } from "../../types/login";
 import ResidentService from "../../services/resident.service";
 import { Alert, Button, Form, Input } from "antd";
+import { MailOutlined, LockOutlined, UserOutlined } from "@ant-design/icons";
+import { ArrowBigLeft } from "lucide-react";
 
 const ResidentLoginPage: FC = () => {
   const [error, setError] = useState<null | string>(null);
   const navigate = useNavigate();
   const [form] = Form.useForm();
 
-  // Login request mutation
   const mutation = useMutation({
     mutationFn: async ({ email, password }: loginState) => {
       const user = await ResidentService.loginResidentByEmailandPassword(
         email,
         password
       );
-      // seperate state for resident login
       console.log(user);
     },
     onSuccess: () => handleLogin(),
@@ -35,18 +35,44 @@ const ResidentLoginPage: FC = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Main Content */}
+      {/* Left Section */}
+      <div className="hidden md:flex flex-col justify-center items-center w-1/2 bg-[#008FFB] rounded-r-3xl relative">
+        {/* Logo or Illustration */}
+        <div className="flex flex-col items-center">
+          <img
+            src="/images/resident-login.png"
+            alt="Logo"
+            // className="w-32 h-32 mb-6"
+          />
+          <h3 className="text-2xl text-blue-50">Resident Login</h3>
+          <p className="text-blue-200 text-center mt-2">
+            Access your profile and manage your health records.
+          </p>
+          <Link
+            to="/"
+            className="absolute top-4 left-4 text-white hover:text-blue-200"
+          >
+            <div className="flex items-center">
+              <ArrowBigLeft className="text-2xl" />
+              <span className="ml-2">Back to Home</span>
+            </div>
+          </Link>
+        </div>
+      </div>
+
+      {/* Right Section */}
       <div className="flex-1 flex items-center justify-center bg-gray-100">
-        <div className="bg-white p-8 rounded-lg shadow-md w-full sm:w-1/2 md:w-1/3">
-          <h2 className="text-2xl font-semibold text-[#008FFB] mb-6 text-center">
-            Resident Login
-          </h2>
+        <div className="bg-white p-10 rounded-3xl shadow-xl w-full max-w-md">
+          <div className="flex justify-center mb-8">
+            <span className="text-2xl font-semibold text-[#008FFB]">
+              Resident Login
+            </span>
+          </div>
 
           {error && (
             <Alert message={error} type="error" showIcon className="mb-4" />
           )}
 
-          {/* Login Form */}
           <Form
             form={form}
             layout="vertical"
@@ -58,26 +84,25 @@ const ResidentLoginPage: FC = () => {
               name="email"
               rules={[
                 { required: true, message: "Email is required" },
-                {
-                  type: "email",
-                  message: "Invalid email format",
-                },
+                { type: "email", message: "Invalid email format" },
               ]}
             >
               <Input
+                prefix={<MailOutlined />}
                 placeholder="Enter Your Email Address"
-                size={"large"}
-              ></Input>
+                size="large"
+              />
             </Form.Item>
 
             <Form.Item
               label="Password"
               name="password"
-              rules={[{ required: true, message: "Email is required" }]}
+              rules={[{ required: true, message: "Password is required" }]}
             >
               <Input.Password
-                placeholder="Enter Your Email Address"
-                size={"large"}
+                prefix={<LockOutlined />}
+                placeholder="Enter Your Password"
+                size="large"
               />
             </Form.Item>
 
@@ -86,36 +111,10 @@ const ResidentLoginPage: FC = () => {
                 Login
               </Button>
             </Form.Item>
-
-            {/* <div className="mb-6">
-              <button
-                onClick={onSubmit}
-                className="w-full px-6 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
-              >
-                Login
-              </button>
-            </div> */}
           </Form>
 
-          <div className="flex justify-between">
-            <div className="text-center">
-              {/* <a href="#" ></a> */}
-              <Link
-                to="/admin/login"
-                className="text-sm text-[#008FFB] hover:text-[#00C1A7]"
-              >
-                Don't remember password?
-              </Link>
-            </div>
-            <div className="text-center">
-              {/* <a href="#" ></a> */}
-              <Link
-                to="/admin/login"
-                className="text-sm text-[#008FFB] hover:text-[#00C1A7]"
-              >
-                Need to activate account?
-              </Link>
-            </div>
+          <div className="text-center mt-4">
+            Don't have an account? Meet our staff at hospital for registration.
           </div>
         </div>
       </div>
