@@ -112,7 +112,13 @@ const ResidentLoginPage: FC = () => {
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary" htmlType="submit" className="w-full">
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="w-full"
+                size="large"
+                loading={isLoading}
+              >
                 {isLoading ? "Logging in..." : "Login"}
               </Button>
             </Form.Item>
