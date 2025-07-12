@@ -108,6 +108,19 @@ Division.hasMany(Resident, {
   as: "residents",
 });
 
+// In Resident model
+Resident.belongsTo(Division, {
+  foreignKey: 'divisionId',
+  as: 'division',
+});
+
+// In Division model
+Division.hasMany(Resident, {
+  foreignKey: 'divisionId',
+  as: 'residents',
+});
+
+
 // Exporting models
 export {
   sequelize,

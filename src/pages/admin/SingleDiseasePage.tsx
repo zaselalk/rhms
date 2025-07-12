@@ -1,43 +1,67 @@
-import { FC } from 'react';
+import { FC,useEffect,useState } from 'react';
 import { useParams } from 'react-router';
 import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
+import residentDiseaseService from '../../services/residentDisease.service';
 
-// Sample data structure (same as DiseasesPage)
-const diseasesData = {
-    Diabetes: 145,
-    Hypertension: 261,
-    "Low Pressure": 120,
-    "High Pressure": 180,
-    Depression: 90,
-    Osteoporosis: 80,
-    Acne: 200,
-    Asthma: 250,
-    Arrhythmia: 110,
-};
 
-// Sample division-wise patient count data
-const divisionData = [
-    { division: "Aluthgamgoda", count: 567 },
-    { division: "Henegama", count: 536 },
-    { division: "Kotagedara", count: 536 },
-    { division: "Henpita", count: 536 },
-    { division: "Navuththuduwa", count: 536 },
-    { division: "Katugahahena", count: 536 },
-];
+interface DivisionCount {
+    division: string;
+    count: number;
+}
 
 const SingleDiseasePage: FC = () => {
     const { diseaseName } = useParams<{ diseaseName: string }>(); // Get disease from URL
     console.log("Disease Name from URL : ", diseaseName); // Log the disease name for debugging
     
-    const patientCount = diseasesData[diseaseName as keyof typeof diseasesData] || 0; // Default to 0 if not found
+    const [divisionData, setDivisionData] = useState<DivisionCount[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchDivisionData = async () => {
+            try {
+                setLoading(true);
+                const response = await residentDiseaseService.getDivisionCountsByDiseaseName(diseaseName || '');
+                console.log("Final division data set to state:", response);
+                setDivisionData(response.data || []);
+            } catch (err:any) {
+                console.error('Failed to load division data:', err);
+                setError('Failed to load division data.');
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (diseaseName) {
+            fetchDivisionData();
+        }
+    }, [diseaseName]);
+
+
+    // const patientCount = diseasesData[diseaseName as keyof typeof diseasesData] || 0; // Default to 0 if not found
     
     // Calculate the total patient count including division-wise counts
-    const totalPatientCount = patientCount + divisionData.reduce((sum, div) => sum + div.count, 0);
+    const totalPatientCount = divisionData.reduce((sum, div) => sum + div.count, 0);
     
-    if (diseaseName) {
+    if (loading) {
         return (
             <DashboardContainer>
-                <div className="flex-1 p-6">
+                <div className=" p-6"> Loading Data...</div>
+                </DashboardContainer>
+        );}
+
+        if(error){
+            return (
+                <DashboardContainer>
+                        <div className="p-6 text-red-600">{error}</div>
+            </DashboardContainer>
+        );
+    }
+
+    return (
+        <DashboardContainer>
+                    <div className="flex-1 p-6">
                     <div className="flex justify-between items-center mb-6">
                         <h2 className="text-2xl font-semibold text-[#008FFB]">{diseaseName}</h2>
                         <div className="px-4 py-2 bg-[#008FFB] text-white rounded-lg">{totalPatientCount} Total Patients</div>
@@ -64,10 +88,11 @@ const SingleDiseasePage: FC = () => {
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </DashboardContainer>
+                    </div>
+                    </DashboardContainer>
+                
         );
-    }
+    
 };
 
 export default SingleDiseasePage;
