@@ -6,17 +6,66 @@ export default {
   async up(queryInterface: QueryInterface): Promise<void> {
     try {
       await queryInterface.bulkInsert("resident_diseases", [
-        { residentId: 1, diseaseId: 1 }, // Kasun - Diabetes
-        { residentId: 2, diseaseId: 2 }, // Nimal - Hypertension
-        { residentId: 3, diseaseId: 3 }, // Tharindu - Asthma
-        { residentId: 4, diseaseId: 4 }, // Sajini - Cancer
-        { residentId: 5, diseaseId: 2 }, // Dilan - Hypertension
-        { residentId: 6, diseaseId: 1 }, // Harshini - Diabetes
-        { residentId: 7, diseaseId: 1 }, // Ruwan - Diabetes
-        { residentId: 8, diseaseId: 5 }, // Iresha - Tuberculosis
-        { residentId: 9, diseaseId: 3 }, // Amal - Asthma
-        { residentId: 10, diseaseId: 4 }, // Chamari - Cancer
-     
+        {
+          residentId: 1,
+          diseaseId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        }, // Kasun - Diabetes
+        {
+          residentId: 2,
+          diseaseId: 2,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        }, // Nimal - Hypertension
+        {
+          residentId: 3,
+          diseaseId: 3,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        }, // Tharindu - Asthma
+        {
+          residentId: 4,
+          diseaseId: 4,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        }, // Sajini - Cancer
+        {
+          residentId: 5,
+          diseaseId: 2,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        }, // Dilan - Hypertension
+        {
+          residentId: 6,
+          diseaseId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        }, // Harshini - Diabetes
+        {
+          residentId: 7,
+          diseaseId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        }, // Ruwan - Diabetes
+        {
+          residentId: 8,
+          diseaseId: 5,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        }, // Iresha - Tuberculosis
+        {
+          residentId: 9,
+          diseaseId: 3,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        }, // Amal - Asthma
+        {
+          residentId: 10,
+          diseaseId: 4,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        }, // Chamari - Cancer
       ]);
     } catch (error) {
       console.error("Error seeding resident_diseases:", error);
