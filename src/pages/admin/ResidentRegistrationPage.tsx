@@ -70,7 +70,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
 
   // Fetch all clinics when the component mounts
   useEffect(() => {
-    //Fetch Disese Function
+    //Fetch Disease  Function
     const fetchDiseases = async () => {
       try {
         const response = await diseaseService.getAllDiseaseswithID();
@@ -90,7 +90,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
       }
     };
 
-    //Fetch Divsion
+    //Fetch Division
      const fetchGramaniladariDivision = async () => {
       try {
         const data = await DivisionService.getAllDivisions();
@@ -100,7 +100,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
         console.error("Error fetching Gramaniladari Division:", error);
       }
     }
-    
+
     fetchGramaniladariDivision();
     fetchDiseases();
     fetchClinics();
