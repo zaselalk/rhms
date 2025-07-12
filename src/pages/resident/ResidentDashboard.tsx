@@ -7,180 +7,218 @@ const resident = {
   bloodGroup: "O+",
   contact: "0711287298",
   division: "Katugahahena",
-  profilePic: "/avatars/1.jpg",
   last_visit: "2025/02/10",
 };
 
 const ResidentDashboard = () => {
   return (
-    <div className="min-h-screen  bg-gray-100  px-4 sm:px-6 md:px-8">
-      <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold text-[#008FFB]">
-          Resident Profile
-        </h2>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 px-4 py-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+            Resident Health Dashboard
+          </h1>
+          <p className="text-gray-600">
+            Welcome back, {resident.name.split(" ")[0]}
+          </p>
+        </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <section className="lg:col-span-1">
-          <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md flex flex-col sm:flex-row">
-            <div className="ml-0 sm:ml-6 flex-grow">
-              <div className="flex justify-center sm:justify-start mb-4">
-                <img
-                  src={resident.profilePic}
-                  alt="Profile"
-                  className="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover"
-                  onError={(e) => {
-                    (e.currentTarget as HTMLImageElement).src =
-                      "https://randomuser.me/api/portraits/men/1.jpg";
-                  }}
-                />
-              </div>
-              <div className="flex w-full">
-                <h3 className="text-xl font-semibold text-gray-800">
-                  {resident.name}
-                </h3>
-              </div>
-              <div className="grid grid-cols-1 gap-4 text-sm text-gray-600 mt-4">
-                <p>
-                  <strong>Age:</strong> {resident.age}
-                </p>
-                <p>
-                  <strong>Blood Group:</strong> {resident.bloodGroup}
-                </p>
-                <p>
-                  <strong>Division:</strong> {resident.division}
-                </p>
-                <p>
-                  <strong>Contact:</strong> {resident.contact}
-                </p>
-                <p>
-                  <strong>Contact:</strong> {resident.contact}
-                </p>
-                <p>
-                  <strong>Contact:</strong> {resident.contact}
-                </p>
-                <p>
-                  <strong>Contact:</strong> {resident.contact}
-                </p>
-                <p>
-                  <strong>Contact:</strong> {resident.contact}
-                </p>
-              </div>
-            </div>
-
-            {/* logout button */}
-          </div>
-          <div className="mt-4">
-            <Link
-              to="/logout"
-              className="inline-block bg-red-500 text-white py-2 px-4 rounded-lg"
-            >
-              Logout
-            </Link>
-          </div>
-        </section>
-
-        <section className="lg:col-span-3">
-          <section>
-            <h2 className="text-m mt-5">Last Updates</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-              {[
-                {
-                  title: "Blood Pressure",
-                  value: "120/89 mm/mg",
-                  status: "Normal",
-                  lastUpdate: "2025/02/10",
-                },
-                {
-                  title: "Heart Rate",
-                  value: "120 BPM",
-                  status: "Normal",
-                  lastUpdate: "2025/02/10",
-                },
-                {
-                  title: "Cholesterol",
-                  value: "85 mg/dl",
-                  status: "Normal",
-                  lastUpdate: "2025/02/10",
-                },
-                {
-                  title: "Glucose",
-                  value: "200 mg/dl",
-                  status: "High",
-                  lastUpdate: "2025/02/10",
-                },
-              ].map((stat, index) => (
-                <div
-                  key={index}
-                  className="bg-white sm:p-6 rounded-lg shadow-md "
-                >
-                  <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                    {stat.title}
-                  </h4>
-                  <p className="text-3xl text-gray-600">{stat.value}</p>
-                  <p className="text-gray-600">{stat.status}</p>
-                  <div className="text-xs mt-4 flex justify-between items-center">
-                    <p>Last Update</p>
-                    <p className=" text-gray-800">{stat.lastUpdate}</p>
-                  </div>
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+          {/* Profile Card */}
+          <div className="xl:col-span-4 order-1 xl:order-1">
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 h-full">
+              <div className="flex flex-col items-center text-center">
+                <div className="relative mb-6">
+                  <img
+                    src="/images/resident-profile-male.svg"
+                    alt="Profile"
+                    className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-blue-500 shadow-lg"
+                  />
+                  <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-green-500 rounded-full border-2 border-white"></div>
                 </div>
-              ))}
-            </div>
-          </section>
 
-          <section>
-            <h3 className="text-xl font-semibold text-[#008FFB] mt-5">
-              Clinic Details
-            </h3>
-            <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md mt-6 overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr>
-                    <th className="px-4 py-2 text-gray-600 flex-col text-left">
-                      Clinic{" "}
-                    </th>
-                    <th className="px-4 py-2 text-gray-600 flex-col text-left">
-                      Date{" "}
-                    </th>
-                    <th className="px-4 py-2 text-gray-600 flex-col text-left">
-                      {" "}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
+                  {resident.name}
+                </h2>
+
+                <div className="w-full space-y-4 mb-8">
                   {[
+                    { label: "Age", value: resident.age, icon: "👤" },
                     {
-                      clinicName: "Eye Clinic",
-                      date: "2024 Oct 02",
+                      label: "Blood Group",
+                      value: resident.bloodGroup,
+                      icon: "🩸",
                     },
+                    { label: "Division", value: resident.division, icon: "📍" },
+                    { label: "Contact", value: resident.contact, icon: "📞" },
                     {
-                      clinicName: "Diabetics",
-                      date: "2024 Oct 23",
+                      label: "Last Visit",
+                      value: resident.last_visit,
+                      icon: "📅",
                     },
-                    {
-                      clinicName: "Pressure",
-                      date: "2024 Apr 02",
-                    },
-                  ].map((record, index) => (
-                    <tr key={index} className=" hover:bg-gray-100 rounded-lg">
-                      <td className="px-4 py-2 text-gray-700">
-                        {record.clinicName}
-                      </td>
-                      <td className="px-4 py-2 text-gray-700">{record.date}</td>
-                      <td className="px-4 py-2">
-                        <Link to={"clinicDetails"}>
-                          <button className="px-4 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]">
-                            View
-                          </button>
-                        </Link>
-                      </td>
-                    </tr>
+                  ].map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-3 bg-gray-50 rounded-xl"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-lg">{item.icon}</span>
+                        <span className="font-medium text-gray-700">
+                          {item.label}
+                        </span>
+                      </div>
+                      <span className="font-semibold text-gray-900">
+                        {item.value}
+                      </span>
+                    </div>
                   ))}
-                </tbody>
-              </table>
+                </div>
+
+                <div className="w-full border-t border-gray-200 pt-6">
+                  <p className="text-sm text-gray-600 mb-4">
+                    Need help? Contact our support team anytime.
+                  </p>
+                  <Link
+                    to="/resident/login"
+                    className="w-full inline-flex items-center justify-center bg-gradient-to-r from-red-500 to-red-600 text-white py-3 px-6 rounded-xl font-semibold shadow-lg hover:from-red-600 hover:to-red-700 transform hover:scale-105 transition-all duration-200"
+                  >
+                    <span className="mr-2">🚪</span>
+                    Logout
+                  </Link>
+                </div>
+              </div>
             </div>
-          </section>
-        </section>
+          </div>
+
+          {/* Main Content */}
+          <div className="xl:col-span-8 order-2 xl:order-2 space-y-6">
+            {/* Health Stats */}
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                <span className="text-2xl">📊</span>
+                Health Metrics
+              </h3>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {[
+                  {
+                    title: "Blood Pressure",
+                    value: "120/89",
+                    unit: "mm/mg",
+                    status: "Normal",
+                    lastUpdate: "2025/02/10",
+                    icon: "💓",
+                    color: "green",
+                  },
+                  {
+                    title: "Heart Rate",
+                    value: "120",
+                    unit: "BPM",
+                    status: "Normal",
+                    lastUpdate: "2025/02/10",
+                    icon: "❤️",
+                    color: "green",
+                  },
+                  {
+                    title: "Cholesterol",
+                    value: "85",
+                    unit: "mg/dl",
+                    status: "Normal",
+                    lastUpdate: "2025/02/10",
+                    icon: "🧪",
+                    color: "green",
+                  },
+                  {
+                    title: "Glucose",
+                    value: "200",
+                    unit: "mg/dl",
+                    status: "High",
+                    lastUpdate: "2025/02/10",
+                    icon: "🍯",
+                    color: "red",
+                  },
+                ].map((stat, index) => (
+                  <div
+                    key={index}
+                    className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-5 border border-gray-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
+                  >
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-2xl">{stat.icon}</span>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-bold ${
+                          stat.color === "green"
+                            ? "bg-green-100 text-green-700"
+                            : "bg-red-100 text-red-700"
+                        }`}
+                      >
+                        {stat.status}
+                      </span>
+                    </div>
+
+                    <h4 className="text-sm font-semibold text-gray-600 mb-2">
+                      {stat.title}
+                    </h4>
+
+                    <div className="flex items-baseline gap-1 mb-3">
+                      <span className="text-2xl font-bold text-gray-900">
+                        {stat.value}
+                      </span>
+                      <span className="text-sm text-gray-500">{stat.unit}</span>
+                    </div>
+
+                    <div className="text-xs text-gray-500 flex items-center gap-1">
+                      <span>📅</span>
+                      <span>Updated: {stat.lastUpdate}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Registered Clinics */}
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                <span className="text-2xl">🏥</span>
+                Registered Clinics
+              </h3>
+
+              <div className="space-y-3">
+                {[
+                  { clinicName: "Eye Clinic", icon: "👁️", color: "blue" },
+                  { clinicName: "Diabetics", icon: "🩺", color: "purple" },
+                  { clinicName: "Pressure", icon: "🫀", color: "red" },
+                ].map((clinic, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border border-gray-200 hover:shadow-md transition-all duration-300 hover:from-blue-50 hover:to-indigo-50"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div
+                        className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl ${
+                          clinic.color === "blue"
+                            ? "bg-blue-100"
+                            : clinic.color === "purple"
+                            ? "bg-purple-100"
+                            : "bg-red-100"
+                        }`}
+                      >
+                        {clinic.icon}
+                      </div>
+                      <span className="font-semibold text-gray-900 text-lg">
+                        {clinic.clinicName}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-gray-500">Active</span>
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
