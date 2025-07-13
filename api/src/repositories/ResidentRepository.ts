@@ -172,4 +172,12 @@ export class ResidentRepository {
 
     return diseaseCounts;
   }
+  async findByEmail(email: string): Promise<Resident | null> {
+    return Resident.findOne({
+      where: {
+        email,
+      },
+    });
+  }
+
 }

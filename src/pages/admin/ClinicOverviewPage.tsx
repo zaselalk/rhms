@@ -7,7 +7,7 @@ import { DashboardContainer } from "../../components/layouts/overlays/DashboardC
 import { Link } from "react-router";
 import { ClinicService } from "../../services/clinic.service";
 
-const ClinicOverview: React.FC = () => {
+const ClinicOverviewPage: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -148,7 +148,9 @@ const ClinicOverview: React.FC = () => {
           <div className="flex items-center space-x-3">
             <FaClinicMedical className="text-[#008FFB] text-3xl" />
             <div>
-              <h2 className="text-2xl font-semibold text-[#008FFB]">Clinic Overview</h2>
+              <h2 className="text-2xl font-semibold text-[#008FFB]">
+                Clinic Overview
+              </h2>
               <p className="text-gray-500 text-l font-semibold">
                 Total Clinics: {clinicCategories.length}
               </p>
@@ -303,4 +305,4 @@ const ClinicOverview: React.FC = () => {
   );
 };
 
-export default ClinicOverview;
+export default ClinicOverviewPage;
