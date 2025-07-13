@@ -12,11 +12,14 @@ import { ResidentData } from "../../types/resident";
 import { ClinicService } from "../../services/clinic.service";
 import { DivisionService } from "../../services/division.service";
 import diseaseService from "../../services/disease.service";
+import { useParams } from "react-router";
 
 type ResidentRegistrationProps = {};
 
 const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
-  const initialValues: ResidentData = {
+
+
+  const initialValues2: ResidentData = {
     firstName: "Kamal",
     lastName: "",
     nic: "",
@@ -39,6 +42,8 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     height: "",
     weight: "",
   };
+  const [initialValues, setinital] = useState<ResidentData>(initialValues2);
+
 
   const [addicted, setAddictedd] = useState<string[]>([]);
   const [alergies, setAllergies] = useState<string[]>([]);
@@ -67,9 +72,58 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
   const [clinics, setClinics] = useState<Clinic[]>([]);
   const [selectedClinicIds, setSelectedClinicIds] = useState<string[]>([]);
 
+  const { id } = useParams<{ id: string }>();
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toISOString().split("T")[0];
+  };
+
 
   // Fetch all clinics when the component mounts
   useEffect(() => {
+
+    const fetchResidentData = async () => {
+      if (id) {
+        try {
+          const response = await residentService.getSingleResident(id);
+          const resident = response.data;
+
+          const formattedResident = {
+            ...resident,
+            birthday: formatDate(resident.birthday), // ✅ Convert to YYYY-MM-DD
+          };
+
+          setinital(formattedResident);
+          console.log("Resident Data:", formattedResident);
+        } catch (err) {
+          console.error("Failed to fetch resident data", err);
+        }
+      }
+    }
+
+    fetchResidentData();
+
+
+    // ✅ Utility function to format date
+    const formatDate = (dateString: string): string => {
+      return new Date(dateString).toISOString().split("T")[0];
+    }
+
+    // Fetch Resident Data
+    // const fetchResidentData = async () => {
+    //   if (id) {
+    //     try {
+    //       const data = await residentService.getSingleResident(id);
+    //       setinital(data.data);
+    //       console.log("Resident Data:", data.data);
+    //     } catch (err) {
+    //       console.error("Failed to fetch resident data", err);
+    //     }
+    //   }
+    // };
+
+    // fetchResidentData();
+
     //Fetch Disease  Function
     const fetchDiseases = async () => {
       try {
@@ -165,6 +219,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
 
   const formik = useFormik({
     initialValues,
+    enableReinitialize: true,
     validationSchema: residentValidation,
     onSubmit: (values) => {
 
