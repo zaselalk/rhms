@@ -21,17 +21,17 @@ export const createHousehold = async (payload: HouseholdPayload) => {
 // };
 
 export const updateHouseholdOwner = async (
-  house_no: string | number,
+  id: string | number,
   owner_id: number | string,
 ) => {
-  const response = await axiosInstance.put(`/household/update/${house_no}`, {
+  const response = await axiosInstance.put(`/household/update/${id}`, {
     owner_id,
   });
   return response.data;
 };
 
-export const deleteHousehold = async (house_no: string) => {
-  const response = await axiosInstance.delete(`/household/delete/${house_no}`);
+export const deleteHousehold = async (id: number ) => {
+  const response = await axiosInstance.delete(`/household/delete/${id}`);
   return response.data;
 };
 
