@@ -33,14 +33,16 @@ const HouseholdPage: FC = () => {
   const [newOwnerId, setNewOwnerId] = useState("");
   const [newOwnerName, setNewOwnerName] = useState("");
   const [deleteReason, setDeleteReason] = useState("");
-
   const [isOpen, setIsOpen] = useState(false);
   const [registeredHouseholds, setRegisteredHouseholds] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [residentCount, setResidentCount] = useState(0);
-  const [householdChartData, setHouseholdChartData] = useState<{ division: string; count: number }[]>([]);
-  const [searchText, setSearchText] = useState('');
+  const [householdChartData, setHouseholdChartData] = useState<
+    { division: string; count: number }[]
+  >([]);
+  const [searchText, setSearchText] = useState("");
 
+  console.log(deleteReason);
 
   const fetchHouseholds = async () => {
     try {
@@ -53,10 +55,12 @@ const HouseholdPage: FC = () => {
         divisionCounts[division] = (divisionCounts[division] || 0) + 1;
       });
 
-      const chartData = Object.entries(divisionCounts).map(([division, count]) => ({
-        division,
-        count,
-      }));
+      const chartData = Object.entries(divisionCounts).map(
+        ([division, count]) => ({
+          division,
+          count,
+        })
+      );
       setHouseholdChartData(chartData);
     } catch (error) {
       console.error("Error fetching households:", error);
@@ -118,42 +122,44 @@ const HouseholdPage: FC = () => {
   const handleSearchResident = async () => {
     if (!newOwnerId) return message.error("Please enter a valid Resident ID!");
 
-     const input = newOwnerId.trim();
+    const input = newOwnerId.trim();
 
-  const isNumericId = /^\d+$/.test(input); // Digits only
-  const isValidNIC = /^(\d{9}[vVxX]|\d{12})$/.test(input); // NIC format
+    const isNumericId = /^\d+$/.test(input); // Digits only
+    const isValidNIC = /^(\d{9}[vVxX]|\d{12})$/.test(input); // NIC format
 
-  if (!isNumericId && !isValidNIC) {
-    message.error("Invalid Resident ID or NIC format!");
-    setNewOwnerName("");
-    return;
-  }
+    if (!isNumericId && !isValidNIC) {
+      message.error("Invalid Resident ID or NIC format!");
+      setNewOwnerName("");
+      return;
+    }
 
     try {
       let resident;
-    if (isNumericId) {
-      resident = await searchResidentById(Number(input));
-    } else {
-      const response = await fetch(`http://localhost:3001/resident/nic/${input}`);
-      const result = await response.json();
-      if (!result?.data) throw new Error("Resident not found");
-      resident = result.data;
-    }
+      if (isNumericId) {
+        resident = await searchResidentById(Number(input));
+      } else {
+        const response = await fetch(
+          `http://localhost:3001/resident/nic/${input}`
+        );
+        const result = await response.json();
+        if (!result?.data) throw new Error("Resident not found");
+        resident = result.data;
+      }
 
-    if (resident) {
-      setNewOwnerName(`${resident.firstName} ${resident.lastName}`);
-      setNewOwnerId(resident.id.toString()); // Store numeric ID for update
-      message.success("Resident found");
-    } else {
+      if (resident) {
+        setNewOwnerName(`${resident.firstName} ${resident.lastName}`);
+        setNewOwnerId(resident.id.toString()); // Store numeric ID for update
+        message.success("Resident found");
+      } else {
+        setNewOwnerName("");
+        message.error("Resident not found");
+      }
+    } catch (error) {
+      console.error("Error searching resident:", error);
       setNewOwnerName("");
-      message.error("Resident not found");
+      message.error("Failed to search resident");
     }
-  } catch (error) {
-    console.error("Error searching resident:", error);
-    setNewOwnerName("");
-    message.error("Failed to search resident");
-  }
-};
+  };
 
   const handleConfirmEdit = async () => {
     if (!newOwnerId) return message.error("Please enter a valid resident ID!");
@@ -172,21 +178,19 @@ const HouseholdPage: FC = () => {
         selectedHousehold.id,
         parseInt(newOwnerId)
       );
-    
 
-        setRegisteredHouseholds((prev) =>
-          prev.map((household) =>
-            household.id === selectedHousehold.id
-              ? { ...household, owner: updatedHousehold.owner }
-              : household
-          )
-        );
+      setRegisteredHouseholds((prev) =>
+        prev.map((household) =>
+          household.id === selectedHousehold.id
+            ? { ...household, owner: updatedHousehold.owner }
+            : household
+        )
+      );
 
-        message.success("Household owner updated successfully!");
-        setEditModalVisible(false);
+      message.success("Household owner updated successfully!");
+      setEditModalVisible(false);
 
-        window.location.reload(); // Refresh the page to reflect changes
-
+      window.location.reload(); // Refresh the page to reflect changes
     } catch (error: any) {
       console.error("Error updating household owner:", error);
       if (error.response?.data?.message) {
@@ -200,10 +204,10 @@ const HouseholdPage: FC = () => {
   if (isLoading) return <div>Loading households...</div>;
 
   const filteredHouseholds = registeredHouseholds.filter((household) =>
-  household.house_no.toLowerCase().includes(searchText.toLowerCase())
-);
+    household.house_no.toLowerCase().includes(searchText.toLowerCase())
+  );
 
-const columns = [
+  const columns = [
     {
       title: "House No",
       dataIndex: "house_no",
@@ -212,7 +216,7 @@ const columns = [
     {
       title: "Owner",
       key: "owner",
-      render: (text: any, record: any) =>
+      render: (_: any, record: any) =>
         `${record.owner?.firstName || ""} ${record.owner?.lastName || ""}`,
     },
     {
@@ -253,7 +257,6 @@ const columns = [
 
   if (isLoading) return <div>Loading households...</div>;
 
-
   return (
     <DashboardContainer>
       <HouseholdCreateModal
@@ -269,7 +272,7 @@ const columns = [
           <Button
             className="px-4 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
             type="primary"
-            style={{ backgroundColor: '#008FFB' }}
+            style={{ backgroundColor: "#008FFB" }}
             onClick={() => setIsOpen(true)}
           >
             + Add Household
@@ -291,8 +294,6 @@ const columns = [
           </div>
         </div>
 
-        
-
         {/* Search Bar */}
         <div className="mb-4">
           <Input.Search
@@ -306,15 +307,15 @@ const columns = [
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow-md">
-            <Table
+          <Table
             dataSource={filteredHouseholds}
             columns={columns}
             rowKey="id"
-            pagination={{ 
+            pagination={{
               pageSize: 5,
-              position: ['bottomCenter'],
+              position: ["bottomCenter"],
               className: "custom-pagination",
-             }}
+            }}
           />
         </div>
 
@@ -333,7 +334,6 @@ const columns = [
             </BarChart>
           </ResponsiveContainer>
         </div>
-
       </div>
 
       <Modal
@@ -343,13 +343,12 @@ const columns = [
         onCancel={() => setDeleteModalVisible(false)}
         okText="Delete"
         cancelText="Cancel"
-        okButtonProps={{ danger: true, type: 'primary' }}
+        okButtonProps={{ danger: true, type: "primary" }}
       >
         <p>
           Are you sure you want to delete the household{" "}
           <strong>{selectedHousehold?.house_no}</strong>?
         </p>
-       
       </Modal>
 
       <Modal
@@ -374,7 +373,6 @@ const columns = [
                 message.error("Please enter a valid Resident ID!");
               }
             }}
-           
             placeholder="Enter new owner's Resident ID or NIC"
           />
           <Button onClick={handleSearchResident} type="primary">
