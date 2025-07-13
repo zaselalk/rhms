@@ -23,29 +23,6 @@ export class ResidentDiseaseService {
         return await this.residentDiseaseRepository.getAllResidentDiseases();
     }
 
-    //update by residentid
-    async updateResidentDiseaseByResidentId(
-        diseaseId: number,
-        residentId: number
-    ): Promise<void> {
-
-        return await this.residentDiseaseRepository.updateResidentDiseaseByDiseaseId(
-            diseaseId,
-            residentId
-        );
-    }
-
-    //update by diseaseId
-    async updateResidentDiseaseByDiseaseId(
-        residentId: number,
-        diseaseId: number
-    ): Promise<void> {
-        return await this.residentDiseaseRepository.updateResidentDiseaseByResidentId(
-            residentId,
-            diseaseId
-        );
-    }
-
     // Delete by diseaseId
     async deleteByDiseaseId(diseaseId: number): Promise<void> {
         return await this.residentDiseaseRepository.deleteResidentDiseaseByDiseaseId(diseaseId);
@@ -65,6 +42,15 @@ export class ResidentDiseaseService {
     async getResidentsByDiseaseId(diseaseId: number): Promise<{ id: number; firstName: string; lastName: string; contactNumber: string }[]> {
         return await this.residentDiseaseRepository.getResidentsByDiseaseId(diseaseId);
     }
+
+    // Get all diseases by diseasename 
+    async getDivisionCountsByDiseaseName(diseaseName: string): Promise<{ division: string, count: number }[]> {
+        console.log(" Service received diseaseName:", diseaseName);
+        const data = await this.residentDiseaseRepository.getDivisionCountsByDiseaseName(diseaseName);
+        console.log("Service got division data:", data);
+        return data;
+}
+
 
 
 

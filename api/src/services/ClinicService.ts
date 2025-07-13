@@ -1,17 +1,16 @@
 import Clinic from "../models/clinic";
 import { ClinicRepository } from "../repositories/ClinicRepository";
 
-
-interface NewClinic{
-    name: string;
+interface NewClinic {
+  name: string;
 }
 
 export class ClinicService {
-    private clinicRepository = new ClinicRepository();
-  
-    async createClinic(name: string): Promise<Clinic> {
-      return this.clinicRepository.createClinic(name);
-    }
+  private clinicRepository = new ClinicRepository();
+
+  async createClinic(name: string): Promise<Clinic> {
+    return this.clinicRepository.createClinic(name);
+  }
   //   // Get all clinics
   async getAllClinics(): Promise<Clinic[]> {
     return this.clinicRepository.getAllClinics();
@@ -23,7 +22,10 @@ export class ClinicService {
   }
 
   // Update a clinic
-  async updateClinic(id: number, data: Partial<Clinic>): Promise<Clinic | null> {
+  async updateClinic(
+    id: number,
+    data: Partial<Clinic>
+  ): Promise<Clinic | null> {
     return this.clinicRepository.updateClinic(id, data);
   }
 
