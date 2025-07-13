@@ -53,22 +53,37 @@ const ClinicDetail: React.FC = () => {
   const [patientPage, setPatientPage] = useState(1);
   const [divisionPage, setDivisionPage] = useState(1);
 
+  // NEW: Search states
+  const [patientSearch, setPatientSearch] = useState("");
+  const [divisionSearch, setDivisionSearch] = useState("");
+
   const patientsPerPage = 10;
   const divisionsPerPage = 10;
 
-  const currentPatients = clinicPatients.slice(
+  // Filter patients based on search input (case-insensitive)
+  const filteredPatients = clinicPatients.filter((patient) =>
+    patient.resident.firstName
+      .toLowerCase()
+      .includes(patientSearch.toLowerCase())
+  );
+
+  // Filter divisions based on search input (case-insensitive)
+  const filteredDivisions = patientDivisions.filter((division) =>
+    division.divisionName.toLowerCase().includes(divisionSearch.toLowerCase())
+  );
+
+  const currentPatients = filteredPatients.slice(
     (patientPage - 1) * patientsPerPage,
     patientPage * patientsPerPage
   );
-  const currentDivisions = patientDivisions.slice(
+
+  const currentDivisions = filteredDivisions.slice(
     (divisionPage - 1) * divisionsPerPage,
     divisionPage * divisionsPerPage
   );
 
-  const patientTotalPages = Math.ceil(clinicPatients.length / patientsPerPage);
-  const divisionTotalPages = Math.ceil(
-    patientDivisions.length / divisionsPerPage
-  );
+  const patientTotalPages = Math.ceil(filteredPatients.length / patientsPerPage);
+  const divisionTotalPages = Math.ceil(filteredDivisions.length / divisionsPerPage);
 
   // Fetch clinic name by ID
   const fetchClinicName = async () => {
@@ -201,12 +216,15 @@ const ClinicDetail: React.FC = () => {
     }
 
     try {
-  const updatedSession = await ClinicService.updateClinicSession(clinicId!, selectedSession);
-setClinicSessions(
-  clinicSessions.map((s) =>
-    s.id === updatedSession.id ? updatedSession : s
-  )
-);
+      const updatedSession = await ClinicService.updateClinicSession(
+        clinicId!,
+        selectedSession
+      );
+      setClinicSessions(
+        clinicSessions.map((s) =>
+          s.id === updatedSession.id ? updatedSession : s
+        )
+      );
       closeEditModal();
     } catch (err) {
       console.error("Failed to update session:", err);
@@ -218,8 +236,6 @@ setClinicSessions(
   const handleClick = (sessionId: string) => {
     navigate(`/admin/clinic/${clinicId}/${sessionId}/attendance`);
   };
-
-  // ---------- UI JSX starts here -------------
 
   return (
     <DashboardContainer>
@@ -236,7 +252,7 @@ setClinicSessions(
                 Loading...
               </p>
             ) : (
-              <p className="text-lg font-semibold text-[#008FFB] ml-2">
+              <p className="text-2xl font-bold text-[#008FFB] ml-2">
                 ({clinicName})
               </p>
             )}
@@ -262,11 +278,24 @@ setClinicSessions(
               Clinic Patients
             </h3>
 
+            {/* Search input for patients */}
+            <input
+              type="text"
+              placeholder="Search patient by name..."
+              value={patientSearch}
+              onChange={(e) => {
+                setPatientSearch(e.target.value);
+                setPatientPage(1);
+              }}
+              className="mb-4 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008FFB]"
+              aria-label="Search Patients"
+            />
+
             {loadingPatients ? (
               <p className="text-center py-10 text-gray-500 italic">
                 Loading patients...
               </p>
-            ) : clinicPatients.length === 0 ? (
+            ) : filteredPatients.length === 0 ? (
               <p className="text-center py-10 text-gray-500 italic">
                 No patients found.
               </p>
@@ -326,11 +355,24 @@ setClinicSessions(
               Patient Across Divisions
             </h3>
 
+            {/* Search input for divisions */}
+            <input
+              type="text"
+              placeholder="Search division..."
+              value={divisionSearch}
+              onChange={(e) => {
+                setDivisionSearch(e.target.value);
+                setDivisionPage(1);
+              }}
+              className="mb-4 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008FFB]"
+              aria-label="Search Divisions"
+            />
+
             {loadingDivisions ? (
               <p className="text-center py-10 text-gray-500 italic">
                 Loading divisions...
               </p>
-            ) : patientDivisions.length === 0 ? (
+            ) : filteredDivisions.length === 0 ? (
               <p className="text-center py-10 text-gray-500 italic">
                 No division data available.
               </p>
