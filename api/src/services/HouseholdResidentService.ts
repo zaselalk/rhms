@@ -33,4 +33,8 @@ export class HouseholdResidentServices {
   return this.repository.removeAllResidentsByHouseholdId(householdId);
 }
 
+  async updateOwnerResidentRelation(householdId: number, residentId: number) {
+  return this.repository.updateOwnerResidentRelation(householdId, residentId);
+}
+
 }
