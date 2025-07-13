@@ -22,5 +22,7 @@ export interface ResidentData {
     height?: string;
     weight?: string;
     bloodPressure?: string;
+    heartRate?: Number;
+    glucose?: Number;
   }
   
