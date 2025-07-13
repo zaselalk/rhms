@@ -5,7 +5,7 @@ import ResidentClinicService from "../../services/residentclinic.service";
 
 interface Patient {
   resident: {
-    id: string;
+    nic: string;
     firstName: string;
   };
 }
@@ -30,7 +30,7 @@ const ClinicAttendances: React.FC = () => {
 
         setAttendances(
           data.map((patient: Patient) => ({
-            patientId: patient.resident.id,
+            patientId: patient.resident.nic,
             status: false,
           }))
         );
@@ -136,16 +136,16 @@ const ClinicAttendances: React.FC = () => {
               <tbody>
                 {filteredPatients.map((patient) => {
                   const attendance = attendances.find(
-                    (a) => a.patientId === patient.resident.id
+                    (a) => a.patientId === patient.resident.nic
                   );
                   const isPresent = attendance?.status;
                   return (
-                    <tr key={patient.resident.id} className="border-b hover:bg-gray-50">
-                      <td className="p-3">{patient.resident.id}</td>
+                    <tr key={patient.resident.nic} className="border-b hover:bg-gray-50">
+                      <td className="p-3">{patient.resident.nic}</td>
                       <td className="p-3">{patient.resident.firstName}</td>
                       <td className="p-3">
                         <button
-                          onClick={() => toggleAttendance(patient.resident.id)}
+                          onClick={() => toggleAttendance(patient.resident.nic)}
                           className={`px-4 py-2 rounded-lg transition shadow ${
                             isPresent
                               ? "bg-green-500 hover:bg-green-600 text-white"
