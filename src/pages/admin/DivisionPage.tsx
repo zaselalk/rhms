@@ -1,10 +1,11 @@
 import { FC, useEffect, useState } from "react";
-import Modal from "../../components/layouts/overlays/Modal";
 import { Link } from "react-router";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
-import { FaTrash } from "react-icons/fa";
 import { FiPlusCircle } from "react-icons/fi";
-import { Bar } from "react-chartjs-2";
+import { FaTrash } from "react-icons/fa";
+import Modal from "../../components/layouts/overlays/Modal";
+import { DivisionService } from "../../services/division.service";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -14,53 +15,67 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { DivisionService } from "../../services/division.service";
+import { Bar } from "react-chartjs-2";
 
-// Chart.js setup
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-);
+// Register Chart.js components
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-// Updated Types
 interface Division {
   divisionId: number;
   divisionName: string;
-  population: number;
+  residentCount?: number;
 }
 
 const DivisionPage: FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [divisions, setDivisions] = useState<Division[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
   const [newDivisionName, setNewDivisionName] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [divisionToDelete, setDivisionToDelete] = useState<Division | null>(
-    null,
-  );
+  const [divisionToDelete, setDivisionToDelete] = useState<Division | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // New state for confirmation popup inside Add Division modal
+  // For confirmation popup inside Add Division modal
   const [isConfirmCreateOpen, setIsConfirmCreateOpen] = useState(false);
 
   useEffect(() => {
-    fetchDivisions();
+    fetchDivisionsWithCounts();
   }, []);
 
-  const fetchDivisions = async () => {
+  const fetchDivisionsWithCounts = async () => {
+    setLoading(true);
     try {
-      const data = await DivisionService.getAllDivisions();
-      setDivisions(data);
+      const divisionsData: Division[] = await DivisionService.getAllDivisions();
+
+      const divisionsWithCounts = await Promise.all(
+        divisionsData.map(async (division) => {
+          try {
+            const countData = await DivisionService.getResidentCountByDivision(division.divisionId);
+            return {
+              ...division,
+              residentCount: countData.residentCount ?? 0,
+            };
+          } catch (error) {
+            console.error(`Failed to fetch resident count for division ${division.divisionName}`, error);
+            return {
+              ...division,
+              residentCount: 0,
+            };
+          }
+        })
+      );
+
+      setDivisions(divisionsWithCounts);
     } catch (error) {
-      console.error("Failed to load divisions");
+      console.error("Failed to fetch divisions:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
+  // Modal handlers
   const handleClose = () => {
     setIsOpen(false);
-    setIsConfirmCreateOpen(false); // also reset confirm popup when modal closes
+    setIsConfirmCreateOpen(false);
   };
   const handleOpen = () => {
     setNewDivisionName("");
@@ -68,30 +83,26 @@ const DivisionPage: FC = () => {
     setIsOpen(true);
   };
 
-  const handleAddDivision = async (name: string) => {
-    try {
-      await DivisionService.createDivision({ divisionName: name });
-      fetchDivisions();
-      setIsOpen(false);
-      setIsConfirmCreateOpen(false);
-    } catch (error) {
-      console.error("Failed to create division");
-    }
-  };
-
   const onFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (newDivisionName.trim()) {
-      setIsConfirmCreateOpen(true); // open confirmation popup instead of immediate add
+      setIsConfirmCreateOpen(true);
     }
   };
 
-  const confirmCreateDivision = () => {
-    handleAddDivision(newDivisionName.trim());
+  const confirmCreateDivision = async () => {
+    try {
+      await DivisionService.createDivision({ divisionName: newDivisionName.trim() });
+      await fetchDivisionsWithCounts();
+      setIsOpen(false);
+      setIsConfirmCreateOpen(false);
+    } catch (error) {
+      console.error("Failed to create division", error);
+    }
   };
 
   const cancelCreateDivision = () => {
-    setIsConfirmCreateOpen(false); // close confirmation popup, back to form
+    setIsConfirmCreateOpen(false);
   };
 
   const handleDelete = (division: Division) => {
@@ -103,12 +114,13 @@ const DivisionPage: FC = () => {
     try {
       if (divisionToDelete) {
         await DivisionService.deleteDivision(divisionToDelete.divisionId);
-        fetchDivisions();
+        await fetchDivisionsWithCounts();
       }
     } catch (error) {
-      console.error("Delete failed");
+      console.error("Delete failed", error);
     } finally {
       setIsDeleteModalOpen(false);
+      setDivisionToDelete(null);
     }
   };
 
@@ -117,13 +129,14 @@ const DivisionPage: FC = () => {
     setIsDeleteModalOpen(false);
   };
 
+  // Prepare chart data
   const generateChartData = () => {
     return {
       labels: divisions.map((d) => d.divisionName),
       datasets: [
         {
-          label: "Population by Division",
-          data: divisions.map((d) => d.population),
+          label: "Resident Count",
+          data: divisions.map((d) => d.residentCount ?? 0),
           backgroundColor: "#008FFB",
           borderRadius: 5,
         },
@@ -133,15 +146,14 @@ const DivisionPage: FC = () => {
 
   return (
     <DashboardContainer>
-      <div className="min-h-screen flex">
+      <div className="min-h-screen p-6">
         {/* Add Division Modal */}
         <Modal isOpen={isOpen} handleClose={handleClose} title="Add Division">
           <div className="p-6">
             {isConfirmCreateOpen ? (
-              <div>
+              <>
                 <p className="mb-4">
-                  Are you sure you want to create the division{" "}
-                  <strong>"{newDivisionName.trim()}"</strong>?
+                  Are you sure you want to create the division <strong>"{newDivisionName.trim()}"</strong>?
                 </p>
                 <div className="flex justify-end space-x-2">
                   <button
@@ -157,13 +169,11 @@ const DivisionPage: FC = () => {
                     Cancel
                   </button>
                 </div>
-              </div>
+              </>
             ) : (
               <form onSubmit={onFormSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-600">
-                    Division Name
-                  </label>
+                  <label className="block text-sm font-semibold text-gray-600">Division Name</label>
                   <input
                     type="text"
                     value={newDivisionName}
@@ -186,15 +196,10 @@ const DivisionPage: FC = () => {
         </Modal>
 
         {/* Delete Confirmation Modal */}
-        <Modal
-          isOpen={isDeleteModalOpen}
-          handleClose={cancelDelete}
-          title="Confirm Deletion"
-        >
+        <Modal isOpen={isDeleteModalOpen} handleClose={cancelDelete} title="Confirm Deletion">
           <div className="p-6">
             <p className="text-sm text-gray-600">
-              Are you sure you want to delete{" "}
-              <strong>{divisionToDelete?.divisionName}</strong>?
+              Are you sure you want to delete <strong>{divisionToDelete?.divisionName}</strong>?
             </p>
             <div className="flex justify-end mt-4">
               <button
@@ -213,58 +218,71 @@ const DivisionPage: FC = () => {
           </div>
         </Modal>
 
-        {/* Main Content */}
-        <div className="flex-1 p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-semibold text-[#008FFB]">
-              Division Details
-            </h2>
-            <button
-              onClick={handleOpen}
-              className="bg-blue-500 text-white px-4 py-2 flex items-center rounded-lg shadow hover:bg-blue-600 transition"
-            >
-              <FiPlusCircle className="mr-2" />
-              New Division
-            </button>
-          </div>
-
-          {/* Division Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {divisions.map((division) => (
-              <Link
-                to={`/admin/division/${division.divisionId}`}
-                key={division.divisionId}
-                className="bg-white p-4 rounded-lg shadow-md flex justify-between items-center"
-              >
-                <div>
-                  <p className="text-lg font-semibold text-gray-800">
-                    {division.divisionName}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    {division.population} residents
-                  </p>
-                </div>
-                <button
-                  className="text-red-500 cursor-pointer hover:text-red-700"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleDelete(division);
-                  }}
-                >
-                  <FaTrash />
-                </button>
-              </Link>
-            ))}
-          </div>
-
-          {/* Population Chart */}
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">
-              Population of All Divisions
-            </h3>
-            <Bar data={generateChartData()} options={{ responsive: true }} />
-          </div>
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-semibold text-[#008FFB]">Division Details</h2>
+          <button
+            onClick={handleOpen}
+            className="bg-blue-500 text-white px-4 py-2 flex items-center rounded-lg shadow hover:bg-blue-600 transition"
+          >
+            <FiPlusCircle className="mr-2" />
+            New Division
+          </button>
         </div>
+
+        {loading ? (
+          <p>Loading divisions...</p>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
+              {divisions.map((division) => (
+                <Link
+                  key={division.divisionId}
+                  to={`/admin/division/${division.divisionId}`}
+                  className="bg-white p-4 rounded-lg shadow-md flex justify-between items-center"
+                >
+                  <div>
+                    <p className="text-lg font-semibold text-gray-800">{division.divisionName}</p>
+                    <p className="text-sm text-gray-600">{division.residentCount ?? 0} residents</p>
+                  </div>
+                  <button
+                    className="text-red-500 cursor-pointer hover:text-red-700"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleDelete(division);
+                    }}
+                  >
+                    <FaTrash />
+                  </button>
+                </Link>
+              ))}
+            </div>
+
+            {/* Bar Chart */}
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">Resident Counts by Division</h3>
+              <Bar
+                data={generateChartData()}
+                options={{
+                  responsive: true,
+                  plugins: {
+                    legend: { position: "top" },
+                    title: {
+                      display: true,
+                      text: "Resident Counts in Divisions",
+                      font: { size: 18 },
+                    },
+                  },
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      ticks: { stepSize: 1 },
+                    },
+                  },
+                }}
+              />
+            </div>
+          </>
+        )}
       </div>
     </DashboardContainer>
   );
