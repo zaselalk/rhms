@@ -78,51 +78,32 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     return new Date(dateString).toISOString().split("T")[0];
   };
 
+  const fetchResidentData = async () => {
+    if (id) {
+      try {
+        const response = await residentService.getSingleResident(id);
+        const resident = response.data;
+
+        const formattedResident = {
+          ...resident,
+          birthday: formatDate(resident.birthday), // ✅ Convert to YYYY-MM-DD
+        };
+
+        setinital(formattedResident);
+        console.log("Resident Data:", formattedResident);
+      } catch (err) {
+        console.error("Failed to fetch resident data", err);
+      }
+    }
+  }
+
 
   // Fetch all clinics when the component mounts
   useEffect(() => {
 
-    const fetchResidentData = async () => {
-      if (id) {
-        try {
-          const response = await residentService.getSingleResident(id);
-          const resident = response.data;
-
-          const formattedResident = {
-            ...resident,
-            birthday: formatDate(resident.birthday), // ✅ Convert to YYYY-MM-DD
-          };
-
-          setinital(formattedResident);
-          console.log("Resident Data:", formattedResident);
-        } catch (err) {
-          console.error("Failed to fetch resident data", err);
-        }
-      }
-    }
 
     fetchResidentData();
 
-
-    // ✅ Utility function to format date
-    const formatDate = (dateString: string): string => {
-      return new Date(dateString).toISOString().split("T")[0];
-    }
-
-    // Fetch Resident Data
-    // const fetchResidentData = async () => {
-    //   if (id) {
-    //     try {
-    //       const data = await residentService.getSingleResident(id);
-    //       setinital(data.data);
-    //       console.log("Resident Data:", data.data);
-    //     } catch (err) {
-    //       console.error("Failed to fetch resident data", err);
-    //     }
-    //   }
-    // };
-
-    // fetchResidentData();
 
     //Fetch Disease  Function
     const fetchDiseases = async () => {
@@ -205,15 +186,22 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
   const residentRegister = residentService;
 
   const mutation = useMutation({
+
     mutationFn: async (values: ResidentData) => {
-      await residentRegister.addResident(values); // ✅ values come from `mutate(values)`
+      if (!id) {
+        throw new Error("Resident ID is missing.");
+      }
+      await residentRegister.updateResident(id, values); // ✅ values come from `mutate(values)`
     },
     onSuccess: () => {
-      toast.success("Register Success");
+      toast.success("Updated Successfully");
+
       formik.resetForm();
+      fetchResidentData();
     },
     onError: () => {
-      toast.error("Registration failed. Please try again.");
+
+      toast.error("Update failed. Please try again.");
     },
   });
 
@@ -614,6 +602,46 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
               />
             </div>
 
+            {/*Heart Rate*/}
+            <div>
+              <label
+                htmlFor="heartRate"
+                className="block text-xl font-medium text-gray-700"
+              >
+                Heart Rate
+              </label>
+              <input
+                type="text"
+                id="heartRate"
+                {...formik.getFieldProps("heartRate")}
+                value={formik.values.heartRate !== undefined ? String(formik.values.heartRate) : ""}
+                className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                placeholder="55-61 Heart Rate"
+              />
+            </div>
+
+            {/* Glucose */}
+            <div>
+              <label
+                htmlFor="glucose"
+                className="block text-xl font-medium text-gray-700"
+              >
+                Glucose
+              </label>
+              <input
+                type="text"
+                id="glucose"
+                {...formik.getFieldProps("glucose")}
+                value={formik.values.glucose !== undefined ? String(formik.values.glucose) : ""}
+                className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                placeholder="Glucose Level"
+              />
+            </div>
+
+
+
+
+
             {/* Addicteds */}
             <div className="col-span-2">
               <label className="block text-xl font-medium text-gray-700">
@@ -709,7 +737,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
             disabled={mutation.isPending || !formik.isValid}
             className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
           >
-            {mutation.isPending ? "Registraion" : "Register"}
+            {mutation.isPending ? "Update Resident" : "Update Resident"}
           </button>
         </div>
       </form>
