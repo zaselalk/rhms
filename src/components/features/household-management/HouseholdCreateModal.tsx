@@ -5,6 +5,7 @@ import axios from "axios";
 import { useLocation, useNavigate } from "react-router";
 import householdresidentService from "../../../services/householdresident.service";
 import { message as antMessage } from "antd";
+import residentService from "../../../services/resident.service";
 
 
 interface HouseholdCreateModalProps {
@@ -58,16 +59,16 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
 
     try {
 
-      let res;
+      let data;
 
 
           if (isNumericId) {
-      res = await axios.get(`http://localhost:3001/resident/id/${input}`);
+      const response = await residentService.getSingleResident(input);
+      data = response.data; // Accessing the correct structure
     } else {
-      res = await axios.get(`http://localhost:3001/resident/nic/${input}`);
+      const response = await residentService.searchResidentByNic(input);
+      data = response.data; // Accessing the correct structure
     }
-
-      const data = res.data.data; // Accessing the correct structure
 
       if (!data) {
         setFoundResidentName("");
@@ -79,7 +80,7 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
       setFoundResidentName(
         `${data.firstName} ${data.lastName}` || "Name not available"
       );
-      setOwnerId(res.data.id); // Corrected: use 'id', not '_id'
+      setOwnerId(data.id); // Corrected: use 'id', not '_id'
     } catch (err) {
       console.error("Fetch error:", err);
       setFoundResidentName("");
