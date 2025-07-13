@@ -2,6 +2,7 @@
 
 import { Request, Response } from "express";
 import { HouseholdResidentServices } from "../services/HouseholdResidentService";
+import { r } from "react-router/dist/development/fog-of-war-CvttGpNz";
 
 export class HouseholdResidentController {
   private service: HouseholdResidentServices;
@@ -77,6 +78,18 @@ export class HouseholdResidentController {
     }
   };
 
+  deleteHousehold= async (req: Request, res: Response): Promise<Response> => {
+    const { id } = req.params;
+
+    try {
+      await this.service.removeAllResidentsByHouseholdId(Number(id));
+      return res.json({ message: "All residents removed from household" });
+    } catch (error) {
+      console.error("Error removing residents:", error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }
+
   // PUT /household-resident/:householdId/update-owner
 updateOwnerResident = async (req: Request, res: Response): Promise<Response> => {
   const { householdId } = req.params;
@@ -107,6 +120,7 @@ updateOwnerResident = async (req: Request, res: Response): Promise<Response> => 
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
 
 
 

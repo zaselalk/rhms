@@ -34,6 +34,13 @@ export class HouseholdResidentRepository {
     return true;
   }
 
+  async removeAllResidentsByHouseholdId(householdId: number): Promise<void> {
+  await HouseholdResident.destroy({ where: { householdId } });
+}
+
+
+  
+
   async updateOwnerResidentRelation(householdId: number, newResidentId: number): Promise<boolean> {
   console.log("Updating owner resident relation...");
   console.log("Household ID:", householdId);
@@ -60,7 +67,5 @@ export class HouseholdResidentRepository {
 
   return true;
 }
-
-
 
 }
