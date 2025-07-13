@@ -23,30 +23,30 @@ module.exports = {
       );
 
       // Ensure only one user has the super_user role
-      await queryInterface.sequelize.query(`
-        CREATE TRIGGER before_insert_user_superuser
-        BEFORE INSERT ON users
-        FOR EACH ROW
-        BEGIN 
-          IF NEW.roleId = ${superUserRoleId} THEN
-            IF (SELECT COUNT(*) FROM users WHERE roleId = ${superUserRoleId}) > 0 THEN
-              SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Only one user can have the super_user role.';
-            END IF;
-          END IF;
-        END;
-      `);
-      await queryInterface.sequelize.query(`
-        CREATE TRIGGER before_update_user_superuser
-        BEFORE UPDATE ON users
-        FOR EACH ROW
-        BEGIN
-          IF NEW.roleId = ${superUserRoleId} THEN
-            IF (SELECT COUNT(*) FROM users WHERE roleId = ${superUserRoleId}) > 0 THEN
-              SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Only one user can have the super_user role.';
-            END IF;
-          END IF;
-        END;
-      `);
+      // await queryInterface.sequelize.query(`
+      //   CREATE TRIGGER before_insert_user_superuser
+      //   BEFORE INSERT ON users
+      //   FOR EACH ROW
+      //   BEGIN
+      //     IF NEW.roleId = ${superUserRoleId} THEN
+      //       IF (SELECT COUNT(*) FROM users WHERE roleId = ${superUserRoleId}) > 0 THEN
+      //         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Only one user can have the super_user role.';
+      //       END IF;
+      //     END IF;
+      //   END;
+      // `);
+      // await queryInterface.sequelize.query(`
+      //   CREATE TRIGGER before_update_user_superuser
+      //   BEFORE UPDATE ON users
+      //   FOR EACH ROW
+      //   BEGIN
+      //     IF NEW.roleId = ${superUserRoleId} THEN
+      //       IF (SELECT COUNT(*) FROM users WHERE roleId = ${superUserRoleId}) > 0 THEN
+      //         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Only one user can have the super_user role.';
+      //       END IF;
+      //     END IF;
+      //   END;
+      // `);
 
       console.log("Super user account updated successfully.");
     } catch (error) {

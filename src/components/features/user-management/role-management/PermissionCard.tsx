@@ -7,8 +7,6 @@ interface PermissionCardProps {
   permissions: string[];
 }
 
-// styles
-
 const permissionCardStyle: React.CSSProperties = {
   marginBottom: "2rem",
   padding: "1rem",
@@ -27,6 +25,7 @@ const permissionGridStyle: React.CSSProperties = {
  * @param title - The title of the permission card.
  * @param permissions - An array of permission strings to be displayed as checkboxes.
  */
+
 export const PermissionCard: FC<PermissionCardProps> = ({
   title,
   permissions,
@@ -35,6 +34,7 @@ export const PermissionCard: FC<PermissionCardProps> = ({
     <div style={permissionCardStyle}>
       <PermissionCardTitle title={title} />
       <div style={permissionGridStyle}>
+
         {permissions.map((perm) => (
           <Checkbox key={perm} value={perm}>
             {perm.split(":")[1]}
