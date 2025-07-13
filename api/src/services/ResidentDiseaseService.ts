@@ -49,7 +49,18 @@ export class ResidentDiseaseService {
         const data = await this.residentDiseaseRepository.getDivisionCountsByDiseaseName(diseaseName);
         console.log("Service got division data:", data);
         return data;
-}
+    }
+
+    //getPatientsCountbyDID
+    async getPatientsCountByDiseaseId(diseaseId: number): Promise<number> {
+        try {
+            const count = await this.residentDiseaseRepository.getPatientsCountByDiseaseId(diseaseId);
+            return count;
+        } catch (error) {
+            console.error("Error fetching patient count by disease ID:", error);
+            throw new Error("Unable to fetch patient count by disease ID");
+        }
+    }
 
 
 
