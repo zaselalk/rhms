@@ -1,22 +1,14 @@
-import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router"; // updated import
-import { FaArrowLeft } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
+import ResidentClinicService from "../../services/residentclinic.service";
 
-// Dummy Patient Data
-const patients = [
-  { id: "DB001", name: "Nuwan Perera" },
-  { id: "DB002", name: "Asela Bandara" },
-  { id: "DB003", name: "Ravindu Jayasinghe" },
-  { id: "DB004", name: "Dilukshi Fernando" },
-  { id: "DB005", name: "Ashfa Nazeer" },
-  { id: "DB006", name: "Sanduni Wickramasinghe" },
-  { id: "DB007", name: "Tharindu Mendis" },
-  { id: "DB008", name: "Sachini Herath" },
-  { id: "DB009", name: "Isuru Gunaratne" },
-  { id: "DB010", name: "Kavindi Rajapaksha" },
-  { id: "DB011", name: "Lahiru Abeysekara" },
-];
+interface Patient {
+  resident: {
+    id: string;
+    firstName: string;
+  };
+}
 
 interface Attendance {
   patientId: string;
@@ -24,20 +16,33 @@ interface Attendance {
 }
 
 const ClinicAttendances: React.FC = () => {
-  const navigate = useNavigate();
-  const { sessionID } = useParams<{ sessionID: string }>(); // ✅ updated
+  const { sessionID, clinicID } = useParams<{ sessionID: string; clinicID: string }>();
 
+  const [patients, setPatients] = useState<Patient[]>([]);
+  const [attendances, setAttendances] = useState<Attendance[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [attendances, setAttendances] = useState<Attendance[]>(
-    patients.map((patient) => ({
-      patientId: patient.id,
-      status: false,
-    }))
-  );
 
-  const filteredPatients = patients.filter((patient) =>
-    patient.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const data = await ResidentClinicService.getResidentsByClinicId(clinicID!);
+        setPatients(data);
+
+        setAttendances(
+          data.map((patient: Patient) => ({
+            patientId: patient.resident.id,
+            status: false,
+          }))
+        );
+      } catch (error) {
+        console.error("Error fetching patients for clinic:", error);
+      }
+    };
+
+    if (clinicID) {
+      fetchPatients();
+    }
+  }, [clinicID]);
 
   const toggleAttendance = (patientId: string) => {
     setAttendances((prev) =>
@@ -49,29 +54,23 @@ const ClinicAttendances: React.FC = () => {
 
   const saveAttendance = () => {
     alert("Attendance saved!");
+    // Add API call here if needed to save attendance data
   };
+
+  const filteredPatients = patients.filter((patient) =>
+    patient.resident.firstName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const previousAttendancePercentage = 60;
   const totalPatients = attendances.length;
   const presentCount = attendances.filter((a) => a.status).length;
-  const attendancePercentage = (presentCount / totalPatients) * 100;
+  const attendancePercentage = (presentCount / totalPatients) * 100 || 0;
   const percentageDifference = attendancePercentage - previousAttendancePercentage;
   const isImproved = percentageDifference >= 0;
 
   return (
     <DashboardContainer>
       <div className="p-6 w-full min-h-screen bg-gray-50">
-        {/* Back Button */}
-        <div className="mb-4">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition"
-          >
-            <FaArrowLeft />
-            Back
-          </button>
-        </div>
-
         {/* Page Heading */}
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-800">
@@ -137,16 +136,16 @@ const ClinicAttendances: React.FC = () => {
               <tbody>
                 {filteredPatients.map((patient) => {
                   const attendance = attendances.find(
-                    (a) => a.patientId === patient.id
+                    (a) => a.patientId === patient.resident.id
                   );
                   const isPresent = attendance?.status;
                   return (
-                    <tr key={patient.id} className="border-b hover:bg-gray-50">
-                      <td className="p-3">{patient.id}</td>
-                      <td className="p-3">{patient.name}</td>
+                    <tr key={patient.resident.id} className="border-b hover:bg-gray-50">
+                      <td className="p-3">{patient.resident.id}</td>
+                      <td className="p-3">{patient.resident.firstName}</td>
                       <td className="p-3">
                         <button
-                          onClick={() => toggleAttendance(patient.id)}
+                          onClick={() => toggleAttendance(patient.resident.id)}
                           className={`px-4 py-2 rounded-lg transition shadow ${
                             isPresent
                               ? "bg-green-500 hover:bg-green-600 text-white"
