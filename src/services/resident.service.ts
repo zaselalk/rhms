@@ -54,7 +54,49 @@ class ResidentService {
             throw new Error(error.response?.data?.message || "Unable to fetch resident details");
         }
     }
+  }
 
+  // Check if resident token is valid
+  async checkResidentToken() {
+    try {
+      const token = localStorage.getItem("residentToken");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const response = await axiosInstance.get("/resident/verify-token", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || "Unable to verify resident token"
+      );
+    }
+  }
+
+  // Get current resident profile
+  async getCurrentResidentProfile() {
+    try {
+      const token = localStorage.getItem("residentToken");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const response = await axiosInstance.get("/resident/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || "Unable to fetch resident profile"
+      );
+    }
+  }
 }
 
 

@@ -1,76 +1,114 @@
-import { Link } from "react-router";
-
-const resident = {
-  id: "1",
-  name: "Kamal Wichramanayake",
-  age: 45,
-  bloodGroup: "O+",
-  contact: "0711287298",
-  division: "Katugahahena",
-  profilePic: "/avatars/1.jpg",
-  last_visit: "2025/02/10",
-};
+import { ArrowLeftOutlined } from "@ant-design/icons";
+import { useResidentAuth } from "../../components/auth/ResidentAuthContext";
+import { Spin } from "antd";
 
 const ResidentDashboard = () => {
-  return (
-    <div className="min-h-screen bg-gray-100 flex flex-col px-4 sm:px-6 md:px-8">
-      {/* Main Content */}
-      <div className="w-full">
-        {/* Page Content */}
-        <div className="p-4 sm:p-6">
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-            <h2 className="text-2xl font-semibold text-[#008FFB]">
-              Resident Profile
-            </h2>
-            {/* <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 mt-4 sm:mt-0">
-              <Link
-                to="/household/manage"
-                className="text-[#008FFB] border border-[#008FFB] rounded-md px-4 py-2 hover:bg-[#00C1A7] text-center"
-              >
-                Manage Household
-              </Link>
-              <Link
-                to="edit"
-                className="text-[#008FFB] border border-[#008FFB] rounded-md px-4 py-2 hover:bg-[#00C1A7] text-center"
-              >
-                Edit Details
-              </Link>
-            </div> */}
-          </div>
+  const { resident, logout, isLoading } = useResidentAuth();
 
-          {/* Profile Overview */}
-          <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md flex flex-col sm:flex-row">
-            <div className="ml-0 sm:ml-6 flex-grow">
-              <div className="flex w-full">
-                <h3 className="text-xl font-semibold text-gray-800">
-                  Name: {resident.name}
-                </h3>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-sm text-gray-600 mt-4">
-                <p>
-                  <strong>Age:</strong> {resident.age}
+  // Show loading if still fetching resident data
+  if (isLoading || !resident) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Spin size="large" tip="Loading your dashboard..." />
+      </div>
+    );
+  }
+
+  const handleLogout = () => {
+    logout();
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 px-4 py-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+            Resident Health Dashboard
+          </h1>
+          <p className="text-gray-600">Welcome back, {resident.firstName}</p>
+        </div>
+
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+          {/* Profile Card */}
+          <div className="xl:col-span-4 order-1 xl:order-1">
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 h-full">
+              <div className="flex flex-col items-center text-center">
+                <div className="relative mb-6">
+                  <img
+                    src="/images/resident-profile-male.svg"
+                    alt="Profile"
+                    className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-blue-500 shadow-lg"
+                  />
+                  <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-green-500 rounded-full border-2 border-white"></div>
+                </div>
+
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
+                  {`${resident.firstName} ${resident.lastName}`}
+                </h2>
+
+                <div className="w-full space-y-4 mb-8">
+                  {[
+                    {
+                      label: "Age",
+                      value: resident.birthday
+                        ? new Date().getFullYear() -
+                          new Date(resident.birthday).getFullYear()
+                        : "N/A",
+                      icon: "👤",
+                    },
+                    {
+                      label: "Blood Group",
+                      value: resident.bloodGroup || "N/A",
+                      icon: "🩸",
+                    },
+                    {
+                      label: "Division",
+                      value: resident.division?.name || "N/A",
+                      icon: "📍",
+                    },
+                    {
+                      label: "Contact",
+                      value: resident.contactNumber || "N/A",
+                      icon: "📞",
+                    },
+                    {
+                      label: "Email",
+                      value: resident.email,
+                      icon: "�",
+                    },
+                  ].map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-3 bg-gray-50 rounded-xl"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-lg">{item.icon}</span>
+                        <span className="font-medium text-gray-700">
+                          {item.label}
+                        </span>
+                      </div>
+                      <span className="font-semibold text-gray-900">
+                        {item.value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                <p className=" mt-3 text-sm text-gray-600 mb-4">
+                  Anything need to be updated? Please meet our staff at the
+                  hospital
                 </p>
-                <p>
-                  <strong>Blood Group:</strong> {resident.bloodGroup}
-                </p>
-                <p>
-                  <strong>Division:</strong> {resident.division}
-                </p>
-                <p>
-                  <strong>Contact:</strong> {resident.contact}
-                </p>
-                <p>
-                  <strong>Contact:</strong> {resident.contact}
-                </p>
-                <p>
-                  <strong>Contact:</strong> {resident.contact}
-                </p>
-                <p>
-                  <strong>Contact:</strong> {resident.contact}
-                </p>
-                <p>
-                  <strong>Contact:</strong> {resident.contact}
-                </p>
+                <div className="w-full border-t border-gray-200 pt-6">
+                  <button
+                    onClick={handleLogout}
+                    className="w-full inline-flex items-center justify-center bg-gradient-to-r from-red-500 to-red-600 text-white py-3 px-6 rounded-xl font-semibold shadow-lg hover:from-red-600 hover:to-red-700 transform hover:scale-105 transition-all duration-200"
+                  >
+                    <span className="mr-2">
+                      <ArrowLeftOutlined />
+                    </span>
+                    Logout
+                  </button>
+                </div>
               </div>
             </div>
           </div>

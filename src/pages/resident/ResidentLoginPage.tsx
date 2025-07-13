@@ -1,22 +1,31 @@
-import { FC, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
-
+import { FC, useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router";
+import { loginState } from "../../types/login";
+import { Alert, Button, Form, Input } from "antd";
+import { MailOutlined, LockOutlined } from "@ant-design/icons";
+import { ArrowBigLeft } from "lucide-react";
+import { useResidentAuth } from "../../components/auth/ResidentAuthContext";
 
 const ResidentLoginPage: FC = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const navigate = useNavigate();
+  const [error, setError] = useState<null | string>(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [form] = Form.useForm();
+  const { login, isLoading } = useResidentAuth();
 
-    const handleLogin = () => {
-        // Handle login logic here
-        // redirect to  /resident-profile
-        navigate('/resident');
+  // Get the intended destination from location state
+  const from = location.state?.from || "/resident";
 
-        console.log('Logged in with:', { username, password });
-    };
-
-    return (
-        <div className="flex min-h-screen bg-gray-100">
+  const onSubmit = async (values: loginState) => {
+    try {
+      setError(null);
+      await login(values.email, values.password);
+      // Navigate to intended destination after successful login
+      navigate(from, { replace: true });
+    } catch (error: any) {
+      setError(error.message);
+    }
+  };
 
 
             {/* Main Content */}
