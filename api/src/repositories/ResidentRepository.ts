@@ -77,9 +77,23 @@ export class ResidentRepository {
         "lastName",
         "nic",
         "email",
+        // 'password',
         "birthday",
         "bloodGroup",
-      ]
+        // 'gender',
+        "bloodPressure",
+        "heartRate",
+        "address",
+        "contactNumber",
+        "divisionId",
+        "maritalState",
+        "educationLevel",
+        "addicted",
+        "alergies",
+        "chronicalDesease",
+        "height",
+        "weight",
+      ], // only fields necessary.
     });
   }
 
@@ -121,7 +135,6 @@ export class ResidentRepository {
       ],
     });
     return residents;
-
   }
 
   async getResidentCount(): Promise<number> {
@@ -129,16 +142,17 @@ export class ResidentRepository {
     return count;
   }
 
-
   async countPatientsByDisease(): Promise<Record<string, number>> {
-    const residents = await Resident.findAll({ attributes: ['chronicalDesease'] });
+    const residents = await Resident.findAll({
+      attributes: ["chronicalDesease"],
+    });
 
     const diseaseCounts: Record<string, number> = {};
 
     for (const res of residents) {
-      const rawValue = res.getDataValue('chronicalDesease');
+      const rawValue = res.getDataValue("chronicalDesease");
 
-      if (!rawValue || typeof rawValue !== 'string') continue;
+      if (!rawValue || typeof rawValue !== "string") continue;
 
       let diseases: string[] = [];
 
@@ -150,7 +164,7 @@ export class ResidentRepository {
       }
 
       for (const disease of diseases) {
-        if (!disease || disease.toLowerCase() === 'none') continue;
+        if (!disease || disease.toLowerCase() === "none") continue;
 
         diseaseCounts[disease] = (diseaseCounts[disease] || 0) + 1;
       }
@@ -158,5 +172,4 @@ export class ResidentRepository {
 
     return diseaseCounts;
   }
-  
 }

@@ -2,9 +2,10 @@ import sequelize from ".";
 import Resident from "./resident";
 import Household from "./household";
 import HouseholdResident from "./householdResident";
-
 import Disease from "./disease";
 import ResidentDisease from "./residentdisease";
+import ResidentClinic from "./residentClinic";
+import Clinic from "./clinic";
 import Division from "./division";
 
 // Associations
@@ -41,28 +42,71 @@ Household.belongsTo(Resident, {
   as: "owner",
 });
 
-
-
 // Disease and ResidentDisease associations
-Resident.hasMany(ResidentDisease, { foreignKey: 'residentId', as: 'residentDiseases' });
-Disease.hasMany(ResidentDisease, { foreignKey: 'diseaseId', as: 'residentDiseases' });
+Resident.hasMany(ResidentDisease, {
+  foreignKey: "residentId",
+  as: "residentDiseases",
+});
+Disease.hasMany(ResidentDisease, {
+  foreignKey: "diseaseId",
+  as: "residentDiseases",
+});
 
-ResidentDisease.belongsTo(Resident, { foreignKey: 'residentId', as: 'resident' });
-ResidentDisease.belongsTo(Disease, { foreignKey: 'diseaseId', as: 'disease' });
+ResidentDisease.belongsTo(Resident, {
+  foreignKey: "residentId",
+  as: "resident",
+});
+ResidentDisease.belongsTo(Disease, { foreignKey: "diseaseId", as: "disease" });
 
+// residentClinic associations
 
-// In Resident model
+Resident.belongsToMany(Clinic, {
+  through: ResidentClinic,
+  foreignKey: "residentId",
+  as: "clinics",
+  otherKey: "clinicId",
+});
+
+Clinic.belongsToMany(Resident, {
+  through: ResidentClinic,
+  foreignKey: "clinicId",
+  as: "residents",
+  otherKey: "residentId",
+});
+
+ResidentClinic.belongsTo(Resident, {
+  foreignKey: "residentId",
+  as: "resident",
+});
+
+ResidentClinic.belongsTo(Clinic, {
+  foreignKey: "clinicId",
+  as: "clinic",
+});
+
+Resident.hasMany(ResidentClinic, {
+  foreignKey: "residentId",
+  as: "residentClinics",
+});
+
+Clinic.hasMany(ResidentClinic, {
+  foreignKey: "clinicId",
+  as: "residentClinics",
+});
+
+/**
+ * Resident has division association
+ */
+
 Resident.belongsTo(Division, {
-  foreignKey: 'divisionId',
-  as: 'division',
+  foreignKey: "divisionId",
+  as: "division",
 });
 
-// In Division model
 Division.hasMany(Resident, {
-  foreignKey: 'divisionId',
-  as: 'residents',
+  foreignKey: "divisionId",
+  as: "residents",
 });
-
 
 // Exporting models
 export {
@@ -72,6 +116,4 @@ export {
   Disease,
   ResidentDisease,
   HouseholdResident,
-  Division
-
 };

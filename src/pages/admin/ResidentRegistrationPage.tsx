@@ -10,6 +10,9 @@ import { residentValidation } from "../../validation/residentValidation";
 import residentService from "../../services/resident.service";
 import { ResidentData } from "../../types/resident";
 import { ClinicService } from "../../services/clinic.service";
+import { DivisionService } from "../../services/division.service";
+import diseaseService from "../../services/disease.service";
+
 
 type ResidentRegistrationProps = {};
 
@@ -40,14 +43,26 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
 
   const [addicted, setAddictedd] = useState<string[]>([]);
   const [alergies, setAllergies] = useState<string[]>([]);
-  const [chronicalDesease, setChronicDisease] = useState<string[]>([]);
 
+  type Division = {
+    divisionId: number;
+    divisionName: string
+  }
 
+  const [GramaniladariDivision, setGramaniladariDivision] = useState<Division[]>([]);
 
   type Clinic = {
     id: string;
     name: string;
   };
+
+  type Disease = {
+    diseaseId: number;
+    diseaseName: string;
+  }
+
+  const [chronicDiseases, setChronicDiseases] = useState<Disease[]>([]);
+  const [selectedDiseaseNames, setSelectedDiseaseNames] = useState<string[]>([]);
 
   const [clinics, setClinics] = useState<Clinic[]>([]);
   const [selectedClinicIds, setSelectedClinicIds] = useState<string[]>([]);
@@ -55,15 +70,39 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
 
   // Fetch all clinics when the component mounts
   useEffect(() => {
+    //Fetch Disease  Function
+    const fetchDiseases = async () => {
+      try {
+        const response = await diseaseService.getAllDiseaseswithID();
+        setChronicDiseases(response.data); // assuming `data` is inside `response.data`
+      } catch (error) {
+        console.error("Error fetching diseases:", error);
+      }
+    };
+
+    //Fetch Clinic Function
     const fetchClinics = async () => {
       try {
         const data = await ClinicService.getAllClinics();
         setClinics(data);
-        console.log("Clinics fetched:", data);
       } catch (error) {
         console.error("Error fetching clinics:", error);
       }
     };
+
+    //Fetch Division
+     const fetchGramaniladariDivision = async () => {
+      try {
+        const data = await DivisionService.getAllDivisions();
+        // Assuming the data is an array of objects with id and name properties
+        setGramaniladariDivision(data);
+      } catch (error) {
+        console.error("Error fetching Gramaniladari Division:", error);
+      }
+    }
+
+    fetchGramaniladariDivision();
+    fetchDiseases();
     fetchClinics();
   }, []);
 
@@ -75,6 +114,22 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
   };
 
 
+  //GramaniladariDivision data fetch
+  useEffect(() => {
+    const fetchGramaniladariDivision = async () => {
+      try {
+        const data = await DivisionService.getAllDivisions();
+        // Assuming the data is an array of objects with id and name properties
+        setGramaniladariDivision(data);
+      } catch (error) {
+        console.error("Error fetching Gramaniladari Division:", error);
+      }
+    }
+    fetchGramaniladariDivision();
+  }, []);
+
+
+
 
   const addictedlist = [
     "Smoke",
@@ -83,32 +138,6 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     "Other Substance Use",
   ];
   const alergydlist = ["Food Allergy", "Drug Allergy", "Other Allergy"];
-  const chronicDeseaselist = [
-    "Cancer",
-    "Arthritis",
-    "Asthma",
-    "High Blood Pressure",
-    "Low Blood Pressure",
-    "Heart Disease",
-    "Stroke",
-    "Kidney Disease",
-    "Liver Disease",
-    "Thyroid Disease",
-    "Epilepsy",
-    "Mental Illness",
-    "HIV/AIDS",
-    "Other",
-  ];
-
-  const GramaniladariDivision = [
-    { id: 1, name: "Kotagedara" },
-    { id: 2, name: "Kolahakada" },
-    { id: 3, name: "Pahalawela" },
-    { id: 4, name: "alpitiya" },
-    { id: 5, name: "Diyagala" },
-    { id: 6, name: "Kolahakada" },
-  ];
-
   const caldate2 = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
 
   const handleAddicted = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -125,13 +154,13 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     );
   };
 
-  const handleChronicDisease = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, checked } = event.target;
-    setChronicDisease((prev) =>
-      checked ? [...prev, value] : prev.filter((item) => item !== value)
+  const handleChronicDiseaseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { checked, value } = e.target;
+
+    setSelectedDiseaseNames((prev) =>
+      checked ? [...prev, value] : prev.filter((name) => name !== value)
     );
   };
-
 
   const residentRegister = residentService;
 
@@ -152,10 +181,10 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     initialValues,
     validationSchema: residentValidation,
     onSubmit: (values) => {
-      
+
       values.addicted = addicted;
       values.alergies = alergies;
-      values.chronicalDesease = chronicalDesease;
+      values.chronicalDesease = selectedDiseaseNames;
       values.clinic = selectedClinicIds;
 
       mutation.mutate(values);
@@ -359,8 +388,8 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
               >
                 <option value="">Select Grama Division</option>
                 {GramaniladariDivision.map((division) => (
-                  <option key={division.id} value={division.id}>
-                    {division.name}
+                  <option key={division.divisionId} value={division.divisionId}>
+                    {division.divisionName}
                   </option>
                 ))}
               </select>
@@ -573,20 +602,21 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
             </div>
           </div>
 
-          {/* Chronic Desease */}
-          <div className="mt-5 mb-8 ">
+          {/* Chronic Disease */}
+          <div className="mt-5 mb-8">
             <label className="block text-xl font-medium text-gray-700">
-              Chronic Desease
+              Chronic Disease
             </label>
             <div className="gap-4 mt-3 ml-3 grid items-center grid-cols-4">
-              {chronicDeseaselist.map((option) => (
-                <label key={option} className="flex items-center gap-2">
+              {chronicDiseases.map((disease) => (
+                <label key={disease.diseaseId} className="flex items-center gap-2">
                   <input
                     type="checkbox"
-                    value={option}
-                    onChange={handleChronicDisease}
+                    value={disease.diseaseName} // ✅ use disease name as value
+                    checked={selectedDiseaseNames.includes(disease.diseaseName)}
+                    onChange={handleChronicDiseaseChange}
                   />
-                  {option}
+                  {disease.diseaseName}
                 </label>
               ))}
             </div>
@@ -595,7 +625,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
           {/* Clinic Details */}
           <div className="mt-5 mb-8 ">
             <label className="block text-xl font-medium text-gray-700">
-             Attending Clinics
+              Attending Clinics
             </label>
             <div className="gap-4 mt-3 ml-3 grid items-center grid-cols-4">
               {clinics.map((clinic) => (
