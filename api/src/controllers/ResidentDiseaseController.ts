@@ -225,8 +225,36 @@ export class ResidentDiseaseController {
         }
     }
 
+// Get disease counts by division ID
+getDiseaseCountsByDivision = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const divisionId = Number(req.params.divisionId);
+    if (isNaN(divisionId)) {
+      return res.status(400).json({
+        message: "Invalid divisionId parameter",
+        status: 400,
+        error: "divisionId must be a number",
+        data: null,
+      });
+    }
 
+    const diseaseCounts = await this.residentDiseaseService.getDiseaseCountsByDivision(divisionId);
 
-
+    return res.json({
+      message: "Disease counts fetched successfully",
+      status: 200,
+      error: null,
+      data: diseaseCounts,
+    });
+  } catch (error) {
+    console.error("Error fetching disease counts by division:", error);
+    return res.status(500).json({
+      message: "Internal server error",
+      status: 500,
+      error: error instanceof Error ? error.message : "Unknown error",
+      data: null,
+    });
+  }
+};
 
 }

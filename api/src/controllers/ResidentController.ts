@@ -342,7 +342,6 @@ class ResidentController {
     res.status(500).json({ error: "Failed to fetch resident count" });
   }
 };
-
 }
 
 export default ResidentController;

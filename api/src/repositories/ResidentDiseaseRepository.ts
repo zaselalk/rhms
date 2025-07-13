@@ -2,6 +2,7 @@ import { Model } from "sequelize";
 import Resident from "../models/resident";
 import { ResidentDisease } from "../models/residentdisease";
 import Disease from "../models/disease";
+import { Sequelize } from "sequelize";
 
 export class ResidentDiseaseRepository {
     async createResidentDisease(
@@ -163,10 +164,43 @@ export class ResidentDiseaseRepository {
             throw new Error("Unable to fetch residents by disease ID");
         }
 
-
-
-
     }
+
+    
+async getDiseaseCountsByDivision(divisionId: number): Promise<{ name: string; count: number }[]> {
+    try {
+        const results = await ResidentDisease.findAll({
+            attributes: [
+                [Sequelize.col("disease.diseaseName"), "name"],
+                [Sequelize.fn("COUNT", Sequelize.col("ResidentDisease.diseaseId")), "count"],
+            ],
+            include: [
+                {
+                    model: Resident,
+                    as: "resident",
+                    where: { divisionId },
+                    attributes: [],
+                },
+                {
+                    model: Disease,
+                    as: "disease",
+                    attributes: [],
+                },
+            ],
+            group: ["disease.diseaseName"],
+            raw: true,  // IMPORTANT: returns plain objects
+        });
+
+        // Sequelize returns "count" as a string, convert it to number here:
+        return results.map((r: any) => ({
+            name: r.name,
+            count: Number(r.count),
+        }));
+    } catch (error) {
+        console.error("Error fetching disease counts by division:", error);
+        throw new Error("Unable to fetch disease counts by division");
+    }
+}
 
 
 
