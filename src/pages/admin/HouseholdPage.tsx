@@ -22,6 +22,7 @@ import {
   searchResidentById,
   updateHouseholdOwner,
 } from "../../services/household.service";
+import householdresidentService from "../../services/householdresident.service";
 
 const HouseholdPage: FC = () => {
   const navigate = useNavigate();
@@ -32,7 +33,6 @@ const HouseholdPage: FC = () => {
   const [newOwnerId, setNewOwnerId] = useState("");
   const [newOwnerName, setNewOwnerName] = useState("");
   const [deleteReason, setDeleteReason] = useState("");
-
   const [isOpen, setIsOpen] = useState(false);
   const [registeredHouseholds, setRegisteredHouseholds] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -102,10 +102,7 @@ const HouseholdPage: FC = () => {
     try {
       await deleteHousehold(selectedHousehold.id);
       setRegisteredHouseholds((prev) =>
-        prev.filter(
-          (household) => household.house_no !== selectedHousehold.house_no
-        )
-
+        prev.filter((household) => household.id !== selectedHousehold.id)
       );
       message.success("Household deleted successfully!");
       setDeleteModalVisible(false);
@@ -124,18 +121,42 @@ const HouseholdPage: FC = () => {
 
   const handleSearchResident = async () => {
     if (!newOwnerId) return message.error("Please enter a valid Resident ID!");
+
+    const input = newOwnerId.trim();
+
+    const isNumericId = /^\d+$/.test(input); // Digits only
+    const isValidNIC = /^(\d{9}[vVxX]|\d{12})$/.test(input); // NIC format
+
+    if (!isNumericId && !isValidNIC) {
+      message.error("Invalid Resident ID or NIC format!");
+      setNewOwnerName("");
+      return;
+    }
+
     try {
-      const resident = await searchResidentById(Number(newOwnerId));
+      let resident;
+      if (isNumericId) {
+        resident = await searchResidentById(Number(input));
+      } else {
+        const response = await fetch(
+          `http://localhost:3001/resident/nic/${input}`
+        );
+        const result = await response.json();
+        if (!result?.data) throw new Error("Resident not found");
+        resident = result.data;
+      }
+
       if (resident) {
         setNewOwnerName(`${resident.firstName} ${resident.lastName}`);
-        console.log("Resident found:", resident.firstName, resident.lastName);
+        setNewOwnerId(resident.id.toString()); // Store numeric ID for update
         message.success("Resident found");
       } else {
-        message.error("Resident not found");
         setNewOwnerName("");
+        message.error("Resident not found");
       }
     } catch (error) {
       console.error("Error searching resident:", error);
+      setNewOwnerName("");
       message.error("Failed to search resident");
     }
   };
@@ -146,28 +167,30 @@ const HouseholdPage: FC = () => {
       return message.error("Invalid household or owner selected!");
 
     try {
+      console.log("Calling updateHouseholdOwner...");
       const updatedHousehold = await updateHouseholdOwner(
         selectedHousehold.id,
         newOwnerId
       );
 
-      if (updatedHousehold.owner) {
-        setRegisteredHouseholds((prev) =>
-          prev.map((household) =>
-            household.id === selectedHousehold.id
-              ? { ...household, owner: updatedHousehold.owner }
-              : household
-          )
-        );
+      console.log("Calling updateOwnerResident...");
+      await householdresidentService.updateOwnerResident(
+        selectedHousehold.id,
+        parseInt(newOwnerId)
+      );
 
-        message.success("Household owner updated successfully!");
-        setEditModalVisible(false);
+      setRegisteredHouseholds((prev) =>
+        prev.map((household) =>
+          household.id === selectedHousehold.id
+            ? { ...household, owner: updatedHousehold.owner }
+            : household
+        )
+      );
 
-        window.location.reload(); // Refresh the page to reflect changes
+      message.success("Household owner updated successfully!");
+      setEditModalVisible(false);
 
-      } else {
-        message.error("Failed to update owner");
-      }
+      window.location.reload(); // Refresh the page to reflect changes
     } catch (error: any) {
       console.error("Error updating household owner:", error);
       if (error.response?.data?.message) {
@@ -338,7 +361,7 @@ const HouseholdPage: FC = () => {
       >
         <div className="mb-4">
           <label className="block text-sm text-gray-700 mb-2">
-            New Owner ID
+            New Owner ID or NIC
           </label>
           <Input
             value={newOwnerId}
@@ -350,8 +373,7 @@ const HouseholdPage: FC = () => {
                 message.error("Please enter a valid Resident ID!");
               }
             }}
-            onBlur={handleSearchResident}
-            placeholder="Enter new owner's Resident ID"
+            placeholder="Enter new owner's Resident ID or NIC"
           />
           <Button onClick={handleSearchResident} type="primary">
             Search

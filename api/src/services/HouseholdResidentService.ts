@@ -28,4 +28,11 @@ export class HouseholdResidentServices {
   async removeResidentFromHousehold(id: number) {
     return this.repository.removeResidentFromHousehold(id);
   }
+
+  async updateOwnerResidentRelation(householdId: number, residentId: number) {
+  return this.repository.updateOwnerResidentRelation(householdId, residentId);
+}
+
+
+
 }
