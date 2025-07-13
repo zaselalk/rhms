@@ -96,50 +96,83 @@ const DiseasesPage: FC = () => {
       const newDisease = values.disease.trim();
       if (!newDisease) return;
 
-      const alreadyExists = diseases.some(
-        (d) => d.diseaseName.toLowerCase() === newDisease.toLowerCase()
-      );
-      if (alreadyExists) {
-        return message.warning(`"${newDisease}" already exists.`);
-      }
 
-      if (window.confirm(`Are you sure you want to add "${newDisease}"?`)) {
-        const addedDisease = await diseaseService.createDisease({ diseaseName: newDisease });
+       // Case-insensitive duplicate check
+    const lowerCaseExisting = diseaseName.map(name => name.toLowerCase());
 
-        setDiseases((prev) => 
-          [...prev, addedDisease]
-      );
-        form.resetFields();
-        setIsModalOpen(false);
-        message.success('Disease added successfully');
-        fetchAllData();
-      }
-    } catch (error: any) {
-      const errMsg =
+    if (lowerCaseExisting.includes(newDisease.toLowerCase())) {
+       form.setFields([
+        {
+          name: 'disease',
+          errors: [`The disease "${newDisease}" already exists.`],
+        },
+      ]);
+      return;
+    }
+    
+    // Use Ant Design styled confirmation dialog
+    Modal.confirm({
+      title: 'Confirm Add Disease',
+      content: `Are you sure you want to add "${newDisease}"?`,
+      okText: 'Yes',
+      cancelText: 'No',
+      onOk: async () => {
+        try {
+          const addedDisease = await diseaseService.createDisease({ diseaseName: newDisease });
+
+          setDiseaseNames((prev) => [...prev, addedDisease.diseaseName]);
+          form.resetFields();
+          setIsModalOpen(false);
+          message.success({
+            content: 'Disease added successfully',
+            duration: 3,
+          });
+        }catch (error: any) {
+        const errMsg =
         error?.response?.data?.message || 'Failed to add disease. Please try again.';
-      message.error(errMsg);
+      message.error({
+        content: errMsg,
+        duration: 2,
+      });
+      }
+      },
+    });
+  }
+   catch (error: any) {
+      const errMsg =
+        error?.response?.data?.message || 'Failed to validate disease. Please try again.';
+      message.error({
+        content: errMsg,
+        duration: 2,
+      });
     }
   };
+  
 
   const handleModalCancel = () => {
     setIsModalOpen(false);
     form.resetFields();
   };
 
-const handleDeleteDisease = async (diseaseName: string) => {
-  if (window.confirm(`Are you sure you want to delete "${diseaseName}"?`)) {
-    try {
-      // Call the backend API to delete the disease
-      await diseaseService.deleteDisease(diseaseName);
-
-      message.success(`"${diseaseName}" deleted successfully.`);
-      fetchAllData(); // Refresh the data after deletion
+const handleDeleteDisease = (diseaseName: string) => {
+  Modal.confirm({
+    title: 'Confirm Delete',
+    content: `Are you sure you want to delete "${diseaseName}"?`,
+    okText: 'Yes',
+    cancelText: 'No',
+    okType: 'danger',
+    onOk: async () => {
+      try {
+        await diseaseService.deleteDisease(diseaseName);
+        message.success(`"${diseaseName}" deleted successfully.`);
+        fetchAllData(); // Refresh the data after deletion
 
     } catch (error) {
       console.error(error);
       message.error('Failed to delete disease.');
     }
   }
+
 };
 
   return (
@@ -253,5 +286,6 @@ const handleDeleteDisease = async (diseaseName: string) => {
     </DashboardContainer>
   );
 };
+
 
 export default DiseasesPage;

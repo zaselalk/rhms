@@ -93,9 +93,9 @@ const HouseholdPage: FC = () => {
   const confirmDeleteHousehold = async () => {
     if (!selectedHousehold) return;
     try {
-      await deleteHousehold(selectedHousehold.house_no);
+      await deleteHousehold(selectedHousehold.id);
       setRegisteredHouseholds((prev) =>
-        prev.filter((household) => household.house_no !== selectedHousehold.house_no)
+        prev.filter((household) => household.id !== selectedHousehold.id)
       );
       message.success("Household deleted successfully!");
       setDeleteModalVisible(false);
@@ -118,6 +118,7 @@ const HouseholdPage: FC = () => {
       const resident = await searchResidentById(Number(newOwnerId));
       if (resident) {
         setNewOwnerName(`${resident.firstName} ${resident.lastName}`);
+        console.log("Resident found:", resident.firstName, resident.lastName);
         message.success("Resident found");
       } else {
         message.error("Resident not found");
@@ -136,14 +137,14 @@ const HouseholdPage: FC = () => {
 
     try {
       const updatedHousehold = await updateHouseholdOwner(
-        selectedHousehold.house_no,
+        selectedHousehold.id,
         newOwnerId
       );
 
       if (updatedHousehold.owner) {
         setRegisteredHouseholds((prev) =>
           prev.map((household) =>
-            household.house_no === selectedHousehold.house_no
+            household.id === selectedHousehold.id
               ? { ...household, owner: updatedHousehold.owner }
               : household
           )
@@ -151,6 +152,9 @@ const HouseholdPage: FC = () => {
 
         message.success("Household owner updated successfully!");
         setEditModalVisible(false);
+
+        window.location.reload(); // Refresh the page to reflect changes
+
       } else {
         message.error("Failed to update owner");
       }
@@ -171,6 +175,7 @@ const HouseholdPage: FC = () => {
       <HouseholdCreateModal
         isOpen={isOpen}
         handleClose={() => setIsOpen(false)}
+        refreshHouseholds={fetchHouseholds}
       />
       <div>
         <div className="flex justify-between items-center mb-6">
