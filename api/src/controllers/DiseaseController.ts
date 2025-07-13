@@ -75,5 +75,26 @@ export class DiseaseController {
     }
   };
 
+  getAllDiseaseswithID = async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const diseases = await this.diseaseService.getAllDiseaseswithID();
+      return res.status(200).json(
+        {
+          message: "Diseases fetched successfully",
+          status: 200,
+          error: null,
+          data: diseases
+        }
+      );
+    } catch (error) {
+      return res.status(500).json({ 
+        message: "Error fetching diseases",
+        status: 500,
+        error: error,
+        data: null
+       });
+    }
+  };
+
 
 }

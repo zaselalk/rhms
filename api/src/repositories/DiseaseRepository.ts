@@ -30,4 +30,11 @@ export class DiseaseRepository {
     return await Disease.count();
   }
 
+  async getDiseasewithID(): Promise<Disease[]> {
+    return await Disease.findAll({
+      attributes: ['diseaseId', 'diseaseName'],
+      order: [['diseaseId', 'ASC']]
+    });
+  }
+
 }
