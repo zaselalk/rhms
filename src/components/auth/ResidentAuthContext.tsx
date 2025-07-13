@@ -65,7 +65,7 @@ export const ResidentAuthProvider: React.FC<ResidentAuthProviderProps> = ({
       );
 
       // Assuming the response contains resident data and token
-      const { resident: residentData, token: authToken } = response.data;
+      const { data: residentData, token: authToken } = response;
 
       // Store in localStorage
       localStorage.setItem("residentToken", authToken);

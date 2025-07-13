@@ -75,7 +75,7 @@ const ResidentDashboard = () => {
                     {
                       label: "Email",
                       value: resident.email,
-                      icon: "�",
+                      icon: "✉️",
                     },
                   ].map((item, index) => (
                     <div
