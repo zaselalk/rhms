@@ -2,7 +2,7 @@
 
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { Modal, message, Button, Input } from "antd";
+import { Modal, message, Button, Input, Table } from "antd";
 import {
   BarChart,
   Bar,
@@ -38,6 +38,8 @@ const HouseholdPage: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [residentCount, setResidentCount] = useState(0);
   const [householdChartData, setHouseholdChartData] = useState<{ division: string; count: number }[]>([]);
+  const [searchText, setSearchText] = useState('');
+
 
   const fetchHouseholds = async () => {
     try {
@@ -170,6 +172,61 @@ const HouseholdPage: FC = () => {
 
   if (isLoading) return <div>Loading households...</div>;
 
+  const filteredHouseholds = registeredHouseholds.filter((household) =>
+  household.house_no.toLowerCase().includes(searchText.toLowerCase())
+);
+
+const columns = [
+    {
+      title: "House No",
+      dataIndex: "house_no",
+      key: "house_no",
+    },
+    {
+      title: "Owner",
+      key: "owner",
+      render: (text: any, record: any) =>
+        `${record.owner?.firstName || ""} ${record.owner?.lastName || ""}`,
+    },
+    {
+      title: "Division",
+      dataIndex: "grama_division",
+      key: "grama_division",
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: (_: any, record: any) => (
+        <div className="flex space-x-2">
+          <button
+            className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-full shadow-md hover:bg-blue-600 cursor-pointer"
+            onClick={() => handleViewHousehold(record.id)}
+          >
+            <span className="mr-2">View</span>
+            <EyeOutlined />
+          </button>
+          <button
+            className="flex items-center px-4 py-2 bg-green-500 text-white rounded-full shadow-md hover:bg-green-600 cursor-pointer"
+            onClick={() => handleEditHousehold(record)}
+          >
+            <span className="mr-2">Edit</span>
+            <EditOutlined />
+          </button>
+          <button
+            className="flex items-center px-4 py-2 bg-red-500 text-white rounded-full shadow-md hover:bg-red-600 cursor-pointer"
+            onClick={() => handleDeleteHousehold(record)}
+          >
+            <span className="mr-2">Delete</span>
+            <DeleteOutlined />
+          </button>
+        </div>
+      ),
+    },
+  ];
+
+  if (isLoading) return <div>Loading households...</div>;
+
+
   return (
     <DashboardContainer>
       <HouseholdCreateModal
@@ -184,6 +241,8 @@ const HouseholdPage: FC = () => {
           </h2>
           <Button
             className="px-4 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
+            type="primary"
+            style={{ backgroundColor: '#008FFB' }}
             onClick={() => setIsOpen(true)}
           >
             + Add Household
@@ -205,9 +264,38 @@ const HouseholdPage: FC = () => {
           </div>
         </div>
 
+        
+
+        {/* Search Bar */}
+        <div className="mb-4">
+          <Input.Search
+            placeholder="Search by House Number"
+            allowClear
+            enterButton
+            size="large"
+            onSearch={(value) => setSearchText(value)}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow-md">
+            <Table
+            dataSource={filteredHouseholds}
+            columns={columns}
+            rowKey="id"
+            pagination={{ 
+              pageSize: 5,
+              position: ['bottomCenter'],
+              className: "custom-pagination",
+             }}
+          />
+        </div>
+
+        <br />
+
         <div className="bg-white p-6 rounded-lg shadow-md mb-6">
           <h3 className="text-lg font-semibold text-gray-700 mb-4">
-            Households Distribution
+            Households Distribution Statistics
           </h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={householdChartData}>
@@ -219,66 +307,6 @@ const HouseholdPage: FC = () => {
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <table className="w-full table-auto">
-            <thead>
-              <tr>
-                <th className="text-left px-4 py-2 text-sm text-gray-600">
-                  House No
-                </th>
-                <th className="text-left px-4 py-2 text-sm text-gray-600">
-                  Owner
-                </th>
-                <th className="text-left px-4 py-2 text-sm text-gray-600">
-                  Division
-                </th>
-                <th className="text-left px-4 py-2 text-sm text-gray-600">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {registeredHouseholds.map((household) => (
-                <tr key={household.id}>
-                  <td className="px-4 py-2 text-sm text-gray-700">
-                    {household.house_no}
-                  </td>
-                  <td className="px-4 py-2 text-sm text-gray-700">
-                    {`${household.owner.firstName} ${household.owner.lastName}`}
-                  </td>
-                  <td className="px-4 py-2 text-sm text-gray-700">
-                    {household.grama_division}
-                  </td>
-                  <td className="px-4 py-2 text-sm text-gray-700">
-                    <div className="flex space-x-2">
-                      <button
-                        className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-full shadow-md hover:bg-blue-600 cursor-pointer"
-                        onClick={() => handleViewHousehold(household.id)}
-                      >
-                        <span className="mr-2">View</span>
-                        <EyeOutlined />
-                      </button>
-                      <button
-                        className="flex items-center px-4 py-2 bg-green-500 text-white rounded-full shadow-md hover:bg-green-600 cursor-pointer"
-                        onClick={() => handleEditHousehold(household)}
-                      >
-                        <span className="mr-2">Edit</span>
-                        <EditOutlined />
-                      </button>
-                      <button
-                        className="flex items-center px-4 py-2 bg-red-500 text-white rounded-full shadow-md hover:bg-red-600 cursor-pointer"
-                        onClick={() => handleDeleteHousehold(household)}
-                      >
-                        <span className="mr-2">Delete</span>
-                        <DeleteOutlined />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
       </div>
 
       <Modal
@@ -288,17 +316,13 @@ const HouseholdPage: FC = () => {
         onCancel={() => setDeleteModalVisible(false)}
         okText="Delete"
         cancelText="Cancel"
+        okButtonProps={{ danger: true, type: 'primary' }}
       >
         <p>
           Are you sure you want to delete the household{" "}
           <strong>{selectedHousehold?.house_no}</strong>?
         </p>
-        <Input
-          type="text"
-          placeholder="Reason for deletion"
-          value={deleteReason}
-          onChange={(e) => setDeleteReason(e.target.value)}
-        />
+       
       </Modal>
 
       <Modal
