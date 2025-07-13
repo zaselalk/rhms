@@ -12,8 +12,8 @@ import { ResidentData } from "../../types/resident";
 import { ClinicService } from "../../services/clinic.service";
 import { DivisionService } from "../../services/division.service";
 import diseaseService from "../../services/disease.service";
-import { DivisionService } from "../../services/division.service";
-import diseaseService from "../../services/disease.service";
+
+
 
 
 type ResidentRegistrationProps = {};
