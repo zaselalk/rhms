@@ -49,6 +49,26 @@ class HouseholdResidentService {
       );
     }
   }
+
+  // Update the owner (residentId) for a household
+async updateOwnerResident(householdId: number | string, residentId: number) {
+  console.log("Sending request to update owner relation");
+  console.log("householdId:", householdId, "residentId:", residentId);
+  try {
+    const response = await axiosInstance.put(
+      `/household-resident/${householdId}/update-owner`,
+      { residentId }
+    );
+    console.log("Response from backend:", response.data);
+    return response.data;
+  } catch (error: any) {
+    console.error("Error updating owner relation in frontend:", error);
+    throw new Error(
+      error.response?.data?.message ||
+        "Unable to update owner in household-resident"
+    );
+  }
+}
 }
 
 export default new HouseholdResidentService();

@@ -3,15 +3,20 @@ import Modal from "../../layouts/overlays/Modal";
 import { createHousehold } from "../../../services/household.service";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router";
+import householdresidentService from "../../../services/householdresident.service";
+import { message as antMessage } from "antd";
+
 
 interface HouseholdCreateModalProps {
   isOpen: boolean;
   handleClose: () => void;
+  refreshHouseholds: () => void; 
 }
 
 export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
   isOpen,
   handleClose,
+  refreshHouseholds,
 }) => {
   const [house_no, setHouseNo] = useState("");
   const [grama_division, setGramaDivision] = useState("");
@@ -21,6 +26,8 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
   const [foundResidentName, setFoundResidentName] = useState("");
   const [owner_id, setOwnerId] = useState("");
 
+  console.log(owner_id);
+
   // Feedback state
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -29,22 +36,37 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log(owner_id);
 
   // Function to search resident by ID
   const handleSearchResident = async () => {
     setMessage("");
     setError("");
+    setFoundResidentName("");
+    setOwnerId("");
 
-    if (!residentSearchId || isNaN(Number(residentSearchId))) {
-      setError("Please enter a valid numeric Resident ID");
-      return;
-    }
+      const input = residentSearchId.trim();
+
+      // Regex patterns
+      const isNumericId = /^\d+$/.test(input); // All digits
+      const isValidNIC = /^(\d{9}[vVxX]|\d{12})$/.test(input); // old/new NIC formats
+
+
+   if (!isNumericId && !isValidNIC) {
+    setError("Please enter a valid Resident ID or NIC");
+    return;
+  }
 
     try {
-      const res = await axios.get(
-        `http://localhost:3001/resident/id/${Number(residentSearchId)}`
-      );
+
+      let res;
+
+
+          if (isNumericId) {
+      res = await axios.get(`http://localhost:3001/resident/id/${input}`);
+    } else {
+      res = await axios.get(`http://localhost:3001/resident/nic/${input}`);
+    }
+
       const data = res.data.data; // Accessing the correct structure
 
       if (!data) {
@@ -72,14 +94,15 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
     const parsedOwnerId = Number(residentSearchId); // convert once and reuse
 
     if (!residentSearchId || isNaN(parsedOwnerId)) {
-      setMessage("Invalid owner ID");
+      antMessage.error("Invalid owner ID");
       setLoading(false);
       return;
     }
 
+   
     if (window.confirm("Are you sure you want to create this household?")) {
       try {
-        const data = await createHousehold({
+        const response = await createHousehold({
           house_no,
           grama_division,
           longitude,
@@ -87,15 +110,37 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
           owner_id: parsedOwnerId,
         });
 
-        setMessage(data.message || "Household created successfully!");
 
+
+        const createdHouseholdId = response?.id; 
+
+      if (!createdHouseholdId) {
+        throw new Error("Household ID not returned after creation.");
+      }
+
+      // Step 2: Add owner to household as a resident with relation = 'Owner'
+      await householdresidentService.addResidentToHousehold(
+        createdHouseholdId,
+        {
+          residentId: parsedOwnerId,
+          relation: "Owner",
+        }
+      );
+
+        antMessage.success("Household created successfully!");
+
+
+
+        refreshHouseholds(); // Call the passed function to refresh households
+      
         handleClose(); // Close modal on success
 
         setTimeout(() => {
           navigate(location.pathname); // Redirect to the same page to refresh data
         }, 500);
+
       } catch (error) {
-        setMessage("Error creating household");
+        antMessage.error("Error creating household");
         console.error("Error:", error);
       } finally {
         setLoading(false);
@@ -194,14 +239,22 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
             htmlFor="residentId"
             className="block text-sm font-medium text-gray-700"
           >
-            House Owner (Resident ID)
+            House Owner (Resident ID / NIC)
           </label>
           <div className="flex space-x-2">
             <input
-              type="number"
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9vV]*"
               id="residentSearchId"
               value={residentSearchId}
-              onChange={(e) => setResidentSearchId(e.target.value)}
+              onChange={(e) => {
+                  const input = e.target.value;
+                  // Allow only numbers and 'v' or 'V'
+                  if (/^[0-9vV]*$/.test(input)) {
+                    setResidentSearchId(input);
+                  }
+                }}
               className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 outline-none"
               placeholder="Enter resident ID"
             />
@@ -236,4 +289,7 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
       </div>
     </Modal>
   );
+
 };
+
+

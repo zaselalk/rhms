@@ -13,7 +13,7 @@ export class DiseaseRepository {
 
   async getAllDiseases(): Promise<Disease[]> {
     return await Disease.findAll({
-      attributes: ['diseaseName'],
+      attributes: ['diseaseId', 'diseaseName'],
       order: [['diseaseName', 'ASC']] // Optional: to sort alphabetically
     });
   }
@@ -28,6 +28,13 @@ export class DiseaseRepository {
   
   async countDisease(): Promise<number> {
     return await Disease.count();
+  }
+
+  async getDiseasewithID(): Promise<Disease[]> {
+    return await Disease.findAll({
+      attributes: ['diseaseId', 'diseaseName'],
+      order: [['diseaseId', 'ASC']]
+    });
   }
 
 }
