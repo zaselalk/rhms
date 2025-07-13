@@ -21,5 +21,6 @@ export interface ResidentData {
     clinic?: string[];
     height?: string;
     weight?: string;
+    bloodPressure?: string;
   }
   
