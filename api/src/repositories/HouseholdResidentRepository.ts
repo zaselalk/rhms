@@ -33,4 +33,11 @@ export class HouseholdResidentRepository {
     await record.destroy();
     return true;
   }
+
+  async removeAllResidentsByHouseholdId(householdId: number): Promise<void> {
+  await HouseholdResident.destroy({ where: { householdId } });
+}
+
+
+  
 }

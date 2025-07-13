@@ -28,4 +28,9 @@ export class HouseholdResidentServices {
   async removeResidentFromHousehold(id: number) {
     return this.repository.removeResidentFromHousehold(id);
   }
+
+  async removeAllResidentsByHouseholdId(householdId: number) {
+  return this.repository.removeAllResidentsByHouseholdId(householdId);
+}
+
 }

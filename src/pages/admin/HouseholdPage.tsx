@@ -288,12 +288,7 @@ const HouseholdPage: FC = () => {
           Are you sure you want to delete the household{" "}
           <strong>{selectedHousehold?.house_no}</strong>?
         </p>
-        <Input
-          type="text"
-          placeholder="Reason for deletion"
-          value={deleteReason}
-          onChange={(e) => setDeleteReason(e.target.value)}
-        />
+        
       </Modal>
 
       <Modal
