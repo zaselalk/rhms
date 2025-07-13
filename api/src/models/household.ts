@@ -10,6 +10,7 @@ interface HouseholdAttributes {
   longitude: string;
   latitude: string;
   owner_id?: number;
+  deletedAt?: Date | null; // Soft delete column
 }
 
 export class Household
@@ -22,6 +23,7 @@ export class Household
   public longitude!: string;
   public latitude!: string;
   public owner_id?: number;
+  public deletedAt?: Date | null; // Soft delete column
 }
 
 Household.init(
@@ -85,6 +87,7 @@ Household.init(
     modelName: "household",
     tableName: "households",
     timestamps: true,
+    paranoid: true, // Enable soft deletes
     engine: "InnoDB",
   }
 );
