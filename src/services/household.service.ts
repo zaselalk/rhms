@@ -54,9 +54,9 @@ export const searchResidentById = async (residentId: number) => {
 export const getHouseholdsByDivision = async (division: string) => {
   try {
     const response = await axiosInstance.get(
-      `/household/by-division/${division}`
+      `/household/division/${division}`
     );
-    return response.data; // array of { house_no, ownerFirstName, ownerLastName, residentCount }
+    return response.data; 
   } catch (error) {
     console.error("Error fetching households by division:", error);
     throw error;
