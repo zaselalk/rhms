@@ -17,11 +17,14 @@ ClinicRouter.get("/getAllClinics", catchAsync(clinicController.getAllClinics));
 
 // // Get a clinic by ID
 ClinicRouter.get("/:id", catchAsync(clinicController.getClinicById));
-ClinicRouter.post("/:id/session", catchAsync(clinicSessionController.createSession));
+
+// session realeted routes
+//ClinicRouter.post("/:id/session", catchAsync(clinicSessionController.createSession));
 ClinicRouter.get("/:id/GetSessionForClinic", catchAsync(clinicSessionController.getAllSessions));
-//ClinicRouter.get(":id/session/:sid/getSessionById", clinicSessionController.getSessionById);
-//ClinicRouter.put("/:id/session/:sid/updateSessionById", clinicSessionController.updateSession);
-//ClinicRouter.delete("/:id/session/:sid/DeleteSession", clinicSessionController.deleteSession);
+ClinicRouter.get("/:id/session/:sid", catchAsync(clinicSessionController.getSessionById));
+ClinicRouter.put("/:id/session/:sid", catchAsync(clinicSessionController.updateSession));
+ClinicRouter.delete("/:id/session/:sid", catchAsync(clinicSessionController.deleteSession));
+
 
 
 // // Update a clinic by ID

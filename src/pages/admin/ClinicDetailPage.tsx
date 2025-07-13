@@ -70,8 +70,7 @@ const ClinicDetail: React.FC = () => {
     patientDivisions.length / divisionsPerPage
   );
 
-  // *** Your existing functions below - no changes ***
-
+  // Fetch clinic name by ID
   const fetchClinicName = async () => {
     setLoadingClinicName(true);
     try {
@@ -85,6 +84,7 @@ const ClinicDetail: React.FC = () => {
     }
   };
 
+  // Fetch all sessions for the clinic
   const fetchSessions = async () => {
     setLoadingSessions(true);
     try {
@@ -98,6 +98,7 @@ const ClinicDetail: React.FC = () => {
     }
   };
 
+  // Fetch patients registered at this clinic
   const fetchClinicPatients = async () => {
     setLoadingPatients(true);
     try {
@@ -114,6 +115,7 @@ const ClinicDetail: React.FC = () => {
     }
   };
 
+  // Fetch resident counts grouped by division for this clinic
   const fetchDivisionCounts = async () => {
     setLoadingDivisions(true);
     try {
@@ -130,6 +132,7 @@ const ClinicDetail: React.FC = () => {
     }
   };
 
+  // On component mount or clinicId change, fetch all necessary data
   useEffect(() => {
     if (clinicId) {
       fetchClinicName();
@@ -139,6 +142,7 @@ const ClinicDetail: React.FC = () => {
     }
   }, [clinicId]);
 
+  // Add new clinic session
   const addClinicSession = async () => {
     if (!newSession.name || !newSession.sessionDate) {
       setError("Session Name and Date cannot be empty!");
@@ -158,6 +162,7 @@ const ClinicDetail: React.FC = () => {
     }
   };
 
+  // Delete a clinic session by ID
   const removeClinicSession = async (sessionId: string) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this session?"
@@ -173,17 +178,20 @@ const ClinicDetail: React.FC = () => {
     }
   };
 
+  // Open modal to edit a session
   const openEditModal = (session: ClinicSession) => {
     setSelectedSession(session);
     setEditModalOpen(true);
   };
 
+  // Close the edit modal and clear errors
   const closeEditModal = () => {
     setSelectedSession(null);
     setEditModalOpen(false);
     setError("");
   };
 
+  // Save changes to an edited session
   const handleSaveEditedSession = async () => {
     if (!selectedSession) return;
 
@@ -193,12 +201,12 @@ const ClinicDetail: React.FC = () => {
     }
 
     try {
-      await ClinicService.updateClinicSession(clinicId!, selectedSession);
-      setClinicSessions(
-        clinicSessions.map((s) =>
-          s.id === selectedSession.id ? selectedSession : s
-        )
-      );
+  const updatedSession = await ClinicService.updateClinicSession(clinicId!, selectedSession);
+setClinicSessions(
+  clinicSessions.map((s) =>
+    s.id === updatedSession.id ? updatedSession : s
+  )
+);
       closeEditModal();
     } catch (err) {
       console.error("Failed to update session:", err);
@@ -206,11 +214,12 @@ const ClinicDetail: React.FC = () => {
     }
   };
 
+  // Navigate to attendance page of a session
   const handleClick = (sessionId: string) => {
     navigate(`/admin/clinic/${clinicId}/${sessionId}/attendance`);
   };
 
-  // ---------- UI Starts Here -------------
+  // ---------- UI JSX starts here -------------
 
   return (
     <DashboardContainer>

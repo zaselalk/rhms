@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router";
+import { useNavigate, useParams } from "react-router"; // updated import
 import { FaArrowLeft } from "react-icons/fa";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 
@@ -25,8 +25,7 @@ interface Attendance {
 
 const ClinicAttendances: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const sessionId = location.pathname.split("/")[2];
+  const { sessionID } = useParams<{ sessionID: string }>(); // ✅ updated
 
   const [searchTerm, setSearchTerm] = useState("");
   const [attendances, setAttendances] = useState<Attendance[]>(
@@ -76,7 +75,8 @@ const ClinicAttendances: React.FC = () => {
         {/* Page Heading */}
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-800">
-            Attendance for Session - <span className="text-blue-600">{sessionId}</span>
+            Attendance for Session -{" "}
+            <span className="text-blue-600">{sessionID}</span>
           </h1>
         </div>
 
@@ -92,11 +92,17 @@ const ClinicAttendances: React.FC = () => {
           </div>
           <div>
             <p className="text-gray-500 font-medium">Attendance %</p>
-            <p className="text-xl font-semibold">{attendancePercentage.toFixed(1)}%</p>
+            <p className="text-xl font-semibold">
+              {attendancePercentage.toFixed(1)}%
+            </p>
           </div>
           <div>
             <p className="text-gray-500 font-medium">Change from Last Session</p>
-            <p className={`text-xl font-semibold ${isImproved ? "text-green-600" : "text-red-600"}`}>
+            <p
+              className={`text-xl font-semibold ${
+                isImproved ? "text-green-600" : "text-red-600"
+              }`}
+            >
               {isImproved ? "+" : ""}
               {percentageDifference.toFixed(1)}%
             </p>
@@ -116,7 +122,9 @@ const ClinicAttendances: React.FC = () => {
 
         {/* Attendance Table */}
         <div className="bg-white p-6 rounded-xl shadow">
-          <h2 className="text-xl font-bold mb-4 text-gray-700">Patient Attendance</h2>
+          <h2 className="text-xl font-bold mb-4 text-gray-700">
+            Patient Attendance
+          </h2>
           <div className="overflow-x-auto">
             <table className="min-w-full border-collapse">
               <thead className="bg-gray-100 text-gray-700">
@@ -128,7 +136,9 @@ const ClinicAttendances: React.FC = () => {
               </thead>
               <tbody>
                 {filteredPatients.map((patient) => {
-                  const attendance = attendances.find((a) => a.patientId === patient.id);
+                  const attendance = attendances.find(
+                    (a) => a.patientId === patient.id
+                  );
                   const isPresent = attendance?.status;
                   return (
                     <tr key={patient.id} className="border-b hover:bg-gray-50">

@@ -79,45 +79,38 @@ export const ClinicService = {
     }
   },
 
-  // Get all sessions for a specific clinic
-  getClinicSessions: async (clinicId: string) => {
-    try {
-      const response = await axiosInstance.get(
-        `/clinic/${clinicId}/GetsessionForClinic`,
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching clinic sessions:", error);
-      throw error;
-    }
-  },
+// Get all sessions for a specific clinic
+getClinicSessions: async (clinicId: string) => {
+  const response = await axiosInstance.get(`/clinic/${clinicId}/GetSessionForClinic`);
+  return response.data;
+},
 
-  // Update a session for a clinic
-  updateClinicSession: async (
-    clinicId: string,
-    sessionData: { id: string; name: string; sessionDate: string },
-  ) => {
-    try {
-      const response = await axiosInstance.put(
-        `/clinic/${clinicId}/session/${sessionData.id}`,
-        sessionData,
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error updating clinic session:", error);
-      throw error;
-    }
-  },
+// Update a session for a clinic
+updateClinicSession: async (
+  clinicId: string,
+  sessionData: { id: string; name: string; sessionDate: string }
+) => {
+  try {
+    const response = await axiosInstance.put(
+      `/clinic/${clinicId}/session/${sessionData.id}`,
+      sessionData
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating clinic session:", error);
+    throw error;
+  }
+},
 
-  // Delete a session for a clinic
-  deleteClinicSession: async (clinicId: string, sessionId: string) => {
-    try {
-      await axiosInstance.delete(`/clinic/${clinicId}/session/${sessionId}`);
-    } catch (error) {
-      console.error("Error deleting clinic session:", error);
-      throw error;
-    }
-  },
+// Delete a session for a clinic
+deleteClinicSession: async (clinicId: string, sessionId: string) => {
+  try {
+    await axiosInstance.delete(`/clinic/${clinicId}/session/${sessionId}`);
+  } catch (error) {
+    console.error("Error deleting clinic session:", error);
+    throw error;
+  }
+},
 
   //  Get all resident clinics
   getAllResidentClinics: async () => {
