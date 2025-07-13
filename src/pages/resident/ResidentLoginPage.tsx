@@ -1,41 +1,30 @@
-import { useMutation } from "@tanstack/react-query";
 import { FC, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useLocation } from "react-router";
 import { loginState } from "../../types/login";
-import ResidentService from "../../services/resident.service";
 import { Alert, Button, Form, Input } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import { ArrowBigLeft } from "lucide-react";
+import { useResidentAuth } from "../../components/auth/ResidentAuthContext";
 
 const ResidentLoginPage: FC = () => {
   const [error, setError] = useState<null | string>(null);
   const navigate = useNavigate();
+  const location = useLocation();
   const [form] = Form.useForm();
-  const [isLoading, setIsLoading] = useState(false);
+  const { login, isLoading } = useResidentAuth();
 
-  const mutation = useMutation({
-    mutationFn: async ({ email, password }: loginState) => {
-      setIsLoading(true);
+  // Get the intended destination from location state
+  const from = location.state?.from || "/resident/dashboard";
+
+  const onSubmit = async (values: loginState) => {
+    try {
       setError(null);
-      await ResidentService.loginResidentByEmailandPassword(email, password);
-    },
-    onSuccess: () => {
-      setIsLoading(false);
-      handleLogin();
-    },
-    onError: (error: any) => {
-      setIsLoading(false);
+      await login(values.email, values.password);
+      // Navigate to intended destination after successful login
+      navigate(from, { replace: true });
+    } catch (error: any) {
       setError(error.message);
-    },
-  });
-
-  const onSubmit = (values: loginState) => {
-    setError(null);
-    mutation.mutate(values);
-  };
-
-  const handleLogin = () => {
-    navigate("/resident");
+    }
   };
 
   return (

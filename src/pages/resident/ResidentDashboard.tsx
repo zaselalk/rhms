@@ -1,17 +1,23 @@
-import { Link } from "react-router";
 import { ArrowLeftOutlined } from "@ant-design/icons";
-
-const resident = {
-  id: "1",
-  name: "Kamal Wichramanayake",
-  age: 45,
-  bloodGroup: "O+",
-  contact: "0711287298",
-  division: "Katugahahena",
-  last_visit: "2025/02/10",
-};
+import { useResidentAuth } from "../../components/auth/ResidentAuthContext";
+import { Spin } from "antd";
 
 const ResidentDashboard = () => {
+  const { resident, logout, isLoading } = useResidentAuth();
+
+  // Show loading if still fetching resident data
+  if (isLoading || !resident) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Spin size="large" tip="Loading your dashboard..." />
+      </div>
+    );
+  }
+
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 px-4 py-6">
       <div className="max-w-7xl mx-auto">
@@ -20,9 +26,7 @@ const ResidentDashboard = () => {
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
             Resident Health Dashboard
           </h1>
-          <p className="text-gray-600">
-            Welcome back, {resident.name.split(" ")[0]}
-          </p>
+          <p className="text-gray-600">Welcome back, {resident.firstName}</p>
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
@@ -40,23 +44,38 @@ const ResidentDashboard = () => {
                 </div>
 
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
-                  {resident.name}
+                  {`${resident.firstName} ${resident.lastName}`}
                 </h2>
 
                 <div className="w-full space-y-4 mb-8">
                   {[
-                    { label: "Age", value: resident.age, icon: "👤" },
+                    {
+                      label: "Age",
+                      value: resident.birthday
+                        ? new Date().getFullYear() -
+                          new Date(resident.birthday).getFullYear()
+                        : "N/A",
+                      icon: "👤",
+                    },
                     {
                       label: "Blood Group",
-                      value: resident.bloodGroup,
+                      value: resident.bloodGroup || "N/A",
                       icon: "🩸",
                     },
-                    { label: "Division", value: resident.division, icon: "📍" },
-                    { label: "Contact", value: resident.contact, icon: "📞" },
                     {
-                      label: "Last Visit",
-                      value: resident.last_visit,
-                      icon: "📅",
+                      label: "Division",
+                      value: resident.division?.name || "N/A",
+                      icon: "📍",
+                    },
+                    {
+                      label: "Contact",
+                      value: resident.contactNumber || "N/A",
+                      icon: "📞",
+                    },
+                    {
+                      label: "Email",
+                      value: resident.email,
+                      icon: "�",
                     },
                   ].map((item, index) => (
                     <div
@@ -80,15 +99,15 @@ const ResidentDashboard = () => {
                   hospital
                 </p>
                 <div className="w-full border-t border-gray-200 pt-6">
-                  <Link
-                    to="/resident/login"
+                  <button
+                    onClick={handleLogout}
                     className="w-full inline-flex items-center justify-center bg-gradient-to-r from-red-500 to-red-600 text-white py-3 px-6 rounded-xl font-semibold shadow-lg hover:from-red-600 hover:to-red-700 transform hover:scale-105 transition-all duration-200"
                   >
                     <span className="mr-2">
                       <ArrowLeftOutlined />
                     </span>
                     Logout
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>
