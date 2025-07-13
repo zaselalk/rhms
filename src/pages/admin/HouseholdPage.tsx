@@ -171,6 +171,7 @@ const HouseholdPage: FC = () => {
       <HouseholdCreateModal
         isOpen={isOpen}
         handleClose={() => setIsOpen(false)}
+        refreshHouseholds={fetchHouseholds}
       />
       <div>
         <div className="flex justify-between items-center mb-6">

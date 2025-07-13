@@ -3,15 +3,20 @@ import Modal from "../../layouts/overlays/Modal";
 import { createHousehold } from "../../../services/household.service";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router";
+import householdresidentService from "../../../services/householdresident.service";
+import { message as antMessage } from "antd";
+
 
 interface HouseholdCreateModalProps {
   isOpen: boolean;
   handleClose: () => void;
+  refreshHouseholds: () => void; 
 }
 
 export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
   isOpen,
   handleClose,
+  refreshHouseholds,
 }) => {
   const [house_no, setHouseNo] = useState("");
   const [grama_division, setGramaDivision] = useState("");
@@ -29,7 +34,7 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log(owner_id);
+ 
 
   // Function to search resident by ID
   const handleSearchResident = async () => {
@@ -72,14 +77,15 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
     const parsedOwnerId = Number(residentSearchId); // convert once and reuse
 
     if (!residentSearchId || isNaN(parsedOwnerId)) {
-      setMessage("Invalid owner ID");
+      antMessage.error("Invalid owner ID");
       setLoading(false);
       return;
     }
 
+   
     if (window.confirm("Are you sure you want to create this household?")) {
       try {
-        const data = await createHousehold({
+        const response = await createHousehold({
           house_no,
           grama_division,
           longitude,
@@ -87,15 +93,33 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
           owner_id: parsedOwnerId,
         });
 
-        setMessage(data.message || "Household created successfully!");
+        const createdHouseholdId = response?.id; 
 
+      if (!createdHouseholdId) {
+        throw new Error("Household ID not returned after creation.");
+      }
+
+      // Step 2: Add owner to household as a resident with relation = 'Owner'
+      await householdresidentService.addResidentToHousehold(
+        createdHouseholdId,
+        {
+          residentId: parsedOwnerId,
+          relation: "Owner",
+        }
+      );
+
+        antMessage.success("Household created successfully!");
+
+        refreshHouseholds(); // Call the passed function to refresh households
+      
         handleClose(); // Close modal on success
 
         setTimeout(() => {
           navigate(location.pathname); // Redirect to the same page to refresh data
         }, 500);
+
       } catch (error) {
-        setMessage("Error creating household");
+        antMessage.error("Error creating household");
         console.error("Error:", error);
       } finally {
         setLoading(false);
@@ -236,4 +260,9 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
       </div>
     </Modal>
   );
+
 };
+function refreshHouseholds() {
+  throw new Error("Function not implemented.");
+}
+
