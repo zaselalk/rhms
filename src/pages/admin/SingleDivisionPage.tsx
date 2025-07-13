@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
+import residentDiseaseService from "../../services/residentDisease.service";
 
 interface Household {
   house_no: string;
@@ -16,7 +17,7 @@ interface Disease {
 const ITEMS_PER_PAGE = 3;
 
 const SingleDivisionPage: FC = () => {
-  //const [divisionName, setDivisionName] = useState<string>("Division");
+  // State
   const [households, setHouseholds] = useState<Household[]>([]);
   const [diseases, setDiseases] = useState<Disease[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,36 +27,50 @@ const SingleDivisionPage: FC = () => {
   const [householdPage, setHouseholdPage] = useState(1);
   const [diseasePage, setDiseasePage] = useState(1);
 
+  // Fetch data on mount
   useEffect(() => {
-    const dummyHouseholds: Household[] = [
-      { house_no: "H001", ownerFirstName: "John", ownerLastName: "Doe", residentCount: 4 },
-      { house_no: "H002", ownerFirstName: "Jane", ownerLastName: "Smith", residentCount: 3 },
-      { house_no: "H003", ownerFirstName: "Amal", ownerLastName: "Perera", residentCount: 6 },
-      { house_no: "H004", ownerFirstName: "Sunil", ownerLastName: "Fernando", residentCount: 2 },
-      { house_no: "H005", ownerFirstName: "Nimal", ownerLastName: "Silva", residentCount: 5 },
-    ];
+    async function fetchData() {
+      setLoading(true);
 
-    const dummyDiseases: Disease[] = [
-      { name: "Flu", count: 15 },
-      { name: "Diabetic", count: 30 },
-      { name: "Hypertension", count: 20 },
-      { name: "Asthma", count: 10 },
-      { name: "Malaria", count: 5 },
-    ];
+      try {
+        // Dummy households data (replace with real API if available)
+        const dummyHouseholds: Household[] = [
+          { house_no: "H001", ownerFirstName: "John", ownerLastName: "Doe", residentCount: 4 },
+          { house_no: "H002", ownerFirstName: "Jane", ownerLastName: "Smith", residentCount: 3 },
+          { house_no: "H003", ownerFirstName: "Amal", ownerLastName: "Perera", residentCount: 6 },
+          { house_no: "H004", ownerFirstName: "Sunil", ownerLastName: "Fernando", residentCount: 2 },
+          { house_no: "H005", ownerFirstName: "Nimal", ownerLastName: "Silva", residentCount: 5 },
+        ];
+        setHouseholds(dummyHouseholds);
 
-    setHouseholds(dummyHouseholds);
-    setDiseases(dummyDiseases);
-    setLoading(false);
+        // Fetch diseases dynamically from backend
+        const diseaseData = await residentDiseaseService.getDiseasePatientCounts(diseasePage);
+        // Format diseases to have consistent { name, count }
+        const diseasesFormatted = diseaseData.map((item: any) => ({
+          name: item.name,
+          count: item.patients ?? item.count ?? 0,
+        }));
+        setDiseases(diseasesFormatted);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
   }, []);
 
-  const filteredHouseholds = households.filter(h =>
+  // Filters
+  const filteredHouseholds = households.filter((h) =>
     `${h.ownerFirstName} ${h.ownerLastName}`.toLowerCase().includes(householdSearch.toLowerCase())
   );
 
-  const filteredDiseases = diseases.filter(d =>
+  const filteredDiseases = diseases.filter((d) =>
     d.name.toLowerCase().includes(diseaseSearch.toLowerCase())
   );
 
+  // Pagination slices
   const paginatedHouseholds = filteredHouseholds.slice(
     (householdPage - 1) * ITEMS_PER_PAGE,
     householdPage * ITEMS_PER_PAGE
@@ -102,7 +117,7 @@ const SingleDivisionPage: FC = () => {
                     placeholder="Search diseases..."
                     className="border px-3 py-1 rounded w-1/2"
                     value={diseaseSearch}
-                    onChange={e => {
+                    onChange={(e) => {
                       setDiseaseSearch(e.target.value);
                       setDiseasePage(1);
                     }}
@@ -128,7 +143,9 @@ const SingleDivisionPage: FC = () => {
                   {Array.from({ length: totalDiseasePages }, (_, i) => (
                     <button
                       key={i}
-                      className={`px-3 py-1 rounded ${diseasePage === i + 1 ? "bg-blue-500 text-white" : "border"}`}
+                      className={`px-3 py-1 rounded ${
+                        diseasePage === i + 1 ? "bg-blue-500 text-white" : "border"
+                      }`}
                       onClick={() => setDiseasePage(i + 1)}
                     >
                       {i + 1}
@@ -145,7 +162,7 @@ const SingleDivisionPage: FC = () => {
                     placeholder="Search owner..."
                     className="border px-3 py-1 rounded w-1/2"
                     value={householdSearch}
-                    onChange={e => {
+                    onChange={(e) => {
                       setHouseholdSearch(e.target.value);
                       setHouseholdPage(1);
                     }}
@@ -175,7 +192,9 @@ const SingleDivisionPage: FC = () => {
                   {Array.from({ length: totalHouseholdPages }, (_, i) => (
                     <button
                       key={i}
-                      className={`px-3 py-1 rounded ${householdPage === i + 1 ? "bg-blue-500 text-white" : "border"}`}
+                      className={`px-3 py-1 rounded ${
+                        householdPage === i + 1 ? "bg-blue-500 text-white" : "border"
+                      }`}
                       onClick={() => setHouseholdPage(i + 1)}
                     >
                       {i + 1}

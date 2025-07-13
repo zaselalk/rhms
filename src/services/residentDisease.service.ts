@@ -101,6 +101,16 @@ class ResidentDiseaseService {
       throw new Error(error.response?.data?.message || 'Unable to update by disease ID');
     }
   }
+
+  // Get patient counts for each disease
+async getDiseasePatientCounts(divisionId: number) {
+  try {
+    const response = await axiosInstance.get(`/resident/disease-patient-counts/${divisionId}`);
+    return response.data; // Expected: [{ name: string, patients: number }]
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Unable to fetch disease patient counts');
+  }
+}
 }
 
 export default new ResidentDiseaseService();

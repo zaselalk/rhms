@@ -45,6 +45,9 @@ ResidentDiseaseRouter.get(
     "/divisionCountsByDisease/:diseaseName",
     catchAsync(residentDiseaseController.getDivisionCountsByDiseaseName)
 );
-
+ResidentDiseaseRouter.get(
+  "/disease-count-by-division/:divisionId",
+  catchAsync(residentDiseaseController.getDiseaseCountsByDivision)
+);
 
 export default ResidentDiseaseRouter;
