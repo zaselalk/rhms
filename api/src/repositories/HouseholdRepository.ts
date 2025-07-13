@@ -108,4 +108,8 @@ export class HouseholdRepository {
   async householdCount(): Promise<number> {
     return Household.count();
   }
+
+
+  //
+
 }

@@ -26,6 +26,8 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
   const [foundResidentName, setFoundResidentName] = useState("");
   const [owner_id, setOwnerId] = useState("");
 
+  console.log(owner_id);
+
   // Feedback state
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -33,8 +35,6 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
 
   const navigate = useNavigate();
   const location = useLocation();
-
- 
 
   // Function to search resident by ID
   const handleSearchResident = async () => {
@@ -93,6 +93,7 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
           owner_id: parsedOwnerId,
         });
 
+
         const createdHouseholdId = response?.id; 
 
       if (!createdHouseholdId) {
@@ -109,6 +110,7 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
       );
 
         antMessage.success("Household created successfully!");
+
 
         refreshHouseholds(); // Call the passed function to refresh households
       
@@ -262,7 +264,4 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
   );
 
 };
-function refreshHouseholds() {
-  throw new Error("Function not implemented.");
-}
 

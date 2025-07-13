@@ -188,6 +188,16 @@ module.exports = {
             createdAt: new Date(),
             updatedAt: new Date(),
           },
+          {
+            permission: "division:view",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+          {
+            permission: "division:edit",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
         ],
         {}
       );
