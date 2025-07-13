@@ -170,12 +170,18 @@ const HouseholdPage: FC = () => {
       return message.error("Invalid household or owner selected!");
 
     try {
+
+      console.log("Calling updateOwnerResident...");
+      await householdresidentService.updateOwnerResident(
+        selectedHousehold.id,
+        parseInt(newOwnerId)
+      );
+
       console.log("Calling updateHouseholdOwner...");
       const updatedHousehold = await updateHouseholdOwner(
         selectedHousehold.id,
         newOwnerId
       );
-
 
       setRegisteredHouseholds((prev) =>
         prev.map((household) =>
@@ -188,9 +194,8 @@ const HouseholdPage: FC = () => {
       message.success("Household owner updated successfully!");
       setEditModalVisible(false);
 
-      
-      await fetchHouseholds(); // Refresh households after update
-      await fetchResidentCountHandler(); // Refresh resident count
+     await fetchHouseholds(); // Refresh households after update
+     await fetchResidentCountHandler
 
     } catch (error: any) {
       console.error("Error updating household owner:", error);
