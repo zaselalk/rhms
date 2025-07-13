@@ -2,7 +2,7 @@
 
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { Modal, message, Button, Input, Table } from "antd";
+import { Modal, message, Button, Input, Table, Spin } from "antd";
 import {
   BarChart,
   Bar,
@@ -35,7 +35,7 @@ const HouseholdPage: FC = () => {
   const [deleteReason, setDeleteReason] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [registeredHouseholds, setRegisteredHouseholds] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [residentCount, setResidentCount] = useState(0);
   const [householdChartData, setHouseholdChartData] = useState<
     { division: string; count: number }[]
@@ -46,6 +46,9 @@ const HouseholdPage: FC = () => {
 
   const fetchHouseholds = async () => {
     try {
+
+      setLoading(true);
+
       const data = await fetchAllHouseholds();
       setRegisteredHouseholds(data);
 
@@ -66,7 +69,7 @@ const HouseholdPage: FC = () => {
       console.error("Error fetching households:", error);
       message.error("Failed to load households");
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
@@ -173,11 +176,6 @@ const HouseholdPage: FC = () => {
         newOwnerId
       );
 
-      console.log("Calling updateOwnerResident...");
-      await householdresidentService.updateOwnerResident(
-        selectedHousehold.id,
-        parseInt(newOwnerId)
-      );
 
       setRegisteredHouseholds((prev) =>
         prev.map((household) =>
@@ -190,7 +188,10 @@ const HouseholdPage: FC = () => {
       message.success("Household owner updated successfully!");
       setEditModalVisible(false);
 
-      window.location.reload(); // Refresh the page to reflect changes
+      
+      await fetchHouseholds(); // Refresh households after update
+      await fetchResidentCountHandler(); // Refresh resident count
+
     } catch (error: any) {
       console.error("Error updating household owner:", error);
       if (error.response?.data?.message) {
@@ -201,7 +202,6 @@ const HouseholdPage: FC = () => {
     }
   };
 
-  if (isLoading) return <div>Loading households...</div>;
 
   const filteredHouseholds = registeredHouseholds.filter((household) =>
     household.house_no.toLowerCase().includes(searchText.toLowerCase())
@@ -255,16 +255,10 @@ const HouseholdPage: FC = () => {
     },
   ];
 
-  if (isLoading) return <div>Loading households...</div>;
 
   return (
     <DashboardContainer>
-      <HouseholdCreateModal
-        isOpen={isOpen}
-        handleClose={() => setIsOpen(false)}
-        refreshHouseholds={fetchHouseholds}
-      />
-      <div>
+      <div className="flex-1 p-6">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-semibold text-[#008FFB]">
             Household Management
@@ -278,6 +272,19 @@ const HouseholdPage: FC = () => {
             + Add Household
           </Button>
         </div>
+
+        <HouseholdCreateModal
+        isOpen={isOpen}
+        handleClose={() => setIsOpen(false)}
+        refreshHouseholds={fetchHouseholds}
+      />
+
+          {loading ? (
+        <div className="flex justify-center items-center h-64">
+          <Spin size="large" />
+        </div>
+      ) : (
+        <>
 
         <div className="flex mb-6">
           <div className="bg-white p-4 rounded-lg shadow-md mr-4 flex-1 text-center">
@@ -334,6 +341,8 @@ const HouseholdPage: FC = () => {
             </BarChart>
           </ResponsiveContainer>
         </div>
+        </>
+      )}
       </div>
 
       <Modal
