@@ -30,7 +30,7 @@ const HouseholdManagePage: FC = () => {
     return currentYear - birthYear;
   };
 
-  // 🔁 Fetch residents on load
+  //  Fetch residents on load
   useEffect(() => {
     const fetchResidents = async () => {
       try {
@@ -82,7 +82,7 @@ const HouseholdManagePage: FC = () => {
     }
   };
 
-  // ➕ Add resident to household
+  //  Add resident to household
   const handleAddResident = async () => {
     if (!foundResident || !relationToOwner.trim()) {
       alert("Please search and validate the resident before adding.");
