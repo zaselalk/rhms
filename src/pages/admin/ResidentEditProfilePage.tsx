@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Alert } from "antd";
+import { Alert, Button } from "antd";
 import { useFormik } from "formik";
 import { useMutation } from "@tanstack/react-query";
 
@@ -731,14 +731,21 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
           </div>
 
           {/* Submit Button */}
+          <Button
+            type="primary"
 
-          <button
-            type="submit"
-            disabled={mutation.isPending || !formik.isValid}
-            className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
+            style={{ backgroundColor: "#008FFB" }}
           >
-            {mutation.isPending ? "Update Resident" : "Update Resident"}
-          </button>
+            <button
+              type="submit"
+              disabled={mutation.isPending || !formik.isValid}
+            // className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
+            >
+              {mutation.isPending ? "Update Resident" : "Update Resident"}
+            </button>
+
+
+          </Button>
         </div>
       </form>
     </DashboardContainer>
