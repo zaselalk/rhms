@@ -246,6 +246,109 @@ function LandingPage() {
         </div>
       </section>
 
+      {/* Developer Team Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Meet Our Development Team
+            </h2>
+            <p className="text-lg text-gray-600">
+              The talented developers behind this healthcare management system
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Developer 1 */}
+            <div className="bg-gray-50 rounded-xl p-6 text-center hover:shadow-lg transition-shadow">
+              <div className="w-24 h-24 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <span className="text-2xl font-bold text-white">A</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                Asela Priyadarshana{" "}
+              </h3>
+              <p className="text-cyan-600 font-medium mb-3">
+                Full Stack Developer
+              </p>
+              <p className="text-gray-600 text-sm">
+                Focused on deployment, infrastructure, and system optimization
+              </p>
+            </div>
+
+            {/* Developer 2 */}
+            <div className="bg-gray-50 rounded-xl p-6 text-center hover:shadow-lg transition-shadow">
+              <div className="w-24 h-24 bg-gradient-to-br from-green-400 to-teal-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <span className="text-2xl font-bold text-white">D</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                Dilukshi Nimasha
+              </h3>
+              <p className="text-green-600 font-medium mb-3">
+                Full Stack Developer
+              </p>
+              <p className="text-gray-600 text-sm">
+                Expert in server-side development and database management
+              </p>
+            </div>
+
+            {/* Developer 3 */}
+            <div className="bg-gray-50 rounded-xl p-6 text-center hover:shadow-lg transition-shadow">
+              <div className="w-24 h-24 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <span className="text-2xl font-bold text-white">R</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                Ravindu Harshana
+              </h3>
+              <p className="text-purple-600 font-medium mb-3">
+                Full Stack Developer
+              </p>
+              <p className="text-gray-600 text-sm">
+                Specialized in frontend development and user experience design
+              </p>
+            </div>
+
+            {/* Developer 4 */}
+            <div className="bg-gray-50 rounded-xl p-6 text-center hover:shadow-lg transition-shadow">
+              <div className="w-24 h-24 bg-gradient-to-br from-orange-400 to-red-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <span className="text-2xl font-bold text-white">N</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                Ashfa Nistar
+              </h3>
+              <p className="text-orange-600 font-medium mb-3">
+                Full Stack Developer
+              </p>
+              <p className="text-gray-600 text-sm">
+                Creating intuitive interfaces and seamless user experiences
+              </p>
+            </div>
+          </div>
+
+          {/* Team Stats */}
+          <div className="mt-12 bg-gradient-to-r from-cyan-50 to-blue-50 rounded-2xl p-8">
+            <div className="grid md:grid-cols-3 gap-8 text-center">
+              <div>
+                <div className="text-3xl font-bold text-cyan-600 mb-2">
+                  Team CipherSquad
+                </div>
+                <div className="text-gray-600">Development Team</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-blue-600 mb-2">
+                  University of Ruhuna
+                </div>
+                <div className="text-gray-600">Educational Institution</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-green-600 mb-2">
+                  2025
+                </div>
+                <div className="text-gray-600">Project Year</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
