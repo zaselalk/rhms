@@ -62,6 +62,7 @@ export class ResidentRepository {
       where: {
         id,
       },
+
       attributes: ['id', 'firstName', 'lastName',
       'nic',
       'email',
@@ -81,6 +82,7 @@ export class ResidentRepository {
       'chronicalDesease',
       'height',
       'weight',], // only fields necessary.
+
     });
   }
 
