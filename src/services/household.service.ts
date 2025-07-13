@@ -67,7 +67,7 @@ export const getHouseholdsByDivision = async (division: string) => {
 export const getHouseholdCountByDivision = async (division: string) => {
   try {
     const response = await axiosInstance.get(
-      `/household/division/${division}/count`
+      `/household/division/${division}`
     );
     return response.data.data.count;
   } catch (error) {

@@ -47,7 +47,7 @@ HouseholdRouter.get(
 
 // Get count of households in a division
 HouseholdRouter.get(
-  "/division/:divisionId/count",
+  "/division/:divisionId",
   protectRoute("household:view"),
   catchAsync(householdController.getHouseholdCountByDivision)
 );
