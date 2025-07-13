@@ -6,14 +6,11 @@ import {
   Building2,
   MapPin,
   Activity,
-  Calendar,
   UserCheck,
   Shield,
   Heart,
-  Clock,
   Phone,
   Mail,
-  Award,
 } from "lucide-react";
 
 interface Stats {
