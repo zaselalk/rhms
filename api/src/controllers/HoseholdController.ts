@@ -98,7 +98,6 @@ getHouseholdsByDivision = async (req: Request, res: Response): Promise<Response>
     if (!divisionId) {
       return res.status(400).json({ message: "Missing divisionId" });
     }
-
     const households = await this.householdService.findHouseholdsByDivision(divisionId);
     return res.json(households);
   } catch (error) {

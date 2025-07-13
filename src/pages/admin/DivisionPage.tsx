@@ -259,7 +259,6 @@ const DivisionPage: FC = () => {
 
             {/* Bar Chart */}
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Resident Counts by Division</h3>
               <Bar
                 data={generateChartData()}
                 options={{
@@ -268,7 +267,7 @@ const DivisionPage: FC = () => {
                     legend: { position: "top" },
                     title: {
                       display: true,
-                      text: "Resident Counts in Divisions",
+                      text: "Resident Count Distribution by Division",
                       font: { size: 18 },
                     },
                   },
