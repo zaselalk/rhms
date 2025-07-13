@@ -26,8 +26,8 @@ export class HouseholdServices {
   }
 
   // Update Household Owner by house_no
-  async updateOwnerByHouseNo(house_no: string, owner_id: number): Promise<boolean> {
-    return this.householdRepository.updateOwnerByHouseNo(house_no, owner_id);
+  async updateOwnerByHouseId(id:number, owner_id: number): Promise<boolean> {
+    return this.householdRepository.updateOwnerByHouseId(id, owner_id);
   }
 
   // Delete Household by house_no

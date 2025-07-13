@@ -33,15 +33,15 @@ export class HouseholdController {
 
   // Update Household Owner
   updateHouseholdOwner = async (req: Request, res: Response): Promise<Response> => {
-    const { house_no } = req.params;  // house_no as part of the request params
+    const { id} = req.params;  // house_no as part of the request params
     const { owner_id } = req.body;
 
-    if (!house_no || !owner_id) {
+    if (!id|| !owner_id) {
       return res.status(400).json({ message: 'Missing house_no or owner_id' });
     }
 
     try {
-      const updated = await this.householdService.updateOwnerByHouseNo(house_no, owner_id);
+      const updated = await this.householdService.updateOwnerByHouseId(Number(id),owner_id);
       if (!updated) {
         return res.status(404).json({ message: 'Household not found' });
       }

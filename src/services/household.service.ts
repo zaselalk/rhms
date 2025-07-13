@@ -21,10 +21,10 @@ export const createHousehold = async (payload: HouseholdPayload) => {
 // };
 
 export const updateHouseholdOwner = async (
-  house_no: string | number,
+  id: string | number,
   owner_id: number | string,
 ) => {
-  const response = await axiosInstance.put(`/household/update/${house_no}`, {
+  const response = await axiosInstance.put(`/household/update/${id}`, {
     owner_id,
   });
   return response.data;

@@ -76,12 +76,12 @@ export class HouseholdRepository {
   }
 
   // Update Household Owner
-  async updateOwnerByHouseNo(
-    house_no: string,
+  async updateOwnerByHouseId(
+    id:number,
     owner_id: number,
   ): Promise<boolean> {
-    const household = await Household.findOne({ where: { house_no } });
-    if (!household) return false; // If no household found with house_no
+    const household = await Household.findByPk(id);
+    if (!household) return false; // If no household found with id
 
     household.owner_id = owner_id; // Update the owner_id
     await household.save(); // Save the changes
