@@ -3,7 +3,6 @@ import { useParams } from "react-router";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import {
   getHouseholdsByDivision,
-  getHouseholdCountByDivision,
 } from "../../services/household.service";
 import { DivisionService } from "../../services/division.service";
 
@@ -48,12 +47,10 @@ const SingleDivisionPage: FC = () => {
 
           const householdData = await getHouseholdsByDivision(divisionData.divisionName);
           setHouseholds(householdData);
+          setHouseholdCount(householdData.length); // ✅ Count from frontend
 
           const countData = await DivisionService.getResidentCountByDivision(divisionId);
           setResidentCount(countData.residentCount);
-
-          const householdCount = await getHouseholdCountByDivision(divisionId);
-          setHouseholdCount(householdCount);
 
           const dummyDiseases: Disease[] = [
             { name: "Flu", count: 15 },
