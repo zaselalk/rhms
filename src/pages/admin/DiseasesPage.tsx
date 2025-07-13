@@ -41,6 +41,8 @@ const DiseasesPage: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
 
+  console.log(diseases, residentDiseases);
+
   const fetchAllData = async () => {
     try {
       setLoading(true);
