@@ -596,6 +596,24 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
               </select>
             </div>
 
+            {/* Blood Pressure */}
+            <div>
+              <label
+                htmlFor="bloodPressure"
+                className="block text-xl font-medium text-gray-700"
+              >
+                Blood Pressure
+              </label>
+              <input
+                type="text"
+                id="bloodPressure"
+                {...formik.getFieldProps("bloodPressure")}
+                value={formik.values.bloodPressure}
+                className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                placeholder="120/80 Blood Pressure"
+              />
+            </div>
+
             {/* Addicteds */}
             <div className="col-span-2">
               <label className="block text-xl font-medium text-gray-700">
