@@ -37,9 +37,12 @@ const HouseholdPage: FC = () => {
   const [registeredHouseholds, setRegisteredHouseholds] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [residentCount, setResidentCount] = useState(0);
-  const [householdChartData, setHouseholdChartData] = useState<{ division: string; count: number }[]>([]);
-  const [searchText, setSearchText] = useState('');
+  const [householdChartData, setHouseholdChartData] = useState<
+    { division: string; count: number }[]
+  >([]);
+  const [searchText, setSearchText] = useState("");
 
+  console.log(deleteReason);
 
   const fetchHouseholds = async () => {
     try {
@@ -52,10 +55,12 @@ const HouseholdPage: FC = () => {
         divisionCounts[division] = (divisionCounts[division] || 0) + 1;
       });
 
-      const chartData = Object.entries(divisionCounts).map(([division, count]) => ({
-        division,
-        count,
-      }));
+      const chartData = Object.entries(divisionCounts).map(
+        ([division, count]) => ({
+          division,
+          count,
+        })
+      );
       setHouseholdChartData(chartData);
     } catch (error) {
       console.error("Error fetching households:", error);
@@ -97,7 +102,9 @@ const HouseholdPage: FC = () => {
     try {
       await deleteHousehold(selectedHousehold.house_no);
       setRegisteredHouseholds((prev) =>
-        prev.filter((household) => household.house_no !== selectedHousehold.house_no)
+        prev.filter(
+          (household) => household.house_no !== selectedHousehold.house_no
+        )
       );
       message.success("Household deleted successfully!");
       setDeleteModalVisible(false);
@@ -169,10 +176,10 @@ const HouseholdPage: FC = () => {
   if (isLoading) return <div>Loading households...</div>;
 
   const filteredHouseholds = registeredHouseholds.filter((household) =>
-  household.house_no.toLowerCase().includes(searchText.toLowerCase())
-);
+    household.house_no.toLowerCase().includes(searchText.toLowerCase())
+  );
 
-const columns = [
+  const columns = [
     {
       title: "House No",
       dataIndex: "house_no",
@@ -181,7 +188,7 @@ const columns = [
     {
       title: "Owner",
       key: "owner",
-      render: (text: any, record: any) =>
+      render: (_: any, record: any) =>
         `${record.owner?.firstName || ""} ${record.owner?.lastName || ""}`,
     },
     {
@@ -222,7 +229,6 @@ const columns = [
 
   if (isLoading) return <div>Loading households...</div>;
 
-
   return (
     <DashboardContainer>
       <HouseholdCreateModal
@@ -237,7 +243,7 @@ const columns = [
           <Button
             className="px-4 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
             type="primary"
-            style={{ backgroundColor: '#008FFB' }}
+            style={{ backgroundColor: "#008FFB" }}
             onClick={() => setIsOpen(true)}
           >
             + Add Household
@@ -259,8 +265,6 @@ const columns = [
           </div>
         </div>
 
-        
-
         {/* Search Bar */}
         <div className="mb-4">
           <Input.Search
@@ -274,15 +278,15 @@ const columns = [
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow-md">
-            <Table
+          <Table
             dataSource={filteredHouseholds}
             columns={columns}
             rowKey="id"
-            pagination={{ 
+            pagination={{
               pageSize: 5,
-              position: ['bottomCenter'],
+              position: ["bottomCenter"],
               className: "custom-pagination",
-             }}
+            }}
           />
         </div>
 
@@ -301,7 +305,6 @@ const columns = [
             </BarChart>
           </ResponsiveContainer>
         </div>
-
       </div>
 
       <Modal
@@ -311,13 +314,12 @@ const columns = [
         onCancel={() => setDeleteModalVisible(false)}
         okText="Delete"
         cancelText="Cancel"
-        okButtonProps={{ danger: true, type: 'primary' }}
+        okButtonProps={{ danger: true, type: "primary" }}
       >
         <p>
           Are you sure you want to delete the household{" "}
           <strong>{selectedHousehold?.house_no}</strong>?
         </p>
-       
       </Modal>
 
       <Modal
