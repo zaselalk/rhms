@@ -31,17 +31,6 @@ ResidentDiseaseRouter.get(
     "/getResidentsByDiseaseId",
     catchAsync(residentDiseaseController.getResidentsByDiseaseId)
 )
-
-ResidentDiseaseRouter.put(
-    "/updateByResidentId",
-    catchAsync(residentDiseaseController.updateResidentDiseaseByResidentId)
-);
-
-ResidentDiseaseRouter.put(
-    "/updateByDiseaseId",
-    catchAsync(residentDiseaseController.updateResidentDiseaseByDiseaseId)
-);
-
 ResidentDiseaseRouter.delete(
     "/deleteByResidentId",
     catchAsync(residentDiseaseController.deleteResidentDiseaseByResidentId)
@@ -51,5 +40,11 @@ ResidentDiseaseRouter.delete(
     "/deleteByDiseaseId",
     catchAsync(residentDiseaseController.deleteResidentDiseaseByDiseaseId)
 );
+
+ResidentDiseaseRouter.get(
+    "/divisionCountsByDisease/:diseaseName",
+    catchAsync(residentDiseaseController.getDivisionCountsByDiseaseName)
+);
+
 
 export default ResidentDiseaseRouter;

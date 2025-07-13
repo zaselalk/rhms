@@ -43,18 +43,8 @@ class DivisionRepository {
     return division;
   }
 
-  // Get all soft-deleted divisions
-  async getDeletedDivisions() {
-    return await Division.findAll({
-      where: {
-        deletedAt: { [Op.not]: null },
-      },
-      paranoid: false,
-    });
-  }
 
-  // Count only non-deleted divisions
-  async getDivisionCount(): Promise<number> {
+  async getDivisionCount() {
     return await Division.count();
   }
 

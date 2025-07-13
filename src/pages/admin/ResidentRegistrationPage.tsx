@@ -13,6 +13,7 @@ import { ClinicService } from "../../services/clinic.service";
 import { DivisionService } from "../../services/division.service";
 import diseaseService from "../../services/disease.service";
 
+
 type ResidentRegistrationProps = {};
 
 const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
@@ -49,7 +50,6 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
   }
 
   const [GramaniladariDivision, setGramaniladariDivision] = useState<Division[]>([]);
-
 
   type Clinic = {
     id: string;
@@ -114,6 +114,22 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
   };
 
 
+  //GramaniladariDivision data fetch
+  useEffect(() => {
+    const fetchGramaniladariDivision = async () => {
+      try {
+        const data = await DivisionService.getAllDivisions();
+        // Assuming the data is an array of objects with id and name properties
+        setGramaniladariDivision(data);
+      } catch (error) {
+        console.error("Error fetching Gramaniladari Division:", error);
+      }
+    }
+    fetchGramaniladariDivision();
+  }, []);
+
+
+
 
   const addictedlist = [
     "Smoke",
@@ -122,8 +138,6 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     "Other Substance Use",
   ];
   const alergydlist = ["Food Allergy", "Drug Allergy", "Other Allergy"];
-
-
   const caldate2 = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
 
   const handleAddicted = (event: React.ChangeEvent<HTMLInputElement>) => {

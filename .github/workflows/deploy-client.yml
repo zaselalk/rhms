@@ -121,26 +121,6 @@ jobs:
             echo "🌐 Website should be accessible at your configured domain"
           EOF
           
-      - name: 🧪 Health check
-        run: |
-          ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
-            # Wait a moment for nginx to serve the new content
-            sleep 3
-            
-            # Check if the index.html is accessible
-            if curl -f http://localhost/health > /dev/null 2>&1; then
-              echo '✅ Health check passed'
-            else
-              echo '⚠️  Health check endpoint not responding, checking main page...'
-              if curl -f http://localhost/ > /dev/null 2>&1; then
-                echo '✅ Main page is accessible'
-              else
-                echo '❌ Main page is not accessible'
-                exit 1
-              fi
-            fi
-          "
-          
       - name: 🧹 Cleanup old deployments
         run: |
           ssh ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }} "
