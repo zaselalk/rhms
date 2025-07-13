@@ -22,6 +22,7 @@ import {
   searchResidentById,
   updateHouseholdOwner,
 } from "../../services/household.service";
+import householdresidentService from "../../services/householdresident.service";
 
 const HouseholdPage: FC = () => {
   const navigate = useNavigate();
@@ -116,21 +117,43 @@ const HouseholdPage: FC = () => {
 
   const handleSearchResident = async () => {
     if (!newOwnerId) return message.error("Please enter a valid Resident ID!");
+
+     const input = newOwnerId.trim();
+
+  const isNumericId = /^\d+$/.test(input); // Digits only
+  const isValidNIC = /^(\d{9}[vVxX]|\d{12})$/.test(input); // NIC format
+
+  if (!isNumericId && !isValidNIC) {
+    message.error("Invalid Resident ID or NIC format!");
+    setNewOwnerName("");
+    return;
+  }
+
     try {
-      const resident = await searchResidentById(Number(newOwnerId));
-      if (resident) {
-        setNewOwnerName(`${resident.firstName} ${resident.lastName}`);
-        console.log("Resident found:", resident.firstName, resident.lastName);
-        message.success("Resident found");
-      } else {
-        message.error("Resident not found");
-        setNewOwnerName("");
-      }
-    } catch (error) {
-      console.error("Error searching resident:", error);
-      message.error("Failed to search resident");
+      let resident;
+    if (isNumericId) {
+      resident = await searchResidentById(Number(input));
+    } else {
+      const response = await fetch(`http://localhost:3001/resident/nic/${input}`);
+      const result = await response.json();
+      if (!result?.data) throw new Error("Resident not found");
+      resident = result.data;
     }
-  };
+
+    if (resident) {
+      setNewOwnerName(`${resident.firstName} ${resident.lastName}`);
+      setNewOwnerId(resident.id.toString()); // Store numeric ID for update
+      message.success("Resident found");
+    } else {
+      setNewOwnerName("");
+      message.error("Resident not found");
+    }
+  } catch (error) {
+    console.error("Error searching resident:", error);
+    setNewOwnerName("");
+    message.error("Failed to search resident");
+  }
+};
 
   const handleConfirmEdit = async () => {
     if (!newOwnerId) return message.error("Please enter a valid resident ID!");
@@ -138,12 +161,19 @@ const HouseholdPage: FC = () => {
       return message.error("Invalid household or owner selected!");
 
     try {
+      console.log("Calling updateHouseholdOwner...");
       const updatedHousehold = await updateHouseholdOwner(
         selectedHousehold.id,
         newOwnerId
       );
 
-      if (updatedHousehold.owner) {
+      console.log("Calling updateOwnerResident...");
+      await householdresidentService.updateOwnerResident(
+        selectedHousehold.id,
+        parseInt(newOwnerId)
+      );
+    
+
         setRegisteredHouseholds((prev) =>
           prev.map((household) =>
             household.id === selectedHousehold.id
@@ -157,9 +187,6 @@ const HouseholdPage: FC = () => {
 
         window.location.reload(); // Refresh the page to reflect changes
 
-      } else {
-        message.error("Failed to update owner");
-      }
     } catch (error: any) {
       console.error("Error updating household owner:", error);
       if (error.response?.data?.message) {
@@ -335,7 +362,7 @@ const columns = [
       >
         <div className="mb-4">
           <label className="block text-sm text-gray-700 mb-2">
-            New Owner ID
+            New Owner ID or NIC
           </label>
           <Input
             value={newOwnerId}
@@ -347,8 +374,8 @@ const columns = [
                 message.error("Please enter a valid Resident ID!");
               }
             }}
-            onBlur={handleSearchResident}
-            placeholder="Enter new owner's Resident ID"
+           
+            placeholder="Enter new owner's Resident ID or NIC"
           />
           <Button onClick={handleSearchResident} type="primary">
             Search

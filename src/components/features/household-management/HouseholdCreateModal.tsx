@@ -40,16 +40,32 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
   const handleSearchResident = async () => {
     setMessage("");
     setError("");
+    setFoundResidentName("");
+    setOwnerId("");
 
-    if (!residentSearchId || isNaN(Number(residentSearchId))) {
-      setError("Please enter a valid numeric Resident ID");
-      return;
-    }
+      const input = residentSearchId.trim();
+
+      // Regex patterns
+      const isNumericId = /^\d+$/.test(input); // All digits
+      const isValidNIC = /^(\d{9}[vVxX]|\d{12})$/.test(input); // old/new NIC formats
+
+
+   if (!isNumericId && !isValidNIC) {
+    setError("Please enter a valid Resident ID or NIC");
+    return;
+  }
 
     try {
-      const res = await axios.get(
-        `http://localhost:3001/resident/id/${Number(residentSearchId)}`
-      );
+
+      let res;
+
+
+          if (isNumericId) {
+      res = await axios.get(`http://localhost:3001/resident/id/${input}`);
+    } else {
+      res = await axios.get(`http://localhost:3001/resident/nic/${input}`);
+    }
+
       const data = res.data.data; // Accessing the correct structure
 
       if (!data) {
@@ -218,14 +234,22 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
             htmlFor="residentId"
             className="block text-sm font-medium text-gray-700"
           >
-            House Owner (Resident ID)
+            House Owner (Resident ID / NIC)
           </label>
           <div className="flex space-x-2">
             <input
-              type="number"
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9vV]*"
               id="residentSearchId"
               value={residentSearchId}
-              onChange={(e) => setResidentSearchId(e.target.value)}
+              onChange={(e) => {
+                  const input = e.target.value;
+                  // Allow only numbers and 'v' or 'V'
+                  if (/^[0-9vV]*$/.test(input)) {
+                    setResidentSearchId(input);
+                  }
+                }}
               className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 outline-none"
               placeholder="Enter resident ID"
             />

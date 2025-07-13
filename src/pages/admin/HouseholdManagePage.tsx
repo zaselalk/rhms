@@ -30,7 +30,7 @@ const HouseholdManagePage: FC = () => {
     return currentYear - birthYear;
   };
 
-  // 🔁 Fetch residents on load
+  //  Fetch residents on load
   useEffect(() => {
     const fetchResidents = async () => {
       try {
@@ -57,15 +57,21 @@ const HouseholdManagePage: FC = () => {
     fetchResidents();
   }, [householdId]);
 
-  // 🔍 Search for resident
+  //  Search for resident
   const handleSearchResident = async () => {
     if (!searchId) return;
 
-    try {
-      const response = await fetch(
-        `http://localhost:3001/resident/id/${searchId}`,
-      );
-      const data = await response.json();
+   try {
+    let res;
+    const isNumeric = /^\d+$/.test(searchId);
+
+    if (isNumeric) {
+      res = await fetch(`http://localhost:3001/resident/id/${searchId}`);
+    } else {
+      res = await fetch(`http://localhost:3001/resident/nic/${searchId}`);
+    }
+
+      const data = await res.json();
       if (data?.data) {
         setFoundResident({
           id: data.data.id,
@@ -173,8 +179,16 @@ const HouseholdManagePage: FC = () => {
           <div className="flex flex-wrap items-center gap-2 mb-2">
             <input
               type="text"
+              inputMode="numeric"
+              pattern="[0-9vV]*"
               value={searchId}
-              onChange={(e) => setSearchId(e.target.value)}
+              onChange={(e) => {
+                const input = e.target.value;
+                // Allow only numbers and 'v' or 'V'
+                if (/^[0-9vV]*$/.test(input)) {
+                  setSearchId(input);
+                }
+              }}
               placeholder="Enter resident ID"
               className="px-4 py-2 border rounded"
             />
@@ -189,7 +203,7 @@ const HouseholdManagePage: FC = () => {
           {foundResident && (
             <div>
               <p className="mb-2 text-green-600">
-                ✅ Found: {foundResident.firstName} {foundResident.lastName}
+                 Found: {foundResident.firstName} {foundResident.lastName}
               </p>
             </div>
           )}

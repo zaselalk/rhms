@@ -33,4 +33,34 @@ export class HouseholdResidentRepository {
     await record.destroy();
     return true;
   }
+
+  async updateOwnerResidentRelation(householdId: number, newResidentId: number): Promise<boolean> {
+  console.log("Updating owner resident relation...");
+  console.log("Household ID:", householdId);
+  console.log("New Resident ID:", newResidentId);
+
+  const ownerRecord = await HouseholdResident.findOne({
+    where: {
+      householdId,
+      relation: 'Owner',
+    },
+  });
+
+  if (!ownerRecord) {
+    console.warn(`No 'Owner' found for householdId: ${householdId}`);
+    return false;
+  }
+
+  console.log("Old Resident ID:", ownerRecord.residentId);
+
+  ownerRecord.residentId = newResidentId;
+  await ownerRecord.save();
+
+  console.log("Updated Owner Record:", ownerRecord.toJSON());
+
+  return true;
+}
+
+
+
 }
