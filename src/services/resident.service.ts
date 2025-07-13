@@ -116,6 +116,18 @@ class ResidentService {
       );
     }
   }
+
+  // Search Resident by NIC
+  async searchResidentByNic(nic: string) {
+    try {
+      const response = await axiosInstance.get(`/resident/nic/${nic}`);
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || "Unable to fetch resident by NIC"
+      );
+    }
+  }
 }
 
 export default new ResidentService();

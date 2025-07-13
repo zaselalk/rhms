@@ -24,4 +24,11 @@ HouseholdResidentRouter.delete(
   catchAsync(householdResidentController.removeResident),
 );
 
+HouseholdResidentRouter.put(
+  "/:householdId/update-owner",
+  catchAsync(householdResidentController.updateOwnerResident),
+);
+
+
+
 export default HouseholdResidentRouter;

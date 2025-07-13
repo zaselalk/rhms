@@ -53,6 +53,15 @@ export class ResidentRepository {
       where: {
         nic,
       },
+      attributes: [
+        "id",
+        "firstName",
+        "lastName",
+        "nic",
+        "email",
+        "birthday",
+        "bloodGroup",
+      ]
     });
   }
 
@@ -62,6 +71,29 @@ export class ResidentRepository {
       where: {
         id,
       },
+      attributes: [
+        "id",
+        "firstName",
+        "lastName",
+        "nic",
+        "email",
+        // 'password',
+        "birthday",
+        "bloodGroup",
+        // 'gender',
+        "bloodPressure",
+        "heartRate",
+        "address",
+        "contactNumber",
+        "divisionId",
+        "maritalState",
+        "educationLevel",
+        "addicted",
+        "alergies",
+        "chronicalDesease",
+        "height",
+        "weight",
+      ], // only fields necessary.
     });
   }
 
@@ -140,7 +172,6 @@ export class ResidentRepository {
 
     return diseaseCounts;
   }
-
   async findByEmail(email: string): Promise<Resident | null> {
     return Resident.findOne({
       where: {
@@ -148,4 +179,5 @@ export class ResidentRepository {
       },
     });
   }
+
 }

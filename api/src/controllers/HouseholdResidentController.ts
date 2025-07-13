@@ -13,7 +13,7 @@ export class HouseholdResidentController {
   // GET /household/:id/residents
   getResidentsByHouseholdId = async (
     req: Request,
-    res: Response,
+    res: Response
   ): Promise<Response> => {
     const { id } = req.params;
     try {
@@ -31,7 +31,7 @@ export class HouseholdResidentController {
   // POST /household/:id/add-resident
   addResidentToHousehold = async (
     req: Request,
-    res: Response,
+    res: Response
   ): Promise<Response> => {
     const { id: householdId } = req.params;
     const { residentId, relation } = req.body;
@@ -46,7 +46,7 @@ export class HouseholdResidentController {
       const added = await this.service.addResidentToHousehold(
         Number(householdId),
         Number(residentId),
-        relation,
+        relation
       );
       return res.status(201).json({
         message: "Resident added to household",
@@ -64,7 +64,7 @@ export class HouseholdResidentController {
 
     try {
       const removed = await this.service.removeResidentFromHousehold(
-        Number(id),
+        Number(id)
       );
       if (!removed) {
         return res.status(404).json({ message: "Record not found" });
@@ -73,6 +73,56 @@ export class HouseholdResidentController {
       return res.json({ message: "Resident removed from household" });
     } catch (error) {
       console.error("Error removing resident:", error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  };
+
+  deleteHousehold = async (req: Request, res: Response): Promise<Response> => {
+    const { id } = req.params;
+
+    try {
+      await this.service.removeAllResidentsByHouseholdId(Number(id));
+      return res.json({ message: "All residents removed from household" });
+    } catch (error) {
+      console.error("Error removing residents:", error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  };
+
+  // PUT /household-resident/:householdId/update-owner
+  updateOwnerResident = async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
+    const { householdId } = req.params;
+    const { residentId } = req.body;
+
+    console.log(
+      `Received update-owner request for householdId ${householdId} and residentId ${residentId}`
+    );
+
+    if (!residentId) {
+      console.error("Missing residentId in request body");
+      return res.status(400).json({ message: "Missing residentId" });
+    }
+
+    try {
+      const success = await this.service.updateOwnerResidentRelation(
+        Number(householdId),
+        Number(residentId)
+      );
+
+      if (!success) {
+        console.error(
+          `Owner relation not found for householdId ${householdId}`
+        );
+        return res.status(404).json({ message: "Owner relation not found" });
+      }
+
+      console.log(`Successfully updated owner for householdId ${householdId}`);
+      return res.json({ message: "Household owner updated successfully" });
+    } catch (error) {
+      console.error("Error updating owner relation:", error);
       return res.status(500).json({ message: "Internal server error" });
     }
   };
