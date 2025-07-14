@@ -33,7 +33,7 @@ interface ResidentDisease {
 }
 
 const DiseasesPage: FC = () => {
- 
+  
   const [diseases, setDiseases] = useState<Disease[]>([]);
   const [residentDiseases, setResidentDiseases] = useState<ResidentDisease[]>(
     []
@@ -121,13 +121,11 @@ const DiseasesPage: FC = () => {
         cancelText: "No",
         onOk: async () => {
           try {
-            const addedDisease = await diseaseService.createDisease({
+            await diseaseService.createDisease({
               diseaseName: newDisease,
             });
 
-          
-            form.resetFields();
-            setIsModalOpen(false);
+            
             message.success({
               content: "Disease added successfully",
               duration: 3,
@@ -220,7 +218,13 @@ const DiseasesPage: FC = () => {
                 },
               ]}
             >
-              <Input placeholder="Enter disease name" />
+              <Input placeholder="Enter disease name" 
+              onKeyPress={(e) => {
+                  const regex = /^[A-Za-z\s]+$/;
+                  if (!regex.test(e.key)) {
+                    e.preventDefault();
+                  }
+                }}/>
             </Form.Item>
           </Form>
         </Modal>
