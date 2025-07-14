@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import { message, Modal } from "antd";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import householdresidentService from "../../services/householdresident.service";
+import residentService from "../../services/resident.service";
 
 interface Resident {
   id: number;
@@ -64,20 +65,22 @@ const HouseholdManagePage: FC = () => {
     const isNumeric = /^\d+$/.test(searchId);
 
     if (isNumeric) {
-      res = await fetch(`http://localhost:3001/resident/id/${searchId}`);
+      const response = await residentService.getSingleResident(searchId);
+      res= response.data;
     } else {
-      res = await fetch(`http://localhost:3001/resident/nic/${searchId}`);
+      const response = await residentService.searchResidentByNic(searchId);
+      res = response.data;
     }
 
-      const data = await res.json();
-      if (data?.data) {
+      
+      if (res) {
         setFoundResident({
-          id: data.data.id,
-          firstName: data.data.firstName,
-          lastName: data.data.lastName,
-          birthday: data.data.birthday,
+          id: res.id,
+          firstName: res.firstName,
+          lastName: res.lastName,
+          birthday: res.birthday,
         });
-        message.success(`Found: ${data.data.firstName} ${data.data.lastName}`);
+        message.success(`Found: ${res.firstName} ${res.lastName}`);
 
       } else {
         message.error("Resident not found");

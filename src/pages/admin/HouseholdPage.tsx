@@ -19,10 +19,10 @@ import {
   deleteHousehold,
   fetchAllHouseholds,
   fetchResidentCount,
-  searchResidentById,
   updateHouseholdOwner,
 } from "../../services/household.service";
 import householdresidentService from "../../services/householdresident.service";
+import residentService from "../../services/resident.service";
 
 const HouseholdPage: FC = () => {
   const navigate = useNavigate();
@@ -136,14 +136,13 @@ const HouseholdPage: FC = () => {
     try {
       let resident;
       if (isNumericId) {
-        resident = await searchResidentById(Number(input));
+        const response = await residentService.getSingleResident(input);
+      resident = response.data;
+
       } else {
-        const response = await fetch(
-          `http://localhost:3001/resident/nic/${input}`
-        );
-        const result = await response.json();
-        if (!result?.data) throw new Error("Resident not found");
-        resident = result.data;
+       const response = await residentService.searchResidentByNic(input);
+      resident = response.data;
+       
       }
 
       if (resident) {
