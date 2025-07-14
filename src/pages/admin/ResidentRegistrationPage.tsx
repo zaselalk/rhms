@@ -42,7 +42,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     Birthcertificate: "",
     gluecose: 0,
     deletedAt: null, // Initialize deletedAt to null for new residents
-    
+
   };
 
   const [addicted, setAddictedd] = useState<string[]>([]);
@@ -95,7 +95,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     };
 
     //Fetch Division
-     const fetchGramaniladariDivision = async () => {
+    const fetchGramaniladariDivision = async () => {
       try {
         const data = await DivisionService.getAllDivisions();
         // Assuming the data is an array of objects with id and name properties
@@ -557,6 +557,41 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                 <option value="O+">O+</option>
                 <option value="O-">O-</option>
               </select>
+            </div>
+
+            {/* Gluecose */}
+            <div>
+              <label
+                htmlFor="gluecose"
+                className="block text-xl font-medium text-gray-700"
+              >
+                Gluecose Level
+              </label>
+              <input
+                type="number"
+                id="gluecose"
+                {...formik.getFieldProps("gluecose")}
+                className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                placeholder="Enter Gluecose Level"
+              />
+            </div>
+
+            {/* Blood Presssure */}
+            <div>
+              <label
+                htmlFor="bloodPressure"
+                className="block text-xl font-medium text-gray-700"
+              >
+                Blood Pressure
+              </label>
+              <input
+                type="text"
+                id="bloodPressure"
+                {...formik.getFieldProps("bloodPressure")}
+                className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                placeholder="120/80 Blood Pressure"
+              />
+
             </div>
 
             {/* Addicteds */}
