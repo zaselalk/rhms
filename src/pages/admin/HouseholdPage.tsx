@@ -24,9 +24,11 @@ import {
 } from "../../services/household.service";
 import householdresidentService from "../../services/householdresident.service";
 import residentService from "../../services/resident.service";
+import { useAppSelector } from "../../hooks/state/hooks";
 
 const HouseholdPage: FC = () => {
   const navigate = useNavigate();
+  const user = useAppSelector((state) => state.auth.user);
 
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isEditModalVisible, setEditModalVisible] = useState(false);
@@ -47,7 +49,6 @@ const HouseholdPage: FC = () => {
 
   const fetchHouseholds = async () => {
     try {
-
       setLoading(true);
 
       const data = await fetchAllHouseholds();
@@ -141,12 +142,10 @@ const HouseholdPage: FC = () => {
       let resident;
       if (isNumericId) {
         const response = await residentService.getSingleResident(input);
-      resident = response.data;
-
+        resident = response.data;
       } else {
-       const response = await residentService.searchResidentByNic(input);
-      resident = response.data;
-       
+        const response = await residentService.searchResidentByNic(input);
+        resident = response.data;
       }
 
       if (resident) {
@@ -170,7 +169,6 @@ const HouseholdPage: FC = () => {
       return message.error("Invalid household or owner selected!");
 
     try {
-
       console.log("Calling updateOwnerResident...");
       await householdresidentService.updateOwnerResident(
         selectedHousehold.id,
@@ -194,9 +192,8 @@ const HouseholdPage: FC = () => {
       message.success("Household owner updated successfully!");
       setEditModalVisible(false);
 
-     await fetchHouseholds(); // Refresh households after update
-     await fetchResidentCountHandler
-
+      await fetchHouseholds(); // Refresh households after update
+      await fetchResidentCountHandler;
     } catch (error: any) {
       console.error("Error updating household owner:", error);
       if (error.response?.data?.message) {
@@ -206,7 +203,6 @@ const HouseholdPage: FC = () => {
       }
     }
   };
-
 
   const filteredHouseholds = registeredHouseholds.filter((household) =>
     household.house_no.toLowerCase().includes(searchText.toLowerCase())
@@ -241,25 +237,30 @@ const HouseholdPage: FC = () => {
             <span className="mr-2">View</span>
             <EyeOutlined />
           </button>
-          <button
-            className="flex items-center px-4 py-2 bg-green-500 text-white rounded-full shadow-md hover:bg-green-600 cursor-pointer"
-            onClick={() => handleEditHousehold(record)}
-          >
-            <span className="mr-2">Edit</span>
-            <EditOutlined />
-          </button>
-          <button
-            className="flex items-center px-4 py-2 bg-red-500 text-white rounded-full shadow-md hover:bg-red-600 cursor-pointer"
-            onClick={() => handleDeleteHousehold(record)}
-          >
-            <span className="mr-2">Delete</span>
-            <DeleteOutlined />
-          </button>
+          {/* Only who has edit permission can see this button */}
+          {user?.permissions?.includes("household:edit") && (
+            <button
+              className="flex items-center px-4 py-2 bg-green-500 text-white rounded-full shadow-md hover:bg-green-600 cursor-pointer"
+              onClick={() => handleEditHousehold(record)}
+            >
+              <span className="mr-2">Edit</span>
+              <EditOutlined />
+            </button>
+          )}
+          {/* Only who has delete permission can see this button */}
+          {user?.permissions?.includes("household:delete") && (
+            <button
+              className="flex items-center px-4 py-2 bg-red-500 text-white rounded-full shadow-md hover:bg-red-600 cursor-pointer"
+              onClick={() => handleDeleteHousehold(record)}
+            >
+              <span className="mr-2">Delete</span>
+              <DeleteOutlined />
+            </button>
+          )}
         </div>
       ),
     },
   ];
-
 
   return (
     <DashboardContainer>
@@ -268,30 +269,33 @@ const HouseholdPage: FC = () => {
           <h2 className="text-2xl font-semibold text-[#008FFB]">
             Household Management
           </h2>
-          <Button
-              type="primary"
-              icon={<PlusOutlined />}
+
+          {/* Render only for users with create permission */}
+          {user?.permissions?.includes("household:create") && (
+            <Button
               className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold px-5 py-2 rounded-full shadow-md transition duration-300 ease-in-out"
+              type="primary"
+              style={{ backgroundColor: "#008FFB" }}
               onClick={() => setIsOpen(true)}
-          >
-             Add Household
-          </Button>
+            >
+              + Add Household
+            </Button>
+          )}
         </div>
 
         <HouseholdCreateModal
-        isOpen={isOpen}
-        handleClose={() => setIsOpen(false)}
-        refreshHouseholds={fetchHouseholds}
-      />
+          isOpen={isOpen}
+          handleClose={() => setIsOpen(false)}
+          refreshHouseholds={fetchHouseholds}
+        />
 
-          {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <Spin size="large" />
-        </div>
-      ) : (
-        <>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <Spin size="large" />
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
           <div className="bg-gradient-to-r from-blue-100 to-blue-200 p-6 rounded-2xl shadow-md flex items-center justify-between transition transform hover:scale-105">
             <div>
               <p className="text-sm text-gray-600 font-medium">Total Households</p>
@@ -315,51 +319,49 @@ const HouseholdPage: FC = () => {
           </div>
         </div>
 
-        {/* Search Bar */}
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold text-blue-700 mb-2">
-            Search Households
-          </h3>
-          <Input.Search
-            placeholder="Search by House Number"
-            allowClear
-            enterButton
-            size="large"
-            onSearch={(value) => setSearchText(value)}
-            onChange={(e) => setSearchText(e.target.value)}
-          />
-        </div>
+            {/* Search Bar */}
+            <div className="mb-4">
+              <Input.Search
+                placeholder="Search by House Number"
+                allowClear
+                enterButton
+                size="large"
+                onSearch={(value) => setSearchText(value)}
+                onChange={(e) => setSearchText(e.target.value)}
+              />
+            </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <Table
-            dataSource={filteredHouseholds}
-            columns={columns}
-            rowKey="id"
-            pagination={{
-              pageSize: 5,
-              position: ["bottomCenter"],
-              className: "custom-pagination",
-            }}
-          />
-        </div>
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <Table
+                dataSource={filteredHouseholds}
+                columns={columns}
+                rowKey="id"
+                pagination={{
+                  pageSize: 5,
+                  position: ["bottomCenter"],
+                  className: "custom-pagination",
+                }}
+              />
+            </div>
 
-        <br />
+            <br />
 
-        <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-          <h3 className="text-lg font-semibold text-gray-700 mb-4">
-            Households Distribution Statistics
-          </h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={householdChartData}>
-              <XAxis dataKey="division" />
-              <YAxis allowDecimals={false} />
-              <Tooltip />
-              <Bar dataKey="count" fill="#008FFB" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-        </>
-      )}
+            <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">
+                Households Distribution Statistics
+              </h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={householdChartData}>
+                  <XAxis dataKey="division" />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip />
+                  <Bar dataKey="count" fill="#008FFB" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </>
+        )}
+
       </div>
 
       <Modal

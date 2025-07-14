@@ -13,6 +13,7 @@ export const UserRoleUpdateForm: FC<UserRoleUpdateFormProps> = ({ roleId }) => {
   const [form] = Form.useForm();
   const [isAllSelected, setIsAllSelected] = useState(false);
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
+  const [isUpdatingRole, setIsUpdatingRole] = useState(false);
   // hooks to get the role data
   const {
     data: roles,
@@ -53,19 +54,48 @@ export const UserRoleUpdateForm: FC<UserRoleUpdateFormProps> = ({ roleId }) => {
       permissionList: string[];
     }) => {
       await User.updateUserRole(roleId, roleName, permissionList);
+      setIsUpdatingRole(true);
     },
     onSuccess: () => {
       message.success("User Role Updated Successfully!");
       refetchUserRoleData();
+      setIsUpdatingRole(false);
     },
     onError: (error: any) => {
       message.error(error.message);
+      setIsUpdatingRole(false);
     },
   });
 
   const handleUserUpdate = (values: any) => {
     const { role, permission } = values;
     mutation.mutate({ roleName: role, permissionList: permission });
+  };
+
+  /**
+   * Handles permission selection logic to ensure 'view' is checked if 'edit' or 'delete' is selected.
+   */
+  const handlePermissionChange = (checkedValues: string[]) => {
+    // Ensure if edit or delete is selected, view is also selected for that module
+    let updated = [...checkedValues];
+    checkedValues.forEach((perm) => {
+      const [module, action] = perm.split(":");
+      if (
+        (action === "edit" || action === "delete" || action === "create") &&
+        !checkedValues.includes(`${module}:view`)
+      ) {
+        updated.push(`${module}:view`);
+
+        // display a message to the user
+        message.info(
+          `Selecting "${perm}" automatically includes "${module}:view" permission.`
+        );
+      }
+    });
+
+    // Remove duplicates
+    updated = Array.from(new Set(updated));
+    form.setFieldsValue({ permission: updated });
   };
 
   /**
@@ -135,7 +165,10 @@ export const UserRoleUpdateForm: FC<UserRoleUpdateFormProps> = ({ roleId }) => {
             { required: true, message: "Select at least one permission" },
           ]}
         >
-          <Checkbox.Group style={{ width: "100%" }}>
+          <Checkbox.Group
+            style={{ width: "100%" }}
+            onChange={handlePermissionChange}
+          >
             {allPermissions.map(({ group, perms }) => (
               <div
                 key={group}
@@ -193,7 +226,7 @@ export const UserRoleUpdateForm: FC<UserRoleUpdateFormProps> = ({ roleId }) => {
             <Button onClick={() => form.resetFields()} danger>
               Clear
             </Button>
-            <Button type="primary" htmlType="submit" loading={isLoading}>
+            <Button type="primary" htmlType="submit" loading={isUpdatingRole}>
               Update Role
             </Button>
           </div>
