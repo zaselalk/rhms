@@ -61,12 +61,9 @@ const ClinicAttendances: React.FC = () => {
     patient.resident.firstName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const previousAttendancePercentage = 60;
   const totalPatients = attendances.length;
   const presentCount = attendances.filter((a) => a.status).length;
   const attendancePercentage = (presentCount / totalPatients) * 100 || 0;
-  const percentageDifference = attendancePercentage - previousAttendancePercentage;
-  const isImproved = percentageDifference >= 0;
 
   return (
     <DashboardContainer>
@@ -80,7 +77,7 @@ const ClinicAttendances: React.FC = () => {
         </div>
 
         {/* Attendance Summary */}
-        <div className="mb-8 p-6 bg-white rounded-xl shadow grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="mb-8 p-6 bg-white rounded-xl shadow grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           <div>
             <p className="text-gray-500 font-medium">Total Patients</p>
             <p className="text-xl font-semibold">{totalPatients}</p>
@@ -93,17 +90,6 @@ const ClinicAttendances: React.FC = () => {
             <p className="text-gray-500 font-medium">Attendance %</p>
             <p className="text-xl font-semibold">
               {attendancePercentage.toFixed(1)}%
-            </p>
-          </div>
-          <div>
-            <p className="text-gray-500 font-medium">Change from Last Session</p>
-            <p
-              className={`text-xl font-semibold ${
-                isImproved ? "text-green-600" : "text-red-600"
-              }`}
-            >
-              {isImproved ? "+" : ""}
-              {percentageDifference.toFixed(1)}%
             </p>
           </div>
         </div>

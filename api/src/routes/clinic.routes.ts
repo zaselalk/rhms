@@ -1,36 +1,51 @@
 import { Router } from "express";
 import ClinicController from "../controllers/ClinicController";
-import catchAsync from "../util/catchAsync"
 import clinicSessionController from "../controllers/clinicSessionController";
+import * as clinicAttendanceController from "../controllers/ClinicAttendanceController";
+import catchAsync from "../util/catchAsync";
 
-
-const ClinicRouter:Router= Router();
+const ClinicRouter: Router = Router();
 const clinicController = new ClinicController();
 
-
-// Route to ping the clinic service
-// ClinicRouter.get("/ping", catchAsync(clinicController.ping)); 
+// Clinic CRUD
 ClinicRouter.post("/createClinic", catchAsync(clinicController.createClinic));
-
-// // Get all clinics
 ClinicRouter.get("/getAllClinics", catchAsync(clinicController.getAllClinics));
-
-// // Get a clinic by ID
 ClinicRouter.get("/:id", catchAsync(clinicController.getClinicById));
+ClinicRouter.put("/:id", catchAsync(clinicController.updateClinic));
+ClinicRouter.delete("/:id", catchAsync(clinicController.deleteClinic));
 
-// session realeted routes
+// Clinic Session Routes
 ClinicRouter.post("/:id/session", catchAsync(clinicSessionController.createSession));
 ClinicRouter.get("/:id/GetSessionForClinic", catchAsync(clinicSessionController.getAllSessions));
 ClinicRouter.get("/:id/session/:sid", catchAsync(clinicSessionController.getSessionById));
 ClinicRouter.put("/:id/session/:sid", catchAsync(clinicSessionController.updateSession));
 ClinicRouter.delete("/:id/session/:sid", catchAsync(clinicSessionController.deleteSession));
 
+// Attendance Route for Session
+ClinicRouter.post(
+  "/:clinicId/session/:sessionId/attendance",
+  catchAsync(clinicAttendanceController.markAttendance)
+);
 
+ClinicRouter.get(
+  "/:clinicId/session/:sessionId/attendance/:patientId",
+  catchAsync(clinicAttendanceController.getAttendance)
+);
 
-// // Update a clinic by ID
-ClinicRouter.put("/:id", catchAsync(clinicController.updateClinic));
+ClinicRouter.put(
+  "/:clinicId/session/:sessionId/attendance/:patientId",
+  catchAsync(clinicAttendanceController.updateAttendance)
+);
 
-// // Delete a clinic by ID
-ClinicRouter.delete("/:id", catchAsync(clinicController.deleteClinic));
+ClinicRouter.delete(
+  "/:clinicId/session/:sessionId/attendance/:patientId",
+  catchAsync(clinicAttendanceController.deleteAttendance)
+);
+
+// Optional: Get all attendances (for admin view)
+ClinicRouter.get(
+  "/attendances",
+  catchAsync(clinicAttendanceController.getAllAttendances)
+);
 
 export default ClinicRouter;

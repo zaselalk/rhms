@@ -127,4 +127,26 @@ deleteClinicSession: async (clinicId: string, sessionId: string) => {
       throw error;
     }
   },
+  // Get clinic attendance for a specific session
+saveClinicAttendance: async (
+    clinicId: string,
+    sessionId: string,
+    attendanceList: {
+      patientId: string;
+      attendance: boolean;
+    }[]
+  ) => {
+    try {
+      const response = await axiosInstance.post(
+        `/clinic/${clinicId}/session/${sessionId}/attendance`,
+        attendanceList
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error saving clinic attendance:", error);
+      throw error;
+    }
+  },
 };
+
+

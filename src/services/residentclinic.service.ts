@@ -90,6 +90,7 @@ class ResidentClinicService {
       );
     }
   }
+  
 }
 
 export default new ResidentClinicService();
