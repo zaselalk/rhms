@@ -25,13 +25,13 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     password: "",
     birthday: "",
     bloodGroup: "",
-    gender: "",
+    gender: "Male",
     address: "",
     contactNumber: "",
     divisionId: "",
-    maritalState: "",
+    maritalState: "Married",
     religion: "",
-    jobdetail: "",
+    jobdetail: "Worker",
     educationLevel: "",
     addicted: [],
     alergies: [],
@@ -170,16 +170,29 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
 
   const mutation = useMutation({
     mutationFn: async (values: ResidentData) => {
-      await residentRegister.addResident(values); // ✅ values come from `mutate(values)`
+      return await residentRegister.addResident(values);
     },
     onSuccess: () => {
       toast.success("Register Success");
       formik.resetForm();
     },
-    onError: () => {
-      toast.error("Registration failed. Please try again.");
-    },
+    onError: (error: any) => {
+      const errorData = error?.response?.data;
+
+      // Case: Validation error array from backend
+      if (Array.isArray(errorData?.errors)) {
+        errorData.errors.forEach((err: any) => {
+          toast.error(err.msg); // show each error
+        });
+      } else {
+        // Fallback single message
+        const errorMessage =
+          errorData?.message || error.message || "Registration failed. Please try again.";
+        toast.error(errorMessage);
+      }
+    }
   });
+
 
   const formik = useFormik({
     initialValues,
@@ -690,7 +703,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
             >
               {mutation.isPending ? "Registraion" : "Register"}
             </button>
-          </div>  
+          </div>
         </div>
       </form>
     </DashboardContainer>
