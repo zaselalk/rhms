@@ -350,7 +350,7 @@ const ClinicDetail: React.FC = () => {
           {/* Divisions Table */}
           <section className="bg-white rounded-lg shadow-md p-6 flex flex-col">
             <h3 className="text-2xl font-semibold mb-6 border-b pb-2">
-              Patient Across Divisions
+              Patients Across Divisions
             </h3>
 
             {/* Search input for divisions */}
