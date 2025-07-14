@@ -48,19 +48,19 @@ const SingleDivisionPage: FC = () => {
 
           const householdData = await getHouseholdsByDivision(divisionData.divisionName);
           setHouseholds(householdData);
-          setHouseholdCount(householdData.length); // ✅ Count from frontend
+          setHouseholdCount(householdData.length);
 
           const countData = await DivisionService.getResidentCountByDivision(divisionId);
           setResidentCount(countData.residentCount);
 
-          const dummyDiseases: Disease[] = [
-            { name: "Flu", count: 15 },
-            { name: "Diabetic", count: 30 },
-            { name: "Hypertension", count: 20 },
-            { name: "Asthma", count: 10 },
-            { name: "Malaria", count: 5 },
-          ];
-          setDiseases(dummyDiseases);
+          // ✅ Replaced dummy data with real API call
+          const diseaseData = await residentDiseaseService.getDiseasePatientCounts(Number(divisionId));
+          setDiseases(
+            diseaseData.map((d: any) => ({
+              name: d.name,
+              count: d.patients
+            }))
+          );
         } catch (error) {
           console.error("Error loading division data:", error);
         } finally {
@@ -82,7 +82,6 @@ const SingleDivisionPage: FC = () => {
     d.name.toLowerCase().includes(diseaseSearch.toLowerCase())
   );
 
-  // Pagination slices
   const paginatedHouseholds = filteredHouseholds.slice(
     (householdPage - 1) * ITEMS_PER_PAGE,
     householdPage * ITEMS_PER_PAGE
@@ -109,7 +108,6 @@ const SingleDivisionPage: FC = () => {
           <p className="text-gray-600">Loading data...</p>
         ) : (
           <>
-            {/* Summary Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
               <div className="bg-white p-8 rounded-lg shadow-lg flex flex-col items-center justify-center space-y-2">
                 <FaHome className="text-[#008FFB] text-5xl" />

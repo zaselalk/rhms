@@ -43,10 +43,10 @@ ResidentDiseaseRouter.delete(
 
 ResidentDiseaseRouter.get(
     "/divisionCountsByDisease/:diseaseName",
-    catchAsync(residentDiseaseController.getDivisionCountsByDiseaseName)
+    catchAsync(residentDiseaseController.getDiseaseCountsByDivision)
 );
 ResidentDiseaseRouter.get(
-  "/disease-count-by-division/:divisionId",
+  "disease-patient-counts/:divisionId",
   catchAsync(residentDiseaseController.getDiseaseCountsByDivision)
 );
 

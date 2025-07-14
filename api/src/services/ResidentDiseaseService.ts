@@ -50,6 +50,8 @@ export class ResidentDiseaseService {
         console.log("Service got division data:", data);
         return data;
 }
+
+  // Get disease counts by division
 async getDiseaseCountsByDivision(divisionId: number): Promise<{ name: string; count: number }[]> {
   return this.residentDiseaseRepository.getDiseaseCountsByDivision(divisionId);
 }
