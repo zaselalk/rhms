@@ -8,6 +8,7 @@ interface residentDisease {
   residentDiseaseId: number;
   residentId: number;
   diseaseId: number;
+  deletedAt?: Date | null; // Optional for soft delete
 }
 
 export class ResidentDisease
@@ -17,6 +18,7 @@ export class ResidentDisease
   public residentDiseaseId!: number;
   public residentId!: number;
   public diseaseId!: number;
+  public deletedAt?: Date | null; // Optional for soft delete
 }
 
 ResidentDisease.init(
@@ -47,7 +49,8 @@ ResidentDisease.init(
     sequelize, // passing the `sequelize` instance is required
     modelName: "ResidentDisease", // We need to choose the model name
     tableName: "resident_diseases", // Specify the table name if different
-    timestamps: false, // Disable timestamps if not needed
+    timestamps: true, // Disable timestamps if not needed
+    paranoid: true, // Enable soft deletes
   }
 );
 
