@@ -39,7 +39,6 @@ const AdminDashboard: React.FC = () => {
 
 
 
-
   const fetchMarkers = async () => {
     try {
       const result = await dashbordService.getlocations();
@@ -55,7 +54,7 @@ const AdminDashboard: React.FC = () => {
       `;
 
         return {
-          position: [(longitude), (latitude)],
+          position: [longitude, latitude],
           popup,
         };
       });
@@ -99,8 +98,10 @@ const AdminDashboard: React.FC = () => {
       console.error("Error fetching diseases:", error);
     }
     try {
+    try {
       const data = await dashbordService.getDivisionCount();
       setDivisionCount(data.count);
+    } catch (error) {
     } catch (error) {
       console.error("Error fetching division count:", error);
     }
@@ -172,7 +173,7 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <DashboardContainer>
-      <div >
+      <div>
         <h2 className="text-2xl font-semibold text-[#008FFB] mb-6">
           Katugahahena Divisional Hospital
         </h2>
@@ -206,7 +207,7 @@ const AdminDashboard: React.FC = () => {
             </h3>
           </div>
         </div>
-        <div >
+        <div>
           {/* Map Section */}
           <div className="bg-white p-6 rounded-lg shadow-md mb-6 w-full ">
             <h3 className="text-xl font-semibold text-[#008FFB] mb-4">
@@ -221,13 +222,13 @@ const AdminDashboard: React.FC = () => {
                 <BaseLayer checked name="Satellite View">
                   <TileLayer
                     url="https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
-                  // attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
+                    // attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
                   />
                 </BaseLayer>
                 <BaseLayer name="Street View">
                   <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  // attribution='&copy; <a href="https://www.openstreetmap.org/copyright"></a>'
+                    // attribution='&copy; <a href="https://www.openstreetmap.org/copyright"></a>'
                   />
                 </BaseLayer>
               </LayersControl>
@@ -263,7 +264,6 @@ const AdminDashboard: React.FC = () => {
             
             
           </div>
-
         </div>
       </div>
     </DashboardContainer>
