@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { Typography, Alert, Form } from "antd";
 import { FC, useState } from "react";
+import { Building2 } from "lucide-react";
 import { loginState } from "../../../../types/login";
 import { useAppDispatch } from "../../../../hooks/state/hooks";
 import AuthServices from "../../../../services/auth.service";
@@ -48,17 +49,43 @@ export const LoginRightLoginSection: FC<UserLoginSectionProps> = ({
   });
 
   return (
-    <div className="flex items-center justify-center w-full lg:w-1/2 p-8">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
-        <Title level={3} className="text-center text-[#008FFB] mb-6">
-          Staff Login
-        </Title>
+    <div className="flex items-center justify-center">
+      <div className="w-full max-w-md">
+        {/* Login Card */}
+        <div className="bg-white rounded-2xl shadow-xl p-8">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Building2 className="w-8 h-8 text-white" />
+            </div>
+            <Title level={3} className="text-gray-900 mb-2">
+              Staff Portal
+            </Title>
+            <p className="text-gray-600">
+              Sign in to access the healthcare management system
+            </p>
+          </div>
 
-        {error && (
-          <Alert message={error} type="error" showIcon className="mb-4" />
-        )}
+          {/* Error Alert */}
+          {error && (
+            <Alert
+              message={error}
+              type="error"
+              showIcon
+              className="mb-6 rounded-lg"
+            />
+          )}
 
-        <UserLoginForm form={form} onFinish={onFinish} />
+          {/* Login Form */}
+          <UserLoginForm form={form} onFinish={onFinish} />
+        </div>
+
+        {/* Additional Info */}
+        {/* <div className="mt-6 text-center">
+          <p className="text-sm text-gray-600">
+            For technical support, contact IT department
+          </p>
+        </div> */}
       </div>
     </div>
   );
