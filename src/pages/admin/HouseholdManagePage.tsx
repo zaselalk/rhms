@@ -4,6 +4,8 @@ import { useParams } from "react-router";
 import { message, Modal } from "antd";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import householdresidentService from "../../services/householdresident.service";
+import residentService from "../../services/resident.service";
+import { useAppSelector } from "../../hooks/state/hooks";
 
 interface Resident {
   id: number;
@@ -26,6 +28,7 @@ const HouseholdManagePage: FC = () => {
   } | null>(null);
 
   const currentYear = new Date().getFullYear();
+  const user = useAppSelector((state) => state.auth.user);
 
   const calculateAge = (birthday: string) => {
     const birthYear = new Date(birthday).getFullYear();
@@ -36,19 +39,19 @@ const HouseholdManagePage: FC = () => {
   useEffect(() => {
     const fetchResidents = async () => {
       try {
-        const result = await householdresidentService.getResidentsByHouseholdId(householdId!);
-          const mapped = result.data.map((entry: any) => ({
-            id: entry.resident.id,
-            name: `${entry.resident.firstName} ${entry.resident.lastName}`,
-            age: calculateAge(entry.resident.birthday),
-            relation: entry.relation,
-            recordId: entry.id, // record ID of household_resident
-          }));
-          setResidents(mapped);
-        
+        const result = await householdresidentService.getResidentsByHouseholdId(
+          householdId!
+        );
+        const mapped = result.data.map((entry: any) => ({
+          id: entry.resident.id,
+          name: `${entry.resident.firstName} ${entry.resident.lastName}`,
+          age: calculateAge(entry.resident.birthday),
+          relation: entry.relation,
+          recordId: entry.id, // record ID of household_resident
+        }));
+        setResidents(mapped);
       } catch (error) {
         message.error("Error fetching household residents");
-       
       }
     };
 
@@ -59,33 +62,35 @@ const HouseholdManagePage: FC = () => {
   const handleSearchResident = async () => {
     if (!searchId) return;
 
-   try {
-    let res;
-    const isNumeric = /^\d+$/.test(searchId);
+    try {
+      let res;
+      const isNumeric = /^\d+$/.test(searchId);
+
 
     if (isNumeric) {
-      res = await fetch(`http://localhost:3001/resident/id/${searchId}`);
+      const response = await residentService.getSingleResident(searchId);
+      res= response.data;
     } else {
-      res = await fetch(`http://localhost:3001/resident/nic/${searchId}`);
+      const response = await residentService.searchResidentByNic(searchId);
+      res = response.data;
     }
 
-      const data = await res.json();
-      if (data?.data) {
-        setFoundResident({
-          id: data.data.id,
-          firstName: data.data.firstName,
-          lastName: data.data.lastName,
-          birthday: data.data.birthday,
-        });
-        message.success(`Found: ${data.data.firstName} ${data.data.lastName}`);
+      
 
+      if (res) {
+        setFoundResident({
+          id: res.id,
+          firstName: res.firstName,
+          lastName: res.lastName,
+          birthday: res.birthday,
+        });
+        message.success(`Found: ${res.firstName} ${res.lastName}`);
       } else {
         message.error("Resident not found");
       }
     } catch (error) {
       message.error("Resident not found");
       console.error("Search error:", error);
-      
     }
   };
 
@@ -97,7 +102,7 @@ const HouseholdManagePage: FC = () => {
     }
 
     const existingResident = residents.find(
-      (resident) => resident.id === foundResident.id,
+      (resident) => resident.id === foundResident.id
     );
     if (existingResident) {
       message.warning("Resident already exists in this household!");
@@ -106,35 +111,32 @@ const HouseholdManagePage: FC = () => {
 
     try {
       const newResident = await householdresidentService.addResidentToHousehold(
-      householdId!,{
-            residentId: foundResident.id,
-            relation: relationToOwner,
-          }
-        
+        householdId!,
+        {
+          residentId: foundResident.id,
+          relation: relationToOwner,
+        }
       );
 
       // const result = await response.json();
       // if (response.ok) {
       //   const newResident = result.data;
-        setResidents([
-          ...residents,
-          {
-            id: foundResident.id,
-            name: `${foundResident.firstName} ${foundResident.lastName}`,
-            age: calculateAge(foundResident.birthday.toString()),
-            relation: relationToOwner,
-            recordId: newResident.data.id,
-          },
-        ]);
-        setSearchId("");
-        setRelationToOwner("");
-        setFoundResident(null);
-        message.success("Resident added successfully");
-
-     
+      setResidents([
+        ...residents,
+        {
+          id: foundResident.id,
+          name: `${foundResident.firstName} ${foundResident.lastName}`,
+          age: calculateAge(foundResident.birthday.toString()),
+          relation: relationToOwner,
+          recordId: newResident.data.id,
+        },
+      ]);
+      setSearchId("");
+      setRelationToOwner("");
+      setFoundResident(null);
+      message.success("Resident added successfully");
     } catch (error) {
       message.error("Error adding resident");
-      
     }
   };
 
@@ -145,18 +147,13 @@ const HouseholdManagePage: FC = () => {
       okText: "Yes",
       cancelText: "No",
       onOk: async () => {
-
-    try {
-      
-        await householdresidentService.removeResidentFromHousehold(recordId);
-        setResidents(residents.filter((r) => r.recordId !== recordId));
-        message.success("Resident removed successfully.");
-        
-      
-    } catch (error) {
-      message.error("Error removing resident.");
-      
-  }
+        try {
+          await householdresidentService.removeResidentFromHousehold(recordId);
+          setResidents(residents.filter((r) => r.recordId !== recordId));
+          message.success("Resident removed successfully.");
+        } catch (error) {
+          message.error("Error removing resident.");
+        }
       },
     });
   };
@@ -168,70 +165,74 @@ const HouseholdManagePage: FC = () => {
           Manage Residents
         </h2>
 
-        <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-          <h3 className="text-xl font-semibold text-[#008FFB] mb-4">
-            Add Resident to the Household
-          </h3>
+        {/* This section render for users that have household edit permission */}
+        {user?.permissions?.includes("household:edit") && (
+          <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+            <h3 className="text-xl font-semibold text-[#008FFB] mb-4">
+              Add Resident to the Household
+            </h3>
 
-          <div className="flex flex-wrap items-center gap-2 mb-2">
-            <input
-              type="text"
-              inputMode="numeric"
-              pattern="[0-9vV]*"
-              value={searchId}
-              onChange={(e) => {
-                const input = e.target.value;
-                // Allow only numbers and 'v' or 'V'
-                if (/^[0-9vV]*$/.test(input)) {
-                  setSearchId(input);
-                }
-              }}
+            <div className="flex flex-wrap items-center gap-2 mb-2">
+              <input
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9vV]*"
+                value={searchId}
+                onChange={(e) => {
+                  const input = e.target.value;
+                  // Allow only numbers and 'v' or 'V'
+                  if (/^[0-9vV]*$/.test(input)) {
+                    setSearchId(input);
+                  }
+                }}
+                placeholder="Enter resident ID"
+                className="px-4 py-2 border rounded"
+              />
+              <button
+                onClick={handleSearchResident}
+                className="px-4 py-2 bg-yellow-500 text-white text-sm rounded-lg shadow-md hover:bg-yellow-600 cursor-pointer"
+              >
+                Search
+              </button>
+            </div>
 
-              placeholder="Enter resident ID"
-              className="px-4 py-2 border rounded"
-            />
-            <button
-              onClick={handleSearchResident}
-              className="px-4 py-2 bg-yellow-500 text-white text-sm rounded-lg shadow-md hover:bg-yellow-600 cursor-pointer"
+            {foundResident && (
+              <div>
+                <p className="mb-2 text-green-600">
+                  Found: {foundResident.firstName} {foundResident.lastName}
+                </p>
+              </div>
+            )}
+
+            <select
+              value={relationToOwner}
+              onChange={(e) => setRelationToOwner(e.target.value)}
+              className={` px-6 py-2 border-black border rounded mr-5 "${
+                relationToOwner ? "text-gray-400" : "text-black"
+              }`}
             >
-              Search
+              <option value="" disabled>
+                Select relation
+              </option>
+              <option value="Father">Father</option>
+              <option value="Mother">Mother</option>
+              <option value="Sister">Sister</option>
+              <option value="Brother">Brother</option>
+              <option value="Son">Son</option>
+              <option value="Daughter">Daughter</option>
+              <option value="Boarder">Boarder/Lodger</option>
+            </select>
+
+            <button
+              onClick={handleAddResident}
+              className="px-4 py-2 bg-blue-500 text-white text-sm rounded-lg shadow-md hover:bg-blue-600 cursor-pointer"
+            >
+              Add Resident
             </button>
           </div>
+        )}
 
-          {foundResident && (
-            <div>
-              <p className="mb-2 text-green-600">
-                 Found: {foundResident.firstName} {foundResident.lastName}
-              </p>
-            </div>
-          )}
-
-          <select
-            value={relationToOwner}
-            onChange={(e) => setRelationToOwner(e.target.value)}
-            className={` px-6 py-2 border-black border rounded mr-5 "${
-                    relationToOwner ? "text-gray-400" : "text-black"
-            }`}
-          >
-
-          <option value="" disabled >Select relation</option>
-          <option value="Father">Father</option>
-          <option value="Mother">Mother</option>
-          <option value="Sister">Sister</option>
-          <option value="Brother">Brother</option>
-          <option value="Son">Son</option>
-          <option value="Daughter">Daughter</option>
-          <option value="Boarder">Boarder/Lodger</option>
-          </select>
-
-
-          <button
-            onClick={handleAddResident}
-            className="px-4 py-2 bg-blue-500 text-white text-sm rounded-lg shadow-md hover:bg-blue-600 cursor-pointer"
-          >
-              Add Resident
-          </button>
-        </div>
+        {/* Displaying residents in the household */}
 
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h3 className="text-xl font-semibold text-[#008FFB] mb-4">
@@ -240,12 +241,20 @@ const HouseholdManagePage: FC = () => {
           <table className="w-full table-auto border-collapse">
             <thead>
               <tr>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Name</th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Age</th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Relation</th>
                 <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">
-                  Actions
+                  Name
                 </th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">
+                  Age
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">
+                  Relation
+                </th>
+                {user?.permissions?.includes("household:edit") && (
+                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">
+                    Actions
+                  </th>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -261,15 +270,17 @@ const HouseholdManagePage: FC = () => {
                   <td className="px-6 py-3 text-sm text-gray-800">
                     {resident.relation}
                   </td>
-                  <td className="px-6 py-3 text-sm text-gray-800">
 
-                    <button
-                    className="px-4 py-2 bg-red-500 text-white rounded-full shadow hover:bg-red-600 text-sm cursor-pointer"
-                      onClick={() => handleRemoveResident(resident.recordId)}
+                  {user?.permissions?.includes("household:edit") && (
+                    <td className="px-6 py-3 text-sm text-gray-800">
+                      <button
+                        className="px-4 py-2 bg-red-500 text-white rounded-full shadow hover:bg-red-600 text-sm cursor-pointer"
+                        onClick={() => handleRemoveResident(resident.recordId)}
                       >
-                        Remove  
-                    </button >
-                  </td>
+                        Remove
+                      </button>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

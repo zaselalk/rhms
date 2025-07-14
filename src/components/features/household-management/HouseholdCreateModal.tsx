@@ -1,10 +1,14 @@
-import { FC, useState } from "react";
+import { FC, useState,useEffect } from "react";
 import Modal from "../../layouts/overlays/Modal";
-import { createHousehold } from "../../../services/household.service";
-import axios from "axios";
+
+import { createHousehold, getHouseholdsByOwnerId } from "../../../services/household.service";
+
 import { useLocation, useNavigate } from "react-router";
 import householdresidentService from "../../../services/householdresident.service";
 import { message as antMessage } from "antd";
+import residentService from "../../../services/resident.service";
+import { DivisionService } from "../../../services/division.service";
+
 
 
 interface HouseholdCreateModalProps {
@@ -31,6 +35,7 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
   // Feedback state
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [divisions, setDivisions] = useState<{ id: number; divisionName: string }[]>([]);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -58,16 +63,16 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
 
     try {
 
-      let res;
+      let data;
 
 
           if (isNumericId) {
-      res = await axios.get(`http://localhost:3001/resident/id/${input}`);
+      const response = await residentService.getSingleResident(input);
+      data = response.data; // Accessing the correct structure
     } else {
-      res = await axios.get(`http://localhost:3001/resident/nic/${input}`);
+      const response = await residentService.searchResidentByNic(input);
+      data = response.data; // Accessing the correct structure
     }
-
-      const data = res.data.data; // Accessing the correct structure
 
       if (!data) {
         setFoundResidentName("");
@@ -79,7 +84,7 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
       setFoundResidentName(
         `${data.firstName} ${data.lastName}` || "Name not available"
       );
-      setOwnerId(res.data.id); // Corrected: use 'id', not '_id'
+      setOwnerId(data.id); // Corrected: use 'id', not '_id'
     } catch (err) {
       console.error("Fetch error:", err);
       setFoundResidentName("");
@@ -88,18 +93,46 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
     }
   };
 
+  //function to fetch all divisions
+    useEffect(() => {
+  const fetchDivisions = async () => {
+    try {
+      const data = await DivisionService.getAllDivisions();
+      setDivisions(data);
+    } catch (error) {
+      antMessage.error("Failed to load divisions");
+    }
+  };
+
+  fetchDivisions();
+}, []);
+
+
   // Function to create a household
   const handleCreateHousehold = async () => {
     setLoading(true);
-    const parsedOwnerId = Number(residentSearchId); // convert once and reuse
+    
 
-    if (!residentSearchId || isNaN(parsedOwnerId)) {
+    if (!owner_id|| isNaN(Number(owner_id))) {
       antMessage.error("Invalid owner ID");
       setLoading(false);
       return;
     }
 
-   
+    const parsedOwnerId = Number(owner_id);
+
+   try {
+    // 🔍 Step 1: Check if this owner already has a household with this house_no
+    const existingHouseholds = await getHouseholdsByOwnerId(parsedOwnerId);
+    const duplicate = existingHouseholds.find(
+      (h: any) => h.house_no.trim().toLowerCase() === house_no.trim().toLowerCase()
+    );
+
+    if (duplicate) {
+      antMessage.warning("This owner already has a household with this house number.");
+      setLoading(false);
+      return;
+    }
     if (window.confirm("Are you sure you want to create this household?")) {
       try {
         const response = await createHousehold({
@@ -146,6 +179,13 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
         setLoading(false);
       }
     }
+
+    } catch (error) {
+      antMessage.error("Error checking existing households");
+      console.error("Error:", error);
+      setLoading(false);
+    }
+
   };
 
   return (
@@ -178,23 +218,19 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
             Grama Division
           </label>
           <select
-            id="grama_division"
-            value={grama_division}
-            onChange={(e) => setGramaDivision(e.target.value)}
-            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 outline-none"
-          >
-            <option value="">Select a division</option>
-            <option value="kotagedara">Kotagedara</option>
-            <option value="navuththuduwa">Navuththuduwa</option>
-            <option value="bopitiya">Bopitiya</option>
-            <option value="maddegedara">Maddegedara</option>
-            <option value="pahalawela">Pahalawela</option>
-            <option value="kolahekada">Kolahekada</option>
-            <option value="naravila">Naravila</option>
-            <option value="yatadola">Yatadola</option>
-            <option value="henpita">Henpita</option>
-            <option value="pallegoda">Pallegoda</option>
-          </select>
+              id="grama_division"
+              value={grama_division}
+              onChange={(e) => setGramaDivision(e.target.value)}
+              className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 outline-none"
+            >
+              <option value="">Select a division</option>
+              {divisions.map((division) => (
+                <option key={division.id} value={division.divisionName}>
+                  {division.divisionName}
+                </option>
+              ))}
+            </select>
+
         </div>
 
         {/* Longitude */}

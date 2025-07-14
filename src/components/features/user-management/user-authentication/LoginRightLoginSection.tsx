@@ -19,6 +19,7 @@ export const LoginRightLoginSection: FC<UserLoginSectionProps> = ({
 }) => {
   const [form] = Form.useForm();
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
   const Auth = new AuthServices();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
@@ -31,6 +32,7 @@ export const LoginRightLoginSection: FC<UserLoginSectionProps> = ({
   const mutation = useMutation({
     mutationFn: async ({ email, password }: loginState) => {
       setIsLoggingIn(true);
+
       const user = await Auth.login(email, password);
       dispatch(
         login({
@@ -88,12 +90,6 @@ export const LoginRightLoginSection: FC<UserLoginSectionProps> = ({
           />
         </div>
 
-        {/* Additional Info */}
-        {/* <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600">
-            For technical support, contact IT department
-          </p>
-        </div> */}
       </div>
     </div>
   );
