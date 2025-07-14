@@ -54,15 +54,21 @@ const updateSession = async (req: Request, res: Response) => {
 
 const deleteSession = async (req: Request, res: Response) => {
   try {
-    const session = await sessionService.deleteSession(Number(req.params.id));
-    if (!session) {
+    const sessionId = Number(req.params.sid);
+
+    const deleted = await sessionService.deleteSession(sessionId);
+
+    if (!deleted) {
       return res.status(404).json({ error: "Session not found" });
     }
+
     res.json({ message: "Session deleted successfully" });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 };
+
+
 
 export default {
   createSession,
