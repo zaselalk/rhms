@@ -68,7 +68,7 @@ export class Resident
   public jobdetail!: string;
   public gluecose!: number;
   public Birthcertificate!: string;
-  public deletedAt?: Date | null; // soft delete
+  public deletedAt!: Date | null; // soft delete
 
 }
 
