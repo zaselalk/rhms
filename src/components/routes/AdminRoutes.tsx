@@ -1,4 +1,3 @@
-import React from "react";
 import { Route, Routes } from "react-router";
 import ProtectedRoutesGuard from "../auth/ProtectedRoute";
 import LoginPage from "../../pages/LoginPage";
@@ -18,8 +17,11 @@ import ClinicOverviewPage from "../../pages/admin/ClinicOverviewPage";
 import ClinicAttendancesPage from "../../pages/admin/ClinicAttendancesPage";
 import ClinicDetailPage from "../../pages/admin/ClinicDetailPage";
 import AuthProvider from "../auth/AuthProvider";
+import { useAppSelector } from "../../hooks/state/hooks";
 
 export const AdminRoutes = () => {
+  const user = useAppSelector((state) => state.auth.user);
+
   return (
     <AuthProvider>
       <Routes>
@@ -95,17 +97,19 @@ export const AdminRoutes = () => {
         </Route>
 
         {/* /admin/users routs */}
-        <Route path="admin/users">
-          <Route
-            path=""
-            element={
-              <ProtectedRoutesGuard>
-                <UsersPage />
-              </ProtectedRoutesGuard>
-            }
-          />
-          {/* <Route path="add" element={<AddUserPage />} /> */}
-        </Route>
+        {/* // if the user is super_admin */}
+        {user?.role === "super_admin" && (
+          <Route path="admin/users">
+            <Route
+              path=""
+              element={
+                <ProtectedRoutesGuard>
+                  <UsersPage />
+                </ProtectedRoutesGuard>
+              }
+            />
+          </Route>
+        )}
 
         {/* /admin/households routes */}
         <Route path="admin/households">
