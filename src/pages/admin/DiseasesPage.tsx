@@ -33,7 +33,7 @@ interface ResidentDisease {
 }
 
 const DiseasesPage: FC = () => {
-  const [diseaseName, setDiseaseNames] = useState<string[]>([]);
+ 
   const [diseases, setDiseases] = useState<Disease[]>([]);
   const [residentDiseases, setResidentDiseases] = useState<ResidentDisease[]>(
     []
@@ -101,17 +101,17 @@ const DiseasesPage: FC = () => {
       if (!newDisease) return;
 
       // Case-insensitive duplicate check
-      const lowerCaseExisting = diseaseName.map((name) => name.toLowerCase());
+      const existingNames = diseases.map((d) => d.diseaseName.toLowerCase()); // already case-sensitive
 
-      if (lowerCaseExisting.includes(newDisease.toLowerCase())) {
-        form.setFields([
-          {
-            name: "disease",
-            errors: [`The disease "${newDisease}" already exists.`],
-          },
-        ]);
-        return;
-      }
+          if (existingNames.includes(newDisease.toLowerCase())) {
+            form.setFields([
+              {
+                name: "disease",
+                errors: [`The disease "${newDisease}" already exists.`],
+              },
+            ]);
+            return;
+          }
 
       // Use Ant Design styled confirmation dialog
       Modal.confirm({
@@ -125,13 +125,18 @@ const DiseasesPage: FC = () => {
               diseaseName: newDisease,
             });
 
-            setDiseaseNames((prev) => [...prev, addedDisease.diseaseName]);
+          
             form.resetFields();
             setIsModalOpen(false);
             message.success({
               content: "Disease added successfully",
               duration: 3,
             });
+
+            await fetchAllData();              // Refresh data (table + stats)
+            form.resetFields();                // Clear form
+            setIsModalOpen(false); // Close modal   
+
           } catch (error: any) {
             const errMsg =
               error?.response?.data?.message ||
@@ -209,6 +214,10 @@ const DiseasesPage: FC = () => {
               label="Disease Name"
               rules={[
                 { required: true, message: "Please enter the disease name" },
+                {
+                  pattern: /^[A-Za-z\s]+$/, // only letters and spaces
+                  message: "Disease name must contain letters only",
+                },
               ]}
             >
               <Input placeholder="Enter disease name" />
