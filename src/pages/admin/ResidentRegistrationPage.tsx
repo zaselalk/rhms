@@ -203,10 +203,9 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
       <form onSubmit={formik.handleSubmit}>
         {/* Registration Form Container */}
         <div className="bg-white p-8 rounded-lg shadow-lg w-full ">
-          <h2 className="text-2xl font-semibold text-[#008FFB] mb-6 text-center">
+          <h2 className="text-2xl font-semibold text-[#008FFB] mb-6 text-">
             Resident Registration
           </h2>
-
           <div className="mt-5 mb-8 ">
             <h2 className="text-2xl">Personal Details</h2>
             <hr className="bg-gray-100 mb-2" />
@@ -683,14 +682,15 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
           </div>
 
           {/* Submit Button */}
-
-          <button
-            type="submit"
-            disabled={mutation.isPending || !formik.isValid}
-            className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
-          >
-            {mutation.isPending ? "Registraion" : "Register"}
-          </button>
+          <div className="mt-6 flex justify-end">
+            <button
+              type="submit"
+              disabled={mutation.isPending || !formik.isValid}
+              className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white  font-semibold rounded-lg hover:bg-[#006fbb]"
+            >
+              {mutation.isPending ? "Registraion" : "Register"}
+            </button>
+          </div>  
         </div>
       </form>
     </DashboardContainer>
