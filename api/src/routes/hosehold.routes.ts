@@ -38,4 +38,12 @@ HouseholdRouter.get(
   catchAsync(householdController.gethouseholdCount)
 );
 
+
+HouseholdRouter.get(
+  "/by-owner/:owner_id",
+  protectRoute("household:view"),
+  catchAsync(householdController.getHouseholdsByOwner)
+);
+
+
 export default HouseholdRouter;
