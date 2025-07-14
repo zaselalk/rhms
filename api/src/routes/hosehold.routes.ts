@@ -1,6 +1,5 @@
 import { Router } from "express";
 
-
 import catchAsync from "../util/catchAsync";
 import { protectRoute } from "../middleware/authjwt.middleware";
 import { HouseholdController } from "../controllers/HoseholdController";
@@ -10,33 +9,33 @@ const householdController = new HouseholdController();
 
 // HouseholdRouter.get("/ping", protectRoute, catchAsync(householdController.ping));
 HouseholdRouter.post(
-    "/create",
-    protectRoute("household:create"),
-    catchAsync(householdController.createHousehold)
+  "/create",
+  protectRoute("household:create"),
+  catchAsync(householdController.createHousehold)
 );
 
 HouseholdRouter.get(
-    "/read", 
-    protectRoute("household:view"),
-    catchAsync(householdController.getAllHouseholds)
+  "/read",
+  protectRoute("household:view"),
+  catchAsync(householdController.getAllHouseholds)
 );
 
 HouseholdRouter.put(
-    "/update/:id",
-    // protectRoute("household:update"),
-    catchAsync(householdController.updateHouseholdOwner)
+  "/update/:id",
+  protectRoute("household:edit"),
+  catchAsync(householdController.updateHouseholdOwner)
 );
 
 HouseholdRouter.delete(
-    "/delete/:id",
-    protectRoute("household:delete"),
-    catchAsync(householdController.deleteHousehold)
+  "/delete/:id",
+  protectRoute("household:delete"),
+  catchAsync(householdController.deleteHousehold)
 );
 
 HouseholdRouter.get(
-    "/count",
-    catchAsync(householdController.gethouseholdCount)
+  "/count",
+  protectRoute("household:view"),
+  catchAsync(householdController.gethouseholdCount)
 );
-
 
 export default HouseholdRouter;
