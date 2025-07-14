@@ -1,14 +1,25 @@
 import { ResidentDiseaseRepository } from "../repositories/ResidentDiseaseRepository";
 import { ResidentDiseaseService } from "../services/ResidentDiseaseService";
 import { Request, Response } from "express";
+import { DiseaseServices } from "../services/DiseaseServices";
+import { DiseaseRepository } from "../repositories/DiseaseRepository";
 
 export class ResidentDiseaseController {
     private residentDiseaseService: ResidentDiseaseService;
+    private diseaseService: DiseaseServices;
 
     constructor() {
         const residentDiseaseRepository = new ResidentDiseaseRepository();
         this.residentDiseaseService = new ResidentDiseaseService(residentDiseaseRepository);
+        
+        const diseasedRepository = new DiseaseRepository();
+
+        this.diseaseService = new DiseaseServices(diseasedRepository);
     }
+
+
+
+
 
     //ping
     residentDiseasePing = async (req: Request, res: Response): Promise<Response> => {
@@ -244,6 +255,38 @@ export class ResidentDiseaseController {
             });
         }
     }
+
+    getAllDiseasesWithPatientCount = async (req: Request, res: Response): Promise<Response> => {
+        try {
+            const diseases = await this.diseaseService.getAllDiseases(); // [{ id: 1, name: "Diabetes" }, ...]
+
+            const results = await Promise.all(
+                diseases.map(async (disease) => {
+                    const count = await this.residentDiseaseService.getPatientsCountByDiseaseId(disease.diseaseId);
+                    return {
+                        name: disease.diseaseName,
+                        count: count
+                    };
+                })
+            );
+
+            return res.json({
+                message: "Patient counts fetched successfully",
+                status: 200,
+                error: null,
+                data: results
+            });
+        } catch (error) {
+            console.error("Error in getAllDiseasesWithPatientCount:", error);
+            return res.status(500).json({
+                message: "Error fetching data",
+                status: 500,
+                error: "Internal Server Error",
+                data: null
+            });
+        }
+    };
+
 
 
 
