@@ -224,22 +224,22 @@ const DiseasesPage: FC = () => {
           <>
             {/* Statistics Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-              <div className="bg-gradient-to-r from-purple-100 to-purple-200 p-6 rounded-2xl shadow-md flex items-center justify-between transition transform hover:scale-105">
+              <div className="bg-gradient-to-r from-yellow-100 to-yellow-200 p-6 rounded-2xl shadow-md flex items-center justify-between transition transform hover:scale-105">
                 <div>
                   <p className="text-sm text-gray-600 font-medium">Total Diseases</p>
-                  <h3 className="text-3xl font-bold text-purple-800">{totalDiseases}</h3>
+                  <h3 className="text-3xl font-bold text-yellow-800">{totalDiseases}</h3>
                 </div>
-                <div className="text-purple-700 text-4xl">
+                <div className="text-yellow-700 text-4xl">
                   <ExperimentOutlined />
                 </div>
               </div>
 
-              <div className="bg-gradient-to-r from-pink-100 to-pink-200 p-6 rounded-2xl shadow-md flex items-center justify-between transition transform hover:scale-105">
+              <div className="bg-gradient-to-r from-green-100 to-green-200 p-6 rounded-2xl shadow-md flex items-center justify-between transition transform hover:scale-105">
                 <div>
                   <p className="text-sm text-gray-600 font-medium">Total Patients</p>
-                  <h3 className="text-3xl font-bold text-pink-800">{totalPatients}</h3>
+                  <h3 className="text-3xl font-bold text-green-800">{totalPatients}</h3>
                 </div>
-                <div className="text-pink-700 text-4xl">
+                <div className="text-green-700 text-4xl">
                   <UsergroupAddOutlined />
                 </div>
               </div>
