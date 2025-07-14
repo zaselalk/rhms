@@ -102,7 +102,7 @@ class ResidentDiseaseService {
     }
   }
 
-  //getpations count by disease id
+  //getPatients  count by disease id
   async getPatientsCountByDiseaseId(diseaseId: number) {
     try {
       const response = await axiosInstance.get(`/residentDisease/PCountByDiseaseId/${diseaseId}`);
