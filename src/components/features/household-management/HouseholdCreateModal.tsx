@@ -1,11 +1,14 @@
 import { FC, useState,useEffect } from "react";
 import Modal from "../../layouts/overlays/Modal";
-import { createHousehold } from "../../../services/household.service";
+
+import { createHousehold, getHouseholdsByOwnerId } from "../../../services/household.service";
+
 import { useLocation, useNavigate } from "react-router";
 import householdresidentService from "../../../services/householdresident.service";
 import { message as antMessage } from "antd";
 import residentService from "../../../services/resident.service";
 import { DivisionService } from "../../../services/division.service";
+
 
 
 interface HouseholdCreateModalProps {
@@ -108,15 +111,28 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
   // Function to create a household
   const handleCreateHousehold = async () => {
     setLoading(true);
-    const parsedOwnerId = Number(residentSearchId); // convert once and reuse
+    
 
-    if (!residentSearchId || isNaN(parsedOwnerId)) {
+    if (!owner_id|| isNaN(Number(owner_id))) {
       antMessage.error("Invalid owner ID");
       setLoading(false);
       return;
     }
 
-   
+    const parsedOwnerId = Number(owner_id);
+
+   try {
+    // 🔍 Step 1: Check if this owner already has a household with this house_no
+    const existingHouseholds = await getHouseholdsByOwnerId(parsedOwnerId);
+    const duplicate = existingHouseholds.find(
+      (h: any) => h.house_no.trim().toLowerCase() === house_no.trim().toLowerCase()
+    );
+
+    if (duplicate) {
+      antMessage.warning("This owner already has a household with this house number.");
+      setLoading(false);
+      return;
+    }
     if (window.confirm("Are you sure you want to create this household?")) {
       try {
         const response = await createHousehold({
@@ -162,6 +178,12 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
       } finally {
         setLoading(false);
       }
+    }
+
+    } catch (error) {
+      antMessage.error("Error checking existing households");
+      console.error("Error:", error);
+      setLoading(false);
     }
 
   };

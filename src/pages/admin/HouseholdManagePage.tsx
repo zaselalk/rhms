@@ -66,13 +66,16 @@ const HouseholdManagePage: FC = () => {
       let res;
       const isNumeric = /^\d+$/.test(searchId);
 
-      if (isNumeric) {
-        const response = await residentService.getSingleResident(searchId);
-        res = response.data;
-      } else {
-        const response = await residentService.searchResidentByNic(searchId);
-        res = response.data;
-      }
+
+    if (isNumeric) {
+      const response = await residentService.getSingleResident(searchId);
+      res= response.data;
+    } else {
+      const response = await residentService.searchResidentByNic(searchId);
+      res = response.data;
+    }
+
+      
 
       if (res) {
         setFoundResident({
