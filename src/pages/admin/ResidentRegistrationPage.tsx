@@ -31,7 +31,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     divisionId: "",
     maritalState: "",
     religion: "",
-    jobState: "",
+    jobdetail: "",
     educationLevel: "",
     addicted: [],
     alergies: [],
@@ -39,6 +39,10 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     clinic: [],
     height: "",
     weight: "",
+    Birthcertificate: "",
+    gluecose: 0,
+    deletedAt: null, // Initialize deletedAt to null for new residents
+    
   };
 
   const [addicted, setAddictedd] = useState<string[]>([]);
@@ -480,9 +484,9 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                 Job Details
               </label>
               <select
-                id="jobState"
+                id="jobdetail"
                 {...formik.getFieldProps("jobState")}
-                value={formik.values.jobState}
+                value={formik.values.jobdetail}
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
               >
                 <option value="No Formal Education">Worker</option>
