@@ -26,6 +26,7 @@ import householdresidentService from "../../services/householdresident.service";
 import residentService from "../../services/resident.service";
 import { useAppSelector } from "../../hooks/state/hooks";
 
+
 const HouseholdPage: FC = () => {
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.auth.user);
@@ -142,10 +143,14 @@ const HouseholdPage: FC = () => {
       let resident;
       if (isNumericId) {
         const response = await residentService.getSingleResident(input);
-        resident = response.data;
+
+      resident = response.data;
+
       } else {
-        const response = await residentService.searchResidentByNic(input);
-        resident = response.data;
+       const response = await residentService.searchResidentByNic(input);
+      resident = response.data;
+       
+
       }
 
       if (resident) {
