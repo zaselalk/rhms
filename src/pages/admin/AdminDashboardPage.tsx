@@ -97,11 +97,10 @@ const AdminDashboard: React.FC = () => {
     } catch (error) {
       console.error("Error fetching diseases:", error);
     }
-    try {
+
     try {
       const data = await dashbordService.getDivisionCount();
       setDivisionCount(data.count);
-    } catch (error) {
     } catch (error) {
       console.error("Error fetching division count:", error);
     }
@@ -117,11 +116,10 @@ const AdminDashboard: React.FC = () => {
       const data = await residentDiseaseService.getPatientsCountByDiseaseId(3);
       console.log("Patient count data:", data.data);
 
-      setPatientCount(data.data.count);
+      setCancerPaitentCount(data.data.count);
     } catch (error) {
       console.error("Error fetching patient count:", error);
     }
-
   };
 
   // Fetch data when loading the component
@@ -156,7 +154,7 @@ const AdminDashboard: React.FC = () => {
   };
   // Data for the charts
   const CancerData = {
-    labels: ["Paitens", "Non Diabetes"],
+    labels: ["Paitens", "Non Paitens"],
     datasets: [
       {
         data: [CancerPaitentCount, residentCount - CancerPaitentCount], // Example data (1,243 Yes, 500 No)
@@ -222,13 +220,13 @@ const AdminDashboard: React.FC = () => {
                 <BaseLayer checked name="Satellite View">
                   <TileLayer
                     url="https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
-                    // attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
+                  // attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
                   />
                 </BaseLayer>
                 <BaseLayer name="Street View">
                   <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    // attribution='&copy; <a href="https://www.openstreetmap.org/copyright"></a>'
+                  // attribution='&copy; <a href="https://www.openstreetmap.org/copyright"></a>'
                   />
                 </BaseLayer>
               </LayersControl>
@@ -261,8 +259,8 @@ const AdminDashboard: React.FC = () => {
               </h3>
               <Pie data={CancerData} />
             </div>
-            
-            
+
+
           </div>
         </div>
       </div>
