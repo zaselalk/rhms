@@ -13,7 +13,6 @@ import { ClinicService } from "../../services/clinic.service";
 import ResidentClinicService from "../../services/residentclinic.service";
 import { Button } from "antd";
 
-
 interface Patient {
   resident: {
     contactNumber: string;
@@ -56,18 +55,22 @@ const ClinicDetail: React.FC = () => {
   const [patientPage, setPatientPage] = useState(1);
   const [divisionPage, setDivisionPage] = useState(1);
 
-  // NEW: Search states
+  // Search states
   const [patientSearch, setPatientSearch] = useState("");
   const [divisionSearch, setDivisionSearch] = useState("");
+
+  // Confirmation modal states for delete
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [sessionToDelete, setSessionToDelete] = useState<ClinicSession | null>(
+    null
+  );
 
   const patientsPerPage = 10;
   const divisionsPerPage = 10;
 
   // Filter patients based on search input (case-insensitive)
   const filteredPatients = clinicPatients.filter((patient) =>
-    patient.resident.firstName
-      .toLowerCase()
-      .includes(patientSearch.toLowerCase())
+    patient.resident.firstName.toLowerCase().includes(patientSearch.toLowerCase())
   );
 
   // Filter divisions based on search input (case-insensitive)
@@ -107,7 +110,6 @@ const ClinicDetail: React.FC = () => {
     setLoadingSessions(true);
     try {
       const sessions = await ClinicService.getClinicSessions(clinicId!);
-      console.log(sessions);
       setClinicSessions(sessions);
     } catch (err) {
       console.error("Failed to fetch sessions:", err);
@@ -121,10 +123,7 @@ const ClinicDetail: React.FC = () => {
   const fetchClinicPatients = async () => {
     setLoadingPatients(true);
     try {
-      const data = await ResidentClinicService.getResidentsByClinicId(
-        clinicId!
-      );
-      console.log(data);
+      const data = await ResidentClinicService.getResidentsByClinicId(clinicId!);
       setClinicPatients(data);
     } catch (err) {
       console.error("Failed to fetch patients:", err);
@@ -138,10 +137,7 @@ const ClinicDetail: React.FC = () => {
   const fetchDivisionCounts = async () => {
     setLoadingDivisions(true);
     try {
-      const data =
-        await ResidentClinicService.getDivisionWiseResidentCountsForClinic(
-          clinicId!
-        );
+      const data = await ResidentClinicService.getDivisionWiseResidentCountsForClinic(clinicId!);
       setPatientDivisions(data);
     } catch (err) {
       console.error("Failed to fetch division counts:", err);
@@ -169,10 +165,7 @@ const ClinicDetail: React.FC = () => {
     }
     setError("");
     try {
-      const created = await ClinicService.createClinicSession(
-        clinicId!,
-        newSession
-      );
+      const created = await ClinicService.createClinicSession(clinicId!, newSession);
       setClinicSessions([...clinicSessions, created]);
       setNewSession({ name: "", sessionDate: "" });
     } catch (err) {
@@ -181,20 +174,33 @@ const ClinicDetail: React.FC = () => {
     }
   };
 
-  // Delete a clinic session by ID
-  const removeClinicSession = async (sessionId: string) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this session?"
-    );
-    if (!confirmDelete) return;
+  // Open confirmation modal for deleting a session
+  const confirmRemoveClinicSession = (session: ClinicSession) => {
+    setSessionToDelete(session);
+    setDeleteConfirmOpen(true);
+  };
+
+  // Actual delete function called on confirm
+  const handleConfirmDelete = async () => {
+    if (!sessionToDelete) return;
 
     try {
-      await ClinicService.deleteClinicSession(clinicId!, sessionId);
-      setClinicSessions(clinicSessions.filter((s) => s.sessionId !== sessionId));
+      await ClinicService.deleteClinicSession(clinicId!, sessionToDelete.sessionId);
+      setClinicSessions(clinicSessions.filter((s) => s.sessionId !== sessionToDelete.sessionId));
+      setDeleteConfirmOpen(false);
+      setSessionToDelete(null);
     } catch (err) {
       console.error("Failed to delete session:", err);
       setError("Failed to delete session.");
+      setDeleteConfirmOpen(false);
+      setSessionToDelete(null);
     }
+  };
+
+  // Cancel delete confirmation
+  const handleCancelDelete = () => {
+    setDeleteConfirmOpen(false);
+    setSessionToDelete(null);
   };
 
   // Open modal to edit a session
@@ -256,9 +262,7 @@ const ClinicDetail: React.FC = () => {
                 Loading...
               </p>
             ) : (
-              <p className="text-2xl font-bold text-[#008FFB] ml-2">
-                ({clinicName})
-              </p>
+              <p className="text-2xl font-bold text-[#008FFB] ml-2">({clinicName})</p>
             )}
           </div>
         </div>
@@ -268,9 +272,7 @@ const ClinicDetail: React.FC = () => {
           <FaClinicMedical className="text-[#008FFB] text-6xl mr-6" />
           <div>
             <p className="text-xl font-semibold text-gray-700 mb-1">Patients</p>
-            <p className="text-5xl font-bold text-[#008FFB]">
-              {clinicPatients.length}
-            </p>
+            <p className="text-5xl font-bold text-[#008FFB]">{clinicPatients.length}</p>
           </div>
         </div>
 
@@ -296,13 +298,9 @@ const ClinicDetail: React.FC = () => {
             />
 
             {loadingPatients ? (
-              <p className="text-center py-10 text-gray-500 italic">
-                Loading patients...
-              </p>
+              <p className="text-center py-10 text-gray-500 italic">Loading patients...</p>
             ) : filteredPatients.length === 0 ? (
-              <p className="text-center py-10 text-gray-500 italic">
-                No patients found.
-              </p>
+              <p className="text-center py-10 text-gray-500 italic">No patients found.</p>
             ) : (
               <>
                 <div className="overflow-x-auto">
@@ -319,12 +317,8 @@ const ClinicDetail: React.FC = () => {
                           key={patient.resident.contactNumber}
                           className="border-b hover:bg-gray-100 transition"
                         >
-                          <td className="p-3 font-mono">
-                            {patient.resident.firstName}
-                          </td>
-                          <td className="p-3 font-medium">
-                            {patient.resident.contactNumber}
-                          </td>
+                          <td className="p-3 font-mono">{patient.resident.firstName}</td>
+                          <td className="p-3 font-medium">{patient.resident.contactNumber}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -373,13 +367,9 @@ const ClinicDetail: React.FC = () => {
             />
 
             {loadingDivisions ? (
-              <p className="text-center py-10 text-gray-500 italic">
-                Loading divisions...
-              </p>
+              <p className="text-center py-10 text-gray-500 italic">Loading divisions...</p>
             ) : filteredDivisions.length === 0 ? (
-              <p className="text-center py-10 text-gray-500 italic">
-                No division data available.
-              </p>
+              <p className="text-center py-10 text-gray-500 italic">No division data available.</p>
             ) : (
               <>
                 <div className="overflow-x-auto">
@@ -396,12 +386,8 @@ const ClinicDetail: React.FC = () => {
                           key={division.divisionName}
                           className="border-b hover:bg-gray-100 transition"
                         >
-                          <td className="p-3 font-medium">
-                            {division.divisionName}
-                          </td>
-                          <td className="p-3 font-semibold text-center">
-                            {division.residentCount}
-                          </td>
+                          <td className="p-3 font-medium">{division.divisionName}</td>
+                          <td className="p-3 font-semibold text-center">{division.residentCount}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -433,9 +419,7 @@ const ClinicDetail: React.FC = () => {
 
         {/* Add Clinic Session */}
         <section className="bg-white rounded-lg shadow-md p-6 mt-10 max-w-4xl mx-auto">
-          <h3 className="text-2xl font-semibold mb-6 border-b pb-2">
-            Add Session
-          </h3>
+          <h3 className="text-2xl font-semibold mb-6 border-b pb-2">Add Session</h3>
 
           {error && <p className="text-red-600 font-semibold mb-4">{error}</p>}
 
@@ -451,18 +435,14 @@ const ClinicDetail: React.FC = () => {
               placeholder="Session Name"
               className="flex-1 border border-gray-300 rounded-lg p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#008FFB]"
               value={newSession.name}
-              onChange={(e) =>
-                setNewSession({ ...newSession, name: e.target.value })
-              }
+              onChange={(e) => setNewSession({ ...newSession, name: e.target.value })}
               aria-label="Session Name"
             />
             <input
               type="date"
               className="border border-gray-300 rounded-lg p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#008FFB]"
               value={newSession.sessionDate}
-              onChange={(e) =>
-                setNewSession({ ...newSession, sessionDate: e.target.value })
-              }
+              onChange={(e) => setNewSession({ ...newSession, sessionDate: e.target.value })}
               aria-label="Session Date"
             />
             <button
@@ -476,18 +456,12 @@ const ClinicDetail: React.FC = () => {
           </form>
 
           {/* Sessions List */}
-          <h3 className="text-2xl font-semibold mt-10 mb-6 border-b pb-2">
-            Sessions
-          </h3>
+          <h3 className="text-2xl font-semibold mt-10 mb-6 border-b pb-2">Sessions</h3>
 
           {loadingSessions ? (
-            <p className="text-center py-10 text-gray-500 italic">
-              Loading sessions...
-            </p>
+            <p className="text-center py-10 text-gray-500 italic">Loading sessions...</p>
           ) : clinicSessions.length === 0 ? (
-            <p className="text-center py-10 text-gray-500 italic">
-              No sessions available.
-            </p>
+            <p className="text-center py-10 text-gray-500 italic">No sessions available.</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full border-collapse text-left">
@@ -501,55 +475,53 @@ const ClinicDetail: React.FC = () => {
                 <tbody>
                   {clinicSessions.map((session) => (
                     <tr
-                      key={session.sessionId
-}
+                      key={session.sessionId}
                       className="border-b hover:bg-gray-100 transition"
                     >
                       <td className="p-3 font-medium">{session.name}</td>
                       <td className="p-3">{session.sessionDate}</td>
-                    <td className="p-3 text-center space-x-2">
-                      <Button
-                        type="default"
-                        ghost
-                        icon={<FaEdit />}
-                        onClick={() => openEditModal(session)}
-                        style={{
-                          borderColor: '#facc15', // yellow-400
-                          color: '#facc15',
-                          fontWeight: '600',
-                        }}
-                      >
-                        Edit
-                      </Button>
+                      <td className="p-3 text-center space-x-2">
+                        <Button
+                          type="default"
+                          ghost
+                          icon={<FaEdit />}
+                          onClick={() => openEditModal(session)}
+                          style={{
+                            borderColor: "#facc15", // yellow-400
+                            color: "#facc15",
+                            fontWeight: "600",
+                          }}
+                        >
+                          Edit
+                        </Button>
 
-                      <Button
-                        type="default"
-                        ghost
-                        danger
-                        icon={<FaTrash />}
-                        onClick={() => removeClinicSession(session.sessionId)}
-                        style={{
-                          fontWeight: '600',
-                        }}
-                      >
-                        Delete
-                      </Button>
+                        <Button
+                          type="default"
+                          ghost
+                          danger
+                          icon={<FaTrash />}
+                          onClick={() => confirmRemoveClinicSession(session)}
+                          style={{
+                            fontWeight: "600",
+                          }}
+                        >
+                          Delete
+                        </Button>
 
-                      <Button
-                        type="default"
-                        ghost
-                        icon={<FaClipboardList />}
-                        onClick={() => handleClick(session.sessionId)}
-                        style={{
-                          borderColor: '#22c55e', // green-500
-                          color: '#22c55e',
-                          fontWeight: '600',
-                        }}
-                      >
-                        Attendance
-                      </Button>
-                    </td>
-
+                        <Button
+                          type="default"
+                          ghost
+                          icon={<FaClipboardList />}
+                          onClick={() => handleClick(session.sessionId)}
+                          style={{
+                            borderColor: "#22c55e", // green-500
+                            color: "#22c55e",
+                            fontWeight: "600",
+                          }}
+                        >
+                          Attendance
+                        </Button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -558,6 +530,28 @@ const ClinicDetail: React.FC = () => {
           )}
         </section>
 
+        {/* Confirmation Modal for Deletion */}
+        {deleteConfirmOpen && sessionToDelete && (
+          <Modal
+            title="Confirm Delete"
+            isOpen={deleteConfirmOpen}
+            handleClose={handleCancelDelete}
+          >
+            <div className="p-4">
+              <p className="mb-4">
+                Are you sure you want to delete the session &quot;
+                <strong>{sessionToDelete.name}</strong>&quot;?
+              </p>
+              <div className="flex justify-end space-x-3">
+                <Button onClick={handleCancelDelete}>Cancel</Button>
+                <Button type="primary" danger onClick={handleConfirmDelete}>
+                  Delete
+                </Button>
+              </div>
+            </div>
+          </Modal>
+        )}
+
         {/* Edit Modal */}
         {editModalOpen && selectedSession && (
           <Modal
@@ -565,46 +559,40 @@ const ClinicDetail: React.FC = () => {
             isOpen={editModalOpen}
             handleClose={closeEditModal}
           >
-            <div className="flex flex-col space-y-4">
-              {error && <p className="text-red-600 font-semibold">{error}</p>}
-              <input
-                type="text"
-                className="border border-gray-300 rounded-lg p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#008FFB]"
-                value={selectedSession.name}
-                onChange={(e) =>
-                  setSelectedSession({
-                    ...selectedSession,
-                    name: e.target.value,
-                  })
-                }
-                placeholder="Session Name"
-                aria-label="Edit Session Name"
-              />
-              <input
-                type="date"
-                className="border border-gray-300 rounded-lg p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#008FFB]"
-                value={selectedSession.sessionDate}
-                onChange={(e) =>
-                  setSelectedSession({
-                    ...selectedSession,
-                    sessionDate: e.target.value,
-                  })
-                }
-                aria-label="Edit Session Date"
-              />
-              <div className="flex justify-end space-x-3 mt-2">
-                <button
-                  onClick={closeEditModal}
-                  className="px-5 py-2 rounded-lg bg-gray-300 hover:bg-gray-400 transition font-semibold"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSaveEditedSession}
-                  className="px-5 py-2 rounded-lg bg-[#008FFB] hover:bg-blue-700 text-white transition font-semibold"
-                >
+            <div className="p-4 flex flex-col space-y-4">
+              {error && (
+                <p className="text-red-600 font-semibold text-center">{error}</p>
+              )}
+              <label className="font-semibold">
+                Session Name:
+                <input
+                  type="text"
+                  value={selectedSession.name}
+                  onChange={(e) =>
+                    setSelectedSession({ ...selectedSession, name: e.target.value })
+                  }
+                  className="w-full p-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008FFB]"
+                  aria-label="Edit Session Name"
+                />
+              </label>
+              <label className="font-semibold">
+                Session Date:
+                <input
+                  type="date"
+                  value={selectedSession.sessionDate}
+                  onChange={(e) =>
+                    setSelectedSession({ ...selectedSession, sessionDate: e.target.value })
+                  }
+                  className="w-full p-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008FFB]"
+                  aria-label="Edit Session Date"
+                />
+              </label>
+
+              <div className="flex justify-end space-x-3">
+                <Button onClick={closeEditModal}>Cancel</Button>
+                <Button type="primary" onClick={handleSaveEditedSession}>
                   Save
-                </button>
+                </Button>
               </div>
             </div>
           </Modal>
