@@ -13,7 +13,6 @@ export interface ResidentData {
     maritalState?: string;
     birthCertificateNumber?: string;
     religion?: string;
-    jobState?: string;
     educationLevel?: string;
     addicted?: string[];
     alergies?: string[];
@@ -21,5 +20,9 @@ export interface ResidentData {
     clinic?: string[];
     height?: string;
     weight?: string;
+    Birthcertificate: string,
+    jobdetail: string,
+    gluecose: Number,
+    deletedAt: Date | null
   }
   
