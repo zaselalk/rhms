@@ -1,10 +1,11 @@
-import { FC, useState } from "react";
+import { FC, useState,useEffect } from "react";
 import Modal from "../../layouts/overlays/Modal";
 import { createHousehold } from "../../../services/household.service";
 import { useLocation, useNavigate } from "react-router";
 import householdresidentService from "../../../services/householdresident.service";
 import { message as antMessage } from "antd";
 import residentService from "../../../services/resident.service";
+import { DivisionService } from "../../../services/division.service";
 
 
 interface HouseholdCreateModalProps {
@@ -31,6 +32,7 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
   // Feedback state
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [divisions, setDivisions] = useState<{ id: number; divisionName: string }[]>([]);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -87,6 +89,21 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
       setError("Resident not found");
     }
   };
+
+  //function to fetch all divisions
+    useEffect(() => {
+  const fetchDivisions = async () => {
+    try {
+      const data = await DivisionService.getAllDivisions();
+      setDivisions(data);
+    } catch (error) {
+      antMessage.error("Failed to load divisions");
+    }
+  };
+
+  fetchDivisions();
+}, []);
+
 
   // Function to create a household
   const handleCreateHousehold = async () => {
@@ -146,6 +163,7 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
         setLoading(false);
       }
     }
+
   };
 
   return (
@@ -178,23 +196,19 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
             Grama Division
           </label>
           <select
-            id="grama_division"
-            value={grama_division}
-            onChange={(e) => setGramaDivision(e.target.value)}
-            className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 outline-none"
-          >
-            <option value="">Select a division</option>
-            <option value="kotagedara">Kotagedara</option>
-            <option value="navuththuduwa">Navuththuduwa</option>
-            <option value="bopitiya">Bopitiya</option>
-            <option value="maddegedara">Maddegedara</option>
-            <option value="pahalawela">Pahalawela</option>
-            <option value="kolahekada">Kolahekada</option>
-            <option value="naravila">Naravila</option>
-            <option value="yatadola">Yatadola</option>
-            <option value="henpita">Henpita</option>
-            <option value="pallegoda">Pallegoda</option>
-          </select>
+              id="grama_division"
+              value={grama_division}
+              onChange={(e) => setGramaDivision(e.target.value)}
+              className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 outline-none"
+            >
+              <option value="">Select a division</option>
+              {divisions.map((division) => (
+                <option key={division.id} value={division.divisionName}>
+                  {division.divisionName}
+                </option>
+              ))}
+            </select>
+
         </div>
 
         {/* Longitude */}
