@@ -69,12 +69,12 @@ const AdminSidebar: FC = () => {
       icon: <FaLocationDot size={25} />,
       permission: "division",
     },
-    {
-      path: "/admin/users",
-      label: "Users",
-      icon: <HiUsers size={25} />,
-      permission: "user",
-    },
+    // {
+    //   path: "/admin/users",
+    //   label: "Users",
+    //   icon: <HiUsers size={25} />,
+    //   permission: "user",
+    // },
   ];
 
   return (
@@ -121,6 +121,27 @@ const AdminSidebar: FC = () => {
                 </NavLink>
               </li>
             ))}
+
+          {/* show user management only for super_admin */}
+          {user?.role === "super_admin" && (
+            <li>
+              <NavLink
+                to="/admin/users"
+                className={({ isActive }) =>
+                  `${navItemClass} ${
+                    isActive ? "bg-[#00C1A7] text-white" : "hover:bg-[#00C1A7]"
+                  }`
+                }
+              >
+                <div className="flex items-center gap-2">
+                  <div className="p-1">
+                    <HiUsers size={25} />
+                  </div>
+                  <div>Users</div>
+                </div>
+              </NavLink>
+            </li>
+          )}
         </ul>
       </div>
       <div className="flex flex-col items-center gap-4 bg-white p-2 rounded-lg shadow-sm">
@@ -129,7 +150,7 @@ const AdminSidebar: FC = () => {
         </span>
         <Link
           to="/admin/profile"
-          className="py-1 text-md flex items-center text-gray-700 hover:bg-[#566c8c] hover:text-white rounded-md px-3"
+          className="py-1 text-md flex items-center text-gray-700 hover:bg-[#00C1A7] hover:text-white rounded-md px-3"
         >
           <div className="p-1">
             <UserOutlined />
