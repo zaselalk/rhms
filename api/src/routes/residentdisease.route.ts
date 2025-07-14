@@ -51,5 +51,10 @@ ResidentDiseaseRouter.get(
     catchAsync(residentDiseaseController.getPatientsCountByDiseaseId)
 );
 
+ResidentDiseaseRouter.get(
+    "/getAllDiseasesWithPatientCount",
+    catchAsync(residentDiseaseController.getAllDiseasesWithPatientCount)
+);
+
 
 export default ResidentDiseaseRouter;
