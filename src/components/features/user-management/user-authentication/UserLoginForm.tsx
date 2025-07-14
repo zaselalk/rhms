@@ -24,7 +24,7 @@ export const UserLoginForm: FC<UserLoginFormProps> = ({ form, onFinish }) => {
           { type: "email", message: "Invalid email format" },
         ]}
       >
-        <Input placeholder="Enter your email address" />
+        <Input placeholder="Enter your email address" size="large" />
       </Form.Item>
 
       {/* Password Input */}
@@ -33,12 +33,17 @@ export const UserLoginForm: FC<UserLoginFormProps> = ({ form, onFinish }) => {
         name="password"
         rules={[{ required: true, message: "Password is required" }]}
       >
-        <Input.Password placeholder="Enter your password" />
+        <Input.Password placeholder="Enter your password" size="large" />
       </Form.Item>
 
       {/* Login Button */}
       <Form.Item>
-        <Button type="primary" htmlType="submit" className="w-full">
+        <Button
+          type="primary"
+          htmlType="submit"
+          className="w-full"
+          size="large"
+        >
           Login
         </Button>
       </Form.Item>
