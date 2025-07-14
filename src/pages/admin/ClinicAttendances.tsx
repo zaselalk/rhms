@@ -12,7 +12,7 @@ interface Patient {
 
 interface Attendance {
   patientId: string;
-  status: boolean;
+  attendance: boolean; // renamed from status to attendance
 }
 
 const ClinicAttendances: React.FC = () => {
@@ -21,21 +21,25 @@ const ClinicAttendances: React.FC = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [attendances, setAttendances] = useState<Attendance[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchPatients = async () => {
       try {
+        setLoading(true);
         const data = await ResidentClinicService.getResidentsByClinicId(clinicID!);
         setPatients(data);
 
         setAttendances(
           data.map((patient: Patient) => ({
             patientId: patient.resident.nic,
-            status: false,
+            attendance: false, // initialize as false
           }))
         );
       } catch (error) {
         console.error("Error fetching patients for clinic:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -47,14 +51,22 @@ const ClinicAttendances: React.FC = () => {
   const toggleAttendance = (patientId: string) => {
     setAttendances((prev) =>
       prev.map((a) =>
-        a.patientId === patientId ? { ...a, status: !a.status } : a
+        a.patientId === patientId ? { ...a, attendance: !a.attendance } : a
       )
     );
   };
 
-  const saveAttendance = () => {
-    alert("Attendance saved!");
-    // Add API call here if needed to save attendance data
+  const saveAttendance = async () => {
+    try {
+      setLoading(true);
+      await ResidentClinicService.saveClinicAttendance(clinicID!, sessionID!, attendances);
+      alert("Attendance saved!");
+    } catch (error) {
+      alert("Failed to save attendance.");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const filteredPatients = patients.filter((patient) =>
@@ -62,7 +74,7 @@ const ClinicAttendances: React.FC = () => {
   );
 
   const totalPatients = attendances.length;
-  const presentCount = attendances.filter((a) => a.status).length;
+  const presentCount = attendances.filter((a) => a.attendance).length;
   const attendancePercentage = (presentCount / totalPatients) * 100 || 0;
 
   return (
@@ -71,8 +83,7 @@ const ClinicAttendances: React.FC = () => {
         {/* Page Heading */}
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-800">
-            Attendance for Session -{" "}
-            <span className="text-blue-600">{sessionID}</span>
+            Attendance for Session - <span className="text-blue-600">{sessionID}</span>
           </h1>
         </div>
 
@@ -88,9 +99,7 @@ const ClinicAttendances: React.FC = () => {
           </div>
           <div>
             <p className="text-gray-500 font-medium">Attendance %</p>
-            <p className="text-xl font-semibold">
-              {attendancePercentage.toFixed(1)}%
-            </p>
+            <p className="text-xl font-semibold">{attendancePercentage.toFixed(1)}%</p>
           </div>
         </div>
 
@@ -107,9 +116,7 @@ const ClinicAttendances: React.FC = () => {
 
         {/* Attendance Table */}
         <div className="bg-white p-6 rounded-xl shadow">
-          <h2 className="text-xl font-bold mb-4 text-gray-700">
-            Patient Attendance
-          </h2>
+          <h2 className="text-xl font-bold mb-4 text-gray-700">Patient Attendance</h2>
           <div className="overflow-x-auto">
             <table className="min-w-full border-collapse">
               <thead className="bg-gray-100 text-gray-700">
@@ -124,7 +131,7 @@ const ClinicAttendances: React.FC = () => {
                   const attendance = attendances.find(
                     (a) => a.patientId === patient.resident.nic
                   );
-                  const isPresent = attendance?.status;
+                  const isPresent = attendance?.attendance;
                   return (
                     <tr key={patient.resident.nic} className="border-b hover:bg-gray-50">
                       <td className="p-3">{patient.resident.nic}</td>
@@ -153,9 +160,14 @@ const ClinicAttendances: React.FC = () => {
         <div className="mt-6 text-right">
           <button
             onClick={saveAttendance}
-            className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow-md hover:bg-blue-700 transition"
+            disabled={loading}
+            className={`px-6 py-3 rounded-xl shadow-md transition ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700 text-white"
+            }`}
           >
-            Save Attendance
+            {loading ? "Saving..." : "Save Attendance"}
           </button>
         </div>
       </div>

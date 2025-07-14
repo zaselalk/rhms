@@ -90,7 +90,29 @@ class ResidentClinicService {
       );
     }
   }
-  
+
+// Save attendance list for a clinic session
+async saveClinicAttendance(
+  clinicId: number | string,
+  sessionId: number | string,
+  attendanceList: { patientId: string; attendance: boolean }[]
+) {
+  try {
+    const response = await axiosInstance.post(
+      `/clinic/${clinicId}/session/${sessionId}/attendance`,
+      {
+        clinicId,
+        attendances: attendanceList,
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || "Unable to save clinic attendance"
+    );
+  }
+}
+
 }
 
 export default new ResidentClinicService();

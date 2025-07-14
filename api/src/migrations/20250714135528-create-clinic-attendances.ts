@@ -33,7 +33,7 @@ module.exports = {
         primaryKey: true,
         references: {
           model: 'residents',
-          key: 'id',
+          key: 'nic',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',

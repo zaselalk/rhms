@@ -1,99 +1,88 @@
-// controllers/clinicAttendanceController.ts
-
 import { Request, Response } from "express";
-import { ClinicAttendance } from "../models/clinicAttendnce"; 
-import Clinic from "../models/clinic";
-import Session from "../models/clinicSession";
-import Resident from "../models/resident";
+import * as attendanceService from "../services/clinicAttendanceService";
 
-// Create or mark attendance
-export const markAttendance = async (req: Request, res: Response) => {
+// Save or update multiple attendance records for a session
+export const saveBulkAttendances = async (req: Request, res: Response) => {
+  const sessionId = parseInt(req.params.sessionId);
+  const clinicId = parseInt(req.body.clinicId);
+  const attendances = req.body.attendances; // [{ patientId, attendance }]
+
   try {
-    const { clinicId, sessionId, patientId, attendance } = req.body;
-
-    const record = await ClinicAttendance.upsert({
-      clinicId,
-      sessionId,
-      patientId,
-      attendance,
-    });
-
-    res.status(200).json({ message: "Attendance marked successfully", record });
+    for (const record of attendances) {
+      await attendanceService.markAttendance(
+        clinicId,
+        sessionId,
+        record.patientId,
+        record.attendance
+      );
+    }
+    return res.status(200).json({ message: "Attendances saved successfully." });
   } catch (error) {
-    res.status(500).json({ error: "Failed to mark attendance", details: error });
+    console.error("Error saving attendances:", error);
+    return res.status(500).json({ error: "Failed to save attendances." });
   }
 };
 
 // Get all attendance records
-export const getAllAttendances = async (_req: Request, res: Response) => {
+export const getAllAttendances = async (req: Request, res: Response) => {
   try {
-    const records = await ClinicAttendance.findAll({
-      include: [Clinic, Session, Resident],
-    });
-    res.status(200).json(records);
+    const data = await attendanceService.getAllAttendances();
+    return res.status(200).json(data);
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch attendance records" });
+    console.error("Error fetching all attendances:", error);
+    return res.status(500).json({ error: "Failed to fetch attendances." });
   }
 };
 
-// Get a specific attendance record
+// Get attendance for a specific patient
 export const getAttendance = async (req: Request, res: Response) => {
-  const { clinicId, sessionId, patientId } = req.params;
+  const clinicId = parseInt(req.params.clinicId);
+  const sessionId = parseInt(req.params.sessionId);
+  const patientId = parseInt(req.params.patientId);
 
   try {
-    const record = await ClinicAttendance.findOne({
-      where: { clinicId, sessionId, patientId },
-      include: [Clinic, Session, Resident],
-    });
-
-    if (!record) {
-      return res.status(404).json({ error: "Attendance record not found" });
-    }
-
-    res.status(200).json(record);
+    const record = await attendanceService.getAttendance(clinicId, sessionId, patientId);
+    if (!record) return res.status(404).json({ message: "Attendance not found." });
+    return res.status(200).json(record);
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch attendance record" });
+    console.error("Error fetching attendance:", error);
+    return res.status(500).json({ error: "Failed to fetch attendance." });
   }
 };
 
-// Update attendance
+// Update a single attendance record
 export const updateAttendance = async (req: Request, res: Response) => {
-  const { clinicId, sessionId, patientId } = req.params;
+  const clinicId = parseInt(req.params.clinicId);
+  const sessionId = parseInt(req.params.sessionId);
+  const patientId = parseInt(req.params.patientId);
   const { attendance } = req.body;
 
   try {
-    const record = await ClinicAttendance.findOne({
-      where: { clinicId, sessionId, patientId },
-    });
-
-    if (!record) {
-      return res.status(404).json({ error: "Attendance record not found" });
-    }
-
-    record.attendance = attendance;
-    await record.save();
-
-    res.status(200).json({ message: "Attendance updated", record });
+    const updated = await attendanceService.modifyAttendance(
+      clinicId,
+      sessionId,
+      patientId,
+      attendance
+    );
+    if (!updated) return res.status(404).json({ message: "Attendance not found." });
+    return res.status(200).json(updated);
   } catch (error) {
-    res.status(500).json({ error: "Failed to update attendance" });
+    console.error("Error updating attendance:", error);
+    return res.status(500).json({ error: "Failed to update attendance." });
   }
 };
 
-// Delete attendance
+// Delete a specific attendance record
 export const deleteAttendance = async (req: Request, res: Response) => {
-  const { clinicId, sessionId, patientId } = req.params;
+  const clinicId = parseInt(req.params.clinicId);
+  const sessionId = parseInt(req.params.sessionId);
+  const patientId = parseInt(req.params.patientId);
 
   try {
-    const result = await ClinicAttendance.destroy({
-      where: { clinicId, sessionId, patientId },
-    });
-
-    if (!result) {
-      return res.status(404).json({ error: "Attendance record not found" });
-    }
-
-    res.status(200).json({ message: "Attendance deleted" });
+    await attendanceService.removeAttendance(clinicId, sessionId, patientId);
+    return res.status(200).json({ message: "Attendance deleted successfully." });
   } catch (error) {
-    res.status(500).json({ error: "Failed to delete attendance" });
+    console.error("Error deleting attendance:", error);
+    return res.status(500).json({ error: "Failed to delete attendance." });
   }
 };

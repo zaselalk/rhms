@@ -66,6 +66,6 @@ ClinicAttendance.init(
 // Optional: Adding associations for Sequelize to recognize the relations
 ClinicAttendance.belongsTo(Clinic, { foreignKey: "clinicId" });
 ClinicAttendance.belongsTo(Session, { foreignKey: "sessionId" });
-ClinicAttendance.belongsTo(Resident, { foreignKey: "patientId" });
+ClinicAttendance.belongsTo(Resident, { foreignKey: "nic" });
 
 export default ClinicAttendance;
