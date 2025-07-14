@@ -1,7 +1,6 @@
 import { FC, useState,useEffect } from "react";
 import Modal from "../../layouts/overlays/Modal";
 import { createHousehold } from "../../../services/household.service";
-import axios from "axios";
 import { useLocation, useNavigate } from "react-router";
 import householdresidentService from "../../../services/householdresident.service";
 import { message as antMessage } from "antd";
