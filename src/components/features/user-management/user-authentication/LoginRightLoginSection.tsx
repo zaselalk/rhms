@@ -21,6 +21,7 @@ export const LoginRightLoginSection: FC<UserLoginSectionProps> = ({
   const [error, setError] = useState<string | null>(null);
   const dispatch = useAppDispatch();
   const Auth = new AuthServices();
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const onFinish = (values: loginState) => {
     setError(null); // clear previous errors
@@ -29,6 +30,7 @@ export const LoginRightLoginSection: FC<UserLoginSectionProps> = ({
 
   const mutation = useMutation({
     mutationFn: async ({ email, password }: loginState) => {
+      setIsLoggingIn(true);
       const user = await Auth.login(email, password);
       dispatch(
         login({
@@ -41,9 +43,11 @@ export const LoginRightLoginSection: FC<UserLoginSectionProps> = ({
       );
     },
     onSuccess: () => {
+      setIsLoggingIn(false);
       handleSuccessLogin();
     },
     onError: (error: any) => {
+      setIsLoggingIn(false);
       setError(error.message);
     },
   });
@@ -77,7 +81,11 @@ export const LoginRightLoginSection: FC<UserLoginSectionProps> = ({
           )}
 
           {/* Login Form */}
-          <UserLoginForm form={form} onFinish={onFinish} />
+          <UserLoginForm
+            form={form}
+            onFinish={onFinish}
+            isLoading={isLoggingIn}
+          />
         </div>
 
         {/* Additional Info */}
