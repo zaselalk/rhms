@@ -5,9 +5,14 @@ import { Link } from "react-router";
 interface UserLoginFormProps {
   form: FormInstance;
   onFinish: (values: any) => void;
+  isLoading?: boolean;
 }
 
-export const UserLoginForm: FC<UserLoginFormProps> = ({ form, onFinish }) => {
+export const UserLoginForm: FC<UserLoginFormProps> = ({
+  form,
+  onFinish,
+  isLoading,
+}) => {
   return (
     <Form
       form={form}
@@ -38,8 +43,13 @@ export const UserLoginForm: FC<UserLoginFormProps> = ({ form, onFinish }) => {
 
       {/* Login Button */}
       <Form.Item>
-        <Button type="primary" htmlType="submit" className="w-full">
-          Login
+        <Button
+          type="primary"
+          htmlType="submit"
+          className="w-full"
+          loading={isLoading}
+        >
+          {isLoading ? " Logging in..." : "Login"}
         </Button>
       </Form.Item>
 
