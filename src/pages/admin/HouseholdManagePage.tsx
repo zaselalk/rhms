@@ -273,12 +273,16 @@ const HouseholdManagePage: FC = () => {
 
                   {user?.permissions?.includes("household:edit") && (
                     <td className="px-6 py-3 text-sm text-gray-800">
+                      {resident.relation.trim().toLowerCase() !== "owner" ? (
                       <button
                         className="px-4 py-2 bg-red-500 text-white rounded-full shadow hover:bg-red-600 text-sm cursor-pointer"
                         onClick={() => handleRemoveResident(resident.recordId)}
                       >
                         Remove
                       </button>
+                      ) : (
+                        <span className="text-gray-400">Cannot remove owner</span>
+                      )}
                     </td>
                   )}
                 </tr>
