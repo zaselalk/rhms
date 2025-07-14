@@ -22,11 +22,15 @@ const AdminSidebar: FC = () => {
     "py-2 text-md flex items-center text-gray-700 hover:text-white rounded-md px-3";
 
   useEffect(() => {
-    const permissions =
-      user?.permissions?.map((perm) => perm.split(":")[0]) || [];
+    // const permissions =
+    //   user?.permissions?.map((perm) => perm.split(":")[0]) || [];
 
-    if (permissions.length > 0) {
-      setNavbarArray(permissions);
+    // console.log(user?.permissions);
+
+    if (!user?.permissions) return;
+
+    if (user?.permissions.length > 0) {
+      setNavbarArray(user?.permissions);
     }
   }, [user?.permissions]);
 
@@ -35,6 +39,10 @@ const AdminSidebar: FC = () => {
     dispatch(logout());
     // remove token from local storage
     localStorage.removeItem("token");
+
+    // remove last location state
+    window.history.replaceState({}, document.title, "/admin/login");
+
     navigate("/admin/login");
   };
 
@@ -43,31 +51,31 @@ const AdminSidebar: FC = () => {
       path: "/admin/diseases",
       label: "Diseases",
       icon: <CiPill size={25} />,
-      permission: "disease",
+      permission: "disease:view",
     },
     {
       path: "/admin/households",
       label: "Households",
       icon: <FaHouseChimney size={25} />,
-      permission: "household",
+      permission: "household:view",
     },
     {
       path: "/admin/residents",
       label: "Residents",
       icon: <FaHouseUser size={25} />,
-      permission: "resident",
+      permission: "resident:view",
     },
     {
       path: "/admin/clinic",
       label: "Clinic",
       icon: <FaUserDoctor size={25} />,
-      permission: "clinic",
+      permission: "clinic:view",
     },
     {
       path: "/admin/division",
       label: "Division",
       icon: <FaLocationDot size={25} />,
-      permission: "division",
+      permission: "division:view",
     },
     // {
     //   path: "/admin/users",
