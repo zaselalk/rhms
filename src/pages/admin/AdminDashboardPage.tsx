@@ -20,8 +20,6 @@ import "leaflet/dist/leaflet.css";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import { DashboardService } from "../../services/dashbord.service";
 import residentDiseaseService from "../../services/residentDisease.service";
-
-import diseaseService from "../../services/disease.service";
 import { Card } from "antd";
 import DiseaseColumnChart from "../../components/charts/DiseaseColumnChart";
 
@@ -154,7 +152,7 @@ const AdminDashboard: React.FC = () => {
   };
   // Data for the charts
   const CancerData = {
-    labels: ["Paitens", "Non Paitens"],
+    labels: ["Patients", "Non Patients"],
     datasets: [
       {
         data: [CancerPaitentCount, residentCount - CancerPaitentCount], // Example data (1,243 Yes, 500 No)
