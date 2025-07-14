@@ -10,6 +10,7 @@ import { GiVirus } from "react-icons/gi";
 import { FiSearch } from "react-icons/fi";
 import residentDiseaseService from "../../services/residentDisease.service";
 import { useParams } from "react-router";
+import { number } from "yup";
 
 interface Household {
   house_no: string;
@@ -29,7 +30,7 @@ const SingleDivisionPage: FC = () => {
   const { divisionId } = useParams();
   const [divisionName, setDivisionName] = useState<string>("");
   const [households, setHouseholds] = useState<Household[]>([]);
-  const [diseases, setDiseases] = useState<Disease[]>([]);
+  const [diseases, setDiseases] = useState<{ name: string; count: number|string }[]>([]);
   const [residentCount, setResidentCount] = useState<number>(0);
   const [householdCount, setHouseholdCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
@@ -53,13 +54,19 @@ const SingleDivisionPage: FC = () => {
           const countData = await DivisionService.getResidentCountByDivision(divisionId);
           setResidentCount(countData.residentCount);
 
-          // ✅ Replaced dummy data with real API call
-          const diseaseData = await residentDiseaseService.getDiseasePatientCounts(Number(divisionId));
+          //Data with real API call
+          const diseaseData:{
+            name: string;
+            count: number;
+          } = await residentDiseaseService.getDiseasePatientCounts(Number(divisionId));
+          console.log(diseaseData)
+          const diseaseArray = Object.entries(diseaseData).map(([name, count]) => ({
+            name,
+            count,
+          }));
+          console.log(diseaseArray)
           setDiseases(
-            diseaseData.map((d: any) => ({
-              name: d.name,
-              count: d.patients
-            }))
+            diseaseArray
           );
         } catch (error) {
           console.error("Error loading division data:", error);

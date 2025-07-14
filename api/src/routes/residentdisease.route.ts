@@ -46,7 +46,7 @@ ResidentDiseaseRouter.get(
     catchAsync(residentDiseaseController.getDiseaseCountsByDivision)
 );
 ResidentDiseaseRouter.get(
-  "disease-patient-counts/:divisionId",
+  "/disease-patient-counts/:divisionId",
   catchAsync(residentDiseaseController.getDiseaseCountsByDivision)
 );
 
