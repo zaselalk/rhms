@@ -22,13 +22,13 @@ HouseholdRouter.get(
 );
 
 HouseholdRouter.put(
-    "/update/:house_no",
-    protectRoute("household:update"),
+    "/update/:id",
+    // protectRoute("household:update"),
     catchAsync(householdController.updateHouseholdOwner)
 );
 
 HouseholdRouter.delete(
-    "/delete/:house_no",
+    "/delete/:id",
     protectRoute("household:delete"),
     catchAsync(householdController.deleteHousehold)
 );

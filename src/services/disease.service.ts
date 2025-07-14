@@ -33,15 +33,26 @@ class DiseaseService {
     }
 
 
-     // Get patient counts for each disease
+    // Get patient counts for each disease
     async getDiseasePatientCounts() {
-    try {
-      const response = await axiosInstance.get('/resident/disease-patient-counts');
-      return response.data; // Expected to return array: [{ name: string, patients: number }]
-    } catch (error: any) {
-      throw new Error(error.response?.data?.message || 'Unable to fetch disease patient counts');
+        try {
+            const response = await axiosInstance.get('/resident/disease-patient-counts');
+            return response.data; // Expected to return array: [{ name: string, patients: number }]
+        } catch (error: any) {
+            throw new Error(error.response?.data?.message || 'Unable to fetch disease patient counts');
+        }
+
     }
-  }
+    
+    // Get all diseases with IDs
+    async getAllDiseaseswithID() {
+        try {
+            const response = await axiosInstance.get('/disease/getDiseasewithID');
+            return response.data; // Expected to return array of diseases with IDs
+        } catch (error: any) {
+            throw new Error(error.response?.data?.message || 'Unable to fetch diseases with IDs');
+        }
+    }
 }
 
 export default new DiseaseService();

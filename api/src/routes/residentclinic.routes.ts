@@ -6,23 +6,28 @@ const residentClinicRouter = Router();
 const residentClinicController = new ResidentClinicController();
 
 residentClinicRouter.post(
-    "/registerClinic",
-    catchAsync(residentClinicController.registerClinic)
+  "/registerClinic",
+  catchAsync(residentClinicController.registerClinic)
 );
 
 residentClinicRouter.get(
-    "/getAllResidentClinics",
-    catchAsync(residentClinicController.getAllResidentClinics)
+  "/getAllResidentClinics",
+  catchAsync(residentClinicController.getAllResidentClinics)
 );
 
 residentClinicRouter.get(
-    "/getResident/:residentId",
-    catchAsync(residentClinicController.getClinicsByResidentId)
+  "/getResident/:residentId",
+  catchAsync(residentClinicController.getClinicsByResidentId)
 );
 
+residentClinicRouter.get(
+  "/getResidentsByClinic/:clinicId",
+  catchAsync(residentClinicController.getResidentsByClinicId)
+);
+
+residentClinicRouter.get(
+  "/patientCountAcrossDivisions/:clinicId",
+  catchAsync(residentClinicController.getDivisionPatientCountByClinic)
+);
 
 export default residentClinicRouter;
-
-
-
-

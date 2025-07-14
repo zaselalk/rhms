@@ -26,17 +26,17 @@ export class HouseholdServices {
   }
 
   // Update Household Owner by house_no
-  async updateOwnerByHouseNo(house_no: string, owner_id: number): Promise<boolean> {
-    return this.householdRepository.updateOwnerByHouseNo(house_no, owner_id);
+  async updateOwnerByHouseId(id:number, owner_id: number): Promise<boolean> {
+    return this.householdRepository.updateOwnerByHouseId(id, owner_id);
   }
 
   // Delete Household by house_no
-  async deleteHouseholdByHouseNo(house_no: string): Promise<boolean> {
-    const household = await this.householdRepository.findHouseholdByHouseNo(house_no);
+  async deleteHouseholdById(id: number): Promise<boolean> {
+    const household = await this.householdRepository.findHouseholdById(id);
     if (!household) {
       throw new HouseholdNotFoundException("Household not found");
     }
-    return this.householdRepository.deleteHouseholdByHouseNo(house_no);
+    return this.householdRepository.deleteHouseholdById(id);
   }
 
   //Household Count

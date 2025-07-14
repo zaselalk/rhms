@@ -76,12 +76,12 @@ export class HouseholdRepository {
   }
 
   // Update Household Owner
-  async updateOwnerByHouseNo(
-    house_no: string,
+  async updateOwnerByHouseId(
+    id:number,
     owner_id: number,
   ): Promise<boolean> {
-    const household = await Household.findOne({ where: { house_no } });
-    if (!household) return false; // If no household found with house_no
+    const household = await Household.findByPk(id);
+    if (!household) return false; // If no household found with id
 
     household.owner_id = owner_id; // Update the owner_id
     await household.save(); // Save the changes
@@ -89,8 +89,8 @@ export class HouseholdRepository {
   }
 
   // Delete Household by house_no
-  async deleteHouseholdByHouseNo(house_no: string): Promise<boolean> {
-    const household = await Household.findOne({ where: { house_no } });
+  async deleteHouseholdById(id: number): Promise<boolean> {
+    const household = await Household.findByPk(id);
     if (!household) {
       return false; // Return false if the household is not found
     }
@@ -100,8 +100,8 @@ export class HouseholdRepository {
   }
 
   // Find Household by house_no
-  async findHouseholdByHouseNo(house_no: string): Promise<Household | null> {
-    return Household.findOne({ where: { house_no } });
+  async findHouseholdById(id: number): Promise<Household | null> {
+    return Household.findByPk(id);
   }
 
   // Household Count

@@ -1,5 +1,4 @@
 import { FC, useEffect, useState } from "react";
-import { useParams } from "react-router";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import {
   getHouseholdsByDivision,
@@ -9,6 +8,8 @@ import { DivisionService } from "../../services/division.service";
 import { FaHome, FaUsers } from "react-icons/fa";
 import { GiVirus } from "react-icons/gi";
 import { FiSearch } from "react-icons/fi";
+import residentDiseaseService from "../../services/residentDisease.service";
+import { useParams } from "react-router";
 
 interface Household {
   house_no: string;
@@ -81,6 +82,7 @@ const SingleDivisionPage: FC = () => {
     d.name.toLowerCase().includes(diseaseSearch.toLowerCase())
   );
 
+  // Pagination slices
   const paginatedHouseholds = filteredHouseholds.slice(
     (householdPage - 1) * ITEMS_PER_PAGE,
     householdPage * ITEMS_PER_PAGE
@@ -121,60 +123,43 @@ const SingleDivisionPage: FC = () => {
               </div>
             </div>
 
-            {/* Tables side by side */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Diseases Table */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div className="bg-white p-6 rounded-lg shadow-md">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-2xl font-semibold text-[#008FFB] flex items-center gap-2">
-                    <GiVirus />
-                    Top Diseases
-                  </h3>
-                  <div className="relative w-2/3 sm:w-1/2">
-                    <FiSearch className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                    <input
-                      type="text"
-                      placeholder="Search diseases..."
-                      className="border border-gray-300 pl-10 pr-4 py-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-[#008FFB]"
-                      value={diseaseSearch}
-                      onChange={(e) => {
-                        setDiseaseSearch(e.target.value);
-                        setDiseasePage(1);
-                      }}
-                    />
-                  </div>
+                  <h3 className="text-xl font-semibold text-[#008FFB]">Top Diseases</h3>
+                  <input
+                    type="text"
+                    placeholder="Search diseases..."
+                    className="border px-3 py-1 rounded w-1/2"
+                    value={diseaseSearch}
+                    onChange={(e) => {
+                      setDiseaseSearch(e.target.value);
+                      setDiseasePage(1);
+                    }}
+                  />
                 </div>
-                <table className="w-full table-auto border-collapse">
-                  <thead className="bg-gray-100">
+                <table className="w-full table-auto">
+                  <thead>
                     <tr>
-                      <th className="text-left px-6 py-3 text-sm font-medium text-gray-600">
-                        Disease
-                      </th>
-                      <th className="text-left px-6 py-3 text-sm font-medium text-gray-600">
-                        Count
-                      </th>
+                      <th className="text-left px-4 py-2 text-sm text-gray-600">Disease</th>
+                      <th className="text-left px-4 py-2 text-sm text-gray-600">Count</th>
                     </tr>
                   </thead>
                   <tbody>
                     {paginatedDiseases.map((disease, index) => (
-                      <tr
-                        key={index}
-                        className="hover:bg-gray-50 cursor-pointer transition-colors duration-150"
-                      >
-                        <td className="px-6 py-3 text-sm text-gray-700">{disease.name}</td>
-                        <td className="px-6 py-3 text-sm text-gray-700">{disease.count}</td>
+                      <tr key={index}>
+                        <td className="px-4 py-2 text-sm text-gray-700">{disease.name}</td>
+                        <td className="px-4 py-2 text-sm text-gray-700">{disease.count}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                <div className="mt-5 flex justify-end space-x-3">
+                <div className="mt-4 flex justify-end space-x-2">
                   {Array.from({ length: totalDiseasePages }, (_, i) => (
                     <button
                       key={i}
-                      className={`px-4 py-1 rounded-md ${
-                        diseasePage === i + 1
-                          ? "bg-[#008FFB] text-white font-semibold"
-                          : "border border-gray-300 text-gray-700 hover:bg-gray-100"
+                      className={`px-3 py-1 rounded ${
+                        diseasePage === i + 1 ? "bg-blue-500 text-white" : "border"
                       }`}
                       onClick={() => setDiseasePage(i + 1)}
                     >
@@ -184,39 +169,26 @@ const SingleDivisionPage: FC = () => {
                 </div>
               </div>
 
-              {/* Households Table */}
               <div className="bg-white p-6 rounded-lg shadow-md">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-2xl font-semibold text-[#008FFB] flex items-center gap-2">
-                    <FaHome />
-                    Households
-                  </h3>
-                  <div className="relative w-2/3 sm:w-1/2">
-                    <FiSearch className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                    <input
-                      type="text"
-                      placeholder="Search owner..."
-                      className="border border-gray-300 pl-10 pr-4 py-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-[#008FFB]"
-                      value={householdSearch}
-                      onChange={(e) => {
-                        setHouseholdSearch(e.target.value);
-                        setHouseholdPage(1);
-                      }}
-                    />
-                  </div>
+                  <h3 className="text-xl font-semibold text-[#008FFB]">Households</h3>
+                  <input
+                    type="text"
+                    placeholder="Search owner..."
+                    className="border px-3 py-1 rounded w-1/2"
+                    value={householdSearch}
+                    onChange={(e) => {
+                      setHouseholdSearch(e.target.value);
+                      setHouseholdPage(1);
+                    }}
+                  />
                 </div>
-                <table className="w-full table-auto border-collapse">
-                  <thead className="bg-gray-100">
+                <table className="w-full table-auto">
+                  <thead>
                     <tr>
-                      <th className="text-left px-6 py-3 text-sm font-medium text-gray-600">
-                        House ID
-                      </th>
-                      <th className="text-left px-6 py-3 text-sm font-medium text-gray-600">
-                        Owner
-                      </th>
-                      <th className="text-left px-6 py-3 text-sm font-medium text-gray-600">
-                        People Count
-                      </th>
+                      <th className="text-left px-4 py-2 text-sm text-gray-600">House ID</th>
+                      <th className="text-left px-4 py-2 text-sm text-gray-600">Owner</th>
+                      <th className="text-left px-4 py-2 text-sm text-gray-600">People Count</th>
                     </tr>
                   </thead>
                   <tbody>
