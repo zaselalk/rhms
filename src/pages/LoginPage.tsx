@@ -1,11 +1,9 @@
-import { Typography } from "antd";
 import { FC, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router";
 import { useAppSelector } from "../hooks/state/hooks";
 import { LoginLeftImageSection } from "../components/features/user-management/user-authentication/LoginLeftImageSection";
 import { LoginRightLoginSection } from "../components/features/user-management/user-authentication/LoginRightLoginSection";
-
-const { Title } = Typography;
+import { Link } from "react-router";
 
 const LoginPage: FC = () => {
   const auth = useAppSelector((state) => state.auth);
@@ -27,16 +25,41 @@ const LoginPage: FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
-      <Title level={2} className="text-center text-blue-800 pt-12">
-        Resident Health Monitoring System - Katugahahena Hospital
-      </Title>
-      <div className="flex justify-center items-center min-h-full gap-32 p-12">
-        {/* Left Image Section */}
-        <LoginLeftImageSection />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 flex flex-col">
+      {/* Header */}
+      <header className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <Link to="/">
+                <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">K</span>
+                </div>
+              </Link>
+              <div>
+                <h1 className="text-xl font-bold text-gray-900">
+                  Katugahahena Hospital
+                </h1>
+                <p className="text-sm text-gray-600">
+                  Resident Health Monitoring System
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
 
-        {/* Right Login Form Section */}
-        <LoginRightLoginSection handleSuccessLogin={handleSuccessLogin} />
+      {/* Main Content */}
+      <div className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-6xl w-full">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            {/* Left Image Section */}
+            <LoginLeftImageSection />
+
+            {/* Right Login Form Section */}
+            <LoginRightLoginSection handleSuccessLogin={handleSuccessLogin} />
+          </div>
+        </div>
       </div>
     </div>
   );
