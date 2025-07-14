@@ -19,7 +19,6 @@ export const LoginRightLoginSection: FC<UserLoginSectionProps> = ({
 }) => {
   const [form] = Form.useForm();
   const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
   const Auth = new AuthServices();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
@@ -89,7 +88,6 @@ export const LoginRightLoginSection: FC<UserLoginSectionProps> = ({
             isLoading={isLoggingIn}
           />
         </div>
-
       </div>
     </div>
   );
