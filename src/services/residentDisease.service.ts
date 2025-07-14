@@ -101,6 +101,26 @@ class ResidentDiseaseService {
       throw new Error(error.response?.data?.message || 'Unable to update by disease ID');
     }
   }
+
+  //getpations count by disease id
+  async getPatientsCountByDiseaseId(diseaseId: number) {
+    try {
+      const response = await axiosInstance.get(`/residentDisease/PCountByDiseaseId/${diseaseId}`);
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || 'Unable to fetch patient count by disease ID');
+    }
+  }
+
+  // Get all diseases with patient count
+  async getAllDiseasesWithPatientCount() {
+    try {
+      const response = await axiosInstance.get('/residentDisease/getAllDiseasesWithPatientCount');
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || 'Unable to fetch all diseases with patient count');
+    }
+  }
 }
 
 export default new ResidentDiseaseService();
