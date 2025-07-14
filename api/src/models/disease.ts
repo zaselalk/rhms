@@ -5,6 +5,8 @@ import sequelize from "."; // Make sure this points to your Sequelize instance
 interface DiseaseAttributes {
   diseaseId: number;
   diseaseName: string;
+  deletedAt?: Date | null; // soft delete
+  
 }
 
 // Make diseaseId optional for creation (since it's auto-incremented)
@@ -15,6 +17,7 @@ class Disease extends Model<DiseaseAttributes, DiseaseCreationAttributes>
   implements DiseaseAttributes {
   public diseaseId!: number;
   public diseaseName!: string;
+  public deletedAt?: Date | null; // soft delete
 
   // Timestamps
   public readonly createdAt!: Date;
@@ -39,6 +42,7 @@ Disease.init(
     modelName: "Disease",
     tableName: "diseases",
     timestamps: true,
+    paranoid: true, // Enable soft delete
   }
 );
 
