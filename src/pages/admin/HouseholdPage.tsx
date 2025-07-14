@@ -291,19 +291,6 @@ const HouseholdPage: FC = () => {
       ) : (
         <>
 
-        {/* <HouseholdCreateModal
-        isOpen={isOpen}
-        handleClose={() => setIsOpen(false)}
-        refreshHouseholds={fetchHouseholds}
-      /> */}
-
-          {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <Spin size="large" />
-        </div>
-      ) : (
-        <>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
           <div className="bg-gradient-to-r from-blue-100 to-blue-200 p-6 rounded-2xl shadow-md flex items-center justify-between transition transform hover:scale-105">
             <div>
