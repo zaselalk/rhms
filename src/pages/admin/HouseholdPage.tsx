@@ -19,7 +19,6 @@ import {
   deleteHousehold,
   fetchAllHouseholds,
   fetchResidentCount,
-  searchResidentById,
   updateHouseholdOwner,
 } from "../../services/household.service";
 import householdresidentService from "../../services/householdresident.service";
