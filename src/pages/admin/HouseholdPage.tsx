@@ -14,7 +14,7 @@ import {
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import { EyeOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { HouseholdCreateModal } from "../../components/features/household-management/HouseholdCreateModal";
-import { HomeOutlined, TeamOutlined , PlusOutlined } from "@ant-design/icons";
+import { HomeOutlined, TeamOutlined, PlusOutlined } from "@ant-design/icons";
 
 import {
   deleteHousehold,
@@ -277,8 +277,9 @@ const HouseholdPage: FC = () => {
               type="primary"
               style={{ backgroundColor: "#008FFB" }}
               onClick={() => setIsOpen(true)}
+              icon={<PlusOutlined />}
             >
-              + Add Household
+              Add Household
             </Button>
           )}
         </div>
@@ -296,28 +297,34 @@ const HouseholdPage: FC = () => {
         ) : (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-          <div className="bg-gradient-to-r from-blue-100 to-blue-200 p-6 rounded-2xl shadow-md flex items-center justify-between transition transform hover:scale-105">
-            <div>
-              <p className="text-sm text-gray-600 font-medium">Total Households</p>
-              <h3 className="text-3xl font-bold text-blue-800">
-                {registeredHouseholds.length}
-              </h3>
-            </div>
-            <div className="text-blue-700 text-4xl">
-              <HomeOutlined />
-            </div>
-          </div>
+              <div className="bg-gradient-to-r from-blue-100 to-blue-200 p-6 rounded-2xl shadow-md flex items-center justify-between transition transform hover:scale-105">
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">
+                    Total Households
+                  </p>
+                  <h3 className="text-3xl font-bold text-blue-800">
+                    {registeredHouseholds.length}
+                  </h3>
+                </div>
+                <div className="text-blue-700 text-4xl">
+                  <HomeOutlined />
+                </div>
+              </div>
 
-          <div className="bg-gradient-to-r from-green-100 to-green-200 p-6 rounded-2xl shadow-md flex items-center justify-between transition transform hover:scale-105">
-            <div>
-              <p className="text-sm text-gray-600 font-medium">Total Residents</p>
-              <h3 className="text-3xl font-bold text-green-800">{residentCount}</h3>
+              <div className="bg-gradient-to-r from-green-100 to-green-200 p-6 rounded-2xl shadow-md flex items-center justify-between transition transform hover:scale-105">
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">
+                    Total Residents
+                  </p>
+                  <h3 className="text-3xl font-bold text-green-800">
+                    {residentCount}
+                  </h3>
+                </div>
+                <div className="text-green-700 text-4xl">
+                  <TeamOutlined />
+                </div>
+              </div>
             </div>
-            <div className="text-green-700 text-4xl">
-              <TeamOutlined />
-            </div>
-          </div>
-        </div>
 
             {/* Search Bar */}
             <div className="mb-4">
@@ -361,7 +368,6 @@ const HouseholdPage: FC = () => {
             </div>
           </>
         )}
-
       </div>
 
       <Modal
