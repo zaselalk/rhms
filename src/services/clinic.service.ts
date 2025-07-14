@@ -1,3 +1,4 @@
+import { ClinicSession } from "../pages/admin/ClinicDetailPage";
 import axiosInstance from "./axios/axiosInstance";
 
 // Define clinic API service functions
@@ -85,15 +86,18 @@ getClinicSessions: async (clinicId: string) => {
   return response.data;
 },
 
-// Update a session for a clinic
+// Get a specific session by ID for a clinic
 updateClinicSession: async (
   clinicId: string,
-  sessionData: { id: string; name: string; sessionDate: string }
+  sessionData: ClinicSession
 ) => {
   try {
+    const { sessionId
+, ...sessionBody } = sessionData; // exclude id
     const response = await axiosInstance.put(
-      `/clinic/${clinicId}/session/${sessionData.id}`,
-      sessionData
+      `/clinic/${clinicId}/session/${sessionId
+}`,
+      sessionBody
     );
     return response.data;
   } catch (error) {
@@ -101,6 +105,7 @@ updateClinicSession: async (
     throw error;
   }
 },
+
 
 // Delete a session for a clinic
 deleteClinicSession: async (clinicId: string, sessionId: string) => {

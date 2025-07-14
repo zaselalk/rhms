@@ -11,6 +11,8 @@ import { DashboardContainer } from "../../components/layouts/overlays/DashboardC
 import Modal from "../../components/layouts/overlays/Modal";
 import { ClinicService } from "../../services/clinic.service";
 import ResidentClinicService from "../../services/residentclinic.service";
+import { Button } from "antd";
+
 
 interface Patient {
   resident: {
@@ -24,8 +26,9 @@ interface DivisionCount {
   residentCount: number;
 }
 
-interface ClinicSession {
-  id: string;
+export interface ClinicSession {
+  clinicId: string;
+  sessionId: string;
   name: string;
   sessionDate: string;
 }
@@ -104,6 +107,7 @@ const ClinicDetail: React.FC = () => {
     setLoadingSessions(true);
     try {
       const sessions = await ClinicService.getClinicSessions(clinicId!);
+      console.log(sessions);
       setClinicSessions(sessions);
     } catch (err) {
       console.error("Failed to fetch sessions:", err);
@@ -186,7 +190,7 @@ const ClinicDetail: React.FC = () => {
 
     try {
       await ClinicService.deleteClinicSession(clinicId!, sessionId);
-      setClinicSessions(clinicSessions.filter((s) => s.id !== sessionId));
+      setClinicSessions(clinicSessions.filter((s) => s.sessionId !== sessionId));
     } catch (err) {
       console.error("Failed to delete session:", err);
       setError("Failed to delete session.");
@@ -222,7 +226,7 @@ const ClinicDetail: React.FC = () => {
       );
       setClinicSessions(
         clinicSessions.map((s) =>
-          s.id === updatedSession.id ? updatedSession : s
+          s.sessionId === updatedSession.id ? updatedSession : s
         )
       );
       closeEditModal();
@@ -497,34 +501,55 @@ const ClinicDetail: React.FC = () => {
                 <tbody>
                   {clinicSessions.map((session) => (
                     <tr
-                      key={session.id}
+                      key={session.sessionId
+}
                       className="border-b hover:bg-gray-100 transition"
                     >
                       <td className="p-3 font-medium">{session.name}</td>
                       <td className="p-3">{session.sessionDate}</td>
-                      <td className="p-3 text-center space-x-4">
-                        <button
-                          onClick={() => openEditModal(session)}
-                          className="text-[#008FFB] hover:text-blue-800"
-                          aria-label={`Edit session ${session.name}`}
-                        >
-                          <FaEdit className="inline-block text-lg" />
-                        </button>
-                        <button
-                          onClick={() => removeClinicSession(session.id)}
-                          className="text-red-600 hover:text-red-800"
-                          aria-label={`Delete session ${session.name}`}
-                        >
-                          <FaTrash className="inline-block text-lg" />
-                        </button>
-                        <button
-                          onClick={() => handleClick(session.id)}
-                          className="text-green-600 hover:text-green-800"
-                          aria-label={`View attendance for session ${session.name}`}
-                        >
-                          <FaClipboardList className="inline-block text-lg" />
-                        </button>
-                      </td>
+                    <td className="p-3 text-center space-x-2">
+                      <Button
+                        type="default"
+                        ghost
+                        icon={<FaEdit />}
+                        onClick={() => openEditModal(session)}
+                        style={{
+                          borderColor: '#facc15', // yellow-400
+                          color: '#facc15',
+                          fontWeight: '600',
+                        }}
+                      >
+                        Edit
+                      </Button>
+
+                      <Button
+                        type="default"
+                        ghost
+                        danger
+                        icon={<FaTrash />}
+                        onClick={() => removeClinicSession(session.sessionId)}
+                        style={{
+                          fontWeight: '600',
+                        }}
+                      >
+                        Delete
+                      </Button>
+
+                      <Button
+                        type="default"
+                        ghost
+                        icon={<FaClipboardList />}
+                        onClick={() => handleClick(session.sessionId)}
+                        style={{
+                          borderColor: '#22c55e', // green-500
+                          color: '#22c55e',
+                          fontWeight: '600',
+                        }}
+                      >
+                        Attendance
+                      </Button>
+                    </td>
+
                     </tr>
                   ))}
                 </tbody>

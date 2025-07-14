@@ -11,7 +11,7 @@ import PermissionRouter from "./routes/permission.routes";
 import RoleRouter from "./routes/role.routes";
 import UserRouter from "./routes/user.routes";
 import serializeUser from "./middleware/serializeuser.middleware";
-import clinicSessionRoutes from "./routes/clinicSession.routes";
+//import clinicSessionRoutes from "./routes/clinicSession.routes";
 import expressErrorHandler from "./util/expressErrorHandler";
 import residentClinicRouter from "./routes/residentclinic.routes";
 import HouseholdResidentRouter from "./routes/householdresident.routes";
@@ -20,7 +20,7 @@ import { auditLogger } from "./middleware/auditLogger.middleware";
 import ResidentDiseaseRouter from "./routes/residentdisease.route";
 import MapdataRouter from "./routes/mapdata.routes";
 import "./models/association"; // Import associations to ensure they are registered
-import clinicSessionRouter from './routes/clinicSession.routes'; 
+//import clinicSessionRouter from './routes/clinicSession.routes'; 
 
 dotenv.config();
 
@@ -56,14 +56,12 @@ app.use("/disease", DisaseRouter);
 app.use("/resident", ResidentRouter);
 app.use("/household", HouseholdRouter);
 app.use("/clinic", ClinicRouter);
-app.use('/sessions', clinicSessionRouter);
 app.use("/permission", PermissionRouter);
 app.use("/role", RoleRouter);
 app.use("/user", UserRouter);
 app.use("/residentClinic", residentClinicRouter);
 app.use("/division", DivisionRouter);
 app.use("/residentdisease", ResidentDiseaseRouter);
-app.use("/sessions", clinicSessionRoutes);
 app.use("/household-resident", HouseholdResidentRouter);
 app.use("/mapdata", MapdataRouter);
 

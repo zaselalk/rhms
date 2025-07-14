@@ -1,6 +1,6 @@
 // services/clinicAttendanceService.ts
 
-import * as repo from "../repositories/clinicAttendanceRepository";
+import * as repo from "../repositories/ClinicAttendanceRepository";
 
 export const markAttendance = async (
   clinicId: number,
