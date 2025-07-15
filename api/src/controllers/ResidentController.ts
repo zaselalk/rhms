@@ -2,8 +2,7 @@ import { Request, Response } from "express";
 import { Resident } from "../models/resident";
 import { ResidentService } from "../services/ResidentService";
 import { ResidentRepository } from "../repositories/ResidentRepository";
-import Clinic from "../models/clinic";
-import ResidentClinicController from "./ResidentClinicController";
+import jwt from "jsonwebtoken";
 import { ResidentClinicService } from "../services/ResidentClinicService";
 import { ResidentClinicRepository } from "../repositories/ResidentClinicRepository";
 
@@ -15,8 +14,9 @@ class ResidentController {
     const residentRepository = new ResidentRepository();
     this.residentService = new ResidentService(residentRepository);
     const residentClinicRepository = new ResidentClinicRepository();
-    this.residentClinicService = new ResidentClinicService(residentClinicRepository)
-
+    this.residentClinicService = new ResidentClinicService(
+      residentClinicRepository
+    );
   }
 
   residentPing = async (
@@ -53,7 +53,7 @@ class ResidentController {
       chronicalDesease,
       height,
       weight,
-      clinic
+      clinic,
     } = req.body;
 
     const residentfindByNic: Resident | null =
@@ -87,13 +87,10 @@ class ResidentController {
         alergies,
         chronicalDesease,
         height,
-        weight,
-
+        weight
       );
-     
 
       const residentId = resident.id;
-
 
       // Register resident with multiple clinics
       const residentClinics = await Promise.all(
@@ -327,6 +324,75 @@ class ResidentController {
       res.status(200).json(counts);
     } catch (error) {
       res.status(500).json({ message: "Error counting diseases" });
+    }
+  };
+
+  loginResidentByEmailandPassword = async (
+    req: Request,
+    res: Response
+  ): Promise<Response | void> => {
+    const { email, password } = req.body;
+
+    try {
+      const resident =
+        await this.residentService.loginResidentByEmailandPassword(
+          email,
+          password
+        );
+
+      if (!resident) {
+        return res.status(404).json({
+          message: null,
+          status: 404,
+          error: "Resident not found",
+          data: null,
+        });
+      }
+
+      const token = jwt.sign(
+        { id: resident.id, email: resident.email },
+        process.env.JWT_SECRET || "defaultsecret",
+        {
+          expiresIn: "1h", // Token expiration time
+        }
+      );
+
+      return res.json({
+        message: "Resident logged in successfully",
+        status: 200,
+        error: null,
+        token: token,
+        data: resident,
+      });
+    } catch (error: any) {
+      console.error("Login Error:", error);
+
+      // if resident not found, it send resident not found
+      if (error.message === "Resident not found") {
+        return res.status(404).json({
+          message: null,
+          status: 404,
+          error: "Resident not found",
+          data: null,
+        });
+      }
+
+      // if password is incorrect, it send invalid credentials
+      if (error.message === "Invalid password") {
+        return res.status(401).json({
+          message: null,
+          status: 401,
+          error: "Invalid credentials",
+          data: null,
+        });
+      }
+
+      return res.status(500).json({
+        message: null,
+        status: 500,
+        error: "Error logging in resident",
+        data: null,
+      });
     }
   };
 }
