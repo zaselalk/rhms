@@ -15,9 +15,8 @@ const residentController = new ResidentController();
 ResidentRouter.get("/", catchAsync(residentController.getAllResident));
 ResidentRouter.post(
   "/createResident",
-
   valiadteResident,
-  // protectRoute,
+  protectRoute("resident:create"),
   catchAsync(residentController.residentRegister)
 );
 ResidentRouter.get(
@@ -27,10 +26,12 @@ ResidentRouter.get(
 ResidentRouter.get("/id/:id", catchAsync(residentController.residentfindById));
 ResidentRouter.put(
   "/update/:id",
+  protectRoute("resident:edit"),
   catchAsync(residentController.updateResident)
 );
 ResidentRouter.delete(
   "/delete/:id",
+  protectRoute("resident:edit"),
   catchAsync(residentController.deleteResidentById)
 );
 
@@ -45,7 +46,8 @@ ResidentRouter.get(
 );
 
 ResidentRouter.get(
-  "/disease-patient-counts",
+  "/disease-patient-counts/:divisionId",
+  catchAsync(residentController.getDiseasePatientCounts));
   catchAsync(residentController.getDiseasePatientCounts)
 );
 
@@ -53,5 +55,12 @@ ResidentRouter.post(
   "/login",
   catchAsync(residentController.loginResidentByEmailandPassword)
 );
+
+
+ResidentRouter.get(
+  "/division/:divisionId/count",
+  catchAsync(residentController.getResidentCountByDivision)
+);
+
 
 export default ResidentRouter;

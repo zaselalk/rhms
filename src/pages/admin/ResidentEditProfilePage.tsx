@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Alert } from "antd";
+import { Alert, Button } from "antd";
 import { useFormik } from "formik";
 import { useMutation } from "@tanstack/react-query";
 
@@ -12,14 +12,14 @@ import { ResidentData } from "../../types/resident";
 import { ClinicService } from "../../services/clinic.service";
 import { DivisionService } from "../../services/division.service";
 import diseaseService from "../../services/disease.service";
+import { useParams } from "react-router";
+import { Eye, EyeOff } from "lucide-react";
+type ResidentEditPageProps = {};
+
+const ResidentEditPage: FC<ResidentEditPageProps> = () => {
 
 
-
-
-type ResidentRegistrationProps = {};
-
-const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
-  const initialValues: ResidentData = {
+  const initialValues2: ResidentData = {
     firstName: "",
     lastName: "",
     nic: "",
@@ -27,13 +27,12 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     password: "",
     birthday: "",
     bloodGroup: "",
-    gender: "Male",
+    gender: "",
     address: "",
     contactNumber: "",
     divisionId: "",
-    maritalState: "Married",
+    maritalState: "",
     religion: "",
-    jobdetail: "Worker",
     educationLevel: "",
     addicted: [],
     alergies: [],
@@ -41,14 +40,17 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     clinic: [],
     height: "",
     weight: "",
-    heartRate: "",
     bloodPressure: "",
-    Birthcertificate: "",
+    heartRate: "",
     glucose: 0,
-    deletedAt: null, // Initialize deletedAt to null for new residents
+    Birthcertificate: "",
+    jobdetail: "",
+    deletedAt: null as Date | null, // Assuming deletedAt can be null
 
   };
+  const [initialValues, setinital] = useState<ResidentData>(initialValues2);
 
+  const [showPassword, setShowPassword] = useState(false);
   const [addicted, setAddictedd] = useState<string[]>([]);
   const [alergies, setAllergies] = useState<string[]>([]);
 
@@ -58,6 +60,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
   }
 
   const [GramaniladariDivision, setGramaniladariDivision] = useState<Division[]>([]);
+
 
   type Clinic = {
     id: string;
@@ -75,9 +78,39 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
   const [clinics, setClinics] = useState<Clinic[]>([]);
   const [selectedClinicIds, setSelectedClinicIds] = useState<string[]>([]);
 
+  const { id } = useParams<{ id: string }>();
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toISOString().split("T")[0];
+  };
+
+  const fetchResidentData = async () => {
+    if (id) {
+      try {
+        const response = await residentService.getSingleResident(id);
+        const resident = response.data;
+
+        const formattedResident = {
+          ...resident,
+          birthday: formatDate(resident.birthday), // ✅ Convert to YYYY-MM-DD
+        };
+
+        setinital(formattedResident);
+        console.log("Resident Data:", formattedResident);
+      } catch (err) {
+        console.error("Failed to fetch resident data", err);
+      }
+    }
+  }
+
 
   // Fetch all clinics when the component mounts
   useEffect(() => {
+
+
+    fetchResidentData();
+
+
     //Fetch Disease  Function
     const fetchDiseases = async () => {
       try {
@@ -122,22 +155,6 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
   };
 
 
-  //GramaniladariDivision data fetch
-  useEffect(() => {
-    const fetchGramaniladariDivision = async () => {
-      try {
-        const data = await DivisionService.getAllDivisions();
-        // Assuming the data is an array of objects with id and name properties
-        setGramaniladariDivision(data);
-      } catch (error) {
-        console.error("Error fetching Gramaniladari Division:", error);
-      }
-    }
-    fetchGramaniladariDivision();
-  }, []);
-
-
-
 
   const addictedlist = [
     "Smoke",
@@ -146,6 +163,8 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     "Other Substance Use",
   ];
   const alergydlist = ["Food Allergy", "Drug Allergy", "Other Allergy"];
+
+
   const caldate2 = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
 
   const handleAddicted = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -173,33 +192,27 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
   const residentRegister = residentService;
 
   const mutation = useMutation({
+
     mutationFn: async (values: ResidentData) => {
-      return await residentRegister.addResident(values);
+      if (!id) {
+        throw new Error("Resident ID is missing.");
+      }
+      await residentRegister.updateResidentData(id, values); // ✅ values come from `mutate(values)`
     },
     onSuccess: () => {
-      toast.success("Register Success");
+      toast.success("Updated Successfully");
+
       formik.resetForm();
+      fetchResidentData();
     },
-    onError: (error: any) => {
-      const errorData = error?.response?.data;
-
-      // Case: Validation error array from backend
-      if (Array.isArray(errorData?.errors)) {
-        errorData.errors.forEach((err: any) => {
-          toast.error(err.msg); // show each error
-        });
-      } else {
-        // Fallback single message
-        const errorMessage =
-          errorData?.message || error.message || "Registration failed. Please try again.";
-        toast.error(errorMessage);
-      }
-    }
+    onError: () => {
+      toast.error("Update failed. Please try again.");
+    },
   });
-
 
   const formik = useFormik({
     initialValues,
+    enableReinitialize: true,
     validationSchema: residentValidation,
     onSubmit: (values) => {
 
@@ -220,9 +233,10 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
       <form onSubmit={formik.handleSubmit}>
         {/* Registration Form Container */}
         <div className="bg-white p-8 rounded-lg shadow-lg w-full ">
-          <h2 className="text-2xl font-semibold text-[#008FFB] mb-6 text-">
-            Resident Registration
+          <h2 className="text-2xl font-semibold text-[#008FFB] mb-6 text">
+            Edit Resident Data
           </h2>
+
           <div className="mt-5 mb-8 ">
             <h2 className="text-2xl">Personal Details</h2>
             <hr className="bg-gray-100 mb-2" />
@@ -457,7 +471,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                 Religion
               </label>
               <select
-                id="religion"
+                id="Religion"
                 {...formik.getFieldProps("religion")}
                 value={formik.values.religion}
                 defaultChecked={true}
@@ -501,7 +515,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
               </label>
               <select
                 id="jobdetail"
-                {...formik.getFieldProps("jobState")}
+                {...formik.getFieldProps("jobdetail")}
                 value={formik.values.jobdetail}
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
               >
@@ -575,24 +589,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
               </select>
             </div>
 
-            {/* Gluecose */}
-            <div>
-              <label
-                htmlFor="glucose"
-                className="block text-xl font-medium text-gray-700"
-              >
-                glucose Level
-              </label>
-              <input
-                type="number"
-                id="glucose"
-                {...formik.getFieldProps("glucose")}
-                className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                placeholder="Enter glucose Level"
-              />
-            </div>
-
-            {/* Blood Presssure */}
+            {/* Blood Pressure */}
             <div>
               <label
                 htmlFor="bloodPressure"
@@ -604,13 +601,13 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                 type="text"
                 id="bloodPressure"
                 {...formik.getFieldProps("bloodPressure")}
+                value={formik.values.bloodPressure}
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                 placeholder="120/80 Blood Pressure"
               />
-
             </div>
 
-            {/* Heart Rate */}
+            {/*Heart Rate*/}
             <div>
               <label
                 htmlFor="heartRate"
@@ -622,11 +619,65 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                 type="text"
                 id="heartRate"
                 {...formik.getFieldProps("heartRate")}
+                value={formik.values.heartRate !== undefined ? String(formik.values.heartRate) : ""}
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                placeholder="Heart Rate"
+                placeholder="55-61 Heart Rate"
+              />
+            </div>
+
+            {/* Glucose */}
+            <div>
+              <label
+                htmlFor="glucose"
+                className="block text-xl font-medium text-gray-700"
+              >
+                Glucose
+              </label>
+              <input
+                type="text"
+                id="glucose"
+                {...formik.getFieldProps("glucose")}
+                value={formik.values.glucose !== undefined ? String(formik.values.glucose) : ""}
+                className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                placeholder="Glucose Level"
+              />
+            </div>
+
+            {/* Password */}
+            {/* Password */}
+            <div className="relative">
+              <label
+                htmlFor="password"
+                className="block text-xl font-medium text-gray-700"
+              >
+                Password
+              </label>
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                {...formik.getFieldProps("password")}
+                className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none pr-10"
+                placeholder="Enter password"
               />
 
+              {/* Eye icon */}
+              <div
+                className="absolute right-3 top-[42px] cursor-pointer text-gray-500"
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </div>
+
+              {formik.touched.password && formik.errors.password && (
+                <div className="text-red-500 text-sm mt-1">
+                  {formik.errors.password}
+                </div>
+              )}
             </div>
+
+
+
+
 
             {/* Addicteds */}
             <div className="col-span-2">
@@ -717,14 +768,21 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
           </div>
 
           {/* Submit Button */}
-          <div className="mt-6 flex justify-end">
-            <button
-              type="submit"
-              disabled={mutation.isPending || !formik.isValid}
-              className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white  font-semibold rounded-lg hover:bg-[#006fbb]"
+          <div className="flex justify-end mt-6">
+
+            <Button
+              type="primary"
+
+              style={{ backgroundColor: "#008FFB" }}
             >
-              {mutation.isPending ? "Registraion" : "Register"}
-            </button>
+              <button
+                type="submit"
+                disabled={mutation.isPending || !formik.isValid}
+              // className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
+              >
+                {mutation.isPending ? "Update Resident" : "Update Resident"}
+              </button>
+            </Button>
           </div>
         </div>
       </form>
@@ -732,4 +790,4 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
   );
 };
 
-export default ResidentRegistrationPage;
+export default ResidentEditPage;

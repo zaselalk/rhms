@@ -1,33 +1,108 @@
 import { Router } from "express";
 import ClinicController from "../controllers/ClinicController";
-import catchAsync from "../util/catchAsync"
 import clinicSessionController from "../controllers/clinicSessionController";
+import * as clinicAttendanceController from "../controllers/ClinicAttendanceController";
+import catchAsync from "../util/catchAsync";
+import { protectRoute } from "../middleware/authjwt.middleware";
 
-
-const ClinicRouter:Router= Router();
+const ClinicRouter: Router = Router();
 const clinicController = new ClinicController();
 
+// ----------------------
+// 📍 Clinic CRUD Routes
+// ----------------------
+ClinicRouter.post(
+  "/createClinic",
+  protectRoute("clinic:create"),
+  catchAsync(clinicController.createClinic)
+);
+ClinicRouter.get(
+  "/getAllClinics",
+  protectRoute("clinic:view"),
+  catchAsync(clinicController.getAllClinics)
+);
+ClinicRouter.get(
+  "/:id",
+  protectRoute("clinic:view"),
+  catchAsync(clinicController.getClinicById)
+);
+ClinicRouter.put(
+  "/:id",
+  protectRoute("clinic:edit"),
+  catchAsync(clinicController.updateClinic)
+);
+ClinicRouter.delete(
+  "/:id",
+  protectRoute("clinic:delete"),
+  catchAsync(clinicController.deleteClinic)
+);
 
-// Route to ping the clinic service
-// ClinicRouter.get("/ping", catchAsync(clinicController.ping)); 
-ClinicRouter.post("/createClinic", catchAsync(clinicController.createClinic));
+// ----------------------
+// 📍 Clinic Session Routes
+// ----------------------
+ClinicRouter.post(
+  "/:id/session",
+  protectRoute("clinic:edit"),
+  catchAsync(clinicSessionController.createSession)
+);
+ClinicRouter.get(
+  "/:id/GetSessionForClinic",
+  protectRoute("clinic:edit"),
+  catchAsync(clinicSessionController.getAllSessions)
+);
+ClinicRouter.get(
+  "/:id/session/:sid",
+  protectRoute("clinic:edit"),
+  catchAsync(clinicSessionController.getSessionById)
+);
+ClinicRouter.put(
+  "/:id/session/:sid",
+  protectRoute("clinic:edit"),
+  catchAsync(clinicSessionController.updateSession)
+);
+ClinicRouter.delete(
+  "/:id/session/:sid",
+  protectRoute("clinic:edit"),
+  catchAsync(clinicSessionController.deleteSession)
+);
 
-// // Get all clinics
-ClinicRouter.get("/getAllClinics", catchAsync(clinicController.getAllClinics));
+// ----------------------
+// 📍 Clinic Attendance Routes
+// ----------------------
 
-// // Get a clinic by ID
-ClinicRouter.get("/:id", catchAsync(clinicController.getClinicById));
-ClinicRouter.post("/:id/session", catchAsync(clinicSessionController.createSession));
-ClinicRouter.get("/:id/GetSessionForClinic", catchAsync(clinicSessionController.getAllSessions));
-//ClinicRouter.get(":id/session/:sid/getSessionById", clinicSessionController.getSessionById);
-//ClinicRouter.put("/:id/session/:sid/updateSessionById", clinicSessionController.updateSession);
-//ClinicRouter.delete("/:id/session/:sid/DeleteSession", clinicSessionController.deleteSession);
+// ✅ Bulk save (create/update) attendances
+ClinicRouter.post(
+  "/:clinicId/session/:sessionId/attendance",
+  protectRoute("clinic:edit"),
+  catchAsync(clinicAttendanceController.saveBulkAttendances) //
+);
 
+// ✅ Get specific patient’s attendance
+ClinicRouter.get(
+  "/:clinicId/session/:sessionId/attendance/:patientId",
+  protectRoute("clinic:edit"),
+  catchAsync(clinicAttendanceController.getAttendance)
+);
 
-// // Update a clinic by ID
-ClinicRouter.put("/:id", catchAsync(clinicController.updateClinic));
+// ✅ Update a specific attendance
+ClinicRouter.put(
+  "/:clinicId/session/:sessionId/attendance/:patientId",
+  protectRoute("clinic:edit"),
+  catchAsync(clinicAttendanceController.updateAttendance)
+);
 
-// // Delete a clinic by ID
-ClinicRouter.delete("/:id", catchAsync(clinicController.deleteClinic));
+// ✅ Delete a specific attendance
+ClinicRouter.delete(
+  "/:clinicId/session/:sessionId/attendance/:patientId",
+  protectRoute("clinic:edit"),
+  catchAsync(clinicAttendanceController.deleteAttendance)
+);
+
+// ✅ Optional: Admin route to get all attendance records
+ClinicRouter.get(
+  "/:clinicId/session/:sessionId/attendance",
+  protectRoute("clinic:edit"),
+  catchAsync(clinicAttendanceController.getAllAttendances)
+);
 
 export default ClinicRouter;

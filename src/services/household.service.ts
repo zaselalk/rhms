@@ -15,10 +15,6 @@ export const createHousehold = async (payload: HouseholdPayload) => {
   return response.data;
 };
 
-// export const getResidentById = async (residentId: number | string) => {
-//   const response = await axiosInstance.get(`/resident/${residentId}`);
-//   return response.data;
-// };
 
 export const updateHouseholdOwner = async (
   id: string | number,
@@ -50,15 +46,38 @@ export const searchResidentById = async (residentId: number) => {
   return response.data.data;
 };
 
-//getHouseholdsByDivision
+// Get households by division
 export const getHouseholdsByDivision = async (division: string) => {
   try {
     const response = await axiosInstance.get(
-      `/household/by-division/${division}`,
+      `/household/division/${division}`
     );
-    return response.data; // should return array of { house_no, ownerFirstName, ownerLastName, residentCount }
+    return response.data; 
   } catch (error) {
     console.error("Error fetching households by division:", error);
     throw error;
   }
+
+
 };
+
+
+// Get household count by division
+export const getHouseholdCountByDivision = async (division: string) => {
+  try {
+    const response = await axiosInstance.get(
+      `/household/division/${division}`
+    );
+    return response.data.data.count;
+  } catch (error) {
+    console.error("Error fetching household count by division:", error);
+    throw error;
+  }
+}
+
+export const getHouseholdsByOwnerId = async (ownerId: number) => {
+  const res = await axiosInstance.get(`/household/by-owner/${ownerId}`);
+  return res.data.data;
+
+};
+

@@ -43,4 +43,21 @@ export class HouseholdServices {
   async householdCount(): Promise<number> {
     return this.householdRepository.householdCount();
   }
+// Household Count by Division**
+async getHouseholdCountByDivision(divisionId: string): Promise<number> {
+  return this.householdRepository.countHouseholdsByDivision(divisionId);
+}
+// Find Households by Division**
+  async findHouseholdsByDivision(divisionId: string): Promise<Household[]> {
+  return this.householdRepository.findHouseholdsByDivision(divisionId);
+}
+
+
+
+
+  async getHouseholdsByOwnerId(owner_id: number): Promise<Household[]> {
+  return this.householdRepository.findHouseholdsByOwnerId(owner_id);
+}
+
+
 }

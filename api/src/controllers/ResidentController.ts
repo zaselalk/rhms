@@ -54,6 +54,11 @@ class ResidentController {
       height,
       weight,
       clinic,
+      Birthcertificate,
+      religion,
+      jobdetail,
+      glucose,
+      deletedAt,
     } = req.body;
 
     const residentfindByNic: Resident | null =
@@ -87,7 +92,12 @@ class ResidentController {
         alergies,
         chronicalDesease,
         height,
-        weight
+        weight,
+        Birthcertificate,
+        religion,
+        jobdetail,
+        glucose,
+        deletedAt
       );
 
       const residentId = resident.id;
@@ -101,6 +111,7 @@ class ResidentController {
           );
         })
       );
+      
 
       return res.json({
         message: "Resident registered successfully",
@@ -327,6 +338,19 @@ class ResidentController {
     }
   };
 
+ getResidentCountByDivision = async (req: Request, res: Response) => {
+  try {
+    const { divisionId } = req.params;
+    const count = await Resident.count({
+      where: { divisionId: divisionId },
+    });
+    res.status(200).json({ divisionId, residentCount: count });
+  } catch (error) {
+    console.error("Error fetching resident count by division:", error);
+    res.status(500).json({ error: "Failed to fetch resident count" });
+  }
+};
+
   loginResidentByEmailandPassword = async (
     req: Request,
     res: Response
@@ -395,6 +419,7 @@ class ResidentController {
       });
     }
   };
+
 }
 
 export default ResidentController;

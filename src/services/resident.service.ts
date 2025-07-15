@@ -18,7 +18,8 @@ class ResidentService {
     if (!response.ok) {
       const errorData = await response.json();
       console.error("Error adding resident:", errorData);
-      throw new Error(errorData.message || "Unable to add resident");
+      throw { response: { data: errorData } }
+      // throw new Error(errorData.message || "Unable to add resident");
     }
 
     const data = await response.json();
@@ -128,6 +129,22 @@ class ResidentService {
       );
     }
   }
+
+  // Update Resident Data
+  async updateResidentData(residentId: string, updatedData: any) {
+    try {
+      const response = await axiosInstance.put(
+        `/resident/update/${residentId}`,
+        updatedData
+      );
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || "Unable to update resident data"
+      );
+    }
+  }
+  
 }
 
 export default new ResidentService();

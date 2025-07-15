@@ -25,7 +25,13 @@ export class ResidentService {
     alergies: Array<string>,
     chronicalDesease: Array<string>,
     height: number,
-    weight: number
+    weight: number,
+    Birthcertificate: string,
+    religion: string,
+    jobdetail: string,
+    glucose: Number,
+    deletedAt: Date | null
+
   ): Promise<Resident> {
     // // Resident want id
     // const existingResident = await this.residentRepository.findById(id);
@@ -54,7 +60,12 @@ export class ResidentService {
       alergies,
       chronicalDesease,
       height,
-      weight
+      weight,
+      Birthcertificate,
+      religion,
+      jobdetail,
+      glucose,
+      deletedAt // Ensure this is set for soft delete functionality
     );
   }
 
@@ -110,7 +121,9 @@ export class ResidentService {
     email: string,
     password: string
   ): Promise<Resident | null> {
-    const resident = await this.residentRepository.findByEmail(email);
+    const resident = await this.residentRepository.findByEmailWithClinicData(
+      email
+    );
     if (!resident) throw new Error("Resident not found");
 
     // const isPasswordValid = await bcrypt.compare(password, resident.password);
