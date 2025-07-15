@@ -1,4 +1,7 @@
+import { Clinic } from "../models/clinic";
+import Division from "../models/division";
 import { Resident } from "../models/resident";
+import ResidentClinic from "../models/residentClinic";
 
 export class ResidentRepository {
   async createResident(
@@ -50,11 +53,10 @@ export class ResidentRepository {
       chronicalDesease,
       height,
       weight,
-      Birthcertificate,
-      religion,
-      jobdetail,
-      gluecose,
-      deletedAt, // Ensure this is set for soft delete functionality
+      Birthcertificate: "",
+      religion: "",
+      jobdetail: "",
+      glucose: 0,
     });
   }
 
@@ -72,7 +74,7 @@ export class ResidentRepository {
         "email",
         "birthday",
         "bloodGroup",
-      ]
+      ],
     });
   }
 
@@ -193,6 +195,25 @@ export class ResidentRepository {
       where: {
         email,
       },
+    });
+  }
+  async findByEmailWithClinicData(email: string): Promise<Resident | null> {
+    return Resident.findOne({
+      where: {
+        email,
+      },
+      include: [
+        {
+          model: ResidentClinic,
+          as: "residentClinics",
+          include: [
+            {
+              model: Clinic,
+              as: "clinic",
+            },
+          ],
+        },
+      ],
     });
   }
 

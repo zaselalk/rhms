@@ -63,11 +63,6 @@ const ResidentDashboard = () => {
                       icon: "🩸",
                     },
                     {
-                      label: "Division",
-                      value: resident.division?.name || "N/A",
-                      icon: "📍",
-                    },
-                    {
                       label: "Contact",
                       value: resident.contactNumber || "N/A",
                       icon: "📞",
@@ -126,37 +121,45 @@ const ResidentDashboard = () => {
                 {[
                   {
                     title: "Blood Pressure",
-                    value: "120/89",
+                    value: resident.bloodPressure || "N/A",
                     unit: "mm/mg",
                     status: "Normal",
-                    lastUpdate: "2025/02/10",
+                    lastUpdate:
+                      new Date(resident.updatedAt).toLocaleDateString() ||
+                      "N/A",
                     icon: "💓",
                     color: "green",
                   },
                   {
                     title: "Heart Rate",
-                    value: "120",
+                    value: resident.heartRate || "N/A",
                     unit: "BPM",
                     status: "Normal",
-                    lastUpdate: "2025/02/10",
+                    lastUpdate:
+                      new Date(resident.updatedAt).toLocaleDateString() ||
+                      "N/A",
                     icon: "❤️",
                     color: "green",
                   },
                   {
-                    title: "Cholesterol",
-                    value: "85",
-                    unit: "mg/dl",
+                    title: "Weight",
+                    value: resident.weight || "N/A",
+                    unit: "kg",
                     status: "Normal",
-                    lastUpdate: "2025/02/10",
-                    icon: "🧪",
+                    lastUpdate:
+                      new Date(resident.updatedAt).toLocaleDateString() ||
+                      "N/A",
+                    icon: "⚖️",
                     color: "green",
                   },
                   {
                     title: "Glucose",
-                    value: "200",
+                    value: resident.glucose || "N/A",
                     unit: "mg/dl",
                     status: "High",
-                    lastUpdate: "2025/02/10",
+                    lastUpdate:
+                      new Date(resident.updatedAt).toLocaleDateString() ||
+                      "N/A",
                     icon: "🍯",
                     color: "red",
                   },
@@ -206,26 +209,27 @@ const ResidentDashboard = () => {
               </h3>
 
               <div className="space-y-3">
-                {[
-                  { clinicName: "Eye Clinic", color: "blue" },
-                  { clinicName: "Diabetics", color: "purple" },
-                  { clinicName: "Pressure", color: "red" },
-                ].map((clinic, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border border-gray-200 hover:shadow-md transition-all duration-300 hover:from-blue-50 hover:to-indigo-50"
-                  >
-                    <div className="flex items-center gap-4">
-                      <span className="font-semibold text-gray-900 text-lg">
-                        {clinic.clinicName}
-                      </span>
+                {resident.residentClinics &&
+                  resident.residentClinics.map((clinic: any, index: number) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border border-gray-200 hover:shadow-md transition-all duration-300 hover:from-blue-50 hover:to-indigo-50"
+                    >
+                      <div className="flex items-center gap-4">
+                        <span className="font-semibold text-gray-900 text-lg">
+                          {clinic.clinic.name || "N/A"}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-gray-500">
+                          {clinic.clinic.deletedAt === null
+                            ? "Active"
+                            : "Inactive"}
+                        </span>
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm text-gray-500">Active</span>
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           </div>

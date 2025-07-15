@@ -197,6 +197,9 @@ const HouseholdPage: FC = () => {
       message.success("Household owner updated successfully!");
       setEditModalVisible(false);
 
+      setNewOwnerId("");
+      setNewOwnerName("");
+
       await fetchHouseholds(); // Refresh households after update
       await fetchResidentCountHandler;
     } catch (error: any) {
