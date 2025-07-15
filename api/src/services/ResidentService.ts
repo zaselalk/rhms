@@ -110,7 +110,9 @@ export class ResidentService {
     email: string,
     password: string
   ): Promise<Resident | null> {
-    const resident = await this.residentRepository.findByEmail(email);
+    const resident = await this.residentRepository.findByEmailWithClinicData(
+      email
+    );
     if (!resident) throw new Error("Resident not found");
 
     // const isPasswordValid = await bcrypt.compare(password, resident.password);

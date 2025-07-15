@@ -41,6 +41,19 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
   const navigate = useNavigate();
   const location = useLocation();
 
+//Helper to reset form
+  const resetForm = () => {
+    setHouseNo("");
+    setGramaDivision("");
+    setLongitude("");
+    setLatitude("");
+    setResidentSearchId("");
+    setFoundResidentName("");
+    setOwnerId("");
+    setMessage("");
+    setError("");
+  };
+
 
   // Function to search resident by ID
   const handleSearchResident = async () => {
@@ -112,6 +125,12 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
   const handleCreateHousehold = async () => {
     setLoading(true);
     
+    // Validate required fields
+    if (!house_no.trim() || !grama_division || !longitude.trim() || !latitude.trim()) {
+      antMessage.error("Please fill in all the required fields.");
+      setLoading(false);
+      return;
+    }
 
     if (!owner_id|| isNaN(Number(owner_id))) {
       antMessage.error("Invalid owner ID");
@@ -130,6 +149,7 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
 
     if (duplicate) {
       antMessage.warning("This owner already has a household with this house number.");
+      resetForm(); // Reset form if duplicate found
       setLoading(false);
       return;
     }
@@ -165,7 +185,7 @@ export const HouseholdCreateModal: FC<HouseholdCreateModalProps> = ({
 
 
         refreshHouseholds(); // Call the passed function to refresh households
-      
+        resetForm(); // Reset form after successful creation
         handleClose(); // Close modal on success
 
         setTimeout(() => {

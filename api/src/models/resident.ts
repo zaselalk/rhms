@@ -4,7 +4,6 @@ import sequelize from ".";
 import Session from "./clinicSession";
 import Household from "./household";
 
-
 interface ResidentAttributes {
   id?: number;
   firstName: string;
@@ -27,6 +26,11 @@ interface ResidentAttributes {
   chronicalDesease: String[];
   height: number;
   weight: number;
+  Birthcertificate: string;
+  religion: string;
+  jobdetail: string;
+  glucose: Number;
+  deletedAt: Date | null;
 }
 
 export class Resident
@@ -60,6 +64,11 @@ export class Resident
   public chronicalDesease!: String[];
   public height!: number;
   public weight!: number;
+  public religion!: string;
+  public jobdetail!: string;
+  public glucose!: number;
+  public Birthcertificate!: string;
+  public deletedAt!: Date | null; // soft delete
 }
 
 Resident.init(
@@ -146,16 +155,33 @@ Resident.init(
     weight: {
       type: DataTypes.FLOAT,
     },
+    religion: {
+      type: DataTypes.STRING,
+    },
+    jobdetail: {
+      type: DataTypes.STRING,
+    },
+    glucose: {
+      type: DataTypes.FLOAT,
+    },
+    Birthcertificate: {
+      type: DataTypes.STRING,
+    },
+    deletedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null, // for soft delete
+    },
   },
 
   {
     sequelize: sequelize,
     modelName: "Resident",
     tableName: "residents",
+    timestamps: true,
+    paranoid: true, // Enable soft delete
     engine: "InnoDB",
   }
-
 );
-
 
 export default Resident;
