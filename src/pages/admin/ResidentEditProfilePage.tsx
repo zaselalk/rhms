@@ -33,7 +33,6 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
     divisionId: "",
     maritalState: "",
     religion: "",
-    jobState: "",
     educationLevel: "",
     addicted: [],
     alergies: [],
@@ -517,7 +516,7 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
               <select
                 id="jobdetail"
                 {...formik.getFieldProps("jobdetail")}
-                value={formik.values.jobState}
+                value={formik.values.jobdetail}
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
               >
                 <option value="No Formal Education">Worker</option>
