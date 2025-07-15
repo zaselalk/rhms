@@ -1,4 +1,7 @@
+import { Clinic } from "../models/clinic";
+import Division from "../models/division";
 import { Resident } from "../models/resident";
+import ResidentClinic from "../models/residentClinic";
 
 export class ResidentRepository {
   async createResident(
@@ -183,4 +186,24 @@ export class ResidentRepository {
       },
     });
   }
+  async findByEmailWithClinicData(email: string): Promise<Resident | null> {
+    return Resident.findOne({
+      where: {
+        email,
+      },
+      include: [
+        {
+          model: ResidentClinic,
+          as: "residentClinics",
+          include: [
+            {
+              model: Clinic,
+              as: "clinic",
+            },
+          ],
+        },
+      ],
+    });
+  }
+
 }
