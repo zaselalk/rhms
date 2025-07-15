@@ -1,7 +1,11 @@
 import { FC, useEffect, useState } from "react";
 import { Link } from "react-router";
 import { Modal, Form, Input, Button, message, Spin } from "antd";
-import { ExperimentOutlined, UsergroupAddOutlined , PlusOutlined} from "@ant-design/icons";
+import {
+  ExperimentOutlined,
+  UsergroupAddOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 
 import {
   LineChart,
@@ -16,6 +20,7 @@ import {
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import diseaseService from "../../services/disease.service";
 import residentDiseaseService from "../../services/residentDisease.service";
+import { useAppSelector } from "../../hooks/state/hooks";
 
 interface DiseaseData {
   name: string;
@@ -33,7 +38,6 @@ interface ResidentDisease {
 }
 
 const DiseasesPage: FC = () => {
-  
   const [diseases, setDiseases] = useState<Disease[]>([]);
   const [residentDiseases, setResidentDiseases] = useState<ResidentDisease[]>(
     []
@@ -42,6 +46,7 @@ const DiseasesPage: FC = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
+  const user = useAppSelector((state) => state.auth.user);
 
   console.log(diseases, residentDiseases);
 
@@ -103,15 +108,15 @@ const DiseasesPage: FC = () => {
       // Case-insensitive duplicate check
       const existingNames = diseases.map((d) => d.diseaseName.toLowerCase()); // already case-sensitive
 
-          if (existingNames.includes(newDisease.toLowerCase())) {
-            form.setFields([
-              {
-                name: "disease",
-                errors: [`The disease "${newDisease}" already exists.`],
-              },
-            ]);
-            return;
-          }
+      if (existingNames.includes(newDisease.toLowerCase())) {
+        form.setFields([
+          {
+            name: "disease",
+            errors: [`The disease "${newDisease}" already exists.`],
+          },
+        ]);
+        return;
+      }
 
       // Use Ant Design styled confirmation dialog
       Modal.confirm({
@@ -125,16 +130,14 @@ const DiseasesPage: FC = () => {
               diseaseName: newDisease,
             });
 
-            
             message.success({
               content: "Disease added successfully",
               duration: 3,
             });
 
-            await fetchAllData();              // Refresh data (table + stats)
-            form.resetFields();                // Clear form
-            setIsModalOpen(false); // Close modal   
-
+            await fetchAllData(); // Refresh data (table + stats)
+            form.resetFields(); // Clear form
+            setIsModalOpen(false); // Close modal
           } catch (error: any) {
             const errMsg =
               error?.response?.data?.message ||
@@ -187,15 +190,16 @@ const DiseasesPage: FC = () => {
       <div className="flex-1 p-6">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-semibold text-[#008FFB]">Diseases</h2>
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold px-5 py-2 rounded-full shadow-md transition duration-300 ease-in-out"
-            onClick={() => setIsModalOpen(true)}
-            
-          >
-            Add Disease
-          </Button>
+          {user?.permissions?.includes("disease:create") && (
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold px-5 py-2 rounded-full shadow-md transition duration-300 ease-in-out"
+              onClick={() => setIsModalOpen(true)}
+            >
+              Add Disease
+            </Button>
+          )}
         </div>
 
         <Modal
@@ -218,13 +222,15 @@ const DiseasesPage: FC = () => {
                 },
               ]}
             >
-              <Input placeholder="Enter disease name" 
-              onKeyPress={(e) => {
+              <Input
+                placeholder="Enter disease name"
+                onKeyPress={(e) => {
                   const regex = /^[A-Za-z\s]+$/;
                   if (!regex.test(e.key)) {
                     e.preventDefault();
                   }
-                }}/>
+                }}
+              />
             </Form.Item>
           </Form>
         </Modal>
@@ -239,8 +245,12 @@ const DiseasesPage: FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
               <div className="bg-gradient-to-r from-yellow-100 to-yellow-200 p-6 rounded-2xl shadow-md flex items-center justify-between transition transform hover:scale-105">
                 <div>
-                  <p className="text-sm text-gray-600 font-medium">Total Diseases</p>
-                  <h3 className="text-3xl font-bold text-yellow-800">{totalDiseases}</h3>
+                  <p className="text-sm text-gray-600 font-medium">
+                    Total Diseases
+                  </p>
+                  <h3 className="text-3xl font-bold text-yellow-800">
+                    {totalDiseases}
+                  </h3>
                 </div>
                 <div className="text-yellow-700 text-4xl">
                   <ExperimentOutlined />
@@ -249,15 +259,18 @@ const DiseasesPage: FC = () => {
 
               <div className="bg-gradient-to-r from-green-100 to-green-200 p-6 rounded-2xl shadow-md flex items-center justify-between transition transform hover:scale-105">
                 <div>
-                  <p className="text-sm text-gray-600 font-medium">Total Patients</p>
-                  <h3 className="text-3xl font-bold text-green-800">{totalPatients}</h3>
+                  <p className="text-sm text-gray-600 font-medium">
+                    Total Patients
+                  </p>
+                  <h3 className="text-3xl font-bold text-green-800">
+                    {totalPatients}
+                  </h3>
                 </div>
                 <div className="text-green-700 text-4xl">
                   <UsergroupAddOutlined />
                 </div>
               </div>
             </div>
-
 
             {/* Disease Table */}
             <div className="bg-white p-6 rounded-lg shadow-md mb-6 overflow-x-auto">
@@ -291,12 +304,14 @@ const DiseasesPage: FC = () => {
                         >
                           View
                         </Link>
-                        <button
-                          onClick={() => handleDeleteDisease(name)}
-                          className="text-red-500 hover:text-red-700 ml-4"
-                        >
-                          Delete
-                        </button>
+                        {user?.permissions?.includes("disease:delete") && (
+                          <button
+                            onClick={() => handleDeleteDisease(name)}
+                            className="text-red-500 hover:text-red-700 ml-4"
+                          >
+                            Delete
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))}
