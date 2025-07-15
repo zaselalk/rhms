@@ -161,7 +161,7 @@ const ClinicAttendances: React.FC = () => {
             <table className="min-w-full border-collapse">
               <thead className="bg-gray-100 text-gray-700">
                 <tr>
-                  <th className="text-left p-3">ID</th>
+                  <th className="text-left p-3">NIC</th>
                   <th className="text-left p-3">Name</th>
                   <th className="text-left p-3">Attendance</th>
                 </tr>
