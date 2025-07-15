@@ -13,14 +13,14 @@ import { ClinicService } from "../../services/clinic.service";
 import { DivisionService } from "../../services/division.service";
 import diseaseService from "../../services/disease.service";
 import { useParams } from "react-router";
-
+import { Eye, EyeOff } from "lucide-react";
 type ResidentEditPageProps = {};
 
 const ResidentEditPage: FC<ResidentEditPageProps> = () => {
 
 
   const initialValues2: ResidentData = {
-    firstName: "Kamal",
+    firstName: "",
     lastName: "",
     nic: "",
     email: "",
@@ -41,10 +41,17 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
     clinic: [],
     height: "",
     weight: "",
+    bloodPressure: "",
+    heartRate: "",
+    glucose: 0,
+    Birthcertificate: "",
+    jobdetail: "",
+    deletedAt: null as Date | null, // Assuming deletedAt can be null
+
   };
   const [initialValues, setinital] = useState<ResidentData>(initialValues2);
 
-
+  const [showPassword, setShowPassword] = useState(false);
   const [addicted, setAddictedd] = useState<string[]>([]);
   const [alergies, setAllergies] = useState<string[]>([]);
 
@@ -200,7 +207,6 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
       fetchResidentData();
     },
     onError: () => {
-
       toast.error("Update failed. Please try again.");
     },
   });
@@ -228,7 +234,7 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
       <form onSubmit={formik.handleSubmit}>
         {/* Registration Form Container */}
         <div className="bg-white p-8 rounded-lg shadow-lg w-full ">
-          <h2 className="text-2xl font-semibold text-[#008FFB] mb-6 text-center">
+          <h2 className="text-2xl font-semibold text-[#008FFB] mb-6 text">
             Edit Resident Data
           </h2>
 
@@ -452,9 +458,9 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
               </label>
               <input
                 type="text"
-                id="birthCertificateNumber"
-                {...formik.getFieldProps("birthCertificateNumber")}
-                value={formik.values.birthCertificateNumber}
+                id="Birthcertificate"
+                {...formik.getFieldProps("Birthcertificate")}
+                value={formik.values.Birthcertificate}
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                 placeholder="Enter Birth Certificate Number "
               />
@@ -509,8 +515,8 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
                 Job Details
               </label>
               <select
-                id="jobState"
-                {...formik.getFieldProps("jobState")}
+                id="jobdetail"
+                {...formik.getFieldProps("jobdetail")}
                 value={formik.values.jobState}
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
               >
@@ -638,6 +644,38 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
               />
             </div>
 
+            {/* Password */}
+            {/* Password */}
+            <div className="relative">
+              <label
+                htmlFor="password"
+                className="block text-xl font-medium text-gray-700"
+              >
+                Password
+              </label>
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                {...formik.getFieldProps("password")}
+                className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none pr-10"
+                placeholder="Enter password"
+              />
+
+              {/* Eye icon */}
+              <div
+                className="absolute right-3 top-[42px] cursor-pointer text-gray-500"
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </div>
+
+              {formik.touched.password && formik.errors.password && (
+                <div className="text-red-500 text-sm mt-1">
+                  {formik.errors.password}
+                </div>
+              )}
+            </div>
+
 
 
 
@@ -731,21 +769,22 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
           </div>
 
           {/* Submit Button */}
-          <Button
-            type="primary"
+          <div className="flex justify-end mt-6">
 
-            style={{ backgroundColor: "#008FFB" }}
-          >
-            <button
-              type="submit"
-              disabled={mutation.isPending || !formik.isValid}
-            // className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
+            <Button
+              type="primary"
+
+              style={{ backgroundColor: "#008FFB" }}
             >
-              {mutation.isPending ? "Update Resident" : "Update Resident"}
-            </button>
-
-
-          </Button>
+              <button
+                type="submit"
+                disabled={mutation.isPending || !formik.isValid}
+              // className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
+              >
+                {mutation.isPending ? "Update Resident" : "Update Resident"}
+              </button>
+            </Button>
+          </div>
         </div>
       </form>
     </DashboardContainer>
