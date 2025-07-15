@@ -14,9 +14,9 @@ import { DivisionService } from "../../services/division.service";
 import diseaseService from "../../services/disease.service";
 import { useParams } from "react-router";
 
-type ResidentRegistrationProps = {};
+type ResidentEditPageProps = {};
 
-const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
+const ResidentEditPage: FC<ResidentEditPageProps> = () => {
 
 
   const initialValues2: ResidentData = {
@@ -191,7 +191,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
       if (!id) {
         throw new Error("Resident ID is missing.");
       }
-      await residentRegister.updateResident(id, values); // ✅ values come from `mutate(values)`
+      await residentRegister.updateResidentData(id, values); // ✅ values come from `mutate(values)`
     },
     onSuccess: () => {
       toast.success("Updated Successfully");
@@ -752,4 +752,4 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
   );
 };
 
-export default ResidentRegistrationPage;
+export default ResidentEditPage;
