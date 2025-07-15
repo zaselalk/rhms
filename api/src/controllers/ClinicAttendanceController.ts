@@ -26,7 +26,9 @@ export const saveBulkAttendances = async (req: Request, res: Response) => {
 // Get all attendance records
 export const getAllAttendances = async (req: Request, res: Response) => {
   try {
-    const data = await attendanceService.getAllAttendances();
+    const clinicId = parseInt(req.params.clinicId);
+    const sessionId = parseInt(req.params.sessionId);
+    const data = await attendanceService.getAllAttendances(clinicId, sessionId);
     return res.status(200).json(data);
   } catch (error) {
     console.error("Error fetching all attendances:", error);
@@ -41,8 +43,13 @@ export const getAttendance = async (req: Request, res: Response) => {
   const patientId = parseInt(req.params.patientId);
 
   try {
-    const record = await attendanceService.getAttendance(clinicId, sessionId, patientId);
-    if (!record) return res.status(404).json({ message: "Attendance not found." });
+    const record = await attendanceService.getAttendance(
+      clinicId,
+      sessionId,
+      patientId
+    );
+    if (!record)
+      return res.status(404).json({ message: "Attendance not found." });
     return res.status(200).json(record);
   } catch (error) {
     console.error("Error fetching attendance:", error);
@@ -64,7 +71,8 @@ export const updateAttendance = async (req: Request, res: Response) => {
       patientId,
       attendance
     );
-    if (!updated) return res.status(404).json({ message: "Attendance not found." });
+    if (!updated)
+      return res.status(404).json({ message: "Attendance not found." });
     return res.status(200).json(updated);
   } catch (error) {
     console.error("Error updating attendance:", error);
@@ -80,7 +88,9 @@ export const deleteAttendance = async (req: Request, res: Response) => {
 
   try {
     await attendanceService.removeAttendance(clinicId, sessionId, patientId);
-    return res.status(200).json({ message: "Attendance deleted successfully." });
+    return res
+      .status(200)
+      .json({ message: "Attendance deleted successfully." });
   } catch (error) {
     console.error("Error deleting attendance:", error);
     return res.status(500).json({ error: "Failed to delete attendance." });

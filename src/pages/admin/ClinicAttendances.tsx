@@ -2,10 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import ResidentClinicService from "../../services/residentclinic.service";
+import residentclinicService from "../../services/residentclinic.service";
+import { ClinicService } from "../../services/clinic.service";
 
 interface Patient {
   resident: {
     nic: string;
+    id: string;
+    contactNumber: string;
     firstName: string;
   };
 }
@@ -16,7 +20,10 @@ interface Attendance {
 }
 
 const ClinicAttendances: React.FC = () => {
-  const { sessionID, clinicID } = useParams<{ sessionID: string; clinicID: string }>();
+  const { sessionID, clinicID } = useParams<{
+    sessionID: string;
+    clinicID: string;
+  }>();
 
   const [patients, setPatients] = useState<Patient[]>([]);
   const [attendances, setAttendances] = useState<Attendance[]>([]);
@@ -27,12 +34,14 @@ const ClinicAttendances: React.FC = () => {
     const fetchPatients = async () => {
       try {
         setLoading(true);
-        const data = await ResidentClinicService.getResidentsByClinicId(clinicID!);
+        const data = await ResidentClinicService.getResidentsByClinicId(
+          clinicID!
+        );
         setPatients(data);
 
         setAttendances(
           data.map((patient: Patient) => ({
-            patientId: patient.resident.nic,
+            patientId: patient.resident.id,
             attendance: false, // initialize as false
           }))
         );
@@ -59,7 +68,11 @@ const ClinicAttendances: React.FC = () => {
   const saveAttendance = async () => {
     try {
       setLoading(true);
-      await ResidentClinicService.saveClinicAttendance(clinicID!, sessionID!, attendances);
+      await ResidentClinicService.saveClinicAttendance(
+        clinicID!,
+        sessionID!,
+        attendances
+      );
       alert("Attendance saved!");
     } catch (error) {
       alert("Failed to save attendance.");
@@ -68,6 +81,28 @@ const ClinicAttendances: React.FC = () => {
       setLoading(false);
     }
   };
+
+  // load attendances for the session
+  useEffect(() => {
+    const fetchAttendances = async () => {
+      try {
+        setLoading(true);
+        const data = await ResidentClinicService.getClinicAttendances(
+          clinicID!,
+          sessionID!
+        );
+        setAttendances(data);
+      } catch (error) {
+        console.error("Error fetching attendances:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (clinicID && sessionID) {
+      fetchAttendances();
+    }
+  }, [clinicID, sessionID]);
 
   const filteredPatients = patients.filter((patient) =>
     patient.resident.firstName.toLowerCase().includes(searchTerm.toLowerCase())
@@ -83,7 +118,8 @@ const ClinicAttendances: React.FC = () => {
         {/* Page Heading */}
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-800">
-            Attendance for Session - <span className="text-blue-600">{sessionID}</span>
+            Attendance for Session -{" "}
+            <span className="text-blue-600">{sessionID}</span>
           </h1>
         </div>
 
@@ -99,7 +135,9 @@ const ClinicAttendances: React.FC = () => {
           </div>
           <div>
             <p className="text-gray-500 font-medium">Attendance %</p>
-            <p className="text-xl font-semibold">{attendancePercentage.toFixed(1)}%</p>
+            <p className="text-xl font-semibold">
+              {attendancePercentage.toFixed(1)}%
+            </p>
           </div>
         </div>
 
@@ -116,7 +154,9 @@ const ClinicAttendances: React.FC = () => {
 
         {/* Attendance Table */}
         <div className="bg-white p-6 rounded-xl shadow">
-          <h2 className="text-xl font-bold mb-4 text-gray-700">Patient Attendance</h2>
+          <h2 className="text-xl font-bold mb-4 text-gray-700">
+            Patient Attendance
+          </h2>
           <div className="overflow-x-auto">
             <table className="min-w-full border-collapse">
               <thead className="bg-gray-100 text-gray-700">
@@ -129,16 +169,19 @@ const ClinicAttendances: React.FC = () => {
               <tbody>
                 {filteredPatients.map((patient) => {
                   const attendance = attendances.find(
-                    (a) => a.patientId === patient.resident.nic
+                    (a) => a.patientId === patient.resident.id
                   );
                   const isPresent = attendance?.attendance;
                   return (
-                    <tr key={patient.resident.nic} className="border-b hover:bg-gray-50">
+                    <tr
+                      key={patient.resident.nic}
+                      className="border-b hover:bg-gray-50"
+                    >
                       <td className="p-3">{patient.resident.nic}</td>
                       <td className="p-3">{patient.resident.firstName}</td>
                       <td className="p-3">
                         <button
-                          onClick={() => toggleAttendance(patient.resident.nic)}
+                          onClick={() => toggleAttendance(patient.resident.id)}
                           className={`px-4 py-2 rounded-lg transition shadow ${
                             isPresent
                               ? "bg-green-500 hover:bg-green-600 text-white"

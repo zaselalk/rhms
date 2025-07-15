@@ -49,7 +49,7 @@ export class ResidentClinicRepository {
         {
           model: Resident,
           as: "resident",
-          attributes: ["nic","firstName", "contactNumber"],
+          attributes: ["id", "nic", "firstName", "contactNumber"],
         },
       ],
     });

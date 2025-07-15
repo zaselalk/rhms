@@ -19,11 +19,26 @@ ClinicRouter.delete("/:id", catchAsync(clinicController.deleteClinic));
 // ----------------------
 // 📍 Clinic Session Routes
 // ----------------------
-ClinicRouter.post("/:id/session", catchAsync(clinicSessionController.createSession));
-ClinicRouter.get("/:id/GetSessionForClinic", catchAsync(clinicSessionController.getAllSessions));
-ClinicRouter.get("/:id/session/:sid", catchAsync(clinicSessionController.getSessionById));
-ClinicRouter.put("/:id/session/:sid", catchAsync(clinicSessionController.updateSession));
-ClinicRouter.delete("/:id/session/:sid", catchAsync(clinicSessionController.deleteSession));
+ClinicRouter.post(
+  "/:id/session",
+  catchAsync(clinicSessionController.createSession)
+);
+ClinicRouter.get(
+  "/:id/GetSessionForClinic",
+  catchAsync(clinicSessionController.getAllSessions)
+);
+ClinicRouter.get(
+  "/:id/session/:sid",
+  catchAsync(clinicSessionController.getSessionById)
+);
+ClinicRouter.put(
+  "/:id/session/:sid",
+  catchAsync(clinicSessionController.updateSession)
+);
+ClinicRouter.delete(
+  "/:id/session/:sid",
+  catchAsync(clinicSessionController.deleteSession)
+);
 
 // ----------------------
 // 📍 Clinic Attendance Routes
@@ -55,7 +70,7 @@ ClinicRouter.delete(
 
 // ✅ Optional: Admin route to get all attendance records
 ClinicRouter.get(
-  "/attendances",
+  "/:clinicId/session/:sessionId/attendance",
   catchAsync(clinicAttendanceController.getAllAttendances)
 );
 

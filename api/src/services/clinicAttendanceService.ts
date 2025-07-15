@@ -1,4 +1,10 @@
-import * as repo from "../repositories/ClinicAttendanceRepository";
+import {
+  deleteAttendance,
+  findAllAttendances,
+  findAttendance,
+  updateAttendance,
+  upsertAttendance,
+} from "../repositories/clinicAttendanceRepository";
 
 // Mark (create or update) a patient's attendance
 export const markAttendance = async (
@@ -7,12 +13,20 @@ export const markAttendance = async (
   patientId: number,
   attendance: boolean
 ) => {
-  return await repo.upsertAttendance({ clinicId, sessionId, patientId, attendance });
+  return await upsertAttendance({
+    clinicId,
+    sessionId,
+    patientId,
+    attendance,
+  });
 };
 
 // Get all attendance records
-export const getAllAttendances = async () => {
-  return await repo.findAllAttendances();
+export const getAllAttendances = async (
+  clinicId: number,
+  sessionId: number
+) => {
+  return await findAllAttendances(clinicId, sessionId);
 };
 
 // Get attendance for a specific patient in a session
@@ -21,7 +35,7 @@ export const getAttendance = async (
   sessionId: number,
   patientId: number
 ) => {
-  return await repo.findAttendance(clinicId, sessionId, patientId);
+  return await findAttendance(clinicId, sessionId, patientId);
 };
 
 // Modify an existing attendance record
@@ -31,7 +45,7 @@ export const modifyAttendance = async (
   patientId: number,
   attendance: boolean
 ) => {
-  return await repo.updateAttendance(clinicId, sessionId, patientId, attendance);
+  return await updateAttendance(clinicId, sessionId, patientId, attendance);
 };
 
 // Delete a specific attendance record
@@ -40,5 +54,5 @@ export const removeAttendance = async (
   sessionId: number,
   patientId: number
 ) => {
-  return await repo.deleteAttendance(clinicId, sessionId, patientId);
+  return await deleteAttendance(clinicId, sessionId, patientId);
 };

@@ -1,4 +1,4 @@
-import ClinicAttendance from "../models/clinicAttendnce"; 
+import ClinicAttendance from "../models/clinicAttendnce";
 import Clinic from "../models/clinic";
 import Session from "../models/clinicSession";
 import Resident from "../models/resident";
@@ -14,8 +14,12 @@ export const upsertAttendance = async (data: {
 };
 
 // Find all attendances (with joins)
-export const findAllAttendances = async () => {
+export const findAllAttendances = async (
+  clinicId: number,
+  sessionId: number
+) => {
   return await ClinicAttendance.findAll({
+    where: { clinicId, sessionId },
     include: [Clinic, Session, Resident],
   });
 };

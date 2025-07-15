@@ -91,28 +91,42 @@ class ResidentClinicService {
     }
   }
 
-// Save attendance list for a clinic session
-async saveClinicAttendance(
-  clinicId: number | string,
-  sessionId: number | string,
-  attendanceList: { patientId: string; attendance: boolean }[]
-) {
-  try {
-    const response = await axiosInstance.post(
-      `/clinic/${clinicId}/session/${sessionId}/attendance`,
-      {
-        clinicId,
-        attendances: attendanceList,
-      }
-    );
-    return response.data;
-  } catch (error: any) {
-    throw new Error(
-      error.response?.data?.message || "Unable to save clinic attendance"
-    );
+  // Save attendance list for a clinic session
+  async saveClinicAttendance(
+    clinicId: number | string,
+    sessionId: number | string,
+    attendanceList: { patientId: string; attendance: boolean }[]
+  ) {
+    try {
+      const response = await axiosInstance.post(
+        `/clinic/${clinicId}/session/${sessionId}/attendance`,
+        {
+          clinicId,
+          attendances: attendanceList,
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || "Unable to save clinic attendance"
+      );
+    }
   }
-}
-
+  async getClinicAttendances(
+    clinicId: number | string,
+    sessionId: number | string
+  ) {
+    try {
+      const response = await axiosInstance.get(
+        `/clinic/${clinicId}/session/${sessionId}/attendance`
+      );
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || "Unable to fetch clinic attendances"
+      );
+    }
+  }
 }
 
 export default new ResidentClinicService();
