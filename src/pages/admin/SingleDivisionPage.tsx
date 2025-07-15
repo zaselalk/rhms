@@ -1,27 +1,23 @@
 import { FC, useEffect, useState } from "react";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
-import {
-  getHouseholdsByDivision,
-} from "../../services/household.service";
+import { getHouseholdsByDivision } from "../../services/household.service";
 import { DivisionService } from "../../services/division.service";
 
 import { FaHome, FaUsers } from "react-icons/fa";
-import { GiVirus } from "react-icons/gi";
-import { FiSearch } from "react-icons/fi";
-import residentDiseaseService from "../../services/residentDisease.service";
+//import { GiVirus } from "react-icons/gi";
 import { useParams } from "react-router";
-import { number } from "yup";
+import residentDiseaseService from "../../services/residentDisease.service";
+import HouseholdResidentService from "../../services/householdresident.service";
 
 interface Household {
+  id: number;
   house_no: string;
-  ownerFirstName: string;
-  ownerLastName: string;
   residentCount: number;
 }
 
 interface Disease {
   name: string;
-  count: number;
+  count: number | string;
 }
 
 const ITEMS_PER_PAGE = 3;
@@ -30,7 +26,8 @@ const SingleDivisionPage: FC = () => {
   const { divisionId } = useParams();
   const [divisionName, setDivisionName] = useState<string>("");
   const [households, setHouseholds] = useState<Household[]>([]);
-  const [diseases, setDiseases] = useState<{ name: string; count: number|string }[]>([]);
+  const [ownerNames, setOwnerNames] = useState<{ [key: number]: string }>({});
+  const [diseases, setDiseases] = useState<Disease[]>([]);
   const [residentCount, setResidentCount] = useState<number>(0);
   const [householdCount, setHouseholdCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
@@ -47,27 +44,38 @@ const SingleDivisionPage: FC = () => {
           const divisionData = await DivisionService.getDivisionById(divisionId);
           setDivisionName(divisionData.divisionName);
 
-          const householdData = await getHouseholdsByDivision(divisionData.divisionName);
+          const householdData: Household[] = await getHouseholdsByDivision(divisionData.divisionName);
           setHouseholds(householdData);
           setHouseholdCount(householdData.length);
 
           const countData = await DivisionService.getResidentCountByDivision(divisionId);
           setResidentCount(countData.residentCount);
 
-          //Data with real API call
-          const diseaseData:{
-            name: string;
-            count: number;
-          } = await residentDiseaseService.getDiseasePatientCounts(Number(divisionId));
-          console.log(diseaseData)
+          const diseaseData: { [key: string]: number } =
+            await residentDiseaseService.getDiseasePatientCounts(Number(divisionId));
+
           const diseaseArray = Object.entries(diseaseData).map(([name, count]) => ({
             name,
             count,
           }));
-          console.log(diseaseArray)
-          setDiseases(
-            diseaseArray
+          setDiseases(diseaseArray);
+
+          // Fetch owner names
+          const namesMap: { [key: number]: string } = {};
+          await Promise.all(
+            householdData.map(async (house) => {
+              try {
+                const res = await HouseholdResidentService.getResidentsByHouseholdId(house.id);
+                const owner = res.find((r: any) => r.relation === "owner");
+                namesMap[house.id] = owner
+                  ? `${owner.resident.firstName} ${owner.resident.lastName}`
+                  : "Unknown";
+              } catch {
+                namesMap[house.id] = "Error";
+              }
+            })
           );
+          setOwnerNames(namesMap);
         } catch (error) {
           console.error("Error loading division data:", error);
         } finally {
@@ -80,9 +88,7 @@ const SingleDivisionPage: FC = () => {
   }, [divisionId]);
 
   const filteredHouseholds = households.filter((h) =>
-    `${h.ownerFirstName} ${h.ownerLastName}`
-      .toLowerCase()
-      .includes(householdSearch.toLowerCase())
+    ownerNames[h.id]?.toLowerCase().includes(householdSearch.toLowerCase())
   );
 
   const filteredDiseases = diseases.filter((d) =>
@@ -115,6 +121,7 @@ const SingleDivisionPage: FC = () => {
           <p className="text-gray-600">Loading data...</p>
         ) : (
           <>
+            {/* Summary Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
               <div className="bg-white p-8 rounded-lg shadow-lg flex flex-col items-center justify-center space-y-2">
                 <FaHome className="text-[#008FFB] text-5xl" />
@@ -128,7 +135,9 @@ const SingleDivisionPage: FC = () => {
               </div>
             </div>
 
+            {/* Tables */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              {/* Diseases Table */}
               <div className="bg-white p-6 rounded-lg shadow-md">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-xl font-semibold text-[#008FFB]">Top Diseases</h3>
@@ -174,6 +183,7 @@ const SingleDivisionPage: FC = () => {
                 </div>
               </div>
 
+              {/* Households Table */}
               <div className="bg-white p-6 rounded-lg shadow-md">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-xl font-semibold text-[#008FFB]">Households</h3>
@@ -193,32 +203,25 @@ const SingleDivisionPage: FC = () => {
                     <tr>
                       <th className="text-left px-4 py-2 text-sm text-gray-600">House ID</th>
                       <th className="text-left px-4 py-2 text-sm text-gray-600">Owner</th>
-                      <th className="text-left px-4 py-2 text-sm text-gray-600">People Count</th>
                     </tr>
                   </thead>
                   <tbody>
                     {paginatedHouseholds.map((house, index) => (
-                      <tr
-                        key={index}
-                        className="hover:bg-gray-50 cursor-pointer transition-colors duration-150"
-                      >
-                        <td className="px-6 py-3 text-sm text-gray-700">{house.house_no}</td>
-                        <td className="px-6 py-3 text-sm text-gray-700">
-                          {`${house.ownerFirstName} ${house.ownerLastName}`}
+                      <tr key={index}>
+                        <td className="px-4 py-2 text-sm text-gray-700">{house.house_no}</td>
+                        <td className="px-4 py-2 text-sm text-gray-700">
+                          {ownerNames[house.id] || "Loading..."}
                         </td>
-                        <td className="px-6 py-3 text-sm text-gray-700">{house.residentCount}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                <div className="mt-5 flex justify-end space-x-3">
+                <div className="mt-4 flex justify-end space-x-2">
                   {Array.from({ length: totalHouseholdPages }, (_, i) => (
                     <button
                       key={i}
-                      className={`px-4 py-1 rounded-md ${
-                        householdPage === i + 1
-                          ? "bg-[#008FFB] text-white font-semibold"
-                          : "border border-gray-300 text-gray-700 hover:bg-gray-100"
+                      className={`px-3 py-1 rounded ${
+                        householdPage === i + 1 ? "bg-blue-500 text-white" : "border"
                       }`}
                       onClick={() => setHouseholdPage(i + 1)}
                     >
