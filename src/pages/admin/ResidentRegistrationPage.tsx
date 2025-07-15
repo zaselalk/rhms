@@ -25,13 +25,13 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     password: "",
     birthday: "",
     bloodGroup: "",
-    gender: "",
+    gender: "Male",
     address: "",
     contactNumber: "",
     divisionId: "",
-    maritalState: "",
+    maritalState: "Married",
     religion: "",
-    jobState: "",
+    jobdetail: "Worker",
     educationLevel: "",
     addicted: [],
     alergies: [],
@@ -39,6 +39,12 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     clinic: [],
     height: "",
     weight: "",
+    heartRate: "",
+    bloodPressure: "",
+    Birthcertificate: "",
+    glucose: 0,
+    deletedAt: null, // Initialize deletedAt to null for new residents
+
   };
 
   const [addicted, setAddictedd] = useState<string[]>([]);
@@ -91,7 +97,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     };
 
     //Fetch Division
-     const fetchGramaniladariDivision = async () => {
+    const fetchGramaniladariDivision = async () => {
       try {
         const data = await DivisionService.getAllDivisions();
         // Assuming the data is an array of objects with id and name properties
@@ -166,16 +172,29 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
 
   const mutation = useMutation({
     mutationFn: async (values: ResidentData) => {
-      await residentRegister.addResident(values); // ✅ values come from `mutate(values)`
+      return await residentRegister.addResident(values);
     },
     onSuccess: () => {
       toast.success("Register Success");
       formik.resetForm();
     },
-    onError: () => {
-      toast.error("Registration failed. Please try again.");
-    },
+    onError: (error: any) => {
+      const errorData = error?.response?.data;
+
+      // Case: Validation error array from backend
+      if (Array.isArray(errorData?.errors)) {
+        errorData.errors.forEach((err: any) => {
+          toast.error(err.msg); // show each error
+        });
+      } else {
+        // Fallback single message
+        const errorMessage =
+          errorData?.message || error.message || "Registration failed. Please try again.";
+        toast.error(errorMessage);
+      }
+    }
   });
+
 
   const formik = useFormik({
     initialValues,
@@ -199,10 +218,9 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
       <form onSubmit={formik.handleSubmit}>
         {/* Registration Form Container */}
         <div className="bg-white p-8 rounded-lg shadow-lg w-full ">
-          <h2 className="text-2xl font-semibold text-[#008FFB] mb-6 text-center">
+          <h2 className="text-2xl font-semibold text-[#008FFB] mb-6 text-">
             Resident Registration
           </h2>
-
           <div className="mt-5 mb-8 ">
             <h2 className="text-2xl">Personal Details</h2>
             <hr className="bg-gray-100 mb-2" />
@@ -423,9 +441,9 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
               </label>
               <input
                 type="text"
-                id="birthCertificateNumber"
-                {...formik.getFieldProps("birthCertificateNumber")}
-                value={formik.values.birthCertificateNumber}
+                id="Birthcertificate"
+                {...formik.getFieldProps("Birthcertificate")}
+                value={formik.values.Birthcertificate}
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                 placeholder="Enter Birth Certificate Number "
               />
@@ -437,7 +455,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                 Religion
               </label>
               <select
-                id="Religion"
+                id="religion"
                 {...formik.getFieldProps("religion")}
                 value={formik.values.religion}
                 defaultChecked={true}
@@ -480,9 +498,9 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                 Job Details
               </label>
               <select
-                id="jobState"
+                id="jobdetail"
                 {...formik.getFieldProps("jobState")}
-                value={formik.values.jobState}
+                value={formik.values.jobdetail}
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
               >
                 <option value="No Formal Education">Worker</option>
@@ -553,6 +571,59 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                 <option value="O+">O+</option>
                 <option value="O-">O-</option>
               </select>
+            </div>
+
+            {/* Gluecose */}
+            <div>
+              <label
+                htmlFor="glucose"
+                className="block text-xl font-medium text-gray-700"
+              >
+                glucose Level
+              </label>
+              <input
+                type="number"
+                id="glucose"
+                {...formik.getFieldProps("glucose")}
+                className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                placeholder="Enter glucose Level"
+              />
+            </div>
+
+            {/* Blood Presssure */}
+            <div>
+              <label
+                htmlFor="bloodPressure"
+                className="block text-xl font-medium text-gray-700"
+              >
+                Blood Pressure
+              </label>
+              <input
+                type="text"
+                id="bloodPressure"
+                {...formik.getFieldProps("bloodPressure")}
+                className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                placeholder="120/80 Blood Pressure"
+              />
+
+            </div>
+
+            {/* Heart Rate */}
+            <div>
+              <label
+                htmlFor="heartRate"
+                className="block text-xl font-medium text-gray-700"
+              >
+                Heart Rate
+              </label>
+              <input
+                type="text"
+                id="heartRate"
+                {...formik.getFieldProps("heartRate")}
+                className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                placeholder="Heart Rate"
+              />
+
             </div>
 
             {/* Addicteds */}
@@ -644,14 +715,15 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
           </div>
 
           {/* Submit Button */}
-
-          <button
-            type="submit"
-            disabled={mutation.isPending || !formik.isValid}
-            className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
-          >
-            {mutation.isPending ? "Registraion" : "Register"}
-          </button>
+          <div className="mt-6 flex justify-end">
+            <button
+              type="submit"
+              disabled={mutation.isPending || !formik.isValid}
+              className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white  font-semibold rounded-lg hover:bg-[#006fbb]"
+            >
+              {mutation.isPending ? "Registraion" : "Register"}
+            </button>
+          </div>
         </div>
       </form>
     </DashboardContainer>

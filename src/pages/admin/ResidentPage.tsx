@@ -2,7 +2,8 @@ import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import residentService from "../../services/resident.service";
-import { Pagination } from "antd";
+import { Button, Pagination } from "antd";
+import { EyeOutlined, UsergroupAddOutlined } from "@ant-design/icons";
 
 const ResidentPage = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -16,7 +17,7 @@ const ResidentPage = () => {
     }[]
   >([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 15;
+  const pageSize = 12;
 
   const residentRegister = residentService;
 
@@ -58,9 +59,20 @@ const ResidentPage = () => {
               Resident Details
             </h2>
             <Link to="create">
-              <button className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+              <Button
+                type="primary"
+                icon={<UsergroupAddOutlined/>}
+                className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold px-5 py-2 rounded-full shadow-md transition duration-300 ease-in-out"
+                style={{ display: "flex", alignItems: "center" }}
+              >
                 Add Resident
-              </button>
+              </Button>
+              
+
+                {/* <button className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+                Add Resident
+              </button> */}
+             
             </Link>
           </div>
           <div className="flex justify-between items-center mb-4 gap-5">
@@ -109,6 +121,11 @@ const ResidentPage = () => {
                         className="text-blue-600"
                       >
                         View
+                        <Button
+                          type="link"
+                          icon={<EyeOutlined />}
+                        >
+                        </Button>
                       </Link>
                     </td>
                   </tr>

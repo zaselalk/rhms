@@ -18,7 +18,8 @@ class ResidentService {
     if (!response.ok) {
       const errorData = await response.json();
       console.error("Error adding resident:", errorData);
-      throw new Error(errorData.message || "Unable to add resident");
+      throw { response: { data: errorData } }
+      // throw new Error(errorData.message || "Unable to add resident");
     }
 
     const data = await response.json();

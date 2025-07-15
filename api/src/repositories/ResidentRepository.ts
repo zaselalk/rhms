@@ -24,7 +24,13 @@ export class ResidentRepository {
     alergies: Array<string>,
     chronicalDesease: Array<string>,
     height: number,
-    weight: number
+    weight: number,
+    Birthcertificate: string,
+    religion: string,
+    jobdetail: string,
+    gluecose: Number,
+    deletedAt: Date | null
+
   ): Promise<Resident> {
     return Resident.create({
       firstName,
@@ -84,10 +90,10 @@ export class ResidentRepository {
         "lastName",
         "nic",
         "email",
-        // 'password',
+        'password',
         "birthday",
         "bloodGroup",
-        // 'gender',
+        'gender',
         "bloodPressure",
         "heartRate",
         "address",
@@ -100,6 +106,11 @@ export class ResidentRepository {
         "chronicalDesease",
         "height",
         "weight",
+        "Birthcertificate",
+        "religion",
+        "jobdetail",
+        "gluecose",
+        "deletedAt", // Include deletedAt for soft delete functionality
       ], // only fields necessary.
     });
   }
