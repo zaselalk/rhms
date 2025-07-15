@@ -1,24 +1,35 @@
 import { FC, useEffect, useState } from "react";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
+import { getHouseholdsByDivision } from "../../services/household.service";
+import { DivisionService } from "../../services/division.service";
+
+import { FaHome, FaUsers } from "react-icons/fa";
+//import { GiVirus } from "react-icons/gi";
+import { useParams } from "react-router";
+import residentDiseaseService from "../../services/residentDisease.service";
+import HouseholdResidentService from "../../services/householdresident.service";
 
 interface Household {
+  id: number;
   house_no: string;
-  ownerFirstName: string;
-  ownerLastName: string;
   residentCount: number;
 }
 
 interface Disease {
   name: string;
-  count: number;
+  count: number | string;
 }
 
 const ITEMS_PER_PAGE = 3;
 
 const SingleDivisionPage: FC = () => {
-  //const [divisionName, setDivisionName] = useState<string>("Division");
+  const { divisionId } = useParams();
+  const [divisionName, setDivisionName] = useState<string>("");
   const [households, setHouseholds] = useState<Household[]>([]);
+  const [ownerNames, setOwnerNames] = useState<{ [key: number]: string }>({});
   const [diseases, setDiseases] = useState<Disease[]>([]);
+  const [residentCount, setResidentCount] = useState<number>(0);
+  const [householdCount, setHouseholdCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
 
   const [householdSearch, setHouseholdSearch] = useState("");
@@ -27,32 +38,60 @@ const SingleDivisionPage: FC = () => {
   const [diseasePage, setDiseasePage] = useState(1);
 
   useEffect(() => {
-    const dummyHouseholds: Household[] = [
-      { house_no: "H001", ownerFirstName: "John", ownerLastName: "Doe", residentCount: 4 },
-      { house_no: "H002", ownerFirstName: "Jane", ownerLastName: "Smith", residentCount: 3 },
-      { house_no: "H003", ownerFirstName: "Amal", ownerLastName: "Perera", residentCount: 6 },
-      { house_no: "H004", ownerFirstName: "Sunil", ownerLastName: "Fernando", residentCount: 2 },
-      { house_no: "H005", ownerFirstName: "Nimal", ownerLastName: "Silva", residentCount: 5 },
-    ];
+    const fetchData = async () => {
+      if (divisionId) {
+        try {
+          const divisionData = await DivisionService.getDivisionById(divisionId);
+          setDivisionName(divisionData.divisionName);
 
-    const dummyDiseases: Disease[] = [
-      { name: "Flu", count: 15 },
-      { name: "Diabetic", count: 30 },
-      { name: "Hypertension", count: 20 },
-      { name: "Asthma", count: 10 },
-      { name: "Malaria", count: 5 },
-    ];
+          const householdData: Household[] = await getHouseholdsByDivision(divisionData.divisionName);
+          setHouseholds(householdData);
+          setHouseholdCount(householdData.length);
 
-    setHouseholds(dummyHouseholds);
-    setDiseases(dummyDiseases);
-    setLoading(false);
-  }, []);
+          const countData = await DivisionService.getResidentCountByDivision(divisionId);
+          setResidentCount(countData.residentCount);
 
-  const filteredHouseholds = households.filter(h =>
-    `${h.ownerFirstName} ${h.ownerLastName}`.toLowerCase().includes(householdSearch.toLowerCase())
+          const diseaseData: { [key: string]: number } =
+            await residentDiseaseService.getDiseasePatientCounts(Number(divisionId));
+
+          const diseaseArray = Object.entries(diseaseData).map(([name, count]) => ({
+            name,
+            count,
+          }));
+          setDiseases(diseaseArray);
+
+          // Fetch owner names
+          const namesMap: { [key: number]: string } = {};
+          await Promise.all(
+            householdData.map(async (house) => {
+              try {
+                const res = await HouseholdResidentService.getResidentsByHouseholdId(house.id);
+                const owner = res.find((r: any) => r.relation === "owner");
+                namesMap[house.id] = owner
+                  ? `${owner.resident.firstName} ${owner.resident.lastName}`
+                  : "Unknown";
+              } catch {
+                namesMap[house.id] = "Error";
+              }
+            })
+          );
+          setOwnerNames(namesMap);
+        } catch (error) {
+          console.error("Error loading division data:", error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchData();
+  }, [divisionId]);
+
+  const filteredHouseholds = households.filter((h) =>
+    ownerNames[h.id]?.toLowerCase().includes(householdSearch.toLowerCase())
   );
 
-  const filteredDiseases = diseases.filter(d =>
+  const filteredDiseases = diseases.filter((d) =>
     d.name.toLowerCase().includes(diseaseSearch.toLowerCase())
   );
 
@@ -72,28 +111,33 @@ const SingleDivisionPage: FC = () => {
   return (
     <DashboardContainer>
       <div className="flex-1 p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-semibold text-[#008FFB]">Division Name</h2>
+        <div className="mb-6">
+          <h2 className="text-3xl font-bold text-[#008FFB]">
+            {divisionName || "Loading..."}
+          </h2>
         </div>
 
         {loading ? (
           <p className="text-gray-600">Loading data...</p>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-              <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center">
-                <p className="text-lg font-semibold text-gray-800">{households.length}</p>
-                <p className="text-sm text-gray-600">Households</p>
+            {/* Summary Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+              <div className="bg-white p-8 rounded-lg shadow-lg flex flex-col items-center justify-center space-y-2">
+                <FaHome className="text-[#008FFB] text-5xl" />
+                <p className="text-4xl font-extrabold text-gray-900">{householdCount}</p>
+                <p className="text-lg font-medium text-gray-600">Households</p>
               </div>
-              <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center">
-                <p className="text-lg font-semibold text-gray-800">
-                  {households.reduce((sum, h) => sum + h.residentCount, 0)}
-                </p>
-                <p className="text-sm text-gray-600">Residents</p>
+              <div className="bg-white p-8 rounded-lg shadow-lg flex flex-col items-center justify-center space-y-2">
+                <FaUsers className="text-[#008FFB] text-5xl" />
+                <p className="text-4xl font-extrabold text-gray-900">{residentCount}</p>
+                <p className="text-lg font-medium text-gray-600">Residents</p>
               </div>
             </div>
 
+            {/* Tables */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              {/* Diseases Table */}
               <div className="bg-white p-6 rounded-lg shadow-md">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-xl font-semibold text-[#008FFB]">Top Diseases</h3>
@@ -102,7 +146,7 @@ const SingleDivisionPage: FC = () => {
                     placeholder="Search diseases..."
                     className="border px-3 py-1 rounded w-1/2"
                     value={diseaseSearch}
-                    onChange={e => {
+                    onChange={(e) => {
                       setDiseaseSearch(e.target.value);
                       setDiseasePage(1);
                     }}
@@ -128,7 +172,9 @@ const SingleDivisionPage: FC = () => {
                   {Array.from({ length: totalDiseasePages }, (_, i) => (
                     <button
                       key={i}
-                      className={`px-3 py-1 rounded ${diseasePage === i + 1 ? "bg-blue-500 text-white" : "border"}`}
+                      className={`px-3 py-1 rounded ${
+                        diseasePage === i + 1 ? "bg-blue-500 text-white" : "border"
+                      }`}
                       onClick={() => setDiseasePage(i + 1)}
                     >
                       {i + 1}
@@ -137,6 +183,7 @@ const SingleDivisionPage: FC = () => {
                 </div>
               </div>
 
+              {/* Households Table */}
               <div className="bg-white p-6 rounded-lg shadow-md">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-xl font-semibold text-[#008FFB]">Households</h3>
@@ -145,7 +192,7 @@ const SingleDivisionPage: FC = () => {
                     placeholder="Search owner..."
                     className="border px-3 py-1 rounded w-1/2"
                     value={householdSearch}
-                    onChange={e => {
+                    onChange={(e) => {
                       setHouseholdSearch(e.target.value);
                       setHouseholdPage(1);
                     }}
@@ -156,7 +203,6 @@ const SingleDivisionPage: FC = () => {
                     <tr>
                       <th className="text-left px-4 py-2 text-sm text-gray-600">House ID</th>
                       <th className="text-left px-4 py-2 text-sm text-gray-600">Owner</th>
-                      <th className="text-left px-4 py-2 text-sm text-gray-600">People Count</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -164,9 +210,8 @@ const SingleDivisionPage: FC = () => {
                       <tr key={index}>
                         <td className="px-4 py-2 text-sm text-gray-700">{house.house_no}</td>
                         <td className="px-4 py-2 text-sm text-gray-700">
-                          {`${house.ownerFirstName} ${house.ownerLastName}`}
+                          {ownerNames[house.id] || "Loading..."}
                         </td>
-                        <td className="px-4 py-2 text-sm text-gray-700">{house.residentCount}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -175,7 +220,9 @@ const SingleDivisionPage: FC = () => {
                   {Array.from({ length: totalHouseholdPages }, (_, i) => (
                     <button
                       key={i}
-                      className={`px-3 py-1 rounded ${householdPage === i + 1 ? "bg-blue-500 text-white" : "border"}`}
+                      className={`px-3 py-1 rounded ${
+                        householdPage === i + 1 ? "bg-blue-500 text-white" : "border"
+                      }`}
                       onClick={() => setHouseholdPage(i + 1)}
                     >
                       {i + 1}

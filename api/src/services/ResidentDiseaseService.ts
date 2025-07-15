@@ -51,8 +51,10 @@ export class ResidentDiseaseService {
         return data;
 }
 
-
-
+  // Get disease counts by division
+async getDiseaseCountsByDivision(divisionId: number): Promise<{ name: string; count: number }[]> {
+  return this.residentDiseaseRepository.getDiseaseCountsByDivision(divisionId);
+}
 
 }
 
