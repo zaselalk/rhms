@@ -1,10 +1,9 @@
-import React, { createContext, useContext, useEffect, ReactNode } from "react";
+import React, { createContext, useContext, ReactNode } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/state/hooks";
 import {
   residentLogin,
   residentLogout,
   setResidentLoading,
-  setResidentAuthCheckComplete,
 } from "../../store/slices/residentAuthSlice";
 import ResidentService from "../../services/resident.service";
 import { ResidentAuthContextType } from "./types/ResidentAuthContextType";
