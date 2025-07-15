@@ -39,6 +39,8 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     clinic: [],
     height: "",
     weight: "",
+    heartRate: "",
+    bloodPressure: "",
     Birthcertificate: "",
     gluecose: 0,
     deletedAt: null, // Initialize deletedAt to null for new residents
@@ -439,9 +441,9 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
               </label>
               <input
                 type="text"
-                id="birthCertificateNumber"
-                {...formik.getFieldProps("birthCertificateNumber")}
-                value={formik.values.birthCertificateNumber}
+                id="Birthcertificate"
+                {...formik.getFieldProps("Birthcertificate")}
+                value={formik.values.Birthcertificate}
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                 placeholder="Enter Birth Certificate Number "
               />
@@ -453,7 +455,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                 Religion
               </label>
               <select
-                id="Religion"
+                id="religion"
                 {...formik.getFieldProps("religion")}
                 value={formik.values.religion}
                 defaultChecked={true}
@@ -602,6 +604,24 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                 {...formik.getFieldProps("bloodPressure")}
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                 placeholder="120/80 Blood Pressure"
+              />
+
+            </div>
+
+            {/* Heart Rate */}
+            <div>
+              <label
+                htmlFor="heartRate"
+                className="block text-xl font-medium text-gray-700"
+              >
+                Blood Pressure
+              </label>
+              <input
+                type="text"
+                id="heartRate"
+                {...formik.getFieldProps("heartRate")}
+                className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
+                placeholder="Heart Rate"
               />
 
             </div>
