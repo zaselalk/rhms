@@ -177,6 +177,22 @@ export class ResidentDiseaseRepository {
       throw new Error("Failed to get division counts by disease name");
     }
   }
+
+  //get count of getPatientsCountbyDID  with a specific diseaseID
+  async getPatientsCountByDiseaseId(
+    diseaseId: number
+  ): Promise<number> {
+    try {
+      const count = await ResidentDisease.count({
+        where: { diseaseId },
+      });
+      return count;
+    } catch (error) {
+      console.error("Error getting resident count by disease ID:", error);
+      throw new Error("Failed to get resident count by disease ID");
+    }
+  }
+
   async getDiseaseCountsByDivision(divisionId: number): Promise<{ name: string; count: number }[]> {
     try {
         const results = await ResidentDisease.findAll({
@@ -211,6 +227,5 @@ export class ResidentDiseaseRepository {
         throw new Error("Unable to fetch disease counts by division");
     }
 }
-
 
 }

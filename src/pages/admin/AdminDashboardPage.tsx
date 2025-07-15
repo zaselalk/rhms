@@ -19,6 +19,10 @@ import {
 import "leaflet/dist/leaflet.css";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import { DashboardService } from "../../services/dashbord.service";
+import residentDiseaseService from "../../services/residentDisease.service";
+import { Card } from "antd";
+import DiseaseColumnChart from "../../components/charts/DiseaseColumnChart";
+
 const { BaseLayer } = LayersControl;
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
@@ -31,26 +35,7 @@ type MarkerType = {
 const AdminDashboard: React.FC = () => {
   const [markers, setMarkers] = useState<MarkerType[]>([]);
 
-  // Data for the charts
-  const residentsData = {
-    labels: ["Yes", "No"],
-    datasets: [
-      {
-        data: [1243, 500], // Example data (1,243 Yes, 500 No)
-        backgroundColor: ["#00C1A7", "#FF0000"], // Green for Yes, Red for No
-      },
-    ],
-  };
 
-  const nonCommunicableDiseasesData = {
-    labels: ["Diabetes", "Mental", "Heart"],
-    datasets: [
-      {
-        data: [250, 100, 106], // Example data for the diseases
-        backgroundColor: ["#008FFB", "#FF0000", "#266874"], // Different colors for each disease
-      },
-    ],
-  };
 
   const fetchMarkers = async () => {
     try {
@@ -78,10 +63,16 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
+  const [diseaseChartData, setDiseaseChartData] = useState<
+    { type: string; sales: number }[]
+  >([]);
+
   const [residentCount, setResidentCount] = React.useState<number>(0);
   const [householdCount, setHouseholdCount] = React.useState<number>(0);
   const [divisionCount, setDivisionCount] = React.useState<number>(0);
   const [diseaseCount, setDiseaseCount] = React.useState<number>(0);
+  const [PaitentCount, setPatientCount] = React.useState<number>(0);
+  const [CancerPaitentCount, setCancerPaitentCount] = React.useState<number>(0);
   const dashbordService = DashboardService;
 
   // Fetch resident count from the server
@@ -104,19 +95,77 @@ const AdminDashboard: React.FC = () => {
     } catch (error) {
       console.error("Error fetching diseases:", error);
     }
+
     try {
       const data = await dashbordService.getDivisionCount();
       setDivisionCount(data.count);
     } catch (error) {
       console.error("Error fetching division count:", error);
     }
+    try {
+      const data = await residentDiseaseService.getPatientsCountByDiseaseId(1);
+      console.log("Patient count data:", data.data);
+
+      setPatientCount(data.data.count);
+    } catch (error) {
+      console.error("Error fetching patient count:", error);
+    }
+    try {
+      const data = await residentDiseaseService.getPatientsCountByDiseaseId(3);
+      console.log("Patient count data:", data.data);
+
+      setCancerPaitentCount(data.data.count);
+    } catch (error) {
+      console.error("Error fetching patient count:", error);
+    }
   };
 
   // Fetch data when loading the component
   useEffect(() => {
     fetchdata();
-    fetchMarkers(); // Fetch markers data
+    fetchMarkers();
+    fetchDiseaseChartData(); // Fetch disease chart data
+    // Fetch markers data
   }, []);
+
+  const fetchDiseaseChartData = async () => {
+    try {
+      const response = await residentDiseaseService.getAllDiseasesWithPatientCount();
+      setDiseaseChartData(response.data); // [{ type: "Diabetes", sales: 20 }, ...]
+      console.log("Disease chart data:", response.data);
+    } catch (error) {
+      console.error("Error fetching chart data:", error);
+    }
+  };
+
+
+
+  // Data for the charts
+  const DiabetesData = {
+    labels: ["Diabetes", "Non Diabetes"],
+    datasets: [
+      {
+        data: [PaitentCount, residentCount - PaitentCount], // Example data (1,243 Yes, 500 No)
+        backgroundColor: ["#FF0000", "#00C1A7"], // Green for Yes, Red for No
+      },
+    ],
+  };
+  // Data for the charts
+  const CancerData = {
+    labels: ["Patients", "Non Patients"],
+    datasets: [
+      {
+        data: [CancerPaitentCount, residentCount - CancerPaitentCount], // Example data (1,243 Yes, 500 No)
+        backgroundColor: ["#faad14", "#00C1A7"], // Green for Yes, Red for No
+      },
+    ],
+  };
+
+
+
+
+
+
 
   return (
     <DashboardContainer>
@@ -169,13 +218,13 @@ const AdminDashboard: React.FC = () => {
                 <BaseLayer checked name="Satellite View">
                   <TileLayer
                     url="https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
-                    // attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
+                  // attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
                   />
                 </BaseLayer>
                 <BaseLayer name="Street View">
                   <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    // attribution='&copy; <a href="https://www.openstreetmap.org/copyright"></a>'
+                  // attribution='&copy; <a href="https://www.openstreetmap.org/copyright"></a>'
                   />
                 </BaseLayer>
               </LayersControl>
@@ -187,23 +236,29 @@ const AdminDashboard: React.FC = () => {
               ))}
             </MapContainer>
           </div>
+
+          <Card title="Disease Distribution">
+            <DiseaseColumnChart data={diseaseChartData} />
+          </Card>
+
           {/* Stats Section */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-            {/* Residents Pie Chart */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mb-6 mt-6">
+            {/*Diabetes Pie Chart */}
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-semibold text-[#008FFB] mb-4">
-                Residents
+                Diabatic Patients
               </h3>
-              <Pie data={residentsData} />
+              <Pie data={DiabetesData} />
+            </div>
+            {/*Diabetes Pie Chart */}
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold text-[#008FFB] mb-4">
+                Cancer Patients
+              </h3>
+              <Pie data={CancerData} />
             </div>
 
-            {/* Non-Communicable Diseases Pie Chart */}
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold text-[#008FFB] mb-4">
-                Non Communicable Diseases
-              </h3>
-              <Pie data={nonCommunicableDiseasesData} />
-            </div>
+
           </div>
         </div>
       </div>
