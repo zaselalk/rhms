@@ -1,89 +1,128 @@
-import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router";
-import { FaArrowLeft } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
+import ResidentClinicService from "../../services/residentclinic.service";
 
-// Dummy Patient Data
-const patients = [
-  { id: "DB001", name: "Nuwan Perera" },
-  { id: "DB002", name: "Asela Bandara" },
-  { id: "DB003", name: "Ravindu Jayasinghe" },
-  { id: "DB004", name: "Dilukshi Fernando" },
-  { id: "DB005", name: "Ashfa Nazeer" },
-  { id: "DB006", name: "Sanduni Wickramasinghe" },
-  { id: "DB007", name: "Tharindu Mendis" },
-  { id: "DB008", name: "Sachini Herath" },
-  { id: "DB009", name: "Isuru Gunaratne" },
-  { id: "DB010", name: "Kavindi Rajapaksha" },
-  { id: "DB011", name: "Lahiru Abeysekara" },
-];
+interface Patient {
+  resident: {
+    nic: string;
+    id: string;
+    contactNumber: string;
+    firstName: string;
+  };
+}
 
 interface Attendance {
   patientId: string;
-  status: boolean;
+  attendance: boolean; // renamed from status to attendance
 }
 
-const ClinicAttendancesPage: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const sessionId = location.pathname.split("/")[2];
+const ClinicAttendances: React.FC = () => {
+  const { sessionID, clinicID } = useParams<{
+    sessionID: string;
+    clinicID: string;
+  }>();
 
+  const [patients, setPatients] = useState<Patient[]>([]);
+  const [attendances, setAttendances] = useState<Attendance[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [attendances, setAttendances] = useState<Attendance[]>(
-    patients.map((patient) => ({
-      patientId: patient.id,
-      status: false,
-    }))
-  );
+  const [loading, setLoading] = useState(false);
 
-  const filteredPatients = patients.filter((patient) =>
-    patient.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        setLoading(true);
+        const data = await ResidentClinicService.getResidentsByClinicId(
+          clinicID!
+        );
+        setPatients(data);
+
+        setAttendances(
+          data.map((patient: Patient) => ({
+            patientId: patient.resident.id,
+            attendance: false, // initialize as false
+          }))
+        );
+      } catch (error) {
+        console.error("Error fetching patients for clinic:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (clinicID) {
+      fetchPatients();
+    }
+  }, [clinicID]);
 
   const toggleAttendance = (patientId: string) => {
     setAttendances((prev) =>
       prev.map((a) =>
-        a.patientId === patientId ? { ...a, status: !a.status } : a
+        a.patientId === patientId ? { ...a, attendance: !a.attendance } : a
       )
     );
   };
 
-  const saveAttendance = () => {
-    alert("Attendance saved!");
+  const saveAttendance = async () => {
+    try {
+      setLoading(true);
+      await ResidentClinicService.saveClinicAttendance(
+        clinicID!,
+        sessionID!,
+        attendances
+      );
+      alert("Attendance saved!");
+    } catch (error) {
+      alert("Failed to save attendance.");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const previousAttendancePercentage = 60;
+  // load attendances for the session
+  useEffect(() => {
+    const fetchAttendances = async () => {
+      try {
+        setLoading(true);
+        const data = await ResidentClinicService.getClinicAttendances(
+          clinicID!,
+          sessionID!
+        );
+        setAttendances(data);
+      } catch (error) {
+        console.error("Error fetching attendances:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (clinicID && sessionID) {
+      fetchAttendances();
+    }
+  }, [clinicID, sessionID]);
+
+  const filteredPatients = patients.filter((patient) =>
+    patient.resident.firstName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const totalPatients = attendances.length;
-  const presentCount = attendances.filter((a) => a.status).length;
-  const attendancePercentage = (presentCount / totalPatients) * 100;
-  const percentageDifference =
-    attendancePercentage - previousAttendancePercentage;
-  const isImproved = percentageDifference >= 0;
+  const presentCount = attendances.filter((a) => a.attendance).length;
+  const attendancePercentage = (presentCount / totalPatients) * 100 || 0;
 
   return (
     <DashboardContainer>
       <div className="p-6 w-full min-h-screen bg-gray-50">
-        {/* Back Button */}
-        <div className="mb-4">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition"
-          >
-            <FaArrowLeft />
-            Back
-          </button>
-        </div>
-
         {/* Page Heading */}
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-800">
             Attendance for Session -{" "}
-            <span className="text-blue-600">{sessionId}</span>
+            <span className="text-blue-600">{sessionID}</span>
           </h1>
         </div>
 
         {/* Attendance Summary */}
-        <div className="mb-8 p-6 bg-white rounded-xl shadow grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="mb-8 p-6 bg-white rounded-xl shadow grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           <div>
             <p className="text-gray-500 font-medium">Total Patients</p>
             <p className="text-xl font-semibold">{totalPatients}</p>
@@ -96,19 +135,6 @@ const ClinicAttendancesPage: React.FC = () => {
             <p className="text-gray-500 font-medium">Attendance %</p>
             <p className="text-xl font-semibold">
               {attendancePercentage.toFixed(1)}%
-            </p>
-          </div>
-          <div>
-            <p className="text-gray-500 font-medium">
-              Change from Last Session
-            </p>
-            <p
-              className={`text-xl font-semibold ${
-                isImproved ? "text-green-600" : "text-red-600"
-              }`}
-            >
-              {isImproved ? "+" : ""}
-              {percentageDifference.toFixed(1)}%
             </p>
           </div>
         </div>
@@ -133,7 +159,7 @@ const ClinicAttendancesPage: React.FC = () => {
             <table className="min-w-full border-collapse">
               <thead className="bg-gray-100 text-gray-700">
                 <tr>
-                  <th className="text-left p-3">ID</th>
+                  <th className="text-left p-3">NIC</th>
                   <th className="text-left p-3">Name</th>
                   <th className="text-left p-3">Attendance</th>
                 </tr>
@@ -141,16 +167,19 @@ const ClinicAttendancesPage: React.FC = () => {
               <tbody>
                 {filteredPatients.map((patient) => {
                   const attendance = attendances.find(
-                    (a) => a.patientId === patient.id
+                    (a) => a.patientId === patient.resident.id
                   );
-                  const isPresent = attendance?.status;
+                  const isPresent = attendance?.attendance;
                   return (
-                    <tr key={patient.id} className="border-b hover:bg-gray-50">
-                      <td className="p-3">{patient.id}</td>
-                      <td className="p-3">{patient.name}</td>
+                    <tr
+                      key={patient.resident.nic}
+                      className="border-b hover:bg-gray-50"
+                    >
+                      <td className="p-3">{patient.resident.nic}</td>
+                      <td className="p-3">{patient.resident.firstName}</td>
                       <td className="p-3">
                         <button
-                          onClick={() => toggleAttendance(patient.id)}
+                          onClick={() => toggleAttendance(patient.resident.id)}
                           className={`px-4 py-2 rounded-lg transition shadow ${
                             isPresent
                               ? "bg-green-500 hover:bg-green-600 text-white"
@@ -172,9 +201,14 @@ const ClinicAttendancesPage: React.FC = () => {
         <div className="mt-6 text-right">
           <button
             onClick={saveAttendance}
-            className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow-md hover:bg-blue-700 transition"
+            disabled={loading}
+            className={`px-6 py-3 rounded-xl shadow-md transition ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700 text-white"
+            }`}
           >
-            Save Attendance
+            {loading ? "Saving..." : "Save Attendance"}
           </button>
         </div>
       </div>
@@ -182,4 +216,4 @@ const ClinicAttendancesPage: React.FC = () => {
   );
 };
 
-export default ClinicAttendancesPage;
+export default ClinicAttendances;
