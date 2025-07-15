@@ -50,4 +50,16 @@ ResidentDiseaseRouter.get(
   catchAsync(residentDiseaseController.getDiseaseCountsByDivision)
 );
 
+ResidentDiseaseRouter.get(
+    "/PCountByDiseaseId/:diseaseId",
+    catchAsync(residentDiseaseController.getPatientsCountByDiseaseId)
+);
+
+ResidentDiseaseRouter.get(
+    "/getAllDiseasesWithPatientCount",
+    catchAsync(residentDiseaseController.getAllDiseasesWithPatientCount)
+);
+
+
+
 export default ResidentDiseaseRouter;

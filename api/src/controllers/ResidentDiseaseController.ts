@@ -1,14 +1,25 @@
 import { ResidentDiseaseRepository } from "../repositories/ResidentDiseaseRepository";
 import { ResidentDiseaseService } from "../services/ResidentDiseaseService";
 import { Request, Response } from "express";
+import { DiseaseServices } from "../services/DiseaseServices";
+import { DiseaseRepository } from "../repositories/DiseaseRepository";
 
 export class ResidentDiseaseController {
     private residentDiseaseService: ResidentDiseaseService;
+    private diseaseService: DiseaseServices;
 
     constructor() {
         const residentDiseaseRepository = new ResidentDiseaseRepository();
         this.residentDiseaseService = new ResidentDiseaseService(residentDiseaseRepository);
+        
+        const diseasedRepository = new DiseaseRepository();
+
+        this.diseaseService = new DiseaseServices(diseasedRepository);
     }
+
+
+
+
 
     //ping
     residentDiseasePing = async (req: Request, res: Response): Promise<Response> => {
@@ -177,6 +188,108 @@ export class ResidentDiseaseController {
             });
         }
     }
+
+
+    // Get all diseases by disease name
+
+    getDivisionCountsByDiseaseName = async (req: Request, res: Response): Promise<Response> => {
+        const { diseaseName } = req.params;
+        console.log("Fetching division counts for disease:", { diseaseName });
+        if (!diseaseName) {
+            return res.status(400).json({
+                message: "diseaseName is required",
+                status: 400,
+                error: "Missing disease name",
+                data: null
+            });
+        }
+
+        try {
+            const results = await this.residentDiseaseService.getDivisionCountsByDiseaseName(diseaseName);
+            console.log("Sending result to frontend:", results); // Confirm response payload
+
+            return res.json({
+                message: "Division counts fetched successfully",
+                status: 200,
+                error: null,
+                data: results
+            });
+        } catch (error) {
+            return res.status(500).json({
+                message: "Error fetching division counts",
+                status: 500,
+                error: "Internal Server Error",
+                data: null
+            });
+        }
+
+
+    }
+
+    // Get patient count by disease ID
+    getPatientsCountByDiseaseId = async (req: Request, res: Response): Promise<Response> => {
+        const { diseaseId } = req.params;
+        console.log("Fetching patient count for disease ID:", { diseaseId });
+        if (!diseaseId) {
+            return res.status(400).json({
+                message: "diseaseId is required",
+                status: 400,
+                error: "Missing disease ID",
+                data: null
+            });
+        }
+
+        try {
+            const count = await this.residentDiseaseService.getPatientsCountByDiseaseId(parseInt(diseaseId));
+            return res.json({
+                message: "Patient count fetched successfully",
+                status: 200,
+                error: null,
+                data: { count }
+            });
+        } catch (error) {
+            return res.status(500).json({
+                message: "Error fetching patient count by disease ID",
+                status: 500,
+                error: "Internal Server Error",
+                data: null
+            });
+        }
+    }
+
+    getAllDiseasesWithPatientCount = async (req: Request, res: Response): Promise<Response> => {
+        try {
+            const diseases = await this.diseaseService.getAllDiseases(); // [{ id: 1, name: "Diabetes" }, ...]
+
+            const results = await Promise.all(
+                diseases.map(async (disease) => {
+                    const count = await this.residentDiseaseService.getPatientsCountByDiseaseId(disease.diseaseId);
+                    return {
+                        name: disease.diseaseName,
+                        count: count
+                    };
+                })
+            );
+
+            return res.json({
+                message: "Patient counts fetched successfully",
+                status: 200,
+                error: null,
+                data: results
+            });
+        } catch (error) {
+            console.error("Error in getAllDiseasesWithPatientCount:", error);
+            return res.status(500).json({
+                message: "Error fetching data",
+                status: 500,
+                error: "Internal Server Error",
+                data: null
+            });
+        }
+    };
+
+
+
 
 // Get disease counts by division ID
 getDiseaseCountsByDivision = async (req: Request, res: Response): Promise<Response> => {
