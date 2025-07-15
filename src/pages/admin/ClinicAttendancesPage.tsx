@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import ResidentClinicService from "../../services/residentclinic.service";
-import residentclinicService from "../../services/residentclinic.service";
-import { ClinicService } from "../../services/clinic.service";
 
 interface Patient {
   resident: {
