@@ -2,10 +2,10 @@
 import React from "react";
 import { Column } from "@ant-design/plots";
 
-type DataItem = {
-  name: string;
-  count: number;
-};
+// type DataItem = {
+//   name: string;
+//   count: number;
+// };
 
 // interface Props {
 //   data: DataItem[];
