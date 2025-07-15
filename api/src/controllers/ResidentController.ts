@@ -54,6 +54,11 @@ class ResidentController {
       height,
       weight,
       clinic,
+      Birthcertificate,
+      religion,
+      jobdetail,
+      gluecose,
+      deletedAt,
     } = req.body;
 
     const residentfindByNic: Resident | null =
@@ -87,7 +92,12 @@ class ResidentController {
         alergies,
         chronicalDesease,
         height,
-        weight
+        weight,
+        Birthcertificate,
+        religion,
+        jobdetail,
+        gluecose,
+        deletedAt
       );
 
       const residentId = resident.id;
@@ -101,6 +111,7 @@ class ResidentController {
           );
         })
       );
+      
 
       return res.json({
         message: "Resident registered successfully",

@@ -25,7 +25,13 @@ export class ResidentService {
     alergies: Array<string>,
     chronicalDesease: Array<string>,
     height: number,
-    weight: number
+    weight: number,
+    Birthcertificate: string,
+    religion: string,
+    jobdetail: string,
+    gluecose: Number,
+    deletedAt: Date | null
+
   ): Promise<Resident> {
     // // Resident want id
     // const existingResident = await this.residentRepository.findById(id);
@@ -54,7 +60,12 @@ export class ResidentService {
       alergies,
       chronicalDesease,
       height,
-      weight
+      weight,
+      Birthcertificate,
+      religion,
+      jobdetail,
+      gluecose,
+      deletedAt // Ensure this is set for soft delete functionality
     );
   }
 
