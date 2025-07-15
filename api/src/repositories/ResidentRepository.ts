@@ -44,6 +44,10 @@ export class ResidentRepository {
       chronicalDesease,
       height,
       weight,
+      Birthcertificate: "",
+      religion: "",
+      jobdetail: "",
+      glucose: 0,
     });
   }
 
@@ -61,7 +65,7 @@ export class ResidentRepository {
         "email",
         "birthday",
         "bloodGroup",
-      ]
+      ],
     });
   }
 
@@ -179,5 +183,4 @@ export class ResidentRepository {
       },
     });
   }
-
 }
