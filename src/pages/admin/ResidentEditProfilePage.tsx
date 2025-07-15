@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Alert, Button } from "antd";
+import { Alert } from "antd";
 import { useFormik } from "formik";
 import { useMutation } from "@tanstack/react-query";
 
@@ -17,8 +17,6 @@ import { Eye, EyeOff } from "lucide-react";
 type ResidentEditPageProps = {};
 
 const ResidentEditPage: FC<ResidentEditPageProps> = () => {
-
-
   const initialValues2: ResidentData = {
     firstName: "",
     lastName: "",
@@ -46,7 +44,6 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
     Birthcertificate: "",
     jobdetail: "",
     deletedAt: null as Date | null, // Assuming deletedAt can be null
-
   };
   const [initialValues, setinital] = useState<ResidentData>(initialValues2);
 
@@ -56,11 +53,12 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
 
   type Division = {
     divisionId: number;
-    divisionName: string
-  }
+    divisionName: string;
+  };
 
-  const [GramaniladariDivision, setGramaniladariDivision] = useState<Division[]>([]);
-
+  const [GramaniladariDivision, setGramaniladariDivision] = useState<
+    Division[]
+  >([]);
 
   type Clinic = {
     id: string;
@@ -70,10 +68,12 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
   type Disease = {
     diseaseId: number;
     diseaseName: string;
-  }
+  };
 
   const [chronicDiseases, setChronicDiseases] = useState<Disease[]>([]);
-  const [selectedDiseaseNames, setSelectedDiseaseNames] = useState<string[]>([]);
+  const [selectedDiseaseNames, setSelectedDiseaseNames] = useState<string[]>(
+    []
+  );
 
   const [clinics, setClinics] = useState<Clinic[]>([]);
   const [selectedClinicIds, setSelectedClinicIds] = useState<string[]>([]);
@@ -101,15 +101,11 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
         console.error("Failed to fetch resident data", err);
       }
     }
-  }
-
+  };
 
   // Fetch all clinics when the component mounts
   useEffect(() => {
-
-
     fetchResidentData();
-
 
     //Fetch Disease  Function
     const fetchDiseases = async () => {
@@ -140,21 +136,21 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
       } catch (error) {
         console.error("Error fetching Gramaniladari Division:", error);
       }
-    }
+    };
 
     fetchGramaniladariDivision();
     fetchDiseases();
     fetchClinics();
   }, []);
 
-  const handleClinicCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleClinicCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const { value, checked } = event.target;
     setSelectedClinicIds((prev) =>
       checked ? [...prev, value] : prev.filter((id) => id !== value)
     );
   };
-
-
 
   const addictedlist = [
     "Smoke",
@@ -163,7 +159,6 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
     "Other Substance Use",
   ];
   const alergydlist = ["Food Allergy", "Drug Allergy", "Other Allergy"];
-
 
   const caldate2 = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
 
@@ -181,7 +176,9 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
     );
   };
 
-  const handleChronicDiseaseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChronicDiseaseChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const { checked, value } = e.target;
 
     setSelectedDiseaseNames((prev) =>
@@ -192,7 +189,6 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
   const residentRegister = residentService;
 
   const mutation = useMutation({
-
     mutationFn: async (values: ResidentData) => {
       if (!id) {
         throw new Error("Resident ID is missing.");
@@ -215,7 +211,6 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
     enableReinitialize: true,
     validationSchema: residentValidation,
     onSubmit: (values) => {
-
       values.addicted = addicted;
       values.alergies = alergies;
       values.chronicalDesease = selectedDiseaseNames;
@@ -619,7 +614,11 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
                 type="text"
                 id="heartRate"
                 {...formik.getFieldProps("heartRate")}
-                value={formik.values.heartRate !== undefined ? String(formik.values.heartRate) : ""}
+                value={
+                  formik.values.heartRate !== undefined
+                    ? String(formik.values.heartRate)
+                    : ""
+                }
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                 placeholder="55-61 Heart Rate"
               />
@@ -637,7 +636,11 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
                 type="text"
                 id="glucose"
                 {...formik.getFieldProps("glucose")}
-                value={formik.values.glucose !== undefined ? String(formik.values.glucose) : ""}
+                value={
+                  formik.values.glucose !== undefined
+                    ? String(formik.values.glucose)
+                    : ""
+                }
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                 placeholder="Glucose Level"
               />
@@ -674,10 +677,6 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
                 </div>
               )}
             </div>
-
-
-
-
 
             {/* Addicteds */}
             <div className="col-span-2">
@@ -733,7 +732,10 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
             </label>
             <div className="gap-4 mt-3 ml-3 grid items-center grid-cols-4">
               {chronicDiseases.map((disease) => (
-                <label key={disease.diseaseId} className="flex items-center gap-2">
+                <label
+                  key={disease.diseaseId}
+                  className="flex items-center gap-2"
+                >
                   <input
                     type="checkbox"
                     value={disease.diseaseName} // ✅ use disease name as value
@@ -763,13 +765,11 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
                   {clinic.name}
                 </label>
               ))}
-
             </div>
           </div>
 
           {/* Submit Button */}
           <div className="flex justify-end mt-6">
-
             {/* <Button
               type="primary"
               style={{ backgroundColor: "#008FFB" }}
@@ -784,7 +784,6 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
             >
               {mutation.isPending ? "Update Resident" : "Update Resident"}
             </button>
-
           </div>
         </div>
       </form>
