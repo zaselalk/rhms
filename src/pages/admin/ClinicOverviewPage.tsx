@@ -6,6 +6,7 @@ import Modal from "../../components/layouts/overlays/Modal";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import { Link } from "react-router";
 import { ClinicService } from "../../services/clinic.service";
+import { useAppSelector } from "../../hooks/state/hooks";
 
 const ClinicOverview: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -15,6 +16,7 @@ const ClinicOverview: React.FC = () => {
   const [clinicCategories, setClinicCategories] = useState<any[]>([]);
   const [clinicToDelete, setClinicToDelete] = useState<string | null>(null);
   const [clinicToEdit, setClinicToEdit] = useState<string | null>(null);
+  const user = useAppSelector((state) => state.auth.user);
 
   // Fetch all clinics when the component mounts
   useEffect(() => {
@@ -148,18 +150,22 @@ const ClinicOverview: React.FC = () => {
           <div className="flex items-center space-x-3">
             <FaClinicMedical className="text-[#008FFB] text-3xl" />
             <div>
-              <h2 className="text-2xl font-semibold text-[#008FFB]">Clinic Overview</h2>
+              <h2 className="text-2xl font-semibold text-[#008FFB]">
+                Clinic Overview
+              </h2>
               <p className="text-gray-500 text-l font-semibold">
                 Total Clinics: {clinicCategories.length}
               </p>
             </div>
           </div>
-          <button
-            onClick={() => setShowModal(true)}
-            className="bg-blue-500 text-white px-4 py-2 flex items-center rounded-lg shadow hover:bg-blue-600 transition"
-          >
-            <FiPlusCircle className="mr-2" /> New Clinic
-          </button>
+          {user?.permissions.includes("clinic:create") && (
+            <button
+              onClick={() => setShowModal(true)}
+              className="bg-blue-500 text-white px-4 py-2 flex items-center rounded-lg shadow hover:bg-blue-600 transition"
+            >
+              <FiPlusCircle className="mr-2" /> New Clinic
+            </button>
+          )}
         </div>
 
         {/* Clinic Categories Section */}
@@ -186,23 +192,27 @@ const ClinicOverview: React.FC = () => {
               </div>
               <div className="flex space-x-2">
                 {/* Edit Icon */}
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleEditClick(clinic.id);
-                  }}
-                  className="text-blue-500 hover:text-blue-700 transition cursor-pointer"
-                >
-                  <FiEdit className="text-lg" />
-                </button>
+                {user?.permissions.includes("clinic:edit") && (
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleEditClick(clinic.id);
+                    }}
+                    className="text-blue-500 hover:text-blue-700 transition cursor-pointer"
+                  >
+                    <FiEdit className="text-lg" />
+                  </button>
+                )}
                 {/* Delete Icon */}
-                <FaTrash
-                  className="text-gray-500 cursor-pointer hover:text-red-600 transition"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleDeleteClick(clinic.id);
-                  }}
-                />
+                {user?.permissions.includes("clinic:delete") && (
+                  <FaTrash
+                    className="text-gray-500 cursor-pointer hover:text-red-600 transition"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleDeleteClick(clinic.id);
+                    }}
+                  />
+                )}
               </div>
             </Link>
           ))}
