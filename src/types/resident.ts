@@ -23,6 +23,9 @@ export interface ResidentData {
     Birthcertificate: string,
     jobdetail: string,
     gluecose: Number,
+    heartRate?: string;
+    bloodPressure?: string;
     deletedAt: Date | null
+    
   }
   
