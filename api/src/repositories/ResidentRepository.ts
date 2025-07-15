@@ -47,6 +47,10 @@ export class ResidentRepository {
       chronicalDesease,
       height,
       weight,
+      Birthcertificate: "",
+      religion: "",
+      jobdetail: "",
+      glucose: 0,
     });
   }
 
@@ -182,7 +186,6 @@ export class ResidentRepository {
       },
     });
   }
-
   async findByEmailWithClinicData(email: string): Promise<Resident | null> {
     return Resident.findOne({
       where: {
@@ -202,4 +205,5 @@ export class ResidentRepository {
       ],
     });
   }
+
 }
