@@ -35,8 +35,7 @@ interface ResidentAttributes {
 
 export class Resident
   extends Model<ResidentAttributes>
-  implements ResidentAttributes
-{
+  implements ResidentAttributes {
   json(sessions: Session[]) {
     throw new Error("Method not implemented.");
   }

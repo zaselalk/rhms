@@ -38,27 +38,37 @@ const getSessionById = async (req: Request, res: Response) =>   {
 
 const updateSession = async (req: Request, res: Response) => {
   try {
-    const session = await sessionService.updateSession(Number(req.params.id), req.body);
+    const sessionId = Number(req.params.sid); // use sid here
+    const session = await sessionService.updateSession(sessionId, req.body);
+
     if (!session) {
       return res.status(404).json({ error: "Session not found" });
     }
-    res.json(session);
+
+    res.json(session); // return the updated session
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
 
+
 const deleteSession = async (req: Request, res: Response) => {
   try {
-    const session = await sessionService.deleteSession(Number(req.params.id));
-    if (!session) {
+    const sessionId = Number(req.params.sid);
+
+    const deleted = await sessionService.deleteSession(sessionId);
+
+    if (!deleted) {
       return res.status(404).json({ error: "Session not found" });
     }
+
     res.json({ message: "Session deleted successfully" });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 };
+
+
 
 export default {
   createSession,
