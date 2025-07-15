@@ -26,34 +26,34 @@ export const ResidentAuthProvider: React.FC<ResidentAuthProviderProps> = ({
   );
 
   // Check for existing token on app load
-  useEffect(() => {
-    checkAuthStatus();
-  }, []);
+  // useEffect(() => {
+  //   checkAuthStatus();
+  // }, []);
 
-  const checkAuthStatus = async () => {
-    try {
-      dispatch(setResidentLoading(true));
+  // const checkAuthStatus = async () => {
+  //   try {
+  //     dispatch(setResidentLoading(true));
 
-      // Check if there's a stored token
-      const storedToken = localStorage.getItem("residentToken");
-      const storedResident = localStorage.getItem("residentData");
+  //     // Check if there's a stored token
+  //     const storedToken = localStorage.getItem("residentToken");
+  //     const storedResident = localStorage.getItem("residentData");
 
-      if (storedToken && storedResident) {
-        // Validate token with backend (you might need to create this endpoint)
-        // For now, we'll trust the stored data
-        const residentData = JSON.parse(storedResident);
-        dispatch(residentLogin({ resident: residentData, token: storedToken }));
-      }
-    } catch (error) {
-      console.error("Error checking resident auth status:", error);
-      // Clear invalid tokens
-      localStorage.removeItem("residentToken");
-      localStorage.removeItem("residentData");
-      dispatch(residentLogout());
-    } finally {
-      dispatch(setResidentAuthCheckComplete());
-    }
-  };
+  //     if (storedToken) {
+  //       // Validate token with backend (you might need to create this endpoint)
+  //       // For now, we'll trust the stored data
+  //       const residentData = JSON.parse(storedResident);
+  //       dispatch(residentLogin({ resident: residentData, token: storedToken }));
+  //     }
+  //   } catch (error) {
+  //     console.error("Error checking resident auth status:", error);
+  //     // Clear invalid tokens
+  //     localStorage.removeItem("residentToken");
+  //     localStorage.removeItem("residentData");
+  //     dispatch(residentLogout());
+  //   } finally {
+  //     dispatch(setResidentAuthCheckComplete());
+  //   }
+  // };
 
   const login = async (email: string, password: string): Promise<void> => {
     try {
@@ -68,8 +68,8 @@ export const ResidentAuthProvider: React.FC<ResidentAuthProviderProps> = ({
       const { data: residentData, token: authToken } = response;
 
       // Store in localStorage
-      localStorage.setItem("residentToken", authToken);
-      localStorage.setItem("residentData", JSON.stringify(residentData));
+      // localStorage.setItem("residentToken", authToken);
+      // localStorage.setItem("residentData", JSON.stringify(residentData));
 
       // Update Redux state
       dispatch(residentLogin({ resident: residentData, token: authToken }));
@@ -94,7 +94,7 @@ export const ResidentAuthProvider: React.FC<ResidentAuthProviderProps> = ({
     isLoading,
     login,
     logout,
-    checkAuthStatus,
+    // checkAuthStatus,
   };
 
   return (
