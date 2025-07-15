@@ -7,11 +7,11 @@ type DataItem = {
   count: number;
 };
 
-interface Props {
-  data: DataItem[];
-}
+// interface Props {
+//   data: DataItem[];
+// }
 
-const DiseaseColumnChart: React.FC<Props> = ({ data }) => {
+const DiseaseColumnChart: React.FC<any> = ({ data }) => {
   const config = {
     data,
     xField: "name", // ← match the backend's "name"
