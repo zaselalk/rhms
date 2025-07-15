@@ -770,19 +770,20 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
           {/* Submit Button */}
           <div className="flex justify-end mt-6">
 
-            <Button
+            {/* <Button
               type="primary"
-
               style={{ backgroundColor: "#008FFB" }}
             >
-              <button
-                type="submit"
-                disabled={mutation.isPending || !formik.isValid}
-              // className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
-              >
-                {mutation.isPending ? "Update Resident" : "Update Resident"}
-              </button>
-            </Button>
+
+            </Button> */}
+
+            <button
+              type="submit"
+              disabled={mutation.isPending || !formik.isValid}
+              className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
+            >
+              {mutation.isPending ? "Update Resident" : "Update Resident"}
+            </button>
           </div>
         </div>
       </form>
