@@ -42,7 +42,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     heartRate: "",
     bloodPressure: "",
     Birthcertificate: "",
-    gluecose: 0,
+    glucose: 0,
     deletedAt: null, // Initialize deletedAt to null for new residents
 
   };
@@ -576,17 +576,17 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
             {/* Gluecose */}
             <div>
               <label
-                htmlFor="gluecose"
+                htmlFor="glucose"
                 className="block text-xl font-medium text-gray-700"
               >
-                Gluecose Level
+                glucose Level
               </label>
               <input
                 type="number"
-                id="gluecose"
-                {...formik.getFieldProps("gluecose")}
+                id="glucose"
+                {...formik.getFieldProps("glucose")}
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
-                placeholder="Enter Gluecose Level"
+                placeholder="Enter glucose Level"
               />
             </div>
 
@@ -614,7 +614,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                 htmlFor="heartRate"
                 className="block text-xl font-medium text-gray-700"
               >
-                Blood Pressure
+                Heart Rate
               </label>
               <input
                 type="text"

@@ -22,7 +22,7 @@ export interface ResidentData {
     weight?: string;
     Birthcertificate: string,
     jobdetail: string,
-    gluecose: Number,
+    glucose: Number,
     heartRate?: string;
     bloodPressure?: string;
     deletedAt: Date | null
