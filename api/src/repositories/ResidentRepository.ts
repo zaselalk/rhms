@@ -28,7 +28,7 @@ export class ResidentRepository {
     Birthcertificate: string,
     religion: string,
     jobdetail: string,
-    gluecose: Number,
+    glucose: Number,
     deletedAt: Date | null
 
   ): Promise<Resident> {
@@ -109,7 +109,7 @@ export class ResidentRepository {
         "Birthcertificate",
         "religion",
         "jobdetail",
-        "gluecose",
+        "glucose",
         "deletedAt", // Include deletedAt for soft delete functionality
       ], // only fields necessary.
     });

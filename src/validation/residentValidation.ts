@@ -23,6 +23,16 @@ export const residentValidation = Yup.object({
     email: Yup.string()
         .email('Invalid email format'),
 
+    bloodPressure: Yup.string()
+        .matches(/^\d{2,3}\/\d{2,3}$/, 'Blood pressure must be in format: systolic/diastolic (e.g. 120/80)')
+        .required('Blood pressure is required'),
+
+    heartRate: Yup.number()
+        .typeError('Heart rate must be a number')
+        .min(40, 'Heart rate must be at least 40 bpm')
+        .max(200, 'Heart rate must be less than or equal to 200 bpm')
+        .required('Heart rate is required'),
+
 
 
 

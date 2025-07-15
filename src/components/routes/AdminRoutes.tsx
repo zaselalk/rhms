@@ -18,6 +18,7 @@ import ClinicAttendancesPage from "../../pages/admin/ClinicAttendancesPage";
 import ClinicDetailPage from "../../pages/admin/ClinicDetailPage";
 import AuthProvider from "../auth/AuthProvider";
 import { useAppSelector } from "../../hooks/state/hooks";
+import ResidentEditPage from "../../pages/admin/ResidentEditProfilePage";
 
 export const AdminRoutes = () => {
   const user = useAppSelector((state) => state.auth.user);
@@ -71,6 +72,14 @@ export const AdminRoutes = () => {
             element={
               <ProtectedRoutesGuard>
                 <ResidentProfilePage />
+              </ProtectedRoutesGuard>
+            }
+          />
+          <Route
+            path="profile/:id/edit"
+            element={
+              <ProtectedRoutesGuard>
+                <ResidentEditPage/>
               </ProtectedRoutesGuard>
             }
           />

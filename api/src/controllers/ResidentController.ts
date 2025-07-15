@@ -57,7 +57,7 @@ class ResidentController {
       Birthcertificate,
       religion,
       jobdetail,
-      gluecose,
+      glucose,
       deletedAt,
     } = req.body;
 
@@ -96,7 +96,7 @@ class ResidentController {
         Birthcertificate,
         religion,
         jobdetail,
-        gluecose,
+        glucose,
         deletedAt
       );
 

@@ -29,7 +29,7 @@ export class ResidentService {
     Birthcertificate: string,
     religion: string,
     jobdetail: string,
-    gluecose: Number,
+    glucose: Number,
     deletedAt: Date | null
 
   ): Promise<Resident> {
@@ -64,7 +64,7 @@ export class ResidentService {
       Birthcertificate,
       religion,
       jobdetail,
-      gluecose,
+      glucose,
       deletedAt // Ensure this is set for soft delete functionality
     );
   }
