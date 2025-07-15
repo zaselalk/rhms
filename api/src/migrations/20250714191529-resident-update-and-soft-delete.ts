@@ -14,6 +14,11 @@ module.exports = {
         type: DataTypes.STRING,
       });
 
+      await queryInterface.addColumn("residents", "gluecose", {
+        type: DataTypes.FLOAT,
+        defaultValue: 0,
+      });
+
       await queryInterface.addColumn("residents", "Birthcertificate", {
         type: DataTypes.STRING,
         defaultValue: "",

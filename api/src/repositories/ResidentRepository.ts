@@ -28,7 +28,7 @@ export class ResidentRepository {
     Birthcertificate: string,
     religion: string,
     jobdetail: string,
-    gluecose: Number,
+    glucose: Number,
     deletedAt: Date | null
 
   ): Promise<Resident> {
@@ -109,7 +109,7 @@ export class ResidentRepository {
         "Birthcertificate",
         "religion",
         "jobdetail",
-        "gluecose",
+        "glucose",
         "deletedAt", // Include deletedAt for soft delete functionality
       ], // only fields necessary.
     });
@@ -190,6 +190,15 @@ export class ResidentRepository {
 
     return diseaseCounts;
   }
+
+  async getResidentCountByDivision(divisionId: number): Promise<number> {
+  const count = await Resident.count({
+    where: { divisionId },
+  });
+  return count;
+}
+
+  
   async findByEmail(email: string): Promise<Resident | null> {
     return Resident.findOne({
       where: {
