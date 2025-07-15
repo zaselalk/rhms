@@ -176,15 +176,7 @@ const ClinicOverviewPage: React.FC = () => {
               <div>
                 <h4 className="text-lg font-semibold">{clinic.name}</h4>
                 <p className="text-2xl font-bold">{clinic.count}</p>
-                <p className="text-gray-500 text-sm">Attendance Trend </p>
-                <p
-                  className={`text-sm font-semibold ${
-                    clinic.increase ? "text-green-500" : "text-red-500"
-                  }`}
-                >
-                  {clinic.change} {clinic.increase ? "▲" : "▼"}{" "}
-                  {clinic.percentage}%
-                </p>
+
               </div>
               <div className="flex space-x-2">
                 {/* Edit Icon */}
