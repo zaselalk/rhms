@@ -109,7 +109,12 @@ export class HouseholdRepository {
     return Household.count();
   }
 
+  // Find households by owner_id
+async findHouseholdsByOwnerId(owner_id: number): Promise<Household[]> {
+  return Household.findAll({
+    where: { owner_id },
+  });
+}
 
-  //
 
 }

@@ -8,7 +8,7 @@ import { Link } from "react-router";
 import { ClinicService } from "../../services/clinic.service";
 import { useAppSelector } from "../../hooks/state/hooks";
 
-const ClinicOverview: React.FC = () => {
+const ClinicOverviewPage: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -313,4 +313,4 @@ const ClinicOverview: React.FC = () => {
   );
 };
 
-export default ClinicOverview;
+export default ClinicOverviewPage;
