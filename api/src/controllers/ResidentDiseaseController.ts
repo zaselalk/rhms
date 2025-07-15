@@ -178,40 +178,36 @@ export class ResidentDiseaseController {
         }
     }
 
-    // Get all diseases by disease name
-
-    getDivisionCountsByDiseaseName = async (req: Request, res: Response): Promise<Response> => {
-    const { diseaseName } = req.params;
-    console.log("Fetching division counts for disease:", { diseaseName });
-    if (!diseaseName) {
-        return res.status(400).json({
-            message: "diseaseName is required",
-            status: 400,
-            error: "Missing disease name",
-            data: null
-        });
+// Get disease counts by division ID
+getDiseaseCountsByDivision = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const divisionId = Number(req.params.divisionId);
+    if (isNaN(divisionId)) {
+      return res.status(400).json({
+        message: "Invalid divisionId parameter",
+        status: 400,
+        error: "divisionId must be a number",
+        data: null,
+      });
     }
 
-    try {
-        const results = await this.residentDiseaseService.getDivisionCountsByDiseaseName(diseaseName);
-        console.log("Sending result to frontend:", results); // Confirm response payload
+    const diseaseCounts = await this.residentDiseaseService.getDiseaseCountsByDivision(divisionId);
 
-        return res.json({
-            message: "Division counts fetched successfully",
-            status: 200,
-            error: null,
-            data: results
-        });
-    } catch (error) {
-        return res.status(500).json({
-            message: "Error fetching division counts",
-            status: 500,
-            error: "Internal Server Error",
-            data: null
-        });
-    }
-}
-
-
+    return res.json({
+      message: "Disease counts fetched successfully",
+      status: 200,
+      error: null,
+      data: diseaseCounts,
+    });
+  } catch (error) {
+    console.error("Error fetching disease counts by division:", error);
+    return res.status(500).json({
+      message: "Internal server error",
+      status: 500,
+      error: error instanceof Error ? error.message : "Unknown error",
+      data: null,
+    });
+  }
+};
 
 }

@@ -13,6 +13,18 @@ export const DivisionService = {
     }
   },
 
+  // Fetch single division by ID
+  getDivisionById: async (divisionId: string | number) => {
+    try {
+      const response = await axiosInstance.get(`/division/${divisionId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching division ${divisionId}:`, error);
+      throw error;
+    }
+  },
+
+  // Create a new division
   createDivision: async (divisionData: { divisionName: string }) => {
     try {
       const response = await axiosInstance.post("/division", divisionData);
@@ -23,7 +35,7 @@ export const DivisionService = {
     }
   },
 
-  // Delete division
+  // Delete a division
   deleteDivision: async (divisionId: number) => {
     try {
       await axiosInstance.delete(`/division/${divisionId}`);
@@ -31,5 +43,10 @@ export const DivisionService = {
       console.error("Error deleting division:", error);
       throw error;
     }
+  },
+  // Fetch resident count by division ID
+  getResidentCountByDivision: async (divisionId: string | number) => {
+    const res = await axiosInstance.get(`/resident/division/${divisionId}/count`);
+    return res.data; // Expected to return { divisionId, residentCount }
   },
 };

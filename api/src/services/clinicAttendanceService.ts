@@ -1,3 +1,5 @@
+
+
 import {
   deleteAttendance,
   findAllAttendances,
@@ -5,6 +7,7 @@ import {
   updateAttendance,
   upsertAttendance,
 } from "../repositories/clinicAttendanceRepository";
+
 
 // Mark (create or update) a patient's attendance
 export const markAttendance = async (
