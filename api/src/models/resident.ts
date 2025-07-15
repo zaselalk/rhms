@@ -4,7 +4,6 @@ import sequelize from ".";
 import Session from "./clinicSession";
 import Household from "./household";
 
-
 interface ResidentAttributes {
   id?: number;
   firstName: string;
@@ -30,13 +29,14 @@ interface ResidentAttributes {
   Birthcertificate: string;
   religion: string;
   jobdetail: string;
-  gluecose: Number
+  glucose: Number;
   deletedAt: Date | null;
 }
 
 export class Resident
   extends Model<ResidentAttributes>
-  implements ResidentAttributes {
+  implements ResidentAttributes
+{
   json(sessions: Session[]) {
     throw new Error("Method not implemented.");
   }
@@ -66,10 +66,9 @@ export class Resident
   public weight!: number;
   public religion!: string;
   public jobdetail!: string;
-  public gluecose!: number;
+  public glucose!: number;
   public Birthcertificate!: string;
   public deletedAt!: Date | null; // soft delete
-
 }
 
 Resident.init(
@@ -162,7 +161,7 @@ Resident.init(
     jobdetail: {
       type: DataTypes.STRING,
     },
-    gluecose: {
+    glucose: {
       type: DataTypes.FLOAT,
     },
     Birthcertificate: {
@@ -173,7 +172,6 @@ Resident.init(
       allowNull: true,
       defaultValue: null, // for soft delete
     },
-    
   },
 
   {
@@ -184,8 +182,6 @@ Resident.init(
     paranoid: true, // Enable soft delete
     engine: "InnoDB",
   }
-
 );
-
 
 export default Resident;
