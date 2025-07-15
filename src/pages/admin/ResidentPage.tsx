@@ -4,9 +4,12 @@ import { DashboardContainer } from "../../components/layouts/overlays/DashboardC
 import residentService from "../../services/resident.service";
 import { Button, Pagination } from "antd";
 import { EyeOutlined, UsergroupAddOutlined } from "@ant-design/icons";
+import { useAppSelector } from "../../hooks/state/hooks";
 
 const ResidentPage = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
+  const user = useAppSelector((state) => state.auth.user);
+
   const [residents2, setResidents] = useState<
     {
       id: string;
@@ -59,20 +62,20 @@ const ResidentPage = () => {
               Resident Details
             </h2>
             <Link to="create">
-              <Button
-                type="primary"
-                icon={<UsergroupAddOutlined/>}
-                className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold px-5 py-2 rounded-full shadow-md transition duration-300 ease-in-out"
-                style={{ display: "flex", alignItems: "center" }}
-              >
-                Add Resident
-              </Button>
-              
+              {user?.permissions.includes("resident:create") && (
+                <Button
+                  type="primary"
+                  icon={<UsergroupAddOutlined />}
+                  className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold px-5 py-2 rounded-full shadow-md transition duration-300 ease-in-out"
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  Add Resident
+                </Button>
+              )}
 
-                {/* <button className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+              {/* <button className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
                 Add Resident
               </button> */}
-             
             </Link>
           </div>
           <div className="flex justify-between items-center mb-4 gap-5">
@@ -116,17 +119,15 @@ const ResidentPage = () => {
                     <td className="p-3">{resident.contactNumber}</td>
                     <td className="p-3">{resident.address}</td>
                     <td className="p-3">
-                      <Link
-                        to={`profile/${resident.id}`}
-                        className="text-blue-600"
-                      >
-                        View
-                        <Button
-                          type="link"
-                          icon={<EyeOutlined />}
+                      {user?.permissions.includes("clinic:view") && (
+                        <Link
+                          to={`profile/${resident.id}`}
+                          className="text-blue-600"
                         >
-                        </Button>
-                      </Link>
+                          View
+                          <Button type="link" icon={<EyeOutlined />}></Button>
+                        </Link>
+                      )}
                     </td>
                   </tr>
                 ))}
