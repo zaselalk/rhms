@@ -17,7 +17,7 @@ export const UserRoleCreateForm: FC<UserRoleCreateFormProps> = ({
 }) => {
   const [form] = Form.useForm();
   const [isAllSelected, setIsAllSelected] = useState(false);
-  //   const [messageApi, contextHolder] = message.useMessage();
+  const [isCreatingRole, setIsCreatingRole] = useState(false);
 
   // initialize user service
   const User = new UserService();
@@ -48,7 +48,7 @@ export const UserRoleCreateForm: FC<UserRoleCreateFormProps> = ({
     checkedValues.forEach((perm) => {
       const [module, action] = perm.split(":");
       if (
-        (action === "edit" || action === "delete") &&
+        (action === "edit" || action === "delete" || action === "create") &&
         !checkedValues.includes(`${module}:view`)
       ) {
         updated.push(`${module}:view`);
@@ -70,15 +70,18 @@ export const UserRoleCreateForm: FC<UserRoleCreateFormProps> = ({
    */
   const mutation = useMutation({
     mutationFn: async ({ role, permission }: NewUserRole) => {
+      setIsCreatingRole(true);
       await User.crateUserRole(role, permission);
     },
     onSuccess: () => {
+      setIsCreatingRole(false);
       message.success("New User Role Created!");
       form.resetFields();
       refetch();
       setIsCreateNewRole(false);
     },
     onError: (error: any) => {
+      setIsCreatingRole(false);
       message.error(error.message);
     },
   });
@@ -135,7 +138,7 @@ export const UserRoleCreateForm: FC<UserRoleCreateFormProps> = ({
           <Button onClick={() => form.resetFields()} danger>
             Clear
           </Button>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={isCreatingRole}>
             Create Role
           </Button>
         </div>

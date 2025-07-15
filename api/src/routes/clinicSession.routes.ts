@@ -4,7 +4,7 @@ import clinicSessionController from "../controllers/clinicSessionController";
 const router = Router();
 
 // Create a new session
-router.post("/createSession", clinicSessionController.createSession);
+//router.post("/createSession", clinicSessionController.createSession);
 
 // Get all sessions
 //router.get("/clinic/:id/GetsessionForClinic", clinicSessionController.getAllSessions);

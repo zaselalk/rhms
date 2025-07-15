@@ -2,10 +2,14 @@ import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import residentService from "../../services/resident.service";
-import { Pagination } from "antd";
+import { Button, Pagination } from "antd";
+import { EyeOutlined, UsergroupAddOutlined } from "@ant-design/icons";
+import { useAppSelector } from "../../hooks/state/hooks";
 
-const ResidentListPage = () => {
+const ResidentPage = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
+  const user = useAppSelector((state) => state.auth.user);
+
   const [residents2, setResidents] = useState<
     {
       id: string;
@@ -16,7 +20,7 @@ const ResidentListPage = () => {
     }[]
   >([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 15;
+  const pageSize = 12;
 
   const residentRegister = residentService;
 
@@ -54,11 +58,24 @@ const ResidentListPage = () => {
         {/* Header & Search */}
         <div className="top-0 bg-white z-20 pb-2">
           <div className="flex justify-between mb-2 items-center">
-            <h2 className="text-2xl font-semibold text-[#008FFB]">Resident Details</h2>
+            <h2 className="text-2xl font-semibold text-[#008FFB]">
+              Resident Details
+            </h2>
             <Link to="create">
-              <button className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+              {user?.permissions.includes("resident:create") && (
+                <Button
+                  type="primary"
+                  icon={<UsergroupAddOutlined />}
+                  className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold px-5 py-2 rounded-full shadow-md transition duration-300 ease-in-out"
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  Add Resident
+                </Button>
+              )}
+
+              {/* <button className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
                 Add Resident
-              </button>
+              </button> */}
             </Link>
           </div>
           <div className="flex justify-between items-center mb-4 gap-5">
@@ -91,7 +108,10 @@ const ResidentListPage = () => {
               </thead>
               <tbody>
                 {paginatedResidents.map((resident) => (
-                  <tr key={resident.id} className="text-center hover:bg-gray-100">
+                  <tr
+                    key={resident.id}
+                    className="text-center hover:bg-gray-100"
+                  >
                     <td className="p-3">{resident.id}</td>
                     <td className="p-3">
                       {resident.firstName} {resident.lastName}
@@ -99,9 +119,15 @@ const ResidentListPage = () => {
                     <td className="p-3">{resident.contactNumber}</td>
                     <td className="p-3">{resident.address}</td>
                     <td className="p-3">
-                      <Link to={`profile/${resident.id}`} className="text-blue-600">
-                        View
-                      </Link>
+                      {user?.permissions.includes("clinic:view") && (
+                        <Link
+                          to={`profile/${resident.id}`}
+                          className="text-blue-600"
+                        >
+                          View
+                          <Button type="link" icon={<EyeOutlined />}></Button>
+                        </Link>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -125,4 +151,4 @@ const ResidentListPage = () => {
   );
 };
 
-export default ResidentListPage;
+export default ResidentPage;

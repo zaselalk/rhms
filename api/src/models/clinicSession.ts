@@ -1,12 +1,13 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "."; // Assuming the sequelize instance is already configured
-import Clinic from "./clinic"; // Importing the Clinic model
+import sequelize from "."; // your configured sequelize instance
+import Clinic from "./clinic";
 
 interface SessionAttributes {
   sessionId: number;
   clinicId: number;
   name: string;
-  sessionDate: Date; // Added sessionDate attribute
+  sessionDate: Date;
+  deletedAt?: Date | null;  // for soft delete timestamp
 }
 
 export class Session
@@ -16,7 +17,8 @@ export class Session
   public sessionId!: number;
   public clinicId!: number;
   public name!: string;
-  public sessionDate!: Date; // Added sessionDate property
+  public sessionDate!: Date;
+  public deletedAt?: Date | null; // optional
 }
 
 Session.init(
@@ -31,7 +33,7 @@ Session.init(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: Clinic, // Foreign key reference to Clinic
+        model: Clinic,
         key: "id",
       },
     },
@@ -45,7 +47,7 @@ Session.init(
       },
     },
     sessionDate: {
-      type: DataTypes.DATEONLY, // Stores only date (no time)
+      type: DataTypes.DATEONLY,
       allowNull: false,
       validate: {
         isDate: {
@@ -54,16 +56,20 @@ Session.init(
         },
       },
     },
+    deletedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
   },
   {
     sequelize,
     modelName: "Session",
     tableName: "clinic_sessions",
-    timestamps: false,
+    timestamps: true, // enable timestamps for createdAt/updatedAt
+    paranoid: true,   // enables soft delete (uses deletedAt)
   }
 );
 
-// Adding association to Clinic
 Session.belongsTo(Clinic, { foreignKey: "clinicId" });
 
 export default Session;

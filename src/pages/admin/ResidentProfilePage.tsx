@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { Link, useNavigate, useParams } from 'react-router';
 import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
 import residentService from '../../services/resident.service';
 
@@ -27,7 +27,7 @@ const ResidentProfilePage: FC = () => {
     const navigate = useNavigate();
 
     const handleEditProfile = () => {
-        navigate('/resident-profile-edit');
+        navigate('/editprofile/' + id);
     };
 
 
@@ -67,12 +67,12 @@ const ResidentProfilePage: FC = () => {
 
 
     return (
-        
-                     
 
 
-           
-         <DashboardContainer>
+
+
+
+        <DashboardContainer>
             <div className="p-6">
                 {!fresidentData ? (
                     <p className="text-center text-gray-600">Loading resident data...</p>
@@ -81,12 +81,14 @@ const ResidentProfilePage: FC = () => {
                         {/* Heading */}
                         <div className="flex justify-between items-center mb-6">
                             <h2 className="text-2xl font-semibold text-[#008FFB]">Resident Profile</h2>
-                            <button
-                                className="text-[#008FFB] border border-[#008FFB] rounded-md px-4 py-2 hover:bg-[#00C1A7]"
-                                onClick={handleEditProfile}
-                            >
-                                Edit Profile
-                            </button>
+                            <Link to="edit">
+                                <button
+                                    className="text-[#008FFB] border border-[#008FFB] rounded-md px-4 py-2 hover:bg-[#00C1A7]"
+                                    onClick={handleEditProfile}
+                                >
+                                    Edit Profile
+                                </button>
+                            </Link>
                         </div>
 
                         {/* Resident Overview */}
@@ -166,7 +168,7 @@ const ResidentProfilePage: FC = () => {
                 )}
             </div>
         </DashboardContainer>
-        
+
     );
 
 };

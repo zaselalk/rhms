@@ -123,6 +123,22 @@ getHouseholdCountByDivision = async (req: Request, res: Response): Promise<Respo
     return res.status(500).json({ message: 'Internal server error' });
   }
 }
+getHouseholdsByOwner = async (req: Request, res: Response): Promise<Response> => {
+  const ownerId = Number(req.params.owner_id);
+
+  if (!ownerId || isNaN(ownerId)) {
+    return res.status(400).json({ message: "Invalid owner ID" });
+  }
+
+  try {
+    const households = await this.householdService.getHouseholdsByOwnerId(ownerId);
+    return res.json({ data: households });
+  } catch (error) {
+    console.error("Error fetching households by owner ID:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 
 
 

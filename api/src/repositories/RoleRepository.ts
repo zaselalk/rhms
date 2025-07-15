@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import Permission from "../models/permission";
 import { PermissionRole } from "../models/permission-role";
 import { Role } from "../models/role";
@@ -70,7 +71,13 @@ export class RoleRepository {
    * @returns {Promise<Role[]>} - An array of roles
    */
   async findAll(): Promise<Role[]> {
-    return Role.findAll();
+    return Role.findAll({
+      where: {
+        role: {
+          [Op.not]: "super_admin",
+        },
+      },
+    });
   }
 
   /**

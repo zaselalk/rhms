@@ -1,4 +1,7 @@
+import { Clinic } from "../models/clinic";
+import Division from "../models/division";
 import { Resident } from "../models/resident";
+import ResidentClinic from "../models/residentClinic";
 
 export class ResidentRepository {
   async createResident(
@@ -21,7 +24,13 @@ export class ResidentRepository {
     alergies: Array<string>,
     chronicalDesease: Array<string>,
     height: number,
-    weight: number
+    weight: number,
+    Birthcertificate: string,
+    religion: string,
+    jobdetail: string,
+    glucose: Number,
+    deletedAt: Date | null
+
   ): Promise<Resident> {
     return Resident.create({
       firstName,
@@ -44,6 +53,10 @@ export class ResidentRepository {
       chronicalDesease,
       height,
       weight,
+      Birthcertificate: "",
+      religion: "",
+      jobdetail: "",
+      glucose: 0,
     });
   }
 
@@ -61,7 +74,7 @@ export class ResidentRepository {
         "email",
         "birthday",
         "bloodGroup",
-      ]
+      ],
     });
   }
 
@@ -77,10 +90,10 @@ export class ResidentRepository {
         "lastName",
         "nic",
         "email",
-        // 'password',
+        'password',
         "birthday",
         "bloodGroup",
-        // 'gender',
+        'gender',
         "bloodPressure",
         "heartRate",
         "address",
@@ -93,6 +106,11 @@ export class ResidentRepository {
         "chronicalDesease",
         "height",
         "weight",
+        "Birthcertificate",
+        "religion",
+        "jobdetail",
+        "glucose",
+        "deletedAt", // Include deletedAt for soft delete functionality
       ], // only fields necessary.
     });
   }
@@ -172,6 +190,7 @@ export class ResidentRepository {
 
     return diseaseCounts;
   }
+
   async getResidentCountByDivision(divisionId: number): Promise<number> {
   const count = await Resident.count({
     where: { divisionId },
@@ -180,4 +199,31 @@ export class ResidentRepository {
 }
 
   
+  async findByEmail(email: string): Promise<Resident | null> {
+    return Resident.findOne({
+      where: {
+        email,
+      },
+    });
+  }
+  async findByEmailWithClinicData(email: string): Promise<Resident | null> {
+    return Resident.findOne({
+      where: {
+        email,
+      },
+      include: [
+        {
+          model: ResidentClinic,
+          as: "residentClinics",
+          include: [
+            {
+              model: Clinic,
+              as: "clinic",
+            },
+          ],
+        },
+      ],
+    });
+  }
+
 }

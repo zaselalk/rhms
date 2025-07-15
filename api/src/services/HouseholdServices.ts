@@ -54,4 +54,10 @@ async getHouseholdCountByDivision(divisionId: string): Promise<number> {
 
 
 
+
+  async getHouseholdsByOwnerId(owner_id: number): Promise<Household[]> {
+  return this.householdRepository.findHouseholdsByOwnerId(owner_id);
+}
+
+
 }

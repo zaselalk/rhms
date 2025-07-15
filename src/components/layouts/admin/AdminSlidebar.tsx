@@ -8,6 +8,7 @@ import { FaUserDoctor } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6";
 import { UserOutlined } from "@ant-design/icons";
 import { HiUsers } from "react-icons/hi";
+import { Heart, LogOut } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/state/hooks";
 import { logout } from "../../../store/slices/authSlices";
 
@@ -19,14 +20,18 @@ const AdminSidebar: FC = () => {
 
   // common css classes for nav item
   const navItemClass =
-    "py-2 text-md flex items-center text-gray-700 hover:text-white rounded-md px-3";
+    "py-3 text-sm font-medium flex items-center text-gray-700 hover:text-white rounded-xl px-4 transition-all duration-200 transform hover:scale-105";
 
   useEffect(() => {
-    const permissions =
-      user?.permissions?.map((perm) => perm.split(":")[0]) || [];
+    // const permissions =
+    //   user?.permissions?.map((perm) => perm.split(":")[0]) || [];
 
-    if (permissions.length > 0) {
-      setNavbarArray(permissions);
+    // console.log(user?.permissions);
+
+    if (!user?.permissions) return;
+
+    if (user?.permissions.length > 0) {
+      setNavbarArray(user?.permissions);
     }
   }, [user?.permissions]);
 
@@ -35,6 +40,10 @@ const AdminSidebar: FC = () => {
     dispatch(logout());
     // remove token from local storage
     localStorage.removeItem("token");
+
+    // remove last location state
+    window.history.replaceState({}, document.title, "/admin/login");
+
     navigate("/admin/login");
   };
 
@@ -42,58 +51,72 @@ const AdminSidebar: FC = () => {
     {
       path: "/admin/diseases",
       label: "Diseases",
-      icon: <CiPill size={25} />,
-      permission: "disease",
+      icon: <CiPill size={20} />,
+      permission: "disease:view",
     },
     {
       path: "/admin/households",
       label: "Households",
-      icon: <FaHouseChimney size={25} />,
-      permission: "household",
+      icon: <FaHouseChimney size={20} />,
+      permission: "household:view",
     },
     {
       path: "/admin/residents",
       label: "Residents",
-      icon: <FaHouseUser size={25} />,
-      permission: "resident",
+      icon: <FaHouseUser size={20} />,
+      permission: "resident:view",
     },
     {
       path: "/admin/clinic",
       label: "Clinic",
-      icon: <FaUserDoctor size={25} />,
-      permission: "clinic",
+      icon: <FaUserDoctor size={20} />,
+      permission: "clinic:view",
     },
     {
       path: "/admin/division",
       label: "Division",
-      icon: <FaLocationDot size={25} />,
-      permission: "division",
+      icon: <FaLocationDot size={20} />,
+      permission: "division:view",
     },
-    {
-      path: "/admin/users",
-      label: "Users",
-      icon: <HiUsers size={25} />,
-      permission: "user",
-    },
+    // {
+    //   path: "/admin/users",
+    //   label: "Users",
+    //   icon: <HiUsers size={20} />,
+    //   permission: "user",
+    // },
   ];
 
   return (
-    <div className="bg-white shadow-lg p-6 h-full fixed flex-col justify-between w-1/6 hidden md:flex">
-      <h2 className="text-xl font-semibold text-[#008FFB]">RHMS</h2>
-      <div>
-        <ul className="space-y-4">
+    <div className="bg-gradient-to-br from-white to-gray-50 shadow-xl p-6 h-full fixed flex-col justify-between w-1/6 hidden md:flex border-r border-gray-200">
+      {/* Header with Logo */}
+      <div className="mb-8">
+        <div className="flex items-center space-x-3 mb-6">
+          <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center">
+            <Heart className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h2 className="text-lg font-bold text-gray-900">RHMS</h2>
+            <p className="text-xs text-gray-600">Admin Portal</p>
+          </div>
+        </div>
+      </div>
+      {/* Navigation */}
+      <div className="flex-1">
+        <ul className="space-y-3">
           <li>
             <NavLink
               to="/admin/dashboard"
               className={({ isActive }) =>
                 `${navItemClass} ${
-                  isActive ? "bg-[#00C1A7] text-white" : "hover:bg-[#00C1A7]"
+                  isActive
+                    ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg"
+                    : "hover:bg-gradient-to-r hover:from-cyan-500 hover:to-blue-600 hover:text-white"
                 } `
               }
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <div className="p-1">
-                  <MdDashboard size={25} />
+                  <MdDashboard size={20} />
                 </div>
                 <div>Dashboard</div>
               </div>
@@ -109,39 +132,78 @@ const AdminSidebar: FC = () => {
                   className={({ isActive }) =>
                     `${navItemClass} ${
                       isActive
-                        ? "bg-[#00C1A7] text-white"
-                        : "hover:bg-[#00C1A7]"
+                        ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg"
+                        : "hover:bg-gradient-to-r hover:from-cyan-500 hover:to-blue-600 hover:text-white"
                     }`
                   }
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-3">
                     <div className="p-1">{item.icon}</div>
                     <div>{item.label}</div>
                   </div>
                 </NavLink>
               </li>
             ))}
+
+          {/* show user management only for super_admin */}
+          {user?.role === "super_admin" && (
+            <li>
+              <NavLink
+                to="/admin/users"
+                className={({ isActive }) =>
+                  `${navItemClass} ${
+                    isActive
+                      ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg"
+                      : "hover:bg-gradient-to-r hover:from-cyan-500 hover:to-blue-600 hover:text-white"
+                  }`
+                }
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-1">
+                    <HiUsers size={20} />
+                  </div>
+                  <div>Users</div>
+                </div>
+              </NavLink>
+            </li>
+          )}
         </ul>
       </div>
-      <div className="flex flex-col items-center gap-4 bg-white p-2 rounded-lg shadow-sm">
-        <span className="text-sm text-gray-700 font-medium">
-          Hi {user?.name} ! <span className="text-blue-600"></span>
-        </span>
-        <Link
-          to="/admin/profile"
-          className="py-1 text-md flex items-center text-gray-700 hover:bg-[#566c8c] hover:text-white rounded-md px-3"
-        >
-          <div className="p-1">
-            <UserOutlined />
+      {/* User Profile Section */}
+      <div className="mb-6">
+        <div className="bg-gradient-to-r from-cyan-50 to-blue-50 rounded-xl p-4 border border-cyan-100">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full flex items-center justify-center">
+              <span className="text-lg font-bold text-white">
+                {user?.name?.charAt(0)?.toUpperCase()}
+              </span>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-gray-900">
+                {user?.name}
+              </p>
+              <p className="text-xs text-gray-600 capitalize">
+                {user?.role?.replace("_", " ")}
+              </p>
+            </div>
           </div>
-          <div>View Profile</div>
-        </Link>
+          <Link
+            to="/admin/profile"
+            className="w-full py-2 text-sm font-medium flex items-center justify-center gap-2 text-cyan-700 hover:bg-white hover:shadow-sm rounded-lg px-3 transition-all duration-200"
+          >
+            <UserOutlined />
+            <span>View Profile</span>
+          </Link>
+        </div>
       </div>
+
+      {/* Logout Button */}
       <button
-        className="text-white bg-[#008FFB] hover:bg-[#3d3d6d] px-4 py-2 rounded-md text-sm transition duration-200 cursor-pointer"
+        className="w-full bg-gradient-to-r cursor-pointer from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold px-4 py-3 rounded-xl text-sm transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2"
         onClick={handleLogout}
       >
-        Logout
+        <LogOut className="w-4 h-4" />
+        <span>Logout</span>
       </button>
     </div>
   );
