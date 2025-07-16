@@ -13,6 +13,7 @@ interface RoleAttributes {
   id?: number;
   role: string;
   permission: String;
+  deletedAt?: Date | null;
 }
 
 export class Role extends Model<RoleAttributes> implements RoleAttributes {
@@ -62,11 +63,17 @@ Role.init(
         },
       },
     },
+    deletedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null,
+    },
   },
   {
     sequelize,
     modelName: "Role",
     tableName: "roles",
+    paranoid: true,
   }
 );
 
