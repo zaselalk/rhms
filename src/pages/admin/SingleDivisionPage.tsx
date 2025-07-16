@@ -41,23 +41,33 @@ const SingleDivisionPage: FC = () => {
     const fetchData = async () => {
       if (divisionId) {
         try {
-          const divisionData = await DivisionService.getDivisionById(divisionId);
+          const divisionData = await DivisionService.getDivisionById(
+            divisionId
+          );
           setDivisionName(divisionData.divisionName);
 
-          const householdData: Household[] = await getHouseholdsByDivision(divisionData.divisionName);
+          const householdData: Household[] = await getHouseholdsByDivision(
+            divisionData.divisionName
+          );
           setHouseholds(householdData);
           setHouseholdCount(householdData.length);
 
-          const countData = await DivisionService.getResidentCountByDivision(divisionId);
+          const countData = await DivisionService.getResidentCountByDivision(
+            divisionId
+          );
           setResidentCount(countData.residentCount);
 
           const diseaseData: { [key: string]: number } =
-            await residentDiseaseService.getDiseasePatientCounts(Number(divisionId));
+            await residentDiseaseService.getDiseasePatientCounts(
+              Number(divisionId)
+            );
 
-          const diseaseArray = Object.entries(diseaseData).map(([name, count]) => ({
-            name,
-            count,
-          }));
+          const diseaseArray = Object.entries(diseaseData).map(
+            ([name, count]) => ({
+              name,
+              count,
+            })
+          );
           setDiseases(diseaseArray);
 
           // Fetch owner names
@@ -65,8 +75,11 @@ const SingleDivisionPage: FC = () => {
           await Promise.all(
             householdData.map(async (house) => {
               try {
-                const res = await HouseholdResidentService.getResidentsByHouseholdId(house.id);
-                const owner = res.find((r: any) => r.relation === "owner");
+                const res =
+                  await HouseholdResidentService.getResidentsByHouseholdId(
+                    house.id
+                  );
+                const owner = res.data.find((r: any) => r.relation === "owner");
                 namesMap[house.id] = owner
                   ? `${owner.resident.firstName} ${owner.resident.lastName}`
                   : "Unknown";
@@ -105,7 +118,9 @@ const SingleDivisionPage: FC = () => {
     diseasePage * ITEMS_PER_PAGE
   );
 
-  const totalHouseholdPages = Math.ceil(filteredHouseholds.length / ITEMS_PER_PAGE);
+  const totalHouseholdPages = Math.ceil(
+    filteredHouseholds.length / ITEMS_PER_PAGE
+  );
   const totalDiseasePages = Math.ceil(filteredDiseases.length / ITEMS_PER_PAGE);
 
   return (
@@ -125,12 +140,16 @@ const SingleDivisionPage: FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
               <div className="bg-white p-8 rounded-lg shadow-lg flex flex-col items-center justify-center space-y-2">
                 <FaHome className="text-[#008FFB] text-5xl" />
-                <p className="text-4xl font-extrabold text-gray-900">{householdCount}</p>
+                <p className="text-4xl font-extrabold text-gray-900">
+                  {householdCount}
+                </p>
                 <p className="text-lg font-medium text-gray-600">Households</p>
               </div>
               <div className="bg-white p-8 rounded-lg shadow-lg flex flex-col items-center justify-center space-y-2">
                 <FaUsers className="text-[#008FFB] text-5xl" />
-                <p className="text-4xl font-extrabold text-gray-900">{residentCount}</p>
+                <p className="text-4xl font-extrabold text-gray-900">
+                  {residentCount}
+                </p>
                 <p className="text-lg font-medium text-gray-600">Residents</p>
               </div>
             </div>
@@ -140,7 +159,9 @@ const SingleDivisionPage: FC = () => {
               {/* Diseases Table */}
               <div className="bg-white p-6 rounded-lg shadow-md">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-xl font-semibold text-[#008FFB]">Top Diseases</h3>
+                  <h3 className="text-xl font-semibold text-[#008FFB]">
+                    Top Diseases
+                  </h3>
                   <input
                     type="text"
                     placeholder="Search diseases..."
@@ -155,15 +176,23 @@ const SingleDivisionPage: FC = () => {
                 <table className="w-full table-auto">
                   <thead>
                     <tr>
-                      <th className="text-left px-4 py-2 text-sm text-gray-600">Disease</th>
-                      <th className="text-left px-4 py-2 text-sm text-gray-600">Count</th>
+                      <th className="text-left px-4 py-2 text-sm text-gray-600">
+                        Disease
+                      </th>
+                      <th className="text-left px-4 py-2 text-sm text-gray-600">
+                        Count
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {paginatedDiseases.map((disease, index) => (
                       <tr key={index}>
-                        <td className="px-4 py-2 text-sm text-gray-700">{disease.name}</td>
-                        <td className="px-4 py-2 text-sm text-gray-700">{disease.count}</td>
+                        <td className="px-4 py-2 text-sm text-gray-700">
+                          {disease.name}
+                        </td>
+                        <td className="px-4 py-2 text-sm text-gray-700">
+                          {disease.count}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -173,7 +202,9 @@ const SingleDivisionPage: FC = () => {
                     <button
                       key={i}
                       className={`px-3 py-1 rounded ${
-                        diseasePage === i + 1 ? "bg-blue-500 text-white" : "border"
+                        diseasePage === i + 1
+                          ? "bg-blue-500 text-white"
+                          : "border"
                       }`}
                       onClick={() => setDiseasePage(i + 1)}
                     >
@@ -186,7 +217,9 @@ const SingleDivisionPage: FC = () => {
               {/* Households Table */}
               <div className="bg-white p-6 rounded-lg shadow-md">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-xl font-semibold text-[#008FFB]">Households</h3>
+                  <h3 className="text-xl font-semibold text-[#008FFB]">
+                    Households
+                  </h3>
                   <input
                     type="text"
                     placeholder="Search owner..."
@@ -201,14 +234,20 @@ const SingleDivisionPage: FC = () => {
                 <table className="w-full table-auto">
                   <thead>
                     <tr>
-                      <th className="text-left px-4 py-2 text-sm text-gray-600">House ID</th>
-                      <th className="text-left px-4 py-2 text-sm text-gray-600">Owner</th>
+                      <th className="text-left px-4 py-2 text-sm text-gray-600">
+                        House ID
+                      </th>
+                      <th className="text-left px-4 py-2 text-sm text-gray-600">
+                        Owner
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {paginatedHouseholds.map((house, index) => (
                       <tr key={index}>
-                        <td className="px-4 py-2 text-sm text-gray-700">{house.house_no}</td>
+                        <td className="px-4 py-2 text-sm text-gray-700">
+                          {house.house_no}
+                        </td>
                         <td className="px-4 py-2 text-sm text-gray-700">
                           {ownerNames[house.id] || "Loading..."}
                         </td>
@@ -221,7 +260,9 @@ const SingleDivisionPage: FC = () => {
                     <button
                       key={i}
                       className={`px-3 py-1 rounded ${
-                        householdPage === i + 1 ? "bg-blue-500 text-white" : "border"
+                        householdPage === i + 1
+                          ? "bg-blue-500 text-white"
+                          : "border"
                       }`}
                       onClick={() => setHouseholdPage(i + 1)}
                     >

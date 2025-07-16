@@ -3,7 +3,6 @@ import catchAsync from "../util/catchAsync";
 import { ResidentDiseaseController } from "../controllers/ResidentDiseaseController";
 import ResidentDisease from "../models/residentdisease";
 
-
 const ResidentDiseaseRouter: Router = Router();
 const residentDiseaseController = new ResidentDiseaseController();
 
@@ -13,53 +12,52 @@ const residentDiseaseController = new ResidentDiseaseController();
 // );
 
 ResidentDiseaseRouter.post(
-    "/createResidentDisease",
-    catchAsync(residentDiseaseController.createResidentDisease)
+  "/createResidentDisease",
+  catchAsync(residentDiseaseController.createResidentDisease)
 );
 
 ResidentDiseaseRouter.get(
-    "/getAllResidentDiseases",
-    catchAsync(residentDiseaseController.getAllResidentDiseases)
+  "/getAllResidentDiseases",
+  catchAsync(residentDiseaseController.getAllResidentDiseases)
 );
 
 ResidentDiseaseRouter.get(
-    "/getDiseasesByResidentId",
-    catchAsync(residentDiseaseController.getDiseasesByResidentId)
-)
+  "/getDiseasesByResidentId",
+  catchAsync(residentDiseaseController.getDiseasesByResidentId)
+);
 
 ResidentDiseaseRouter.get(
-    "/getResidentsByDiseaseId",
-    catchAsync(residentDiseaseController.getResidentsByDiseaseId)
-)
+  "/getResidentsByDiseaseId",
+  catchAsync(residentDiseaseController.getResidentsByDiseaseId)
+);
 ResidentDiseaseRouter.delete(
-    "/deleteByResidentId",
-    catchAsync(residentDiseaseController.deleteResidentDiseaseByResidentId)
+  "/deleteByResidentId",
+  catchAsync(residentDiseaseController.deleteResidentDiseaseByResidentId)
 );
 
 ResidentDiseaseRouter.delete(
-    "/deleteByDiseaseId",
-    catchAsync(residentDiseaseController.deleteResidentDiseaseByDiseaseId)
+  "/deleteByDiseaseId",
+  catchAsync(residentDiseaseController.deleteResidentDiseaseByDiseaseId)
 );
 
 ResidentDiseaseRouter.get(
-    "/divisionCountsByDisease/:diseaseName",
-    catchAsync(residentDiseaseController.getDiseaseCountsByDivision)
+  "/divisionCountsByDisease/:diseaseName",
+  catchAsync(residentDiseaseController.getDivisionCountsByDiseaseName)
 );
+
 ResidentDiseaseRouter.get(
   "/disease-patient-counts/:divisionId",
   catchAsync(residentDiseaseController.getDiseaseCountsByDivision)
 );
 
 ResidentDiseaseRouter.get(
-    "/PCountByDiseaseId/:diseaseId",
-    catchAsync(residentDiseaseController.getPatientsCountByDiseaseId)
+  "/PCountByDiseaseId/:diseaseId",
+  catchAsync(residentDiseaseController.getPatientsCountByDiseaseId)
 );
 
 ResidentDiseaseRouter.get(
-    "/getAllDiseasesWithPatientCount",
-    catchAsync(residentDiseaseController.getAllDiseasesWithPatientCount)
+  "/getAllDiseasesWithPatientCount",
+  catchAsync(residentDiseaseController.getAllDiseasesWithPatientCount)
 );
-
-
 
 export default ResidentDiseaseRouter;
