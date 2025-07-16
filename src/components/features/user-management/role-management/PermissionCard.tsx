@@ -1,5 +1,5 @@
 import { Button, Checkbox, Modal, Form } from "antd";
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { PermissionCardTitle } from "./components/PermissionCardTitle";
 
 interface PermissionCardProps {

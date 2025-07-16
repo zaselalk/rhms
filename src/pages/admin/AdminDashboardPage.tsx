@@ -1,3 +1,4 @@
+import "leaflet/dist/leaflet.css";
 import React, { useEffect, useState } from "react";
 import { Home, Users, LayoutGrid, Activity } from "lucide-react";
 import { Pie } from "react-chartjs-2";
@@ -16,12 +17,12 @@ import {
   Marker,
   LayersControl,
 } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import { DashboardService } from "../../services/dashbord.service";
 import residentDiseaseService from "../../services/residentDisease.service";
 import { Card } from "antd";
 import DiseaseColumnChart from "../../components/charts/DiseaseColumnChart";
+import { Icon } from "leaflet";
 
 const { BaseLayer } = LayersControl;
 
@@ -34,8 +35,12 @@ type MarkerType = {
 
 const AdminDashboard: React.FC = () => {
   const [markers, setMarkers] = useState<MarkerType[]>([]);
-
-
+  const markerIcon = new Icon({
+    iconUrl: "/images/marker-icon-2x.png",
+    iconSize: [25, 41],
+    iconAnchor: [12.5, 41],
+    popupAnchor: [0, -41],
+  });
 
   const fetchMarkers = async () => {
     try {
@@ -130,15 +135,14 @@ const AdminDashboard: React.FC = () => {
 
   const fetchDiseaseChartData = async () => {
     try {
-      const response = await residentDiseaseService.getAllDiseasesWithPatientCount();
+      const response =
+        await residentDiseaseService.getAllDiseasesWithPatientCount();
       setDiseaseChartData(response.data); // [{ type: "Diabetes", sales: 20 }, ...]
       console.log("Disease chart data:", response.data);
     } catch (error) {
       console.error("Error fetching chart data:", error);
     }
   };
-
-
 
   // Data for the charts
   const DiabetesData = {
@@ -160,12 +164,6 @@ const AdminDashboard: React.FC = () => {
       },
     ],
   };
-
-
-
-
-
-
 
   return (
     <DashboardContainer>
@@ -218,19 +216,22 @@ const AdminDashboard: React.FC = () => {
                 <BaseLayer checked name="Satellite View">
                   <TileLayer
                     url="https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
-                  // attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
+                    // attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
                   />
                 </BaseLayer>
                 <BaseLayer name="Street View">
                   <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  // attribution='&copy; <a href="https://www.openstreetmap.org/copyright"></a>'
+                    // attribution='&copy; <a href="https://www.openstreetmap.org/copyright"></a>'
                   />
                 </BaseLayer>
               </LayersControl>
 
               {markers.map((marker) => (
-                <Marker position={marker.position as [number, number]}>
+                <Marker
+                  position={marker.position as [number, number]}
+                  icon={markerIcon}
+                >
                   <Popup>{marker.popup}</Popup>
                 </Marker>
               ))}
@@ -242,7 +243,7 @@ const AdminDashboard: React.FC = () => {
           </Card>
 
           {/* Stats Section */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mb-6 mt-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6 mt-6">
             {/*Diabetes Pie Chart */}
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-semibold text-[#008FFB] mb-4">
@@ -257,8 +258,6 @@ const AdminDashboard: React.FC = () => {
               </h3>
               <Pie data={CancerData} />
             </div>
-
-
           </div>
         </div>
       </div>
