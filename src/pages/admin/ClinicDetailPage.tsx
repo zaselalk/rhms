@@ -18,6 +18,7 @@ interface Patient {
   resident: {
     contactNumber: string;
     firstName: string;
+    lastName: string;
   };
 }
 
@@ -347,7 +348,7 @@ const ClinicDetail: React.FC = () => {
                           className="border-b hover:bg-gray-100 transition"
                         >
                           <td className="p-3 font-mono">
-                            {patient.resident.firstName}
+                            {patient.resident.firstName} {patient.resident.lastName}
                           </td>
                           <td className="p-3 font-medium">
                             {patient.resident.contactNumber}
