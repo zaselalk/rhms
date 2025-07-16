@@ -65,8 +65,11 @@ const SingleDivisionPage: FC = () => {
           await Promise.all(
             householdData.map(async (house) => {
               try {
-                const res = await HouseholdResidentService.getResidentsByHouseholdId(house.id);
-                const owner = res.find((r: any) => r.relation === "owner");
+                const res = await HouseholdResidentService.getResidentsByHouseholdId(house.id)
+                // console.log("first")
+                const owner = res.data.find((r: any) => r.relation === "owner");
+                console.log("Owner id" + owner)
+                
                 namesMap[house.id] = owner
                   ? `${owner.resident.firstName} ${owner.resident.lastName}`
                   : "Unknown";
