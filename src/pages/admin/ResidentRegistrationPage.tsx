@@ -501,7 +501,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
               </label>
               <select
                 id="jobdetail"
-                {...formik.getFieldProps("jobState")}
+                {...formik.getFieldProps("jobdetail")}
                 value={formik.values.jobdetail}
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
               >
@@ -715,7 +715,6 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
 
             </div>
           </div>
-
           {/* Submit Button */}
           <div className="mt-6 flex justify-end">
             <button
