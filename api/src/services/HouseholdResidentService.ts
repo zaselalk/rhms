@@ -30,11 +30,17 @@ export class HouseholdResidentServices {
   }
 
   async removeAllResidentsByHouseholdId(householdId: number) {
-  return this.repository.removeAllResidentsByHouseholdId(householdId);
-}
+    return this.repository.removeAllResidentsByHouseholdId(householdId);
+  }
 
   async updateOwnerResidentRelation(householdId: number, residentId: number) {
-  return this.repository.updateOwnerResidentRelation(householdId, residentId);
-}
+    return this.repository.updateOwnerResidentRelation(householdId, residentId);
+  }
 
+
+  //call this method to get household by resident id
+  async getHouseholdByResidentId(residentId: number) {
+    return this.repository.getResidentsByResidentId(residentId);
+  }
+  
 }

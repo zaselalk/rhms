@@ -30,4 +30,9 @@ HouseholdResidentRouter.put(
   catchAsync(householdResidentController.updateOwnerResident)
 );
 
+HouseholdResidentRouter.get(
+  "/by-resident/:residentId",
+  catchAsync(householdResidentController.getHouseholdResidentsByResidentId)
+);
+
 export default HouseholdResidentRouter;

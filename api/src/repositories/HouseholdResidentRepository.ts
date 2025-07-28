@@ -68,4 +68,15 @@ export class HouseholdResidentRepository {
   return true;
 }
 
+
+//get Residents by resident ID
+  async getResidentsByResidentId(residentId: number): Promise<HouseholdResident[] | null> {
+    const record = await HouseholdResident.findOne({
+      where: { residentId },
+    });
+
+    if (!record) return null;
+
+    return this.findByHouseholdId(record.householdId);
+  }
 }

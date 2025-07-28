@@ -126,4 +126,31 @@ export class HouseholdResidentController {
       return res.status(500).json({ message: "Internal server error" });
     }
   };
+
+
+
+  // GET /household-resident/by-resident/:residentId
+getHouseholdResidentsByResidentId = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const { residentId } = req.params;
+
+  try {
+    const residents = await this.service.getHouseholdByResidentId(Number(residentId));
+
+    if (!residents) {
+      return res.status(404).json({ message: "Household not found for this resident" });
+    }
+
+    return res.json({
+      message: "Residents in the same household fetched successfully",
+      data: residents,
+    });
+  } catch (error) {
+    console.error("Error fetching household residents:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 }

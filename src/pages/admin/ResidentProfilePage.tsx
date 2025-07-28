@@ -31,6 +31,35 @@ const ResidentProfilePage: FC = () => {
     };
 
 
+    const [householdMembers, setHouseholdMembers] = useState<any[]>([]);
+
+    const fetchHouseholdMembers = async (residentId: string) => {
+        try {
+            const res = await fetch(`http://localhost:3001/household-resident/by-resident/${residentId}`);
+            const data = await res.json();
+            setHouseholdMembers(data.data);
+        } catch (error) {
+            console.error("Error fetching household members:", error);
+        }
+    };
+
+
+    const DeleteProfile = async () => {
+        if (!id) {
+            console.error("Resident ID is undefined");
+            return;
+        }
+        try {
+            await residentService.deleteResident(id);
+            console.log("Resident profile deleted successfully");
+            navigate('/admin/residents'); // Redirect to the residents list after deletion
+        } catch (error) {
+            console.error("Error deleting resident profile:", error);
+        }
+    };
+
+
+
     const fetchResidentData = async () => {
         if (!id) {
             console.error("Resident ID is undefined\n");
@@ -53,6 +82,9 @@ const ResidentProfilePage: FC = () => {
 
     useEffect(() => {
         fetchResidentData();
+        if (id) {
+            fetchHouseholdMembers(id);
+        }
 
     }, [id]);
 
@@ -81,14 +113,26 @@ const ResidentProfilePage: FC = () => {
                         {/* Heading */}
                         <div className="flex justify-between items-center mb-6">
                             <h2 className="text-2xl font-semibold text-[#008FFB]">Resident Profile</h2>
-                            <Link to="edit">
-                                <button
-                                    className="text-[#008FFB] border border-[#008FFB] rounded-md px-4 py-2 hover:bg-[#00C1A7]"
-                                    onClick={handleEditProfile}
-                                >
-                                    Edit Profile
-                                </button>
-                            </Link>
+
+                            <div className='flex space-x-4'>
+
+                                <Link to="edit">
+                                    <button
+                                        className="text-[#008FFB] border border-[#008FFB] rounded-md px-4 py-2"
+                                        onClick={handleEditProfile}
+                                    >
+                                        Edit Profile
+                                    </button>
+                                </Link>
+                                <Link to="edit">
+                                    <button
+                                        className="text-[#fb0000] border border-[#fb0000] rounded-md px-4 py-2 hover:bg-[#c10000]"
+                                        onClick={DeleteProfile}
+                                    >
+                                        Delete Profile
+                                    </button>
+                                </Link>
+                            </div>
                         </div>
 
                         {/* Resident Overview */}
@@ -132,6 +176,34 @@ const ResidentProfilePage: FC = () => {
                                 <p className="text-gray-600">{fresidentData.weight} kg</p>
                             </div>
                         </div>
+
+                        {/* Household Members Table */}
+                        {householdMembers.length > 0 && (
+                            <div className="bg-white p-6 rounded-lg shadow-md mt-6">
+                                <h3 className="text-xl font-semibold text-[#008FFB] mb-4">Household Members</h3>
+                                <table className="w-full table-auto">
+                                    <thead>
+                                        <tr>
+                                            <th className="text-left px-4 py-2 text-sm text-gray-600">ID</th>
+                                            <th className="text-left px-4 py-2 text-sm text-gray-600">Name</th>
+                                            <th className="text-left px-4 py-2 text-sm text-gray-600">Relation</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {householdMembers.map((member, index) => (
+                                            <tr key={index} className="hover:bg-gray-100">
+                                                <td className="px-4 py-2 text-sm text-gray-700">{member.resident.id}</td>
+                                                <td className="px-4 py-2 text-sm text-gray-700">
+                                                    {member.resident.firstName} {member.resident.lastName}
+                                                </td>
+                                                <td className="px-4 py-2 text-sm text-gray-700">{member.relation}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+
 
                         {/* Patient History */}
                         {fresidentData.patientHistory && fresidentData.patientHistory.length > 0 && (

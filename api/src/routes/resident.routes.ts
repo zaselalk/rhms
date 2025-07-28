@@ -16,7 +16,7 @@ ResidentRouter.get("/", catchAsync(residentController.getAllResident));
 ResidentRouter.post(
   "/createResident",
   valiadteResident,
-  protectRoute("resident:create"),
+  // protectRoute("resident:create"),
   catchAsync(residentController.residentRegister)
 );
 ResidentRouter.get(
