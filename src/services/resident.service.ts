@@ -144,6 +144,19 @@ class ResidentService {
       );
     }
   }
+
+  // Delete Resident
+  async deleteResident(id: string) {
+    try {
+      const response = await axiosInstance.delete(`/resident/delete/${id}`);
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || "Unable to delete resident"
+      );
+    }
+  }
+
   
 }
 
