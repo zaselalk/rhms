@@ -7,13 +7,18 @@ class ResidentService {
       "/resident/createResident",
       newResidentData
     );
-    if (response.status !== 201) {
-      throw new Error(
-        response.data?.message || "Unable to create new resident"
-      );
+    console.log("newResidentData", newResidentData);
+    if (response.status < 200 || response.status >= 300) {
+      const errorData = response.data;
+      console.error("Error adding resident:", errorData);
+      throw { response: { data: errorData } };
+      // throw new Error(errorData.message || "Unable to add resident");
     }
-    return response.data;
 
+
+
+    // Check if the response contains a success message
+    return response.data;
   }
 
   //resident Overview
