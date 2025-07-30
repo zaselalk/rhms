@@ -3,29 +3,17 @@ import axiosInstance from "./axios/axiosInstance";
 class ResidentService {
   // Add Resident
   async addResident(newResidentData: any) {
-    const response = await fetch(
-      "http://localhost:3001/resident/createResident",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newResidentData),
-      }
+    const response = await axiosInstance.post(
+      "/resident/createResident",
+      newResidentData
     );
-    console.log("newResidentData", newResidentData);
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Error adding resident:", errorData);
-      throw { response: { data: errorData } }
-      // throw new Error(errorData.message || "Unable to add resident");
+    if (response.status !== 201) {
+      throw new Error(
+        response.data?.message || "Unable to create new resident"
+      );
     }
+    return response.data;
 
-    const data = await response.json();
-
-    // Check if the response contains a success message
-    return data;
   }
 
   //resident Overview
@@ -157,7 +145,7 @@ class ResidentService {
     }
   }
 
-  
+
 }
 
 export default new ResidentService();
