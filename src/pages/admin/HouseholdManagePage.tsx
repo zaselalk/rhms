@@ -216,10 +216,13 @@ const HouseholdManagePage: FC = () => {
               </option>
               <option value="Father">Father</option>
               <option value="Mother">Mother</option>
+              <option value="Husband">Husband</option>
+              <option value="Wife">Wife</option>
               <option value="Sister">Sister</option>
               <option value="Brother">Brother</option>
               <option value="Son">Son</option>
               <option value="Daughter">Daughter</option>
+              <option value="Relative">Family Relative</option>
               <option value="Boarder">Boarder/Lodger</option>
             </select>
 
