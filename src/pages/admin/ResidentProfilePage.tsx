@@ -44,22 +44,6 @@ const ResidentProfilePage: FC = () => {
     };
 
 
-    const DeleteProfile = async () => {
-        if (!id) {
-            console.error("Resident ID is undefined");
-            return;
-        }
-        try {
-            await residentService.deleteResident(id);
-            console.log("Resident profile deleted successfully");
-            navigate('/admin/residents'); // Redirect to the residents list after deletion
-        } catch (error) {
-            console.error("Error deleting resident profile:", error);
-        }
-    };
-
-
-
     const fetchResidentData = async () => {
         if (!id) {
             console.error("Resident ID is undefined\n");
@@ -99,11 +83,6 @@ const ResidentProfilePage: FC = () => {
 
 
     return (
-
-
-
-
-
         <DashboardContainer>
             <div className="p-6">
                 {!fresidentData ? (
@@ -127,7 +106,7 @@ const ResidentProfilePage: FC = () => {
                                 <Link to="edit">
                                     <button
                                         className="text-[#fb0000] border border-[#fb0000] rounded-md px-4 py-2 hover:bg-[#c10000]"
-                                        onClick={DeleteProfile}
+
                                     >
                                         Delete Profile
                                     </button>
