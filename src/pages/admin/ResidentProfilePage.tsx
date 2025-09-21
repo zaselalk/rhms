@@ -2,6 +2,8 @@ import { FC, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { DashboardContainer } from '../../components/layouts/overlays/DashboardContainer';
 import residentService from '../../services/resident.service';
+import householdresidentService from '../../services/householdresident.service';
+
 
 
 
@@ -35,9 +37,8 @@ const ResidentProfilePage: FC = () => {
 
     const fetchHouseholdMembers = async (residentId: string) => {
         try {
-            const res = await fetch(`http://localhost:3001/household-resident/by-resident/${residentId}`);
-            const data = await res.json();
-            setHouseholdMembers(data.data);
+            const res = await householdresidentService.gethouseholdResidentsByResidentId(residentId);
+            setHouseholdMembers(res.data);
         } catch (error) {
             console.error("Error fetching household members:", error);
         }
