@@ -13,9 +13,6 @@ import { ClinicService } from "../../services/clinic.service";
 import { DivisionService } from "../../services/division.service";
 import diseaseService from "../../services/disease.service";
 
-
-
-
 type ResidentRegistrationProps = {};
 
 const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
@@ -36,7 +33,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     jobdetail: "Worker",
     educationLevel: "",
     addicted: [],
-    alergies: [],
+    alergies: [], 
     chronicalDesease: [],
     clinic: [],
     height: "",
@@ -46,7 +43,6 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     Birthcertificate: "",
     glucose: 0,
     deletedAt: null, // Initialize deletedAt to null for new residents
-
   };
 
   const [addicted, setAddictedd] = useState<string[]>([]);
@@ -54,10 +50,12 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
 
   type Division = {
     divisionId: number;
-    divisionName: string
-  }
+    divisionName: string;
+  };
 
-  const [GramaniladariDivision, setGramaniladariDivision] = useState<Division[]>([]);
+  const [GramaniladariDivision, setGramaniladariDivision] = useState<
+    Division[]
+  >([]);
 
   type Clinic = {
     id: string;
@@ -67,14 +65,15 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
   type Disease = {
     diseaseId: number;
     diseaseName: string;
-  }
+  };
 
   const [chronicDiseases, setChronicDiseases] = useState<Disease[]>([]);
-  const [selectedDiseaseNames, setSelectedDiseaseNames] = useState<string[]>([]);
+  const [selectedDiseaseNames, setSelectedDiseaseNames] = useState<string[]>(
+    []
+  );
 
   const [clinics, setClinics] = useState<Clinic[]>([]);
   const [selectedClinicIds, setSelectedClinicIds] = useState<string[]>([]);
-
 
   // Fetch all clinics when the component mounts
   useEffect(() => {
@@ -107,20 +106,21 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
       } catch (error) {
         console.error("Error fetching Gramaniladari Division:", error);
       }
-    }
+    };
 
     fetchGramaniladariDivision();
     fetchDiseases();
     fetchClinics();
   }, []);
 
-  const handleClinicCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleClinicCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const { value, checked } = event.target;
     setSelectedClinicIds((prev) =>
       checked ? [...prev, value] : prev.filter((id) => id !== value)
     );
   };
-
 
   //GramaniladariDivision data fetch
   useEffect(() => {
@@ -132,12 +132,9 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
       } catch (error) {
         console.error("Error fetching Gramaniladari Division:", error);
       }
-    }
+    };
     fetchGramaniladariDivision();
   }, []);
-
-
-
 
   const addictedlist = [
     "Smoke",
@@ -162,7 +159,9 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     );
   };
 
-  const handleChronicDiseaseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChronicDiseaseChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const { checked, value } = e.target;
 
     setSelectedDiseaseNames((prev) =>
@@ -191,18 +190,18 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
       } else {
         // Fallback single message
         const errorMessage =
-          errorData?.message || error.message || "Registration failed. Please try again.";
+          errorData?.message ||
+          error.message ||
+          "Registration failed. Please try again.";
         toast.error(errorMessage);
       }
-    }
+    },
   });
-
 
   const formik = useFormik({
     initialValues,
     validationSchema: residentValidation,
     onSubmit: (values) => {
-
       values.addicted = addicted;
       values.alergies = alergies;
       values.chronicalDesease = selectedDiseaseNames;
@@ -607,7 +606,6 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                 placeholder="120/80 Blood Pressure"
               />
-
             </div>
 
             {/* Heart Rate */}
@@ -625,7 +623,6 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                 placeholder="Heart Rate"
               />
-
             </div>
 
             {/* Addicteds */}
@@ -682,11 +679,14 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
             </label>
             <div className="gap-4 mt-3 ml-3 grid items-center grid-cols-4">
               {chronicDiseases.map((disease) => (
-                <label key={disease.diseaseId} className="flex items-center gap-2">
+                <label
+                  key={disease.diseaseId}
+                  className="flex items-center gap-2"
+                >
                   <input
                     type="checkbox"
-                    value={disease.diseaseName} // ✅ use disease name as value
-                    checked={selectedDiseaseNames.includes(disease.diseaseName)}
+                    value={disease.diseaseId} // ✅ use disease name as value
+                    checked={selectedDiseaseNames.includes(disease.diseaseId.toString())}
                     onChange={handleChronicDiseaseChange}
                   />
                   {disease.diseaseName}
@@ -712,7 +712,6 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                   {clinic.name}
                 </label>
               ))}
-
             </div>
           </div>
 
@@ -720,7 +719,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
           <div className="mt-6 flex justify-end">
             <button
               type="submit"
-              disabled={mutation.isPending || !formik.isValid}
+              disabled={mutation.isPending}
               className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white  font-semibold rounded-lg hover:bg-[#006fbb]"
             >
               {mutation.isPending ? "Registraion" : "Register"}
