@@ -166,6 +166,7 @@ const ResidentProfilePage: FC = () => {
                                         <tr>
                                             <th className="text-left px-4 py-2 text-sm text-gray-600">ID</th>
                                             <th className="text-left px-4 py-2 text-sm text-gray-600">Name</th>
+                                            <th className="text-left px-4 py-2 text-sm text-gray-600">Age</th>
                                             <th className="text-left px-4 py-2 text-sm text-gray-600">Relation</th>
                                         </tr>
                                     </thead>
@@ -176,6 +177,7 @@ const ResidentProfilePage: FC = () => {
                                                 <td className="px-4 py-2 text-sm text-gray-700">
                                                     {member.resident.firstName} {member.resident.lastName}
                                                 </td>
+                                                <td className="px-4 py-2 text-sm text-gray-700">{new Date().getFullYear() - new Date(member.resident.birthday).getFullYear()} years</td>
                                                 <td className="px-4 py-2 text-sm text-gray-700">{member.relation}</td>
                                             </tr>
                                         ))}
