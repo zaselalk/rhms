@@ -5,18 +5,25 @@ import { ResidentRepository } from "../repositories/ResidentRepository";
 import jwt from "jsonwebtoken";
 import { ResidentClinicService } from "../services/ResidentClinicService";
 import { ResidentClinicRepository } from "../repositories/ResidentClinicRepository";
+import disease from "../models/disease";
+import { ResidentDiseaseRepository } from "../repositories/ResidentDiseaseRepository";
+import { ResidentDiseaseService } from "../services/ResidentDiseaseService";
+import { Error } from "sequelize";
 
 class ResidentController {
   private residentService: ResidentService;
   private residentClinicService: ResidentClinicService;
+  private residentDisease: ResidentDiseaseService;
 
   constructor() {
     const residentRepository = new ResidentRepository();
     this.residentService = new ResidentService(residentRepository);
+
     const residentClinicRepository = new ResidentClinicRepository();
-    this.residentClinicService = new ResidentClinicService(
-      residentClinicRepository
-    );
+    this.residentClinicService = new ResidentClinicService(residentClinicRepository);
+
+    const residentDiseaseRepository = new ResidentDiseaseRepository();
+    this.residentDisease = new ResidentDiseaseService(residentDiseaseRepository);
   }
 
   residentPing = async (
@@ -32,47 +39,8 @@ class ResidentController {
     req: Request,
     res: Response
   ): Promise<Response | void> => {
-    const {
-      firstName,
-      lastName,
-      nic,
-      email,
-      password,
-      birthday,
-      bloodGroup,
-      gender,
-      bloodPressure,
-      heartRate,
-      address,
-      contactNumber,
-      divisionId,
-      maritalState,
-      educationLevel,
-      addicted,
-      alergies,
-      chronicalDesease,
-      height,
-      weight,
-      clinic,
-      Birthcertificate,
-      religion,
-      jobdetail,
-      glucose,
-      deletedAt,
-    } = req.body;
-
-    const residentfindByNic: Resident | null =
-      await this.residentService.findByNic(nic);
-
-    if (residentfindByNic) {
-      return res.status(400).json({
-        message: "Resident already exists",
-        status: 400,
-        error: "Resident already exists",
-        data: null,
-      });
-    } else if (residentfindByNic === null) {
-      const resident = await this.residentService.registerResident(
+    try {
+      const {
         firstName,
         lastName,
         nic,
@@ -93,34 +61,100 @@ class ResidentController {
         chronicalDesease,
         height,
         weight,
+        clinic,
         Birthcertificate,
         religion,
         jobdetail,
         glucose,
-        deletedAt
-      );
+        deletedAt,
+      } = req.body;
 
-      const residentId = resident.id;
+      const residentfindByNic: Resident | null =
+        await this.residentService.findByNic(nic);
 
-      // Register resident with multiple clinics
-      const residentClinics = await Promise.all(
-        clinic.map(async (clinicId: number) => {
-          return await this.residentClinicService.createResidentClinic(
-            Number(residentId),
-            Number(clinicId)
-          );
-        })
-      );
-      
+      if (residentfindByNic) {
+        return res.status(400).json({
+          message: "Resident already exists",
+          status: 400,
+          error: "Resident already exists",
+          data: null,
+        });
+      } else if (residentfindByNic === null) {
+        const resident = await this.residentService.registerResident(
+          firstName,
+          lastName,
+          nic,
+          email,
+          password,
+          birthday,
+          bloodGroup,
+          gender,
+          bloodPressure,
+          heartRate,
+          address,
+          contactNumber,
+          divisionId,
+          maritalState,
+          educationLevel,
+          addicted,
+          alergies,
+          chronicalDesease,
+          height,
+          weight,
+          Birthcertificate,
+          religion,
+          jobdetail,
+          glucose,
+          deletedAt
+        );
 
-      return res.json({
-        message: "Resident registered successfully",
-        status: 200,
-        error: null,
-        data: resident,
+        const residentId = resident.id;
+
+        // Register resident with multiple clinics
+        const residentClinics = await Promise.all(
+          clinic.map(async (clinicId: number) => {
+            return await this.residentClinicService.createResidentClinic(
+              Number(residentId),
+              Number(clinicId)
+            );
+          })
+        );
+
+        console.log("Diseases:", chronicalDesease);
+        interface CleanDiseases extends Array<number> { }
+        const cleanDiseases: CleanDiseases = chronicalDesease.map((d: any) => Number(d)).filter((d: number) => !isNaN(d));
+        console.log("Diseases:", cleanDiseases);
+        //Resident Register with multiple Diseases
+        const residentDiseases = await Promise.all(
+          cleanDiseases.map(async (diseaseId: number) => {
+            return await this.residentDisease.createResidentDisease(
+              Number(residentId),
+              Number(diseaseId)
+            );
+          })
+        );
+        return res.status(201).json({
+          message: "Resident registered successfully",
+          status: 200,
+          error: null,
+          data: resident,
+        });
+
+      }
+    } catch (error) {
+      console.error("Registration Error:", error);
+      return res.status(500).json({
+        message: "Error registering resident",
+        status: 500,
+        error: error || "Internal server error",
+        data: null,
       });
     }
+
   };
+
+
+
   residentfindByNic = async (
     req: Request,
     res: Response
@@ -338,18 +372,18 @@ class ResidentController {
     }
   };
 
- getResidentCountByDivision = async (req: Request, res: Response) => {
-  try {
-    const { divisionId } = req.params;
-    const count = await Resident.count({
-      where: { divisionId: divisionId },
-    });
-    res.status(200).json({ divisionId, residentCount: count });
-  } catch (error) {
-    console.error("Error fetching resident count by division:", error);
-    res.status(500).json({ error: "Failed to fetch resident count" });
-  }
-};
+  getResidentCountByDivision = async (req: Request, res: Response) => {
+    try {
+      const { divisionId } = req.params;
+      const count = await Resident.count({
+        where: { divisionId: divisionId },
+      });
+      res.status(200).json({ divisionId, residentCount: count });
+    } catch (error) {
+      console.error("Error fetching resident count by division:", error);
+      res.status(500).json({ error: "Failed to fetch resident count" });
+    }
+  };
 
   loginResidentByEmailandPassword = async (
     req: Request,

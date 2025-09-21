@@ -3,21 +3,14 @@ import axiosInstance from "./axios/axiosInstance";
 class ResidentService {
   // Add Resident
   async addResident(newResidentData: any) {
-    const response = await axiosInstance.post(
-      "/resident/createResident",
-      newResidentData
-    );
-    console.log("newResidentData", newResidentData);
-    if (response.status < 200 || response.status >= 300) {
-      const errorData = response.data;
-      console.error("Error adding resident:", errorData);
-      throw { response: { data: errorData } };
-      // throw new Error(errorData.message || "Unable to add resident");
+    
+    if (!newResidentData || Object.keys(newResidentData).length === 0) {
+      throw new Error("No resident data provided");
     }
-
-
-
-    // Check if the response contains a success message
+    const response = await axiosInstance.post("/resident/createResident", newResidentData);
+    if (response.status !== 201) {
+      throw new Error("Failed to add resident");
+    }
     return response.data;
   }
 

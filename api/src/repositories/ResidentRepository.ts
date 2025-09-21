@@ -28,7 +28,7 @@ export class ResidentRepository {
     Birthcertificate: string,
     religion: string,
     jobdetail: string,
-    glucose: Number,
+    glucose: number,
     deletedAt: Date | null
 
   ): Promise<Resident> {
@@ -53,10 +53,10 @@ export class ResidentRepository {
       chronicalDesease,
       height,
       weight,
-      Birthcertificate: "",
-      religion: "",
-      jobdetail: "",
-      glucose: 0,
+      Birthcertificate,
+      religion,
+      jobdetail,
+      glucose,
     });
   }
 

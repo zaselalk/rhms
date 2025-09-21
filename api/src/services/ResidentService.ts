@@ -29,7 +29,7 @@ export class ResidentService {
     Birthcertificate: string,
     religion: string,
     jobdetail: string,
-    glucose: Number,
+    glucose: number,
     deletedAt: Date | null
 
   ): Promise<Resident> {
