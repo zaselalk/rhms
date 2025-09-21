@@ -16,6 +16,19 @@ class HouseholdResidentService {
       );
     }
   }
+  async gethouseholdResidentsByResidentId(residentId: number | string) {
+    try {
+      const response = await axiosInstance.get(
+        `/household-resident/by-resident/${residentId}`,
+      );
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message ||
+          "Unable to fetch residents for household",
+      );
+    }
+  }
 
   // Add a resident to a household
   async addResidentToHousehold(
@@ -69,6 +82,11 @@ async updateOwnerResident(householdId: number | string, residentId: number) {
     );
   }
 }
+
+
+
+
+
 }
 
 export default new HouseholdResidentService();
