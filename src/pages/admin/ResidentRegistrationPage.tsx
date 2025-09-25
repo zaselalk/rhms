@@ -495,7 +495,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                 <option value="No Formal Education">Worker</option>
                 <option value="Semi_artisan">Semi-artisan</option>
                 <option value="Artisan">Artisan</option>
-                <option value="Excecutive">Excecutive</option>t
+                <option value="Executive">Executive</option>t
                 <option value="Unemployment">Unemployment</option>
                 <option value="Student">Student</option>
               </select>
@@ -627,6 +627,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                       value={option}
                       checked={addicted.includes(option)}
                       onChange={handleAddicted}
+
                     />
                     {option}
                   </label>
