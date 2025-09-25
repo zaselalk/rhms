@@ -122,19 +122,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     );
   };
 
-  //GramaniladariDivision data fetch
-  useEffect(() => {
-    const fetchGramaniladariDivision = async () => {
-      try {
-        const data = await DivisionService.getAllDivisions();
-        // Assuming the data is an array of objects with id and name properties
-        setGramaniladariDivision(data);
-      } catch (error) {
-        console.error("Error fetching Gramaniladari Division:", error);
-      }
-    };
-    fetchGramaniladariDivision();
-  }, []);
+  
 
   const addictedlist = [
     "Smoke",
@@ -201,6 +189,8 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
   const formik = useFormik({
     initialValues,
     validationSchema: residentValidation,
+    validateOnChange: true,
+    
     onSubmit: (values) => {
       values.addicted = addicted;
       values.alergies = alergies;
@@ -719,7 +709,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
           <div className="mt-6 flex justify-end">
             <button
               type="submit"
-              disabled={mutation.isPending}
+            
               className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white  font-semibold rounded-lg hover:bg-[#006fbb]"
             >
               {mutation.isPending ? "Registraion" : "Register"}
