@@ -449,8 +449,6 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                 id="religion"
                 {...formik.getFieldProps("religion")}
                 value={formik.values.religion}
-                defaultChecked={true}
-                defaultValue={"Buddhist"}
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
               >
                 <option value="Buddhist">Buddhist</option>
