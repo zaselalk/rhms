@@ -417,7 +417,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
               >
                 <option value="Married">Married</option>
                 <option value="Unmarried">Unmarried</option>
-                <option value="Unmarried">Widowed</option>
+                <option value="Widowed">Widowed</option>
                 <option value="Divorced">Divorced</option>
               </select>
             </div>
