@@ -18,8 +18,8 @@ export interface ResidentData {
     alergies?: string[];
     chronicalDesease?: string[];
     clinic?: string[];
-    height?: string;
-    weight?: string;
+    height?: number;
+    weight?: number;
     Birthcertificate: string,
     jobdetail: string,
     glucose: Number,
