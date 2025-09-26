@@ -36,8 +36,8 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
     alergies: [], 
     chronicalDesease: [],
     clinic: [],
-    height: "",
-    weight: "",
+    height: 0,
+    weight: 0,
     heartRate: "",
     bloodPressure: "",
     Birthcertificate: "",
@@ -488,7 +488,7 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
               </label>
               <select
                 id="jobdetail"
-                {...formik.getFieldProps("jobState")}
+                {...formik.getFieldProps("jobdetail")}
                 value={formik.values.jobdetail}
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
               >
