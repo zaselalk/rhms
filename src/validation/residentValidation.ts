@@ -5,13 +5,15 @@ export const residentValidation = Yup.object({
         .matches(/^[0-9]{10}$/, 'Please enter a valid 10-digit contact number.')
         .required('Contact number is required.'),
 
-    weight: Yup.string()
-        .matches(/^[0-9]+(\.[0-9]+)?$/, 'Invalid weight format')
-        .test('positive', 'Weight must be greater than 0', value => !value || parseFloat(value) > 0),
+    weight: Yup.number()
+        .typeError('Weight must be a number')
+        .min(0, 'Weight must be greater than or equal to 0')
+        .required('Weight is required'),
 
-    height: Yup.string()
-        .matches(/^[0-9]+(\.[0-9]+)?$/, 'Invalid height format')
-        .test('positive', 'Height must be greater than 0', value => !value || parseFloat(value) > 0),
+    height: Yup.number()
+        .typeError('Height must be a number')
+        .min(0, 'Height must be greater than or equal to 0')
+        .required('Height is required'),
 
     nic: Yup.string()
         .trim()
