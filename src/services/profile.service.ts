@@ -1,9 +1,10 @@
 import axiosInstance from "./axios/axiosInstance";
+import { IProfileService } from "./types/profile-service.types";
 
 /**
  * ProfileService class to handle user profile related API calls.
  */
-export default class ProfileService {
+export default class ProfileService implements IProfileService {
   async updateUserFullNameById(userId: number, fullName: string) {
     try {
       const response = await axiosInstance.put(`/user/${userId}/name`, {

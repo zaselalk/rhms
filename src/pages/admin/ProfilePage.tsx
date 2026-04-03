@@ -4,6 +4,9 @@ import { useAppSelector } from "../../hooks/state/hooks";
 
 import { UpdateUserFullName } from "../../components/features/profile-management/UpdateUserFullName";
 import { UserChangeChangePassword } from "../../components/features/profile-management/UserChangeChangePassword";
+import ProfileService from "../../services/profile.service";
+
+const profileService = new ProfileService();
 
 const ProfilePage: FC = () => {
   const user = useAppSelector((state) => state.auth.user);
@@ -17,7 +20,7 @@ const ProfilePage: FC = () => {
 
         <div className="bg-white shadow-md p-5 rounded-2xl">
           <div className=" rounded-lg">
-            <UpdateUserFullName />
+            <UpdateUserFullName profileService={profileService} />
 
             <div className="mb-4">
               <p className="block text-sm font-semibold text-gray-700 mb-1">
@@ -27,7 +30,7 @@ const ProfilePage: FC = () => {
             </div>
           </div>
         </div>
-        <UserChangeChangePassword />
+        <UserChangeChangePassword profileService={profileService} />
       </div>
     </DashboardContainer>
   );
