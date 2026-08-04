@@ -15,6 +15,7 @@ import { DashboardContainer } from "../../components/layouts/overlays/DashboardC
 import { EyeOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { HouseholdCreateModal } from "../../components/features/household-management/HouseholdCreateModal";
 import { HomeOutlined, TeamOutlined, PlusOutlined } from "@ant-design/icons";
+import { BarChart3, MapPin } from "lucide-react";
 
 import {
   deleteHousehold,
@@ -26,6 +27,22 @@ import householdresidentService from "../../services/householdresident.service";
 import residentService from "../../services/resident.service";
 import { useAppSelector } from "../../hooks/state/hooks";
 
+const getInitials = (firstName?: string, lastName?: string) => {
+  return `${firstName?.[0] ?? ""}${lastName?.[0] ?? ""}`.toUpperCase() || "?";
+};
+
+const avatarPalette = [
+  "bg-[#008FFB]/10 text-[#008FFB]",
+  "bg-emerald-100 text-emerald-600",
+  "bg-purple-100 text-purple-600",
+  "bg-amber-100 text-amber-600",
+  "bg-rose-100 text-rose-600",
+];
+
+const avatarColor = (seed: string) => {
+  const index = seed.split("").reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
+  return avatarPalette[index % avatarPalette.length];
+};
 
 const HouseholdPage: FC = () => {
   const navigate = useNavigate();
@@ -221,48 +238,73 @@ const HouseholdPage: FC = () => {
       title: "House No",
       dataIndex: "house_no",
       key: "house_no",
+      render: (house_no: string) => (
+        <span className="font-medium text-gray-800">{house_no}</span>
+      ),
     },
     {
       title: "Owner",
       key: "owner",
-      render: (_: any, record: any) =>
-        `${record.owner?.firstName || ""} ${record.owner?.lastName || ""}`,
+      render: (_: any, record: any) => {
+        const firstName = record.owner?.firstName || "";
+        const lastName = record.owner?.lastName || "";
+        return (
+          <div className="flex items-center gap-3">
+            <div
+              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${avatarColor(
+                record.id + firstName
+              )}`}
+            >
+              {getInitials(firstName, lastName)}
+            </div>
+            <span className="text-gray-700">
+              {firstName || lastName ? `${firstName} ${lastName}` : "N/A"}
+            </span>
+          </div>
+        );
+      },
     },
     {
       title: "Division",
       dataIndex: "grama_division",
       key: "grama_division",
+      render: (division: string) => (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-medium">
+          <MapPin size={12} />
+          {division}
+        </span>
+      ),
     },
     {
       title: "Actions",
       key: "actions",
       render: (_: any, record: any) => (
-        <div className="flex space-x-2">
+        <div className="flex items-center gap-2">
           <button
-            className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-full shadow-md hover:bg-blue-600 cursor-pointer"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 text-[#008FFB] hover:bg-[#008FFB]/10 rounded-lg font-medium text-sm transition-colors"
             onClick={() => handleViewHousehold(record.id)}
           >
-            <span className="mr-2">View</span>
             <EyeOutlined />
+            View
           </button>
           {/* Only who has edit permission can see this button */}
           {user?.permissions?.includes("household:edit") && (
             <button
-              className="flex items-center px-4 py-2 bg-green-500 text-white rounded-full shadow-md hover:bg-green-600 cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg font-medium text-sm transition-colors"
               onClick={() => handleEditHousehold(record)}
             >
-              <span className="mr-2">Edit</span>
               <EditOutlined />
+              Edit
             </button>
           )}
           {/* Only who has delete permission can see this button */}
           {user?.permissions?.includes("household:delete") && (
             <button
-              className="flex items-center px-4 py-2 bg-red-500 text-white rounded-full shadow-md hover:bg-red-600 cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 text-rose-600 hover:bg-rose-50 rounded-lg font-medium text-sm transition-colors"
               onClick={() => handleDeleteHousehold(record)}
             >
-              <span className="mr-2">Delete</span>
               <DeleteOutlined />
+              Delete
             </button>
           )}
         </div>
@@ -272,7 +314,7 @@ const HouseholdPage: FC = () => {
 
   return (
     <DashboardContainer>
-      <div className="flex-1 p-6">
+      <div className="flex-1 max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-semibold text-[#008FFB]">
             Household Management
@@ -304,38 +346,38 @@ const HouseholdPage: FC = () => {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-              <div className="bg-gradient-to-r from-blue-100 to-blue-200 p-6 rounded-2xl shadow-md flex items-center justify-between transition transform hover:scale-105">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex items-center justify-between hover:shadow-md transition-shadow">
                 <div>
-                  <p className="text-sm text-gray-600 font-medium">
+                  <p className="text-sm text-gray-500 font-medium">
                     Total Households
                   </p>
-                  <h3 className="text-3xl font-bold text-blue-800">
+                  <h3 className="text-3xl font-bold text-gray-800 mt-1">
                     {registeredHouseholds.length}
                   </h3>
                 </div>
-                <div className="text-blue-700 text-4xl">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#008FFB]/10 text-[#008FFB] text-2xl">
                   <HomeOutlined />
                 </div>
               </div>
 
-              <div className="bg-gradient-to-r from-green-100 to-green-200 p-6 rounded-2xl shadow-md flex items-center justify-between transition transform hover:scale-105">
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex items-center justify-between hover:shadow-md transition-shadow">
                 <div>
-                  <p className="text-sm text-gray-600 font-medium">
+                  <p className="text-sm text-gray-500 font-medium">
                     Total Residents
                   </p>
-                  <h3 className="text-3xl font-bold text-green-800">
+                  <h3 className="text-3xl font-bold text-gray-800 mt-1">
                     {residentCount}
                   </h3>
                 </div>
-                <div className="text-green-700 text-4xl">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-500 text-2xl">
                   <TeamOutlined />
                 </div>
               </div>
             </div>
 
             {/* Search Bar */}
-            <div className="mb-4">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-6">
               <Input.Search
                 placeholder="Search by House Number"
                 allowClear
@@ -346,7 +388,7 @@ const HouseholdPage: FC = () => {
               />
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-md">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
               <Table
                 dataSource={filteredHouseholds}
                 columns={columns}
@@ -359,18 +401,22 @@ const HouseholdPage: FC = () => {
               />
             </div>
 
-            <br />
-
-            <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">
-                Households Distribution Statistics
-              </h3>
-              <ResponsiveContainer width="100%" height={300}>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+              <div className="flex items-center gap-2 mb-4">
+                <BarChart3 size={20} className="text-[#008FFB]" />
+                <h3 className="text-lg font-semibold text-gray-800">
+                  Households Distribution by Division
+                </h3>
+              </div>
+              <ResponsiveContainer width="100%" height={280}>
                 <BarChart data={householdChartData}>
-                  <XAxis dataKey="division" />
-                  <YAxis allowDecimals={false} />
-                  <Tooltip />
-                  <Bar dataKey="count" fill="#008FFB" />
+                  <XAxis dataKey="division" tick={{ fill: "#6b7280", fontSize: 12 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
+                  <YAxis allowDecimals={false} tick={{ fill: "#9ca3af", fontSize: 11 }} axisLine={false} tickLine={false} />
+                  <Tooltip
+                    cursor={{ fill: "#f3f4f6" }}
+                    contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", boxShadow: "0 4px 12px rgba(0,0,0,0.08)" }}
+                  />
+                  <Bar dataKey="count" fill="#008FFB" radius={[6, 6, 0, 0]} maxBarSize={48} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

@@ -6,6 +6,7 @@ import {
   FaClipboardList,
 } from "react-icons/fa";
 import { FiPlusCircle } from "react-icons/fi";
+import { Search, Users, MapPin, CalendarClock } from "lucide-react";
 import { useNavigate, useParams } from "react-router";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import Modal from "../../components/layouts/overlays/Modal";
@@ -270,86 +271,90 @@ const ClinicDetail: React.FC = () => {
 
   return (
     <DashboardContainer>
-      <div className="p-6 w-full min-h-screen bg-gray-50">
+      <div className="w-full max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8 bg-white p-6 rounded-lg shadow-md">
-          <div className="flex items-center space-x-3">
-            <FaClinicMedical className="text-[#008FFB] text-4xl" />
-            <h2 className="text-3xl font-extrabold text-[#008FFB] tracking-wide">
-              Clinic Details
-            </h2>
-            {loadingClinicName ? (
-              <p className="text-lg font-semibold text-gray-500 italic ml-2">
-                Loading...
-              </p>
-            ) : (
-              <p className="text-2xl font-bold text-[#008FFB] ml-2">
-                ({clinicName})
-              </p>
-            )}
-          </div>
-        </div>
-
-        {/* Summary Card */}
-        <div className="max-w-xs mx-auto sm:mx-0 sm:max-w-none flex justify-center items-center bg-white p-8 rounded-xl shadow-lg mb-8">
-          <FaClinicMedical className="text-[#008FFB] text-6xl mr-6" />
-          <div>
-            <p className="text-xl font-semibold text-gray-700 mb-1">Patients</p>
-            <p className="text-5xl font-bold text-[#008FFB]">
-              {clinicPatients.length}
-            </p>
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#008FFB] to-[#00C1A7] px-8 py-8 shadow-lg mb-6">
+          <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10" />
+          <div className="absolute -right-4 bottom-0 h-24 w-24 rounded-full bg-white/10" />
+          <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 text-white">
+                <FaClinicMedical size={22} />
+              </div>
+              <div>
+                <p className="text-white/80 text-sm font-medium tracking-wide uppercase">
+                  Clinic Details
+                </p>
+                <h2 className="text-2xl sm:text-3xl font-bold text-white">
+                  {loadingClinicName ? "Loading..." : clinicName}
+                </h2>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm px-4 py-2 rounded-xl">
+              <Users size={18} className="text-white" />
+              <span className="text-white font-semibold">
+                {clinicPatients.length} Patients
+              </span>
+            </div>
           </div>
         </div>
 
         {/* Patients & Divisions Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           {/* Patients Table */}
-          <section className="bg-white rounded-lg shadow-md p-6 flex flex-col">
-            <h3 className="text-2xl font-semibold mb-6 border-b pb-2">
-              Clinic Patients
-            </h3>
+          <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col">
+            <div className="flex items-center gap-2 mb-4">
+              <Users size={20} className="text-[#008FFB]" />
+              <h3 className="text-lg font-semibold text-gray-800">
+                Clinic Patients
+              </h3>
+            </div>
 
             {/* Search input for patients */}
-            <input
-              type="text"
-              placeholder="Search patient by name..."
-              value={patientSearch}
-              onChange={(e) => {
-                setPatientSearch(e.target.value);
-                setPatientPage(1);
-              }}
-              className="mb-4 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008FFB]"
-              aria-label="Search Patients"
-            />
+            <div className="relative mb-4">
+              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search patient by name..."
+                value={patientSearch}
+                onChange={(e) => {
+                  setPatientSearch(e.target.value);
+                  setPatientPage(1);
+                }}
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#008FFB]/30 focus:border-[#008FFB] outline-none transition-all"
+                aria-label="Search Patients"
+              />
+            </div>
 
             {loadingPatients ? (
-              <p className="text-center py-10 text-gray-500 italic">
+              <p className="text-center py-10 text-gray-400 text-sm">
                 Loading patients...
               </p>
             ) : filteredPatients.length === 0 ? (
-              <p className="text-center py-10 text-gray-500 italic">
-                No patients found.
-              </p>
+              <div className="flex flex-col items-center gap-2 text-gray-400 py-10">
+                <Users size={28} />
+                <p className="text-sm">No patients found</p>
+              </div>
             ) : (
               <>
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto rounded-xl border border-gray-100">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="bg-[#008FFB] text-white">
-                        <th className="p-3">Name</th>
-                        <th className="p-3">Contact Number</th>
+                      <tr className="bg-gray-50 border-b border-gray-100">
+                        <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">Name</th>
+                        <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">Contact Number</th>
                       </tr>
                     </thead>
                     <tbody>
                       {currentPatients.map((patient) => (
                         <tr
                           key={patient.resident.contactNumber}
-                          className="border-b hover:bg-gray-100 transition"
+                          className="border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors"
                         >
-                          <td className="p-3 font-mono">
+                          <td className="px-4 py-3 text-sm font-medium text-gray-800">
                             {patient.resident.firstName}
                           </td>
-                          <td className="p-3 font-medium">
+                          <td className="px-4 py-3 text-sm text-gray-600">
                             {patient.resident.contactNumber}
                           </td>
                         </tr>
@@ -359,75 +364,86 @@ const ClinicDetail: React.FC = () => {
                 </div>
 
                 {/* Pagination */}
-                <div className="mt-6 flex justify-center space-x-3">
-                  {[...Array(patientTotalPages)].map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setPatientPage(idx + 1)}
-                      className={`px-4 py-2 rounded-lg border font-semibold transition
-                        ${
-                          patientPage === idx + 1
-                            ? "bg-[#008FFB] text-white shadow-md"
-                            : "bg-white text-gray-700 hover:bg-gray-200"
-                        }`}
-                      aria-label={`Go to patient page ${idx + 1}`}
-                    >
-                      {idx + 1}
-                    </button>
-                  ))}
-                </div>
+                {patientTotalPages > 1 && (
+                  <div className="mt-4 flex justify-center flex-wrap gap-2">
+                    {[...Array(patientTotalPages)].map((_, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => setPatientPage(idx + 1)}
+                        className={`h-8 w-8 rounded-lg text-sm font-medium transition-colors
+                          ${
+                            patientPage === idx + 1
+                              ? "bg-[#008FFB] text-white shadow-sm"
+                              : "text-gray-600 hover:bg-gray-100"
+                          }`}
+                        aria-label={`Go to patient page ${idx + 1}`}
+                      >
+                        {idx + 1}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </>
             )}
           </section>
 
           {/* Divisions Table */}
-          <section className="bg-white rounded-lg shadow-md p-6 flex flex-col">
-            <h3 className="text-2xl font-semibold mb-6 border-b pb-2">
-              Patients Across Divisions
-            </h3>
+          <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col">
+            <div className="flex items-center gap-2 mb-4">
+              <MapPin size={20} className="text-[#008FFB]" />
+              <h3 className="text-lg font-semibold text-gray-800">
+                Patients Across Divisions
+              </h3>
+            </div>
 
             {/* Search input for divisions */}
-            <input
-              type="text"
-              placeholder="Search division..."
-              value={divisionSearch}
-              onChange={(e) => {
-                setDivisionSearch(e.target.value);
-                setDivisionPage(1);
-              }}
-              className="mb-4 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008FFB]"
-              aria-label="Search Divisions"
-            />
+            <div className="relative mb-4">
+              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search division..."
+                value={divisionSearch}
+                onChange={(e) => {
+                  setDivisionSearch(e.target.value);
+                  setDivisionPage(1);
+                }}
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#008FFB]/30 focus:border-[#008FFB] outline-none transition-all"
+                aria-label="Search Divisions"
+              />
+            </div>
 
             {loadingDivisions ? (
-              <p className="text-center py-10 text-gray-500 italic">
+              <p className="text-center py-10 text-gray-400 text-sm">
                 Loading divisions...
               </p>
             ) : filteredDivisions.length === 0 ? (
-              <p className="text-center py-10 text-gray-500 italic">
-                No division data available.
-              </p>
+              <div className="flex flex-col items-center gap-2 text-gray-400 py-10">
+                <MapPin size={28} />
+                <p className="text-sm">No division data available</p>
+              </div>
             ) : (
               <>
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto rounded-xl border border-gray-100">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="bg-[#008FFB] text-white">
-                        <th className="p-3">Division</th>
-                        <th className="p-3">Count</th>
+                      <tr className="bg-gray-50 border-b border-gray-100">
+                        <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">Division</th>
+                        <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">Count</th>
                       </tr>
                     </thead>
                     <tbody>
                       {currentDivisions.map((division) => (
                         <tr
                           key={division.divisionName}
-                          className="border-b hover:bg-gray-100 transition"
+                          className="border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors"
                         >
-                          <td className="p-3 font-medium">
+                          <td className="px-4 py-3 text-sm font-medium text-gray-800">
                             {division.divisionName}
                           </td>
-                          <td className="p-3 font-semibold text-center">
-                            {division.residentCount}
+                          <td className="px-4 py-3">
+                            <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#008FFB]/10 text-[#008FFB] text-xs font-semibold">
+                              {division.residentCount}
+                            </span>
                           </td>
                         </tr>
                       ))}
@@ -436,47 +452,56 @@ const ClinicDetail: React.FC = () => {
                 </div>
 
                 {/* Pagination */}
-                <div className="mt-6 flex justify-center space-x-3">
-                  {[...Array(divisionTotalPages)].map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setDivisionPage(idx + 1)}
-                      className={`px-4 py-2 rounded-lg border font-semibold transition
-                        ${
-                          divisionPage === idx + 1
-                            ? "bg-[#008FFB] text-white shadow-md"
-                            : "bg-white text-gray-700 hover:bg-gray-200"
-                        }`}
-                      aria-label={`Go to division page ${idx + 1}`}
-                    >
-                      {idx + 1}
-                    </button>
-                  ))}
-                </div>
+                {divisionTotalPages > 1 && (
+                  <div className="mt-4 flex justify-center flex-wrap gap-2">
+                    {[...Array(divisionTotalPages)].map((_, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => setDivisionPage(idx + 1)}
+                        className={`h-8 w-8 rounded-lg text-sm font-medium transition-colors
+                          ${
+                            divisionPage === idx + 1
+                              ? "bg-[#008FFB] text-white shadow-sm"
+                              : "text-gray-600 hover:bg-gray-100"
+                          }`}
+                        aria-label={`Go to division page ${idx + 1}`}
+                      >
+                        {idx + 1}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </>
             )}
           </section>
         </div>
 
         {/* Add Clinic Session */}
-        <section className="bg-white rounded-lg shadow-md p-6 mt-10 max-w-4xl mx-auto">
-          <h3 className="text-2xl font-semibold mb-6 border-b pb-2">
-            Add Session
-          </h3>
+        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+          <div className="flex items-center gap-2 mb-4">
+            <CalendarClock size={20} className="text-[#008FFB]" />
+            <h3 className="text-lg font-semibold text-gray-800">
+              Add Session
+            </h3>
+          </div>
 
-          {error && <p className="text-red-600 font-semibold mb-4">{error}</p>}
+          {error && (
+            <div className="bg-rose-50 border border-rose-100 text-rose-600 text-sm rounded-xl px-4 py-3 mb-4">
+              {error}
+            </div>
+          )}
 
           <form
             onSubmit={(e) => {
               e.preventDefault();
               addClinicSession();
             }}
-            className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4"
+            className="flex flex-col sm:flex-row sm:items-center gap-3"
           >
             <input
               type="text"
               placeholder="Session Name"
-              className="flex-1 border border-gray-300 rounded-lg p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#008FFB]"
+              className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-gray-700 focus:ring-2 focus:ring-[#008FFB]/30 focus:border-[#008FFB] outline-none transition-all"
               value={newSession.name}
               onChange={(e) =>
                 setNewSession({ ...newSession, name: e.target.value })
@@ -485,7 +510,7 @@ const ClinicDetail: React.FC = () => {
             />
             <input
               type="date"
-              className="border border-gray-300 rounded-lg p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#008FFB]"
+              className="border border-gray-200 rounded-xl px-4 py-2.5 text-gray-700 focus:ring-2 focus:ring-[#008FFB]/30 focus:border-[#008FFB] outline-none transition-all"
               value={newSession.sessionDate}
               onChange={(e) =>
                 setNewSession({ ...newSession, sessionDate: e.target.value })
@@ -494,87 +519,75 @@ const ClinicDetail: React.FC = () => {
             />
             <button
               type="submit"
-              className="flex items-center bg-[#008FFB] hover:bg-blue-700 text-white font-semibold px-5 py-3 rounded-lg shadow transition"
+              className="flex items-center justify-center gap-2 bg-[#008FFB] hover:bg-[#006fbb] text-white font-semibold px-5 py-2.5 rounded-xl shadow-sm transition-colors"
               aria-label="Add New Session"
             >
-              <FiPlusCircle className="mr-2 text-xl" />
+              <FiPlusCircle />
               New Session
             </button>
           </form>
 
           {/* Sessions List */}
-          <h3 className="text-2xl font-semibold mt-10 mb-6 border-b pb-2">
-            Sessions
-          </h3>
+          <div className="flex items-center gap-2 mt-8 mb-4">
+            <h3 className="text-lg font-semibold text-gray-800">
+              Sessions
+            </h3>
+          </div>
 
           {loadingSessions ? (
-            <p className="text-center py-10 text-gray-500 italic">
+            <p className="text-center py-10 text-gray-400 text-sm">
               Loading sessions...
             </p>
           ) : clinicSessions.length === 0 ? (
-            <p className="text-center py-10 text-gray-500 italic">
-              No sessions available.
-            </p>
+            <div className="flex flex-col items-center gap-2 text-gray-400 py-10">
+              <CalendarClock size={28} />
+              <p className="text-sm">No sessions available</p>
+            </div>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto rounded-xl border border-gray-100">
               <table className="w-full border-collapse text-left">
                 <thead>
-                  <tr className="bg-[#008FFB] text-white">
-                    <th className="p-3">Name</th>
-                    <th className="p-3">Date</th>
-                    <th className="p-3 text-center">Actions</th>
+                  <tr className="bg-gray-50 border-b border-gray-100">
+                    <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">Name</th>
+                    <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">Date</th>
+                    {user?.permissions.includes("clinic:edit") && (
+                      <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500 text-right">Actions</th>
+                    )}
                   </tr>
                 </thead>
                 <tbody>
                   {clinicSessions.map((session) => (
                     <tr
                       key={session.sessionId}
-                      className="border-b hover:bg-gray-100 transition"
+                      className="border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors"
                     >
-                      <td className="p-3 font-medium">{session.name}</td>
-                      <td className="p-3">{session.sessionDate}</td>
+                      <td className="px-4 py-3 text-sm font-medium text-gray-800">{session.name}</td>
+                      <td className="px-4 py-3 text-sm text-gray-600">{session.sessionDate}</td>
                       {user?.permissions.includes("clinic:edit") && (
-                        <td className="p-3 text-center space-x-2">
-                          <Button
-                            type="default"
-                            ghost
-                            icon={<FaEdit />}
-                            onClick={() => openEditModal(session)}
-                            style={{
-                              borderColor: "#facc15", // yellow-400
-                              color: "#facc15",
-                              fontWeight: "600",
-                            }}
-                          >
-                            Edit
-                          </Button>
-
-                          <Button
-                            type="default"
-                            ghost
-                            danger
-                            icon={<FaTrash />}
-                            onClick={() => confirmRemoveClinicSession(session)}
-                            style={{
-                              fontWeight: "600",
-                            }}
-                          >
-                            Delete
-                          </Button>
-
-                          <Button
-                            type="default"
-                            ghost
-                            icon={<FaClipboardList />}
-                            onClick={() => handleClick(session.sessionId)}
-                            style={{
-                              borderColor: "#22c55e", // green-500
-                              color: "#22c55e",
-                              fontWeight: "600",
-                            }}
-                          >
-                            Attendance
-                          </Button>
+                        <td className="px-4 py-3">
+                          <div className="flex items-center justify-end gap-1">
+                            <button
+                              onClick={() => openEditModal(session)}
+                              className="flex items-center gap-1.5 px-3 py-1.5 text-amber-600 hover:bg-amber-50 rounded-lg font-medium text-sm transition-colors"
+                            >
+                              <FaEdit size={13} />
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => confirmRemoveClinicSession(session)}
+                              className="flex items-center gap-1.5 px-3 py-1.5 text-rose-600 hover:bg-rose-50 rounded-lg font-medium text-sm transition-colors"
+                            >
+                              <FaTrash size={13} />
+                              Delete
+                            </button>
+                            <button
+                              onClick={() => handleClick(session.sessionId)}
+                              className="flex items-center gap-1.5 px-3 py-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg font-medium text-sm transition-colors"
+                            >
+                              <FaClipboardList size={13} />
+                              Attendance
+                            </button>
+                          </div>
                         </td>
                       )}
                     </tr>
