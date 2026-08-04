@@ -1,5 +1,6 @@
 import HouseholdResident from "../models/householdResident";
 import Resident from "../models/resident";
+import Household from "../models/household";
 
 export class HouseholdResidentRepository {
   async findByHouseholdId(householdId: number): Promise<HouseholdResident[]> {
@@ -10,6 +11,40 @@ export class HouseholdResidentRepository {
           model: Resident,
           as: "resident",
           attributes: ["id", "firstName", "lastName", "birthday"],
+        },
+      ],
+    });
+  }
+
+  async findHouseholdByResidentId(
+    residentId: number
+  ): Promise<HouseholdResident | null> {
+    return HouseholdResident.findOne({
+      where: { residentId },
+      include: [{ model: Household, as: "household" }],
+    });
+  }
+
+  async findFamilyMembersByResidentId(
+    residentId: number
+  ): Promise<HouseholdResident[]> {
+    const own = await HouseholdResident.findOne({ where: { residentId } });
+    if (!own) return [];
+
+    return HouseholdResident.findAll({
+      where: { householdId: own.householdId },
+      include: [
+        {
+          model: Resident,
+          as: "resident",
+          attributes: [
+            "id",
+            "firstName",
+            "lastName",
+            "birthday",
+            "gender",
+            "contactNumber",
+          ],
         },
       ],
     });

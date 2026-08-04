@@ -28,6 +28,26 @@ export class HouseholdResidentController {
     }
   };
 
+  // GET /household-resident/family/:residentId
+  getFamilyMembersByResidentId = async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
+    const { residentId } = req.params;
+    try {
+      const members = await this.service.getFamilyMembersByResidentId(
+        Number(residentId)
+      );
+      return res.json({
+        message: "Family members fetched successfully",
+        data: members,
+      });
+    } catch (error) {
+      console.error("Error fetching family members:", error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  };
+
   // POST /household/:id/add-resident
   addResidentToHousehold = async (
     req: Request,

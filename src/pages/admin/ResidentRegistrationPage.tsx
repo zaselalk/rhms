@@ -177,21 +177,21 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
       return await residentRegister.addResident(values);
     },
     onSuccess: () => {
-      toast.success("Register Success");
+      toast.success("Resident registered successfully");
       formik.resetForm();
     },
     onError: (error: any) => {
       const errorData = error?.response?.data;
 
       // Case: Validation error array from backend
-      if (Array.isArray(errorData?.errors)) {
+      if (Array.isArray(errorData?.errors) && errorData.errors.length > 0) {
         errorData.errors.forEach((err: any) => {
           toast.error(err.msg); // show each error
         });
       } else {
-        // Fallback single message
+        // Fallback single message (covers backend `error` field and thrown Error messages)
         const errorMessage =
-          errorData?.message || error.message || "Registration failed. Please try again.";
+          errorData?.error || errorData?.message || error.message || "Registration failed. Please try again.";
         toast.error(errorMessage);
       }
     }
@@ -607,7 +607,11 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                 placeholder="120/80 Blood Pressure"
               />
-
+              {formik.touched.bloodPressure && formik.errors.bloodPressure && (
+                <div className="text-red-500 text-sm mt-1">
+                  {formik.errors.bloodPressure}
+                </div>
+              )}
             </div>
 
             {/* Heart Rate */}
@@ -625,7 +629,11 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                 placeholder="Heart Rate"
               />
-
+              {formik.touched.heartRate && formik.errors.heartRate && (
+                <div className="text-red-500 text-sm mt-1">
+                  {formik.errors.heartRate}
+                </div>
+              )}
             </div>
 
             {/* Addicteds */}
@@ -720,8 +728,19 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
           <div className="mt-6 flex justify-end">
             <button
               type="submit"
-              disabled={mutation.isPending || !formik.isValid}
-              className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white  font-semibold rounded-lg hover:bg-[#006fbb]"
+              disabled={mutation.isPending}
+              onClick={() => {
+                if (!formik.isValid) {
+                  formik.setTouched(
+                    Object.keys(formik.values).reduce(
+                      (acc, key) => ({ ...acc, [key]: true }),
+                      {}
+                    )
+                  );
+                  toast.error("Please fill in all required fields correctly.");
+                }
+              }}
+              className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white  font-semibold rounded-lg hover:bg-[#006fbb] disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {mutation.isPending ? "Registraion" : "Register"}
             </button>

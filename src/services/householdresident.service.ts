@@ -17,6 +17,21 @@ class HouseholdResidentService {
     }
   }
 
+  // Get all family (household) members for a given resident ID
+  async getFamilyMembersByResidentId(residentId: number | string) {
+    try {
+      const response = await axiosInstance.get(
+        `/household-resident/family/${residentId}`,
+      );
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message ||
+          "Unable to fetch family members for resident",
+      );
+    }
+  }
+
   // Add a resident to a household
   async addResidentToHousehold(
     householdId: number | string,
