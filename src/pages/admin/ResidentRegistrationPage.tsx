@@ -177,21 +177,21 @@ const ResidentRegistrationPage: FC<ResidentRegistrationProps> = () => {
       return await residentRegister.addResident(values);
     },
     onSuccess: () => {
-      toast.success("Register Success");
+      toast.success("Resident registered successfully");
       formik.resetForm();
     },
     onError: (error: any) => {
       const errorData = error?.response?.data;
 
       // Case: Validation error array from backend
-      if (Array.isArray(errorData?.errors)) {
+      if (Array.isArray(errorData?.errors) && errorData.errors.length > 0) {
         errorData.errors.forEach((err: any) => {
           toast.error(err.msg); // show each error
         });
       } else {
-        // Fallback single message
+        // Fallback single message (covers backend `error` field and thrown Error messages)
         const errorMessage =
-          errorData?.message || error.message || "Registration failed. Please try again.";
+          errorData?.error || errorData?.message || error.message || "Registration failed. Please try again.";
         toast.error(errorMessage);
       }
     }
