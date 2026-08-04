@@ -90,7 +90,6 @@ export class ResidentRepository {
         "lastName",
         "nic",
         "email",
-        'password',
         "birthday",
         "bloodGroup",
         'gender',
