@@ -142,18 +142,36 @@ const ResidentPage = () => {
                     >
                       <td className="px-5 py-3.5 text-sm text-gray-500">#{resident.id}</td>
                       <td className="px-5 py-3.5">
-                        <div className="flex items-center gap-3">
-                          <div
-                            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${avatarColor(
-                              resident.id + resident.firstName
-                            )}`}
+                        {user?.permissions.includes("clinic:view") ? (
+                          <Link
+                            to={`profile/${resident.id}`}
+                            className="flex items-center gap-3 group w-fit"
                           >
-                            {getInitials(resident.firstName, resident.lastName)}
+                            <div
+                              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${avatarColor(
+                                resident.id + resident.firstName
+                              )}`}
+                            >
+                              {getInitials(resident.firstName, resident.lastName)}
+                            </div>
+                            <span className="font-medium text-gray-800 group-hover:text-[#008FFB] transition-colors">
+                              {resident.firstName} {resident.lastName}
+                            </span>
+                          </Link>
+                        ) : (
+                          <div className="flex items-center gap-3">
+                            <div
+                              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${avatarColor(
+                                resident.id + resident.firstName
+                              )}`}
+                            >
+                              {getInitials(resident.firstName, resident.lastName)}
+                            </div>
+                            <span className="font-medium text-gray-800">
+                              {resident.firstName} {resident.lastName}
+                            </span>
                           </div>
-                          <span className="font-medium text-gray-800">
-                            {resident.firstName} {resident.lastName}
-                          </span>
-                        </div>
+                        )}
                       </td>
                       <td className="px-5 py-3.5 text-sm text-gray-600">
                         <div className="flex items-center gap-1.5">
