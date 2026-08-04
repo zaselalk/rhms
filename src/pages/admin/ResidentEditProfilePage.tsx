@@ -201,8 +201,8 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
       formik.resetForm();
       fetchResidentData();
     },
-    onError: () => {
-      toast.error("Update failed. Please try again.");
+    onError: (error: any) => {
+      toast.error(error?.message || "Update failed. Please try again.");
     },
   });
 
@@ -600,6 +600,11 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                 placeholder="120/80 Blood Pressure"
               />
+              {formik.touched.bloodPressure && formik.errors.bloodPressure && (
+                <div className="text-red-500 text-sm mt-1">
+                  {formik.errors.bloodPressure}
+                </div>
+              )}
             </div>
 
             {/*Heart Rate*/}
@@ -622,6 +627,11 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none"
                 placeholder="55-61 Heart Rate"
               />
+              {formik.touched.heartRate && formik.errors.heartRate && (
+                <div className="text-red-500 text-sm mt-1">
+                  {formik.errors.heartRate}
+                </div>
+              )}
             </div>
 
             {/* Glucose */}
@@ -647,20 +657,19 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
             </div>
 
             {/* Password */}
-            {/* Password */}
             <div className="relative">
               <label
                 htmlFor="password"
                 className="block text-xl font-medium text-gray-700"
               >
-                Password
+                New Password
               </label>
               <input
                 type={showPassword ? "text" : "password"}
                 id="password"
                 {...formik.getFieldProps("password")}
                 className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-[#00C1A7] focus:border-[#00C1A7] outline-none pr-10"
-                placeholder="Enter password"
+                placeholder="Leave blank to keep current password"
               />
 
               {/* Eye icon */}
@@ -770,19 +779,23 @@ const ResidentEditPage: FC<ResidentEditPageProps> = () => {
 
           {/* Submit Button */}
           <div className="flex justify-end mt-6">
-            {/* <Button
-              type="primary"
-              style={{ backgroundColor: "#008FFB" }}
-            >
-
-            </Button> */}
-
             <button
               type="submit"
-              disabled={mutation.isPending || !formik.isValid}
-              className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb]"
+              disabled={mutation.isPending}
+              onClick={() => {
+                if (!formik.isValid) {
+                  formik.setTouched(
+                    Object.keys(formik.values).reduce(
+                      (acc, key) => ({ ...acc, [key]: true }),
+                      {}
+                    )
+                  );
+                  toast.error("Please fill in all required fields correctly.");
+                }
+              }}
+              className="w-full sm:w-auto px-6 py-2 bg-[#008FFB] text-white font-semibold rounded-lg hover:bg-[#006fbb] disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {mutation.isPending ? "Update Resident" : "Update Resident"}
+              {mutation.isPending ? "Updating..." : "Update Resident"}
             </button>
           </div>
         </div>
