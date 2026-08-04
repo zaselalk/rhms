@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Home, Users, LayoutGrid, Activity } from "lucide-react";
+import { Home, Users, LayoutGrid, Activity, MapPin, PieChart } from "lucide-react";
 import { Pie } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -20,7 +20,6 @@ import "leaflet/dist/leaflet.css";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import { DashboardService } from "../../services/dashbord.service";
 import residentDiseaseService from "../../services/residentDisease.service";
-import { Card } from "antd";
 import DiseaseColumnChart from "../../components/charts/DiseaseColumnChart";
 
 const { BaseLayer } = LayersControl;
@@ -140,13 +139,30 @@ const AdminDashboard: React.FC = () => {
 
 
 
+  const pieOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: "68%",
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: "#1f2937",
+        padding: 10,
+        cornerRadius: 8,
+        boxPadding: 4,
+      },
+    },
+  };
+
   // Data for the charts
   const DiabetesData = {
     labels: ["Diabetes", "Non Diabetes"],
     datasets: [
       {
-        data: [PaitentCount, residentCount - PaitentCount], // Example data (1,243 Yes, 500 No)
-        backgroundColor: ["#FF0000", "#00C1A7"], // Green for Yes, Red for No
+        data: [PaitentCount, residentCount - PaitentCount],
+        backgroundColor: ["#f4664a", "#00C1A7"],
+        borderWidth: 0,
+        hoverOffset: 4,
       },
     ],
   };
@@ -155,11 +171,16 @@ const AdminDashboard: React.FC = () => {
     labels: ["Patients", "Non Patients"],
     datasets: [
       {
-        data: [CancerPaitentCount, residentCount - CancerPaitentCount], // Example data (1,243 Yes, 500 No)
-        backgroundColor: ["#faad14", "#00C1A7"], // Green for Yes, Red for No
+        data: [CancerPaitentCount, residentCount - CancerPaitentCount],
+        backgroundColor: ["#faad14", "#00C1A7"],
+        borderWidth: 0,
+        hoverOffset: 4,
       },
     ],
   };
+
+  const diabetesPct = residentCount > 0 ? Math.round((PaitentCount / residentCount) * 100) : 0;
+  const cancerPct = residentCount > 0 ? Math.round((CancerPaitentCount / residentCount) * 100) : 0;
 
 
 
@@ -169,46 +190,36 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <DashboardContainer>
-      <div>
-        <h2 className="text-2xl font-semibold text-[#008FFB] mb-6">
-          Katugahahena Divisional Hospital
-        </h2>
-        {/* Other Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-5">
-          <div className="bg-white rounded-xl shadow-md p-4 flex flex-col justify-center items-center aspect-square">
-            <Home className="text-[#008FFB]" size={40} />
-            <h3 className="text-lg font-semibold text-[#008FFB] mt-2 text-center">
-              {householdCount} Houses
-            </h3>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-md p-4 flex flex-col justify-center items-center aspect-square">
-            <Users className="text-[#008FFB]" size={40} />
-            <h3 className="text-lg font-semibold text-[#008FFB] mt-2 text-center">
-              {residentCount} Residents
-            </h3>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-md p-4 flex flex-col justify-center items-center aspect-square">
-            <LayoutGrid className="text-[#008FFB]" size={40} />
-            <h3 className="text-lg font-semibold text-[#008FFB] mt-2 text-center">
-              {divisionCount} Divisions
-            </h3>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-md p-4 flex flex-col justify-center items-center aspect-square">
-            <Activity className="text-[#008FFB]" size={40} />
-            <h3 className="text-lg font-semibold text-[#008FFB] mt-2 text-center">
-              {diseaseCount} Diseases
-            </h3>
-          </div>
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#008FFB] to-[#00C1A7] px-8 py-10 shadow-lg mb-8">
+          <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10" />
+          <div className="absolute -right-4 bottom-0 h-24 w-24 rounded-full bg-white/10" />
+          <p className="relative text-white/80 text-sm font-medium tracking-wide uppercase">
+            Overview
+          </p>
+          <h2 className="relative text-2xl sm:text-3xl font-bold text-white mt-1">
+            Katugahahena Divisional Hospital
+          </h2>
         </div>
-        <div>
-          {/* Map Section */}
-          <div className="bg-white p-6 rounded-lg shadow-md mb-6 w-full ">
-            <h3 className="text-xl font-semibold text-[#008FFB] mb-4">
-              Locations
+
+        {/* Stat Cards */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-8">
+          <StatCard icon={<Home size={22} />} label="Houses" value={householdCount} accent="text-[#008FFB] bg-[#008FFB]/10" />
+          <StatCard icon={<Users size={22} />} label="Residents" value={residentCount} accent="text-emerald-500 bg-emerald-50" />
+          <StatCard icon={<LayoutGrid size={22} />} label="Divisions" value={divisionCount} accent="text-purple-500 bg-purple-50" />
+          <StatCard icon={<Activity size={22} />} label="Diseases" value={diseaseCount} accent="text-rose-500 bg-rose-50" />
+        </div>
+
+        {/* Map Section */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6 overflow-hidden">
+          <div className="flex items-center gap-2 mb-4">
+            <MapPin size={20} className="text-[#008FFB]" />
+            <h3 className="text-lg font-semibold text-gray-800">
+              Household Locations
             </h3>
+          </div>
+          <div className="rounded-xl overflow-hidden border border-gray-100">
             <MapContainer
               center={[6.4893, 80.0847]}
               zoom={100}
@@ -236,34 +247,113 @@ const AdminDashboard: React.FC = () => {
               ))}
             </MapContainer>
           </div>
+        </div>
 
-          <Card title="Disease Distribution">
-            <DiseaseColumnChart data={diseaseChartData} />
-          </Card>
+        {/* Disease Distribution */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+          <div className="flex items-center gap-2 mb-1">
+            <Activity size={20} className="text-[#008FFB]" />
+            <h3 className="text-lg font-semibold text-gray-800">
+              Disease Distribution
+            </h3>
+          </div>
+          <p className="text-xs text-gray-400 mb-4 ml-7">
+            Patient count by diagnosed condition
+          </p>
+          <DiseaseColumnChart data={diseaseChartData} />
+        </div>
 
-          {/* Stats Section */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mb-6 mt-6">
-            {/*Diabetes Pie Chart */}
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold text-[#008FFB] mb-4">
-                Diabatic Patients
-              </h3>
-              <Pie data={DiabetesData} />
+        {/* Pie Charts */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <PieChart size={20} className="text-[#008FFB]" />
+                <h3 className="text-lg font-semibold text-gray-800">
+                  Diabetic Patients
+                </h3>
+              </div>
+              <span className="text-xs font-medium text-gray-400">
+                {PaitentCount} of {residentCount}
+              </span>
             </div>
-            {/*Diabetes Pie Chart */}
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold text-[#008FFB] mb-4">
-                Cancer Patients
-              </h3>
-              <Pie data={CancerData} />
+            <div className="relative mx-auto" style={{ width: 180, height: 180 }}>
+              <Pie data={DiabetesData} options={pieOptions} />
+              <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-2xl font-bold text-gray-800">{diabetesPct}%</span>
+                <span className="text-xs text-gray-400">Diabetic</span>
+              </div>
             </div>
-
-
+            <ChartLegend
+              items={[
+                { label: "Diabetes", value: PaitentCount, color: "#f4664a" },
+                { label: "Non Diabetes", value: residentCount - PaitentCount, color: "#00C1A7" },
+              ]}
+            />
+          </div>
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <PieChart size={20} className="text-[#008FFB]" />
+                <h3 className="text-lg font-semibold text-gray-800">
+                  Cancer Patients
+                </h3>
+              </div>
+              <span className="text-xs font-medium text-gray-400">
+                {CancerPaitentCount} of {residentCount}
+              </span>
+            </div>
+            <div className="relative mx-auto" style={{ width: 180, height: 180 }}>
+              <Pie data={CancerData} options={pieOptions} />
+              <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-2xl font-bold text-gray-800">{cancerPct}%</span>
+                <span className="text-xs text-gray-400">Patients</span>
+              </div>
+            </div>
+            <ChartLegend
+              items={[
+                { label: "Patients", value: CancerPaitentCount, color: "#faad14" },
+                { label: "Non Patients", value: residentCount - CancerPaitentCount, color: "#00C1A7" },
+              ]}
+            />
           </div>
         </div>
       </div>
     </DashboardContainer>
   );
 };
+
+const ChartLegend: React.FC<{
+  items: { label: string; value: number; color: string }[];
+}> = ({ items }) => (
+  <div className="flex items-center justify-center gap-5 mt-4">
+    {items.map((item) => (
+      <div key={item.label} className="flex items-center gap-1.5">
+        <span
+          className="h-2.5 w-2.5 rounded-full"
+          style={{ backgroundColor: item.color }}
+        />
+        <span className="text-xs text-gray-500">
+          {item.label} <span className="font-medium text-gray-700">({item.value})</span>
+        </span>
+      </div>
+    ))}
+  </div>
+);
+
+const StatCard: React.FC<{
+  icon: React.ReactNode;
+  label: string;
+  value: number;
+  accent: string;
+}> = ({ icon, label, value, accent }) => (
+  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow">
+    <div className={`flex h-11 w-11 items-center justify-center rounded-xl mb-4 ${accent}`}>
+      {icon}
+    </div>
+    <p className="text-2xl font-bold text-gray-800">{value.toLocaleString()}</p>
+    <p className="text-sm text-gray-500 mt-0.5">{label}</p>
+  </div>
+);
 
 export default AdminDashboard;
