@@ -13,6 +13,10 @@ export class HouseholdResidentServices {
     return this.repository.findByHouseholdId(householdId);
   }
 
+  async getFamilyMembersByResidentId(residentId: number) {
+    return this.repository.findFamilyMembersByResidentId(residentId);
+  }
+
   async addResidentToHousehold(
     householdId: number,
     residentId: number,

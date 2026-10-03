@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { DashboardContainer } from "../../components/layouts/overlays/DashboardContainer";
 import ResidentClinicService from "../../services/residentclinic.service";
+import { Search, Users, UserCheck, Percent, ClipboardList } from "lucide-react";
 
 interface Patient {
   resident: {
@@ -112,100 +113,137 @@ const ClinicAttendances: React.FC = () => {
 
   return (
     <DashboardContainer>
-      <div className="p-6 w-full min-h-screen bg-gray-50">
-        {/* Page Heading */}
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">
-            Attendance for Session -{" "}
-            <span className="text-blue-600">{sessionID}</span>
-          </h1>
+      <div className="w-full max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#008FFB] to-[#00C1A7] px-8 py-8 shadow-lg mb-6">
+          <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10" />
+          <div className="absolute -right-4 bottom-0 h-24 w-24 rounded-full bg-white/10" />
+          <div className="relative flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 text-white">
+              <ClipboardList size={22} />
+            </div>
+            <div>
+              <p className="text-white/80 text-sm font-medium tracking-wide uppercase">
+                Attendance
+              </p>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white">
+                Session {sessionID}
+              </h2>
+            </div>
+          </div>
         </div>
 
         {/* Attendance Summary */}
-        <div className="mb-8 p-6 bg-white rounded-xl shadow grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          <div>
-            <p className="text-gray-500 font-medium">Total Patients</p>
-            <p className="text-xl font-semibold">{totalPatients}</p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex items-center justify-between hover:shadow-md transition-shadow">
+            <div>
+              <p className="text-sm text-gray-500 font-medium">Total Patients</p>
+              <h3 className="text-3xl font-bold text-gray-800 mt-1">{totalPatients}</h3>
+            </div>
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#008FFB]/10 text-[#008FFB]">
+              <Users size={22} />
+            </div>
           </div>
-          <div>
-            <p className="text-gray-500 font-medium">Present</p>
-            <p className="text-xl font-semibold">{presentCount}</p>
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex items-center justify-between hover:shadow-md transition-shadow">
+            <div>
+              <p className="text-sm text-gray-500 font-medium">Present</p>
+              <h3 className="text-3xl font-bold text-gray-800 mt-1">{presentCount}</h3>
+            </div>
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-500">
+              <UserCheck size={22} />
+            </div>
           </div>
-          <div>
-            <p className="text-gray-500 font-medium">Attendance %</p>
-            <p className="text-xl font-semibold">
-              {attendancePercentage.toFixed(1)}%
-            </p>
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex items-center justify-between hover:shadow-md transition-shadow">
+            <div>
+              <p className="text-sm text-gray-500 font-medium">Attendance %</p>
+              <h3 className="text-3xl font-bold text-gray-800 mt-1">
+                {attendancePercentage.toFixed(1)}%
+              </h3>
+            </div>
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-500">
+              <Percent size={22} />
+            </div>
           </div>
         </div>
 
         {/* Search Bar */}
-        <div className="mb-4">
-          <input
-            type="text"
-            placeholder="Search Patient"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="border border-gray-300 rounded-lg px-4 py-2 w-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-6">
+          <div className="relative">
+            <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search patient by name..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#008FFB]/30 focus:border-[#008FFB] outline-none transition-all"
+            />
+          </div>
         </div>
 
         {/* Attendance Table */}
-        <div className="bg-white p-6 rounded-xl shadow">
-          <h2 className="text-xl font-bold mb-4 text-gray-700">
-            Patient Attendance
-          </h2>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
           <div className="overflow-x-auto">
             <table className="min-w-full border-collapse">
-              <thead className="bg-gray-100 text-gray-700">
-                <tr>
-                  <th className="text-left p-3">NIC</th>
-                  <th className="text-left p-3">Name</th>
-                  <th className="text-left p-3">Attendance</th>
+              <thead>
+                <tr className="bg-gray-50 border-b border-gray-100">
+                  <th className="text-left px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500">NIC</th>
+                  <th className="text-left px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500">Name</th>
+                  <th className="text-left px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500">Attendance</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredPatients.map((patient) => {
-                  const attendance = attendances.find(
-                    (a) => a.patientId === patient.resident.id
-                  );
-                  const isPresent = attendance?.attendance;
-                  return (
-                    <tr
-                      key={patient.resident.nic}
-                      className="border-b hover:bg-gray-50"
-                    >
-                      <td className="p-3">{patient.resident.nic}</td>
-                      <td className="p-3">{patient.resident.firstName}</td>
-                      <td className="p-3">
-                        <button
-                          onClick={() => toggleAttendance(patient.resident.id)}
-                          className={`px-4 py-2 rounded-lg transition shadow ${
-                            isPresent
-                              ? "bg-green-500 hover:bg-green-600 text-white"
-                              : "bg-red-500 hover:bg-red-600 text-white"
-                          }`}
-                        >
-                          {isPresent ? "Present" : "Absent"}
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {filteredPatients.length === 0 ? (
+                  <tr>
+                    <td colSpan={3} className="px-5 py-16 text-center">
+                      <div className="flex flex-col items-center gap-2 text-gray-400">
+                        <Users size={32} />
+                        <p className="text-sm">No patients found</p>
+                      </div>
+                    </td>
+                  </tr>
+                ) : (
+                  filteredPatients.map((patient) => {
+                    const attendance = attendances.find(
+                      (a) => a.patientId === patient.resident.id
+                    );
+                    const isPresent = attendance?.attendance;
+                    return (
+                      <tr
+                        key={patient.resident.nic}
+                        className="border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors"
+                      >
+                        <td className="px-5 py-3.5 text-sm text-gray-600">{patient.resident.nic}</td>
+                        <td className="px-5 py-3.5 text-sm font-medium text-gray-800">{patient.resident.firstName}</td>
+                        <td className="px-5 py-3.5">
+                          <button
+                            onClick={() => toggleAttendance(patient.resident.id)}
+                            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                              isPresent
+                                ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                                : "bg-rose-100 text-rose-700 hover:bg-rose-200"
+                            }`}
+                          >
+                            {isPresent ? "Present" : "Absent"}
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
         </div>
 
         {/* Save Attendance */}
-        <div className="mt-6 text-right">
+        <div className="flex justify-end mb-6">
           <button
             onClick={saveAttendance}
             disabled={loading}
-            className={`px-6 py-3 rounded-xl shadow-md transition ${
+            className={`px-6 py-2.5 rounded-lg font-semibold shadow-sm transition-colors ${
               loading
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700 text-white"
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                : "bg-[#008FFB] hover:bg-[#006fbb] text-white"
             }`}
           >
             {loading ? "Saving..." : "Save Attendance"}

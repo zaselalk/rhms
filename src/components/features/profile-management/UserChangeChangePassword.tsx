@@ -1,12 +1,15 @@
 import { useMutation } from "@tanstack/react-query";
 import { Button, Form, Input, Row, Col, Alert, message } from "antd";
-import ProfileService from "../../../services/profile.service";
+import { IProfileService } from "../../../services/types/profile-service.types";
 import { useAppSelector } from "../../../hooks/state/hooks";
 import { useState } from "react";
 
-export const UserChangeChangePassword = () => {
+interface UserChangeChangePasswordProps {
+  profileService: IProfileService;
+}
+
+export const UserChangeChangePassword = ({ profileService }: UserChangeChangePasswordProps) => {
   const [form] = Form.useForm();
-  const profileService = new ProfileService();
   const user = useAppSelector((state) => state.auth.user);
   const [error, setError] = useState("");
 

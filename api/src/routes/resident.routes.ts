@@ -26,7 +26,7 @@ ResidentRouter.get(
 ResidentRouter.get("/id/:id", catchAsync(residentController.residentfindById));
 ResidentRouter.put(
   "/update/:id",
-  // protectRoute("resident:edit"),
+  protectRoute("resident:edit"),
   catchAsync(residentController.updateResident)
 );
 ResidentRouter.delete(
