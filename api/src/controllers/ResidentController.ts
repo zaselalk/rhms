@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import bcrypt from "bcrypt";
 import { Resident } from "../models/resident";
 import { ResidentService } from "../services/ResidentService";
 import { ResidentRepository } from "../repositories/ResidentRepository";
@@ -61,17 +62,19 @@ class ResidentController {
       deletedAt,
     } = req.body;
 
-    const residentfindByNic: Resident | null =
-      await this.residentService.findByNic(nic);
+    try {
+      const residentfindByNic: Resident | null =
+        await this.residentService.findByNic(nic);
 
-    if (residentfindByNic) {
-      return res.status(400).json({
-        message: "Resident already exists",
-        status: 400,
-        error: "Resident already exists",
-        data: null,
-      });
-    } else if (residentfindByNic === null) {
+      if (residentfindByNic) {
+        return res.status(400).json({
+          message: "Resident already exists",
+          status: 400,
+          error: "Resident already exists",
+          data: null,
+        });
+      }
+
       const resident = await this.residentService.registerResident(
         firstName,
         lastName,
@@ -103,7 +106,7 @@ class ResidentController {
       const residentId = resident.id;
 
       // Register resident with multiple clinics
-      const residentClinics = await Promise.all(
+      await Promise.all(
         clinic.map(async (clinicId: number) => {
           return await this.residentClinicService.createResidentClinic(
             Number(residentId),
@@ -111,13 +114,20 @@ class ResidentController {
           );
         })
       );
-      
 
       return res.json({
         message: "Resident registered successfully",
         status: 200,
         error: null,
         data: resident,
+      });
+    } catch (error: any) {
+      console.error("Resident Registration Error:", error);
+      return res.status(500).json({
+        message: null,
+        status: 500,
+        error: error?.message || "Error registering resident",
+        data: null,
       });
     }
   };
@@ -202,7 +212,7 @@ class ResidentController {
         });
       }
 
-      const updateData = req.body;
+      const updateData = { ...req.body };
       if (Object.keys(updateData).length === 0) {
         return res.status(400).json({
           message: null,
@@ -210,6 +220,12 @@ class ResidentController {
           error: "No update data provided",
           data: null,
         });
+      }
+
+      if (typeof updateData.password === "string" && updateData.password.trim()) {
+        updateData.password = await bcrypt.hash(updateData.password, 10);
+      } else {
+        delete updateData.password;
       }
 
       const updatedResident = await this.residentService.updateResident(

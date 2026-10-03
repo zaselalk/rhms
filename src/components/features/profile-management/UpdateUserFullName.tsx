@@ -3,14 +3,17 @@ import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/state/hooks";
 import { SaveOutlined } from "@ant-design/icons";
 import { useMutation } from "@tanstack/react-query";
-import ProfileService from "../../../services/profile.service";
+import { IProfileService } from "../../../services/types/profile-service.types";
 import { changeName } from "../../../store/slices/authSlices";
 
-export const UpdateUserFullName = () => {
+interface UpdateUserFullNameProps {
+  profileService: IProfileService;
+}
+
+export const UpdateUserFullName = ({ profileService }: UpdateUserFullNameProps) => {
   const user = useAppSelector((state) => state.auth.user);
   const dispatch = useAppDispatch();
   const [fullName, setFullName] = useState(user?.name || "");
-  const profileService = new ProfileService();
 
   if (!user) {
     return <div>User not found</div>;

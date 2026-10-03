@@ -18,6 +18,12 @@ HouseholdResidentRouter.get(
   catchAsync(householdResidentController.getResidentsByHouseholdId)
 );
 
+HouseholdResidentRouter.get(
+  "/family/:residentId",
+  protectRoute("household:view"),
+  catchAsync(householdResidentController.getFamilyMembersByResidentId)
+);
+
 HouseholdResidentRouter.delete(
   "/:id",
   protectRoute("household:delete"),

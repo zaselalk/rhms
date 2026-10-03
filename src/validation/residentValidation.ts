@@ -16,7 +16,7 @@ export const residentValidation = Yup.object({
     nic: Yup.string()
         .trim()
         .matches(
-            /^\d{9}V$|^\d{12}$/,
+            /^\d{9}[VvXx]$|^\d{12}$/,
             "NIC must be 9 digits followed by 'V' or 'X' OR a 12-digit number"
         ),
 
